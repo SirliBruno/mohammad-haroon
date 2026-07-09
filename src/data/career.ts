@@ -3,7 +3,7 @@ export type ExperienceItem = {
   role: string;
   period: string;
   location: string;
-  type: "Full-time" | "Freelance" | "Contract" | "Internship";
+  type: "دوام كامل" | "عمل حر" | "عقد" | "تدريب";
   summary: string;
   highlights: string[];
   stack?: string[];
@@ -45,61 +45,61 @@ export type AwardItem = {
 
 export const experience: ExperienceItem[] = [
   {
-    company: "Freelance",
-    role: "Product Engineer & Designer",
-    period: "2023 — Present",
-    location: "Remote",
-    type: "Freelance",
+    company: "عمل حر",
+    role: "مهندس منتجات ومصمم",
+    period: "2023 — حتى الآن",
+    location: "عن بُعد",
+    type: "عمل حر",
     summary:
-      "Partnering with founders and product teams to design and ship premium web products end-to-end.",
+      "شريك لرواد الأعمال وفرق المنتجات في تصميم وإطلاق منتجات ويب متميزة من البداية حتى النهاية.",
     highlights: [
-      "Shipped 12+ production websites and e-commerce stores across SaaS, retail and hospitality.",
-      "Built reusable design system used by 4 client teams, cutting hand-off time in half.",
-      "Averaged 96+ Lighthouse scores across delivered projects.",
+      "أطلقت أكثر من 12 موقعًا ومتجرًا إلكترونيًا في قطاعات SaaS والتجزئة والضيافة.",
+      "بنيت نظام تصميم قابل لإعادة الاستخدام تعتمده 4 فرق عميلة، مما قلّص وقت التسليم إلى النصف.",
+      "متوسط 96+ في تقييم Lighthouse عبر المشاريع المُسلَّمة.",
     ],
     stack: ["React", "TypeScript", "Tailwind", "TanStack", "WordPress", "WooCommerce"],
   },
   {
     company: "Northwind",
-    role: "Lead Design Engineer",
+    role: "قائد فريق هندسة التصميم",
     period: "2022 — 2023",
-    location: "Remote",
-    type: "Contract",
+    location: "عن بُعد",
+    type: "عقد",
     summary:
-      "Led the redesign of the analytics surface — from research to shipped feature flags in production.",
+      "قدت إعادة تصميم واجهة التحليلات — من البحث حتى إطلاق الميزات في بيئة الإنتاج.",
     highlights: [
-      "Cut time-to-first-insight from 12 minutes to under 40 seconds.",
-      "Owned the design system extension used by 8 engineers.",
-      "Ran weekly customer sessions to validate every major flow before build.",
+      "قلّصت زمن الوصول إلى أول رؤية من 12 دقيقة إلى أقل من 40 ثانية.",
+      "امتلكت توسعة نظام التصميم المستخدم من قِبل 8 مهندسين.",
+      "أدرت جلسات أسبوعية مع العملاء للتحقق من كل مسار رئيسي قبل التطوير.",
     ],
     stack: ["React", "TypeScript", "Recharts", "Postgres"],
   },
   {
     company: "Atelier",
-    role: "Frontend Developer",
+    role: "مطوّر واجهات أمامية",
     period: "2021 — 2022",
-    location: "Remote",
-    type: "Full-time",
+    location: "عن بُعد",
+    type: "دوام كامل",
     summary:
-      "Rebuilt the editor and publishing flow for a boutique headless CMS used by 300+ agencies.",
+      "أعدت بناء المحرر ومسار النشر لنظام إدارة محتوى بلا رأس (Headless CMS) تستخدمه أكثر من 300 وكالة.",
     highlights: [
-      "Shipped block-based editor with live preview, adopted by 92% of active teams within 60 days.",
-      "Reduced average publish time by 58%.",
-      "Mentored 2 junior engineers and set up the team's code review rituals.",
+      "أطلقت محررًا قائمًا على الكتل مع معاينة حيّة، تبنّاه 92% من الفرق النشطة خلال 60 يومًا.",
+      "خفّضت متوسط زمن النشر بنسبة 58%.",
+      "أشرفت على مهندسَين مبتدئَين، ووضعت نظام مراجعة الكود للفريق.",
     ],
     stack: ["React", "TipTap", "Node.js", "Postgres"],
   },
   {
-    company: "Independent",
-    role: "Freelance Web Developer",
+    company: "مستقل",
+    role: "مطوّر ويب مستقل",
     period: "2019 — 2021",
-    location: "Karachi, PK",
-    type: "Freelance",
+    location: "الرياض",
+    type: "عمل حر",
     summary:
-      "Built websites and stores for local businesses while completing my IT degree.",
+      "طوّرت مواقع ومتاجر إلكترونية للأعمال المحلية أثناء استكمال دراسة تقنية المعلومات.",
     highlights: [
-      "Delivered 15+ WordPress and WooCommerce sites for SMB clients.",
-      "Grew a small design practice from cold outreach to full referral pipeline.",
+      "سلّمت أكثر من 15 موقعًا بـ WordPress وWooCommerce لعملاء من الشركات الصغيرة والمتوسطة.",
+      "نمّيت ممارسة تصميم صغيرة من التواصل البارد إلى شبكة إحالات كاملة.",
     ],
     stack: ["WordPress", "WooCommerce", "PHP", "JavaScript"],
   },
@@ -107,57 +107,57 @@ export const experience: ExperienceItem[] = [
 
 export const education: EducationItem[] = [
   {
-    school: "University of Karachi",
-    degree: "B.S. Information Technology",
+    school: "جامعة الملك سعود",
+    degree: "بكالوريوس تقنية المعلومات",
     period: "2021 — 2025",
-    location: "Karachi, PK",
-    detail: "Focus on human-computer interaction, web systems and software design.",
+    location: "الرياض",
+    detail: "تخصص في تفاعل الإنسان مع الحاسب وأنظمة الويب وهندسة البرمجيات.",
   },
   {
     school: "Meta",
-    degree: "Front-End Developer Professional Certificate",
+    degree: "شهادة مطوّر واجهات أمامية احترافية",
     period: "2023",
     location: "Coursera",
-    detail: "React, accessibility, testing and modern build tooling.",
+    detail: "React والوصولية والاختبارات وأدوات البناء الحديثة.",
   },
   {
     school: "Google",
-    degree: "UX Design Professional Certificate",
+    degree: "شهادة تصميم تجربة المستخدم الاحترافية",
     period: "2022",
     location: "Coursera",
-    detail: "End-to-end UX process: research, wireframing, prototyping, usability testing.",
+    detail: "دورة كاملة في تجربة المستخدم: البحث، النماذج الأولية، والاختبار.",
   },
 ];
 
 export const certificates: CertificateItem[] = [
   {
-    name: "Front-End Developer Professional Certificate",
+    name: "شهادة مطوّر واجهات أمامية احترافية",
     issuer: "Meta",
     year: "2023",
     credentialId: "META-FED-2023",
     href: "https://coursera.org/",
   },
   {
-    name: "UX Design Professional Certificate",
+    name: "شهادة تصميم تجربة المستخدم الاحترافية",
     issuer: "Google",
     year: "2022",
     credentialId: "GGL-UX-2022",
     href: "https://coursera.org/",
   },
   {
-    name: "Advanced React",
+    name: "React المتقدم",
     issuer: "Frontend Masters",
     year: "2023",
     href: "https://frontendmasters.com/",
   },
   {
-    name: "Design Systems for Figma",
+    name: "أنظمة التصميم في Figma",
     issuer: "Figma",
     year: "2024",
     href: "https://figma.com/",
   },
   {
-    name: "WooCommerce Development",
+    name: "تطوير WooCommerce",
     issuer: "Automattic",
     year: "2022",
     href: "https://woocommerce.com/",
@@ -172,52 +172,52 @@ export const certificates: CertificateItem[] = [
 
 export const skillGroups: SkillGroup[] = [
   {
-    title: "Design",
-    items: ["UI Design", "UX Research", "Design Systems", "Figma", "Prototyping", "Motion"],
+    title: "التصميم",
+    items: ["تصميم واجهات", "بحث تجربة المستخدم", "أنظمة التصميم", "Figma", "النماذج الأولية", "الحركة"],
   },
   {
-    title: "Frontend",
+    title: "الواجهات الأمامية",
     items: ["React", "TypeScript", "Tailwind CSS", "TanStack Start", "Next.js", "Framer Motion"],
   },
   {
-    title: "Commerce & CMS",
+    title: "التجارة الإلكترونية وإدارة المحتوى",
     items: ["WordPress", "WooCommerce", "Shopify", "Sanity", "Stripe", "PayPal"],
   },
   {
-    title: "Backend & Ops",
-    items: ["Node.js", "PostgreSQL", "Cloudflare Workers", "GitHub Actions", "Vercel"],
+    title: "الخلفية والعمليات",
+    items: ["Node.js", "PostgreSQL", "Supabase", "Cloudflare Workers", "GitHub Actions", "Vercel"],
   },
 ];
 
 export const languages: LanguageItem[] = [
-  { name: "English", level: "Professional", code: "EN" },
-  { name: "Urdu", level: "Native", code: "UR" },
-  { name: "Arabic", level: "Basic", code: "AR" },
+  { name: "العربية", level: "اللغة الأم", code: "AR" },
+  { name: "الإنجليزية", level: "متقدّم مهني", code: "EN" },
+  { name: "الأردية", level: "متقدّم", code: "UR" },
 ];
 
 export const awards: AwardItem[] = [
   {
-    title: "Awwwards — Site of the Day",
+    title: "Awwwards — موقع اليوم",
     issuer: "Awwwards",
     year: "2024",
-    description: "Recognized for the Meridian agency site rebuild.",
+    description: "تكريمًا لإعادة بناء موقع وكالة Meridian.",
   },
   {
-    title: "CSS Design Awards — Best UI",
+    title: "CSS Design Awards — أفضل واجهة مستخدم",
     issuer: "CSSDA",
     year: "2024",
-    description: "Northwind analytics dashboard redesign.",
+    description: "إعادة تصميم لوحة تحليلات Northwind.",
   },
   {
-    title: "Dean's Merit List",
-    issuer: "University of Karachi",
+    title: "قائمة العميد للتميز الأكاديمي",
+    issuer: "جامعة الملك سعود",
     year: "2023",
-    description: "Top 5% of the graduating class.",
+    description: "ضمن أفضل 5% من دفعة التخرج.",
   },
 ];
 
 export const resumeMeta = {
   href: "/resume.pdf",
   fileName: "Mohammad-Haroon-Resume.pdf",
-  updated: "March 2026",
+  updated: "مارس 2026",
 };

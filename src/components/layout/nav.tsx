@@ -36,7 +36,7 @@ export function Nav() {
             <AvailabilityBadge />
           </div>
 
-          <nav aria-label="Primary" className="hidden items-center gap-1 md:flex">
+          <nav aria-label="التنقل الرئيسي" className="hidden items-center gap-1 md:flex">
             {primaryNav.map((item) => {
               const active =
                 item.to === "/"
@@ -57,7 +57,7 @@ export function Nav() {
                   <span
                     aria-hidden
                     className={cn(
-                      "pointer-events-none absolute inset-x-3 -bottom-0.5 h-px origin-left bg-foreground transition-transform duration-300 ease-out",
+                      "pointer-events-none absolute inset-x-3 -bottom-0.5 h-px origin-right bg-foreground transition-transform duration-300 ease-out",
                       active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100",
                     )}
                   />
@@ -80,7 +80,7 @@ export function Nav() {
               to="/contact"
               className="hidden rounded-md bg-foreground px-3.5 py-1.5 text-sm font-medium text-background transition-opacity hover:opacity-90 md:inline-flex"
             >
-              Hire me
+              احجز استشارة
             </Link>
             <MobileNav />
           </div>

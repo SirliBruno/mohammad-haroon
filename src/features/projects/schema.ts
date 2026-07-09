@@ -8,12 +8,12 @@ export const mediaSchema = z.object({
 });
 
 export const projectCategories = [
-  "Websites",
-  "E-commerce",
-  "UI Design",
-  "Graphic Design",
-  "Marketing",
-  "Photography",
+  "مواقع إلكترونية",
+  "تجارة إلكترونية",
+  "تصميم واجهات",
+  "تصميم جرافيكي",
+  "تسويق",
+  "تصوير",
 ] as const;
 
 export const projectSchema = z.object({
@@ -24,7 +24,7 @@ export const projectSchema = z.object({
   role: z.string(),
   client: z.string().optional(),
   year: z.number(),
-  category: z.enum(projectCategories).default("Websites"),
+  category: z.enum(projectCategories).default("مواقع إلكترونية"),
   tags: z.array(z.string()).default([]),
   stack: z.array(z.string()).default([]),
   tools: z.array(z.string()).optional(),

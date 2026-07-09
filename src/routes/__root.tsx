@@ -47,34 +47,34 @@ function NotFoundComponent() {
   return (
     <div className="flex min-h-dvh items-center justify-center bg-background px-4">
       <div className="max-w-lg text-center">
-        <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
-          Error 404
+        <p className="text-xs font-medium tracking-[0.14em] text-muted-foreground">
+          خطأ 404
         </p>
         <h1 className="mt-3 text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
-          This page wandered off
+          الصفحة غير موجودة
         </h1>
         <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-          The page you're looking for doesn't exist, has moved, or is still being drafted.
-          Try one of the routes below.
+          الصفحة التي تبحث عنها غير متوفرة، أو تم نقلها، أو لا تزال قيد الإعداد.
+          يمكنك العودة إلى إحدى الوجهات أدناه.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
           <Link
             to="/"
             className="inline-flex items-center justify-center rounded-md bg-foreground px-4 py-2 text-sm font-medium text-background transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
-            Return home
+            العودة إلى الرئيسية
           </Link>
           <Link
             to="/work"
             className="inline-flex items-center justify-center rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
-            View work
+            استعرض أعمالي
           </Link>
           <Link
             to="/contact"
             className="inline-flex items-center justify-center rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
-            Get in touch
+            تواصل معي
           </Link>
         </div>
       </div>
@@ -93,10 +93,10 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
     <div className="flex min-h-dvh items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          Something went wrong
+          حدث خطأ غير متوقع
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Try again, or head back home.
+          يرجى المحاولة مرة أخرى، أو العودة إلى الصفحة الرئيسية.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
@@ -106,13 +106,13 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
             }}
             className="inline-flex items-center justify-center rounded-md bg-foreground px-4 py-2 text-sm font-medium text-background transition-opacity hover:opacity-90"
           >
-            Try again
+            إعادة المحاولة
           </button>
           <a
             href="/"
             className="inline-flex items-center justify-center rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
           >
-            Go home
+            العودة إلى الرئيسية
           </a>
         </div>
       </div>
@@ -133,7 +133,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Noto+Kufi+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
       },
     ],
     scripts: [
@@ -157,9 +157,9 @@ function RootShell({ children }: { children: ReactNode }) {
       <body>
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-foreground focus:px-3 focus:py-2 focus:text-sm focus:text-background"
+          className="sr-only focus:not-sr-only focus:fixed focus:right-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-foreground focus:px-3 focus:py-2 focus:text-sm focus:text-background"
         >
-          Skip to content
+          تجاوز إلى المحتوى
         </a>
         {children}
         <Scripts />

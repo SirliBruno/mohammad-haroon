@@ -1,6 +1,6 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import {
-  ArrowRight,
+  ArrowLeft,
   ArrowUpRight,
   Award,
   Braces,
@@ -16,7 +16,6 @@ import {
   Wrench,
   Zap,
 } from "lucide-react";
-import type { ReactNode } from "react";
 
 import { Reveal } from "@/components/motion/reveal";
 import { Eyebrow } from "@/components/typography/eyebrow";
@@ -24,7 +23,6 @@ import { Eyebrow } from "@/components/typography/eyebrow";
 import { buildMeta } from "@/features/seo/build-meta";
 import { Section } from "@/components/layout/section";
 import { SectionTitle } from "@/components/layout/section-title";
-import { Container } from "@/components/layout/container";
 import { Hero } from "@/components/sections/hero";
 import {
   CertificateCard,
@@ -45,144 +43,131 @@ import { services } from "@/data/services";
 import { testimonials } from "@/data/testimonials";
 import { articles } from "@/data/writing";
 
-// ------------------------------------------------------------
-// Local content — kept alongside the composition, easy to tune.
-// ------------------------------------------------------------
-
 const trustedCompanies = [
-  "Northwind",
-  "Lumen",
-  "Atelier",
-  "Meridian",
-  "Halcyon",
-  "Kinfolk",
-  "Vantage",
-  "Onyx",
+  "أرامكو",
+  "STC",
+  "نون",
+  "طلبات",
+  "علم",
+  "الراجحي",
+  "ثمانية",
+  "مرسول",
 ];
 
 const statistics = [
-  { value: "5+", label: "Websites shipped", hint: "Marketing & product" },
-  { value: "10+", label: "E-commerce stores", hint: "Shopify · custom" },
-  { value: "Multi", label: "Companies served", hint: "Startups → agencies" },
-  { value: "Open", label: "For freelance", hint: "Q1 slots remain" },
+  { value: "+5", label: "موقع تم إطلاقه", hint: "تسويقي ومنتجات" },
+  { value: "+10", label: "متجر إلكتروني", hint: "Shopify ومخصص" },
+  { value: "متعدّدة", label: "شركات تعاملت معها", hint: "من ناشئة إلى وكالات" },
+  { value: "متاح", label: "لاستقبال المشاريع", hint: "أماكن محدودة للربع القادم" },
 ];
 
 const skillGroups = [
   {
-    title: "Design",
+    title: "التصميم",
     icon: Palette,
-    items: ["UI Design", "UX Research", "Design Systems", "Prototyping", "Motion"],
+    items: ["تصميم واجهات", "بحث UX", "أنظمة تصميم", "نماذج أولية", "الحركة"],
   },
   {
-    title: "Frontend",
+    title: "الواجهات الأمامية",
     icon: Braces,
     items: ["React", "TypeScript", "Next.js", "TanStack", "Tailwind CSS"],
   },
   {
-    title: "Commerce",
+    title: "التجارة الإلكترونية",
     icon: Store,
-    items: ["Shopify", "Stripe", "Headless CMS", "SEO", "Analytics"],
+    items: ["Shopify", "Stripe", "Headless CMS", "SEO", "التحليلات"],
   },
   {
-    title: "Tooling",
+    title: "الأدوات",
     icon: Wrench,
     items: ["Figma", "Framer", "Git", "Linear", "Vercel"],
   },
 ];
 
 const certificates: Certificate[] = [
-  { title: "Meta Front-End Developer", issuer: "Meta", issuedAt: "2025" },
-  { title: "Google UX Design", issuer: "Google", issuedAt: "2024" },
-  { title: "Shopify Partner Academy", issuer: "Shopify", issuedAt: "2024" },
-  { title: "Advanced React Patterns", issuer: "Frontend Masters", issuedAt: "2024" },
-  { title: "Figma for Product Design", issuer: "Config", issuedAt: "2023" },
-  { title: "Design Systems in Practice", issuer: "Interaction Design", issuedAt: "2023" },
+  { title: "مطوّر واجهات أمامية — Meta", issuer: "Meta", issuedAt: "2025" },
+  { title: "تصميم تجربة المستخدم — Google", issuer: "Google", issuedAt: "2024" },
+  { title: "شهادة شريك Shopify", issuer: "Shopify", issuedAt: "2024" },
+  { title: "أنماط React المتقدمة", issuer: "Frontend Masters", issuedAt: "2024" },
+  { title: "Figma لتصميم المنتجات", issuer: "Config", issuedAt: "2023" },
+  { title: "أنظمة التصميم عمليًا", issuer: "Interaction Design", issuedAt: "2023" },
 ];
 
 const timeline: TimelineItem[] = [
   {
-    date: "2025 — Present",
-    title: "Freelance Product Engineer",
-    meta: "Independent · Remote",
+    date: "2025 — حتى الآن",
+    title: "مهندس منتجات مستقل",
+    meta: "عمل حر · عن بُعد",
     description:
-      "Partnering with founders to design and ship premium web products, storefronts, and design systems.",
+      "شراكات مع رواد الأعمال لتصميم وإطلاق منتجات ويب متميزة، ومتاجر إلكترونية، وأنظمة تصميم.",
   },
   {
     date: "2024",
-    title: "Design Engineer",
-    meta: "Boutique product studios",
+    title: "مهندس تصميم",
+    meta: "استوديوهات منتجات متخصصة",
     description:
-      "Led interface work across dashboards, editors, and marketing surfaces for early-stage SaaS teams.",
+      "قدت أعمال الواجهات عبر لوحات التحكم والمحرّرات والصفحات التسويقية لفرق SaaS في مراحلها المبكرة.",
   },
   {
     date: "2023",
-    title: "Frontend Developer",
-    meta: "Agency retainers",
+    title: "مطوّر واجهات أمامية",
+    meta: "عقود مع وكالات",
     description:
-      "Shipped Shopify and headless storefronts for lifestyle brands and DTC operators.",
+      "أطلقت متاجر Shopify وHeadless لعلامات نمط الحياة والعلامات التجارية المباشرة للمستهلك.",
   },
   {
     date: "2022",
-    title: "IT Studies — start",
-    meta: "Bachelor of Information Technology",
+    title: "بداية دراسة تقنية المعلومات",
+    meta: "بكالوريوس تقنية المعلومات",
     description:
-      "Began formal studies while freelancing on the side. Design and code, in that order.",
+      "بدأت الدراسة الأكاديمية بالتوازي مع العمل الحر. التصميم أولًا، ثم الكود.",
   },
 ];
 
 const currentFocus = [
   {
     icon: Zap,
-    title: "Design systems that scale",
+    title: "أنظمة تصميم قابلة للتوسّع",
     description:
-      "Building the tokens, primitives, and patterns behind a fintech product's next release.",
+      "بناء التوكنز والعناصر والأنماط لإصدار جديد لمنتج في قطاع التقنية المالية.",
   },
   {
     icon: Server,
-    title: "Edge-first commerce",
+    title: "تجارة إلكترونية على الحافة",
     description:
-      "Prototyping storefronts on TanStack Start and Cloudflare — faster carts, cleaner code.",
+      "بناء متاجر تجريبية على TanStack Start وCloudflare — سلات أسرع، وكود أنظف.",
   },
   {
     icon: Sparkles,
-    title: "Motion as a language",
+    title: "الحركة كلغة تواصل",
     description:
-      "Codifying a motion system so animation communicates state instead of decorating it.",
+      "توثيق نظام حركة يجعل الأنيميشن يُعبّر عن الحالة لا مجرد زخرفة.",
   },
 ];
 
 const ideas = [
   {
     icon: Lightbulb,
-    tag: "Experiment",
-    title: "Quiet analytics",
+    tag: "تجربة",
+    title: "تحليلات هادئة",
     description:
-      "A dashboard that tells you what changed — in one sentence — instead of dumping charts.",
+      "لوحة تخبرك بما تغيّر — في جملة واحدة — بدلًا من إغراقك بالرسوم البيانية.",
   },
   {
     icon: Compass,
-    tag: "Concept",
-    title: "Founder OS",
+    tag: "تصوّر",
+    title: "نظام رائد الأعمال",
     description:
-      "A single surface for the three things a founder actually does: talk to users, ship, decide.",
+      "واجهة واحدة لأهم ثلاثة أشياء يفعلها المؤسّس: يتحدث مع المستخدمين، يُطلق، ويقرّر.",
   },
   {
     icon: Layers,
-    tag: "Prototype",
-    title: "Component recipes",
+    tag: "نموذج أولي",
+    title: "وصفات مكوّنات",
     description:
-      "A library of pre-composed shadcn recipes — copy, paste, ship. No boilerplate rewrite.",
+      "مكتبة من وصفات shadcn الجاهزة — انسخ، الصق، أطلق. دون إعادة كتابة أي كود.",
   },
 ];
-
-// ------------------------------------------------------------
-// Route
-// ------------------------------------------------------------
-
-
-// ------------------------------------------------------------
-// Route
-// ------------------------------------------------------------
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -202,10 +187,8 @@ function Home() {
 
   return (
     <>
-      {/* 1 — Hero */}
       <Hero />
 
-      {/* 2 — Trusted companies */}
       <Section
         id="trusted"
         size="sm"
@@ -214,7 +197,7 @@ function Home() {
       >
         <Reveal>
           <Eyebrow className="mx-auto justify-center" id="trusted-heading">
-            Trusted by teams shipping serious product
+            شركات ومنتجات وثقت بأعمالنا
           </Eyebrow>
         </Reveal>
         <Reveal delay={0.05}>
@@ -235,13 +218,12 @@ function Home() {
       </Section>
 
 
-      {/* 3 — Statistics */}
       <Section id="stats" className="border-t border-border/60">
         <Reveal>
           <SectionTitle
-            eyebrow="By the numbers"
-            title="A quiet track record."
-            description="Small numbers, sharp results. Each engagement is scoped to move a specific outcome."
+            eyebrow="بالأرقام"
+            title="سِجلّ عمل هادئ ومؤثّر."
+            description="أرقام متزنة ونتائج حادّة. كل شراكة موجّهة نحو نتيجة محدّدة."
           />
         </Reveal>
         <Reveal delay={0.05}>
@@ -251,7 +233,7 @@ function Home() {
                 key={s.label}
                 className="group bg-background p-6 transition-colors hover:bg-muted/40 md:p-8"
               >
-                <dt className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
+                <dt className="text-xs tracking-[0.14em] text-muted-foreground">
                   {s.label}
                 </dt>
                 <dd className="mt-3 text-4xl font-semibold tracking-tight text-foreground md:text-5xl">
@@ -264,17 +246,16 @@ function Home() {
         </Reveal>
       </Section>
 
-      {/* 4 — Featured Services */}
       <Section id="services" className="border-t border-border/60">
         <Reveal>
           <SectionTitle
-            eyebrow="Services"
-            title="Ways we can work together."
-            description="Sprints, retainers, and advisory — each scoped to move a specific outcome, not to fill a calendar."
+            eyebrow="الخدمات"
+            title="كيف يمكننا العمل معًا."
+            description="جلسات مركّزة، وعقود شهرية، واستشارات — كل خدمة مصممة لتحقيق نتيجة محدّدة، لا لملء الجدول."
             actions={
               <DSButton asChild variant="ghost" size="sm">
                 <Link to="/services">
-                  All services
+                  جميع الخدمات
                   <ArrowUpRight />
                 </Link>
               </DSButton>
@@ -294,25 +275,24 @@ function Home() {
           <div className="mt-8 flex justify-center">
             <DSButton asChild variant="outline" size="lg">
               <Link to="/services">
-                Explore all services
-                <ArrowRight />
+                استعرض كل الخدمات
+                <ArrowLeft />
               </Link>
             </DSButton>
           </div>
         </Reveal>
       </Section>
 
-      {/* 5 — Featured Projects */}
       <Section id="work" className="border-t border-border/60">
         <Reveal>
           <SectionTitle
-            eyebrow="Selected work"
-            title="Projects worth studying."
-            description="A handful of engagements where the details compounded into real outcomes."
+            eyebrow="أعمال مختارة"
+            title="مشاريع تستحق الاستكشاف."
+            description="مجموعة من الشراكات التي تحوّلت فيها التفاصيل الدقيقة إلى نتائج حقيقية."
             actions={
               <DSButton asChild variant="ghost" size="sm">
                 <Link to="/work">
-                  All projects
+                  جميع المشاريع
                   <ArrowUpRight />
                 </Link>
               </DSButton>
@@ -332,29 +312,28 @@ function Home() {
           <div className="mt-10 flex justify-center">
             <DSButton asChild variant="outline" size="lg">
               <Link to="/work">
-                See every project
-                <ArrowRight />
+                استعرض جميع المشاريع
+                <ArrowLeft />
               </Link>
             </DSButton>
           </div>
         </Reveal>
       </Section>
 
-      {/* 6 — Experience Timeline Preview */}
       <Section id="experience" className="border-t border-border/60">
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] lg:gap-16">
           <Reveal>
             <SectionTitle
               as="h2"
-              eyebrow="Experience"
-              title="A short, deliberate path."
-              description="I've kept the résumé lean on purpose — each stop was chosen for the depth of work, not the logo."
+              eyebrow="الخبرات"
+              title="مسيرة قصيرة ومدروسة."
+              description="أبقيت السيرة المهنية مركّزة عن قصد — كل محطة اخترتها لعمق التجربة، لا لبريق الاسم."
             />
             <div className="mt-8">
               <DSButton asChild variant="outline" size="md">
                 <Link to="/about">
-                  Read the full story
-                  <ArrowRight />
+                  اقرأ القصة كاملة
+                  <ArrowLeft />
                 </Link>
               </DSButton>
             </div>
@@ -367,13 +346,12 @@ function Home() {
         </div>
       </Section>
 
-      {/* 7 — Skills */}
       <Section id="skills" className="border-t border-border/60">
         <Reveal>
           <SectionTitle
-            eyebrow="Skills"
-            title="The stack behind the work."
-            description="Design and engineering, held to the same bar. I stay narrow so I can go deep."
+            eyebrow="المهارات"
+            title="التقنيات وراء العمل."
+            description="التصميم والهندسة بمعيار واحد. أبقى مركّزًا لأتعمّق أكثر."
           />
         </Reveal>
         <Reveal delay={0.05}>
@@ -408,7 +386,7 @@ function Home() {
           <div className="mt-10 flex justify-center">
             <DSButton asChild variant="ghost" size="md">
               <Link to="/about">
-                See the full toolkit
+                استعرض القائمة الكاملة
                 <ArrowUpRight />
               </Link>
             </DSButton>
@@ -416,17 +394,16 @@ function Home() {
         </Reveal>
       </Section>
 
-      {/* 8 — Certificates */}
       <Section id="certificates" className="border-t border-border/60">
         <Reveal>
           <SectionTitle
-            eyebrow="Certificates"
-            title="Learning, on the record."
-            description="Formal credentials from teams whose work I respect."
+            eyebrow="الشهادات"
+            title="تعلّم موثّق."
+            description="شهادات رسمية من جهات أحترم عملها."
             actions={
               <span className="hidden items-center gap-2 rounded-full border border-border/70 bg-background px-3 py-1 text-xs text-muted-foreground md:inline-flex">
                 <Award className="size-3.5" aria-hidden />
-                {certificates.length} verified
+                {certificates.length} شهادة موثّقة
               </span>
             }
           />
@@ -442,13 +419,12 @@ function Home() {
         </Reveal>
       </Section>
 
-      {/* 9 — Testimonials */}
       <Section id="testimonials" className="border-t border-border/60">
         <Reveal>
           <SectionTitle
-            eyebrow="Testimonials"
-            title="What partners say."
-            description="A few kind words from the people I've shipped alongside."
+            eyebrow="آراء العملاء"
+            title="ماذا يقول شركاؤنا."
+            description="كلمات كريمة من الأشخاص الذين عملت معهم."
           />
         </Reveal>
         <Reveal delay={0.05}>
@@ -464,21 +440,20 @@ function Home() {
           <div className="mt-10 flex justify-center">
             <DSButton asChild variant="outline" size="md">
               <Link to="/contact">
-                Become the next case study
-                <ArrowRight />
+                كن دراسة الحالة القادمة
+                <ArrowLeft />
               </Link>
             </DSButton>
           </div>
         </Reveal>
       </Section>
 
-      {/* 10 — Current Focus */}
       <Section id="now" className="border-t border-border/60">
         <Reveal>
           <SectionTitle
-            eyebrow="Now"
-            title="What I'm focused on this quarter."
-            description="A short, updated list — three problems getting my time and attention right now."
+            eyebrow="حاليًا"
+            title="ما الذي أركّز عليه هذا الربع."
+            description="قائمة قصيرة ومحدّثة — ثلاث قضايا تشغل وقتي واهتمامي الآن."
           />
         </Reveal>
         <Reveal delay={0.05}>
@@ -495,7 +470,7 @@ function Home() {
                   >
                     <div
                       aria-hidden
-                      className="pointer-events-none absolute -right-16 -top-16 size-40 rounded-full bg-primary/10 blur-2xl"
+                      className="pointer-events-none absolute -left-16 -top-16 size-40 rounded-full bg-primary/10 blur-2xl"
                     />
                     <div className="relative">
                       <span className="grid size-10 place-items-center rounded-md border border-border/60 bg-background text-primary">
@@ -514,17 +489,16 @@ function Home() {
         </Reveal>
       </Section>
 
-      {/* 11 — Ideas Lab */}
       <Section id="ideas" className="border-t border-border/60">
         <Reveal>
           <SectionTitle
-            eyebrow="Ideas Lab"
-            title="Half-formed things, in the open."
-            description="Concepts, experiments, and prototypes I'm exploring — some will ship, most won't."
+            eyebrow="مختبر الأفكار"
+            title="أفكار قيد التشكّل، بشفافية."
+            description="مفاهيم وتجارب ونماذج أولية أستكشفها — بعضها سيرى النور، ومعظمها لن يفعل."
             actions={
               <DSButton asChild variant="ghost" size="sm">
                 <Link to="/ideas">
-                  Browse the lab
+                  استعرض المختبر
                   <ArrowUpRight />
                 </Link>
               </DSButton>
@@ -557,7 +531,7 @@ function Home() {
                       to="/ideas"
                       className="mt-6 inline-flex items-center gap-1 text-xs font-medium text-foreground/80 transition-colors hover:text-foreground"
                     >
-                      Follow along
+                      تابع الأفكار
                       <ArrowUpRight className="size-3.5" />
                     </Link>
                   </DSCard>
@@ -568,17 +542,16 @@ function Home() {
         </Reveal>
       </Section>
 
-      {/* 12 — Latest Articles */}
       <Section id="writing" className="border-t border-border/60">
         <Reveal>
           <SectionTitle
-            eyebrow="Writing"
-            title="Latest essays."
-            description="Short notes on design, engineering, and the practice of shipping."
+            eyebrow="المدونة"
+            title="أحدث المقالات."
+            description="ملاحظات قصيرة حول التصميم والهندسة وممارسة إطلاق المنتجات."
             actions={
               <DSButton asChild variant="ghost" size="sm">
                 <Link to="/blog">
-                  All essays
+                  جميع المقالات
                   <ArrowUpRight />
                 </Link>
               </DSButton>
@@ -596,13 +569,13 @@ function Home() {
                 >
                   <div className="min-w-0">
                     <p className="text-xs text-muted-foreground">
-                      {new Date(post.publishedAt).toLocaleDateString("en-US", {
-                        month: "short",
+                      {new Date(post.publishedAt).toLocaleDateString("ar-SA", {
+                        month: "long",
                         day: "numeric",
                         year: "numeric",
                       })}
                       {" · "}
-                      {post.readingTime} min read
+                      {post.readingTime} دقائق قراءة
                     </p>
                     <h3 className="mt-1 text-lg font-medium text-foreground transition-colors group-hover:text-primary">
                       {post.title}
@@ -612,7 +585,7 @@ function Home() {
                     </p>
                   </div>
                   <ArrowUpRight
-                    className="mt-1 size-4 shrink-0 text-muted-foreground transition-transform duration-300 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-foreground"
+                    className="mt-1 size-4 shrink-0 text-muted-foreground transition-transform duration-300 ease-out group-hover:-translate-y-0.5 group-hover:text-foreground"
                     aria-hidden
                   />
                 </Link>
@@ -624,15 +597,14 @@ function Home() {
           <div className="mt-8 flex justify-center">
             <DSButton asChild variant="outline" size="md">
               <Link to="/blog">
-                Read the blog
-                <ArrowRight />
+                استعرض المدونة
+                <ArrowLeft />
               </Link>
             </DSButton>
           </div>
         </Reveal>
       </Section>
 
-      {/* 13 — Contact CTA */}
       <Section className="border-t border-border/60">
         <Reveal>
           <div className="relative overflow-hidden rounded-3xl border border-border/60 bg-card px-6 py-16 md:px-16 md:py-24">
@@ -642,36 +614,36 @@ function Home() {
             />
             <div
               aria-hidden
-              className="pointer-events-none absolute -right-24 -bottom-24 size-80 rounded-full bg-accent/20 blur-3xl"
+              className="pointer-events-none absolute -left-24 -bottom-24 size-80 rounded-full bg-accent/20 blur-3xl"
             />
             <div className="relative mx-auto max-w-3xl text-center">
               <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/70 px-3 py-1 text-xs text-muted-foreground backdrop-blur-sm">
                 <ShieldCheck className="size-3.5" aria-hidden />
-                Booking new engagements for this quarter
+                أستقبل مشاريع جديدة لهذا الربع
               </div>
               <h2 className="mt-6 text-3xl font-semibold tracking-tight text-foreground text-balance md:text-5xl">
-                Let's build something worth shipping.
+                لنبنِ معًا شيئًا يستحق الإطلاق.
               </h2>
               <p className="mt-4 text-base text-muted-foreground md:text-lg">
-                Whether you're launching, redesigning, or scaling — start with a short
-                conversation. If we're not a fit, I'll tell you.
+                سواء كنت تُطلق منتجًا جديدًا، أو تُعيد تصميم منتج قائم، أو تعمل
+                على التوسّع — ابدأ بمحادثة قصيرة. إن لم نكن الشراكة المناسبة، سأخبرك بصراحة.
               </p>
               <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
                 <DSButton asChild size="lg" variant="primary">
                   <Link to="/contact">
-                    Start a project
-                    <ArrowRight />
+                    ابدأ مشروعًا
+                    <ArrowLeft />
                   </Link>
                 </DSButton>
                 <DSButton asChild size="lg" variant="outline">
                   <Link to="/services">
                     <Figma />
-                    See services
+                    استعرض الخدمات
                   </Link>
                 </DSButton>
               </div>
               <p className="mt-6 text-xs text-muted-foreground">
-                Typical reply time · within 24 hours · {site.location}
+                زمن الرد المعتاد · خلال 24 ساعة · {site.location}
               </p>
             </div>
           </div>

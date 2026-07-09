@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
-  ArrowRight,
+  ArrowLeft,
   Award,
   Briefcase,
   Building2,
@@ -39,8 +39,8 @@ import {
 export const Route = createFileRoute("/career")({
   head: () => ({
     meta: buildMeta({
-      title: "Career — Experience, Education & Resume",
-      description: `${site.name}'s professional experience, education, certificates, skills, languages and awards. Download the latest resume — ${site.availabilityLabel.toLowerCase()}.`,
+      title: "الخبرات — السيرة المهنية والتعليم والشهادات",
+      description: `الخبرة المهنية والتعليم والشهادات والمهارات واللغات والجوائز لـ ${site.name}. حمّل السيرة الذاتية الأحدث — ${site.availabilityLabel}.`,
       path: "/career",
       type: "profile",
     }),
@@ -100,17 +100,16 @@ function SectionHeading({
 
 function CareerPage() {
   const linkedin = socials.find((s) => s.label.toLowerCase() === "linkedin");
-  const emailContact = socials.find((s) => s.label.toLowerCase() === "email");
+  const emailContact = socials.find((s) => s.label === "البريد الإلكتروني");
 
   return (
     <>
       <PageHeader
-        eyebrow="Career"
-        title="Experience, education and everything in between"
-        description={`${site.role} with a track record of shipping premium, considered products. Built for recruiters — quick to scan, easy to verify, ready to download.`}
+        eyebrow="الخبرات"
+        title="الخبرة والتعليم وكل ما بينهما"
+        description={`${site.role} مع سِجلّ حافل بإطلاق منتجات مميّزة ومدروسة. مُنسَّق للمسؤولين عن التوظيف — سهل التصفح، وسريع التحقق، وجاهز للتحميل.`}
       />
 
-      {/* Availability + quick actions */}
       <Section size="sm">
         <Reveal>
           <div className="flex flex-col gap-6 rounded-2xl border border-border/60 bg-card p-6 md:flex-row md:items-center md:justify-between md:p-8">
@@ -118,13 +117,13 @@ function CareerPage() {
               <div className="flex flex-wrap items-center gap-3">
                 <AvailabilityBadge
                   available={site.available}
-                  label={site.available ? site.availabilityLabel : "Not currently available"}
+                  label={site.available ? site.availabilityLabel : "غير متاح حاليًا"}
                 />
                 <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
                   <MapPin className="size-3.5" aria-hidden /> {site.location}
                 </span>
                 <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <Calendar className="size-3.5" aria-hidden /> Resume updated {resumeMeta.updated}
+                  <Calendar className="size-3.5" aria-hidden /> آخر تحديث للسيرة الذاتية: {resumeMeta.updated}
                 </span>
               </div>
               <h2 className="mt-4 text-lg font-semibold tracking-tight text-foreground md:text-xl">
@@ -137,12 +136,12 @@ function CareerPage() {
             <div className="flex flex-wrap items-center gap-2">
               <DSButton asChild size="lg">
                 <a href={resumeMeta.href} download={resumeMeta.fileName}>
-                  <Download /> Download resume
+                  <Download /> تحميل السيرة الذاتية
                 </a>
               </DSButton>
               <DSButton asChild size="lg" variant="outline">
                 <Link to="/contact">
-                  <Mail /> Contact me
+                  <Mail /> تواصل معي
                 </Link>
               </DSButton>
             </div>
@@ -150,17 +149,15 @@ function CareerPage() {
         </Reveal>
       </Section>
 
-      {/* Body + Sticky Recruiter Sidebar */}
       <Section size="sm">
 
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_320px]">
           <div className="min-w-0 space-y-16">
-            {/* Experience Timeline */}
             <Reveal>
               <SectionHeading
                 id="experience"
-                eyebrow="Experience"
-                title="Professional timeline"
+                eyebrow="الخبرة"
+                title="المسيرة المهنية"
               />
               <ol className="mt-8 relative border-s border-border/60 ps-6 md:ps-8">
                 {experience.map((item, i) => (
@@ -169,12 +166,11 @@ function CareerPage() {
               </ol>
             </Reveal>
 
-            {/* Education */}
             <Reveal>
               <SectionHeading
                 id="education"
-                eyebrow="Education"
-                title="Where I studied"
+                eyebrow="التعليم"
+                title="أين درست"
               />
               <div className="mt-8">
                 <Grid cols={{ base: 1, md: 2 }} gap="md">
@@ -189,7 +185,7 @@ function CareerPage() {
                         <span className="grid size-10 place-items-center rounded-lg border border-border/60 bg-muted/50 text-primary">
                           <GraduationCap className="size-5" aria-hidden />
                         </span>
-                        <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                        <span className="text-xs font-medium tracking-wider text-muted-foreground">
                           {e.period}
                         </span>
                       </div>
@@ -207,12 +203,11 @@ function CareerPage() {
               </div>
             </Reveal>
 
-            {/* Certificates */}
             <Reveal>
               <SectionHeading
                 id="certificates"
-                eyebrow="Certificates"
-                title="Verified credentials"
+                eyebrow="الشهادات"
+                title="شهادات موثّقة"
               />
               <div className="mt-8">
                 <Grid cols={{ base: 1, md: 2, lg: 3 }} gap="md">
@@ -236,7 +231,7 @@ function CareerPage() {
                       </h3>
                       <p className="mt-1 text-xs text-muted-foreground">{c.issuer}</p>
                       {c.credentialId ? (
-                        <p className="mt-3 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+                        <p className="mt-3 font-mono text-[10px] tracking-wider text-muted-foreground" dir="ltr">
                           ID: {c.credentialId}
                         </p>
                       ) : null}
@@ -247,7 +242,7 @@ function CareerPage() {
                           rel="noreferrer"
                           className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
                         >
-                          Verify <ExternalLink className="size-3" aria-hidden />
+                          تحقّق <ExternalLink className="size-3" aria-hidden />
                         </a>
                       ) : null}
                     </DSCard>
@@ -256,12 +251,11 @@ function CareerPage() {
               </div>
             </Reveal>
 
-            {/* Skills */}
             <Reveal>
               <SectionHeading
                 id="skills"
-                eyebrow="Skills"
-                title="What I bring to the table"
+                eyebrow="المهارات"
+                title="ما أُقدّمه للفريق"
               />
               <div className="mt-8">
                 <Grid cols={{ base: 1, md: 2 }} gap="md">
@@ -272,7 +266,7 @@ function CareerPage() {
                       padding="lg"
                       className="flex h-full flex-col"
                     >
-                      <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                      <p className="text-xs font-medium tracking-wider text-muted-foreground">
                         {group.title}
                       </p>
                       <ul className="mt-4 flex flex-wrap gap-2">
@@ -292,12 +286,11 @@ function CareerPage() {
               </div>
             </Reveal>
 
-            {/* Languages */}
             <Reveal>
               <SectionHeading
                 id="languages"
-                eyebrow="Languages"
-                title="How I communicate"
+                eyebrow="اللغات"
+                title="كيف أتواصل"
               />
               <ul className="mt-8 grid gap-3 sm:grid-cols-3">
                 {languages.map((l) => (
@@ -308,6 +301,7 @@ function CareerPage() {
                     <span
                       aria-hidden
                       className="grid size-10 place-items-center rounded-lg border border-border/60 bg-muted/50 text-xs font-semibold tracking-wider text-foreground"
+                      dir="ltr"
                     >
                       {l.code ?? <LanguagesIcon className="size-4" />}
                     </span>
@@ -320,12 +314,11 @@ function CareerPage() {
               </ul>
             </Reveal>
 
-            {/* Awards */}
             <Reveal>
               <SectionHeading
                 id="awards"
-                eyebrow="Awards"
-                title="Recognition"
+                eyebrow="الجوائز"
+                title="تكريمات وإنجازات"
               />
               <ol className="mt-8 space-y-3">
                 {awards.map((a) => (
@@ -357,7 +350,6 @@ function CareerPage() {
               </ol>
             </Reveal>
 
-            {/* Resume + Recruiter CTA */}
             <Reveal>
               <div
                 id="resume"
@@ -367,46 +359,46 @@ function CareerPage() {
                   aria-hidden
                   className="pointer-events-none absolute inset-0 -z-10 opacity-60 [mask-image:radial-gradient(60%_60%_at_50%_0%,black,transparent)] bg-linear-to-b from-primary/8 to-transparent"
                 />
-                <Eyebrow>For recruiters &amp; hiring managers</Eyebrow>
+                <Eyebrow>لمسؤولي التوظيف والموارد البشرية</Eyebrow>
                 <h2 className="mt-3 max-w-2xl text-2xl font-semibold tracking-tight md:text-3xl">
-                  Everything you need in one page
+                  كل ما تحتاجه في صفحة واحدة
                 </h2>
                 <p className="mt-3 max-w-xl text-sm text-muted-foreground md:text-base">
-                  Download a printer-friendly resume, book a short intro call, or reach out with a role — I reply to every message within 48 hours.
+                  حمّل السيرة الذاتية بصيغة PDF جاهزة للطباعة، أو احجز مكالمة تعارف قصيرة، أو أرسل الوصف الوظيفي — أرد على كل رسالة خلال 48 ساعة.
                 </p>
                 <ul className="mt-6 grid gap-2 text-sm text-foreground/85 sm:grid-cols-2">
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="size-4 text-primary" aria-hidden />
-                    Open to full-time &amp; contract
+                    متاح للدوام الكامل والعقود
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="size-4 text-primary" aria-hidden />
-                    Remote-first, flexible with time zones
+                    عمل عن بُعد مع مرونة في المناطق الزمنية
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="size-4 text-primary" aria-hidden />
-                    References available on request
+                    مراجع مهنية متوفّرة عند الطلب
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="size-4 text-primary" aria-hidden />
-                    Notice period: 2 weeks
+                    فترة الإشعار: أسبوعان
                   </li>
                 </ul>
                 <div className="mt-8 flex flex-wrap gap-2">
                   <DSButton asChild size="lg">
                     <a href={resumeMeta.href} download={resumeMeta.fileName}>
-                      <Download /> Download resume (PDF)
+                      <Download /> تحميل السيرة الذاتية (PDF)
                     </a>
                   </DSButton>
                   <DSButton asChild size="lg" variant="outline">
                     <Link to="/contact">
-                      Send a role <ArrowRight />
+                      إرسال وصف وظيفي <ArrowLeft />
                     </Link>
                   </DSButton>
                   {linkedin ? (
                     <DSButton asChild size="lg" variant="ghost">
                       <a href={linkedin.href} target="_blank" rel="noreferrer">
-                        LinkedIn <ExternalLink />
+                        لينكدإن <ExternalLink />
                       </a>
                     </DSButton>
                   ) : null}
@@ -415,28 +407,27 @@ function CareerPage() {
             </Reveal>
           </div>
 
-          {/* Sticky Recruiter Sidebar */}
           <aside className="lg:sticky lg:top-24 lg:self-start">
             <div className="rounded-2xl border border-border/60 bg-card p-6">
-              <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                Quick facts
+              <p className="text-xs font-medium tracking-wider text-muted-foreground">
+                معلومات سريعة
               </p>
               <dl className="mt-5 space-y-4 text-sm">
-                <SidebarRow icon={Briefcase} label="Role" value={site.role} />
-                <SidebarRow icon={MapPin} label="Location" value={site.location} />
+                <SidebarRow icon={Briefcase} label="المنصب" value={site.role} />
+                <SidebarRow icon={MapPin} label="الموقع" value={site.location} />
                 <SidebarRow
                   icon={Building2}
-                  label="Availability"
-                  value={site.available ? site.availabilityLabel : "Not available"}
+                  label="التوفّر"
+                  value={site.available ? site.availabilityLabel : "غير متاح"}
                 />
                 <SidebarRow
                   icon={Calendar}
-                  label="Notice period"
-                  value="2 weeks"
+                  label="فترة الإشعار"
+                  value="أسبوعان"
                 />
                 <SidebarRow
                   icon={FileText}
-                  label="Resume updated"
+                  label="آخر تحديث للسيرة"
                   value={resumeMeta.updated}
                 />
               </dl>
@@ -444,41 +435,41 @@ function CareerPage() {
               <div className="mt-6 space-y-2 border-t border-border/60 pt-6">
                 <DSButton asChild className="w-full" size="sm">
                   <a href={resumeMeta.href} download={resumeMeta.fileName}>
-                    <Download /> Download resume
+                    <Download /> تحميل السيرة الذاتية
                   </a>
                 </DSButton>
                 {emailContact ? (
                   <DSButton asChild className="w-full" size="sm" variant="outline">
                     <a href={emailContact.href}>
-                      <Mail /> Email me
+                      <Mail /> راسلني عبر البريد
                     </a>
                   </DSButton>
                 ) : null}
                 {linkedin ? (
                   <DSButton asChild className="w-full" size="sm" variant="ghost">
                     <a href={linkedin.href} target="_blank" rel="noreferrer">
-                      LinkedIn <ExternalLink />
+                      لينكدإن <ExternalLink />
                     </a>
                   </DSButton>
                 ) : null}
               </div>
 
               <nav
-                aria-label="On this page"
+                aria-label="في هذه الصفحة"
                 className="mt-6 border-t border-border/60 pt-6"
               >
-                <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                  On this page
+                <p className="text-xs font-medium tracking-wider text-muted-foreground">
+                  في هذه الصفحة
                 </p>
                 <ul className="mt-3 space-y-1.5 text-sm">
                   {[
-                    { href: "#experience", label: "Experience" },
-                    { href: "#education", label: "Education" },
-                    { href: "#certificates", label: "Certificates" },
-                    { href: "#skills", label: "Skills" },
-                    { href: "#languages", label: "Languages" },
-                    { href: "#awards", label: "Awards" },
-                    { href: "#resume", label: "Resume" },
+                    { href: "#experience", label: "الخبرة" },
+                    { href: "#education", label: "التعليم" },
+                    { href: "#certificates", label: "الشهادات" },
+                    { href: "#skills", label: "المهارات" },
+                    { href: "#languages", label: "اللغات" },
+                    { href: "#awards", label: "الجوائز" },
+                    { href: "#resume", label: "السيرة الذاتية" },
                   ].map((l) => (
                     <li key={l.href}>
                       <a
@@ -510,7 +501,7 @@ function SidebarRow({
 }) {
   return (
     <div>
-      <dt className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+      <dt className="inline-flex items-center gap-2 text-xs font-medium tracking-wider text-muted-foreground">
         <Icon className="size-3.5" aria-hidden /> {label}
       </dt>
       <dd className="mt-1 text-sm text-foreground">{value}</dd>
@@ -533,7 +524,7 @@ function ExperienceEntry({ item }: { item: ExperienceItem }) {
           <span aria-hidden>·</span>
           <span>{item.location}</span>
           <span aria-hidden>·</span>
-          <span className="rounded-full border border-border/60 bg-muted px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider">
+          <span className="rounded-full border border-border/60 bg-muted px-2 py-0.5 text-[10px] font-medium tracking-wider">
             {item.type}
           </span>
         </div>

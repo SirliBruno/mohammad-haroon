@@ -5,10 +5,12 @@ import { PageHeader } from "@/components/layout/page-header";
 export const Route = createFileRoute("/products")({
   head: () => ({
     meta: buildMeta({
-      title: "Products",
-      description: "Products built and shipped by Mohammad Haroon.",
+      title: "المنتجات",
+      description: "منتجات صمّمها وأطلقها محمد هارون.",
       path: "/products",
     }),
   }),
-  component: () => <PageHeader eyebrow="Products" title="Products" description="Coming soon." />,
+  component: () => (
+    <PageHeader eyebrow="المنتجات" title="المنتجات" description="قريبًا." />
+  ),
 });

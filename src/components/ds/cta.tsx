@@ -24,7 +24,7 @@ export function CTA({
             className="pointer-events-none absolute inset-0 -z-10 opacity-60 [mask-image:radial-gradient(60%_60%_at_50%_0%,black,transparent)] bg-linear-to-b from-primary/8 to-transparent"
           />
           {eyebrow ? (
-            <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
+            <p className="text-xs font-medium tracking-[0.14em] text-muted-foreground">
               {eyebrow}
             </p>
           ) : null}

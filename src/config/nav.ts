@@ -1,33 +1,35 @@
 export type NavItem = { label: string; to: string };
 
 export const primaryNav: NavItem[] = [
-  { label: "Projects", to: "/work" },
-  { label: "Services", to: "/services" },
-  { label: "About", to: "/about" },
-  { label: "Career", to: "/career" },
-  { label: "Blog", to: "/blog" },
-  { label: "Contact", to: "/contact" },
+  { label: "الرئيسية", to: "/" },
+  { label: "نبذة عني", to: "/about" },
+  { label: "المشاريع", to: "/work" },
+  { label: "الخدمات", to: "/services" },
+  { label: "الخبرات", to: "/career" },
+  { label: "المدونة", to: "/blog" },
+  { label: "تواصل معي", to: "/contact" },
 ];
 
 export const footerNav: { title: string; items: NavItem[] }[] = [
   {
-    title: "Work",
+    title: "الأعمال",
     items: [
-      { label: "Projects", to: "/work" },
-      { label: "Services", to: "/services" },
+      { label: "المشاريع", to: "/work" },
+      { label: "الخدمات", to: "/services" },
     ],
   },
   {
-    title: "Company",
+    title: "التعريف",
     items: [
-      { label: "About", to: "/about" },
-      { label: "Contact", to: "/contact" },
+      { label: "نبذة عني", to: "/about" },
+      { label: "تواصل معي", to: "/contact" },
     ],
   },
   {
-    title: "Resources",
+    title: "مصادر",
     items: [
-      { label: "Blog", to: "/blog" },
+      { label: "المدونة", to: "/blog" },
+      { label: "الخبرات", to: "/career" },
     ],
   },
 ];
