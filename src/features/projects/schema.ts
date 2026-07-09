@@ -27,10 +27,30 @@ export const projectSchema = z.object({
   category: z.enum(projectCategories).default("Websites"),
   tags: z.array(z.string()).default([]),
   stack: z.array(z.string()).default([]),
+  tools: z.array(z.string()).optional(),
+  timeline: z.string().optional(),
   cover: mediaSchema,
   gallery: z.array(mediaSchema).default([]),
   metrics: z.array(z.object({ label: z.string(), value: z.string() })).optional(),
   links: z.array(z.object({ label: z.string(), href: z.string().url() })).optional(),
+  github: z.string().optional(),
+  liveDemo: z.string().optional(),
+  problem: z.string().optional(),
+  goals: z.array(z.string()).optional(),
+  research: z.string().optional(),
+  solution: z.string().optional(),
+  designProcess: z
+    .array(z.object({ title: z.string(), description: z.string() }))
+    .optional(),
+  development: z.string().optional(),
+  lessons: z.array(z.string()).optional(),
+  testimonial: z
+    .object({
+      quote: z.string(),
+      author: z.string(),
+      role: z.string().optional(),
+    })
+    .optional(),
   featured: z.boolean().default(false),
   status: z.enum(["live", "in-progress", "archived", "concept"]).default("live"),
 });
