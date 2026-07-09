@@ -19,6 +19,7 @@ import { buildMeta } from "@/features/seo/build-meta";
 import { PageHeader } from "@/components/layout/page-header";
 import { Section } from "@/components/layout/section";
 import { SectionTitle } from "@/components/layout/section-title";
+import { Eyebrow } from "@/components/typography/eyebrow";
 import { Reveal } from "@/components/motion/reveal";
 import { AvailabilityBadge } from "@/components/ds/availability-badge";
 import { DSButton, DSCard, Grid } from "@/components/ds";
