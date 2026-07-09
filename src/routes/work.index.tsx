@@ -303,7 +303,7 @@ function PremiumProjectCard({
       variant="surface"
       interactive
       padding="none"
-      className="group relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:border-foreground/20 hover:shadow-xl"
+      className="group relative overflow-hidden transition-[transform,box-shadow,border-color] duration-300 ease-out will-change-transform hover:border-foreground/20 hover:shadow-xl motion-safe:hover:-translate-y-1"
     >
       <Link
         to="/work/$slug"
@@ -370,7 +370,7 @@ function PremiumProjectCard({
           </div>
 
           {/* Arrow */}
-          <div className="absolute bottom-4 right-4 grid size-10 translate-y-2 place-items-center rounded-full border border-border/60 bg-background/90 text-foreground opacity-0 backdrop-blur transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+          <div className="absolute bottom-4 right-4 grid size-10 place-items-center rounded-full border border-border/60 bg-background/90 text-foreground opacity-0 backdrop-blur transition-[opacity,transform] duration-300 ease-out group-hover:opacity-100 motion-safe:translate-y-2 motion-safe:group-hover:translate-y-0">
             <ArrowUpRight className="size-4" />
           </div>
         </div>
