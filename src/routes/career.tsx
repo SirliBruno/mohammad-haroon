@@ -15,11 +15,12 @@ import {
   MapPin,
   Sparkles,
 } from "lucide-react";
-import { motion, useReducedMotion } from "motion/react";
 import { buildMeta } from "@/features/seo/build-meta";
 import { PageHeader } from "@/components/layout/page-header";
 import { Section } from "@/components/layout/section";
-import { Eyebrow } from "@/components/typography/eyebrow";
+import { SectionTitle } from "@/components/layout/section-title";
+import { Reveal } from "@/components/motion/reveal";
+import { AvailabilityBadge } from "@/components/ds/availability-badge";
 import { DSButton, DSCard, Grid } from "@/components/ds";
 import { site } from "@/config/site";
 import { socials } from "@/config/socials";
