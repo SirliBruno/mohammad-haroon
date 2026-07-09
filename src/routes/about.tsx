@@ -421,11 +421,10 @@ function About() {
               <div className="relative">
                 <p className="text-xs font-medium tracking-[0.14em] text-primary">الرسالة</p>
                 <h3 className="mt-3 text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
-                  مساعدة الشركات على إطلاق منتجات رقمية يستمتع الناس باستخدامها.
+                  مساعدة الشركات على إطلاق منتجات رقميّة يستمتع الناس باستخدامها.
                 </h3>
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground md:text-base">
-                  سواء كان موقعًا تسويقيًا، أو متجرًا، أو منتجًا متكاملًا،
-                  الرسالة واحدة: واجهات هادئة، ونتائج حادّة، دون شاشات مهدورة.
+                  موقع تسويقي، أو متجر، أو منتج متكامل — الرسالة واحدة: واجهات هادئة، ونتائج ملموسة، بلا شاشات زائدة.
                 </p>
               </div>
             </DSCard>
@@ -439,11 +438,10 @@ function About() {
               <div className="relative">
                 <p className="text-xs font-medium tracking-[0.14em] text-accent">الرؤية</p>
                 <h3 className="mt-3 text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
-                  شريك بجودة استوديو حقيقي للفرق التي تعامل البرمجيات كحرفة.
+                  شريك بمستوى استوديو متخصّص للفرق التي تُعامل البرمجيّات كحرفة.
                 </h3>
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground md:text-base">
-                  على المدى الطويل: بناء ممارسة صغيرة ومدروسة معروفة بتفاصيلها —
-                  من النوع الذي يمكنك الإشارة إليه دون تحفّظ.
+                  على المدى الطويل: ممارسة صغيرة ومدروسة، تُعرَف بتفاصيلها، ويمكن الإشارة إليها بلا تحفّظ.
                 </p>
               </div>
             </DSCard>
@@ -454,9 +452,9 @@ function About() {
       <Section className="border-t border-border/60">
         <Reveal>
           <SectionTitle
-            eyebrow="القيم الأساسية"
-            title="مبادئ ألتزم بها."
-            description="البوصلة — نفسها في السنة الأولى والسنة الثامنة."
+            eyebrow="القيم"
+            title="مبادئ لا أتنازل عنها."
+            description="بوصلة العمل — نفسها في السنة الأولى والسنة الثامنة."
           />
         </Reveal>
         <Reveal delay={0.05}>
