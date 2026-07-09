@@ -14,10 +14,10 @@ const socialIcon: Record<string, typeof Github> = {
 };
 
 const stats = [
-  { value: "+5", label: "موقع تم إطلاقه" },
+  { value: "+5", label: "موقع منشور" },
   { value: "+10", label: "متجر إلكتروني" },
-  { value: "متعدّدة", label: "شركات تعاملت معها" },
-  { value: "متاح", label: "لاستقبال المشاريع" },
+  { value: "متنوّعة", label: "قطاعات وشركات" },
+  { value: "متاح", label: "لمشاريع جديدة" },
 ];
 
 export function Hero() {
