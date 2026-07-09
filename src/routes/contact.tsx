@@ -207,7 +207,7 @@ function ContactPage() {
                     <p className="truncate text-xs text-muted-foreground">{c.hint}</p>
                   </div>
                 </div>
-                <p className="mt-4 truncate text-sm text-foreground/80 group-hover:text-foreground" dir={c.label === "قيت هَب" || c.label === "لينكدإن" ? "ltr" : undefined}>
+                <p className="mt-4 truncate text-sm text-foreground/80 group-hover:text-foreground" dir={c.label === "GitHub" || c.label === "لينكدإن" ? "ltr" : undefined}>
                   {c.value}
                 </p>
                 <ArrowLeft
