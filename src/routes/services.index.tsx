@@ -3,8 +3,8 @@ import { ArrowRight, Mail } from "lucide-react";
 import { buildMeta } from "@/features/seo/build-meta";
 import { PageHeader } from "@/components/layout/page-header";
 import { Section } from "@/components/layout/section";
-import { Eyebrow } from "@/components/typography/eyebrow";
-import { DSButton, Grid, ServiceCard } from "@/components/ds";
+import { SectionTitle } from "@/components/layout/section-title";
+import { DSButton, Grid, ServiceCard, CTA } from "@/components/ds";
 import { services, serviceProcess, serviceFaq } from "@/data/services";
 import {
   Accordion,
@@ -42,7 +42,7 @@ function ServicesIndex() {
               key={s.slug}
               to="/services/$slug"
               params={{ slug: s.slug }}
-              className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-2xl"
+              className="rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               <ServiceCard service={s} className="h-full transition-colors hover:border-primary/40" />
             </Link>
@@ -51,16 +51,15 @@ function ServicesIndex() {
       </Section>
 
       <Section className="border-t border-border/60">
-        <div className="max-w-2xl">
-          <Eyebrow>Process</Eyebrow>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">
-            How every engagement runs
-          </h2>
-        </div>
+        <SectionTitle
+          eyebrow="Process"
+          title="How every engagement runs"
+          size="sm"
+        />
         <div className="mt-10">
           <Grid cols={{ base: 1, md: 2, lg: 4 }} gap="md">
             {serviceProcess.map((p) => (
-              <div key={p.step} className="rounded-xl border border-border/60 bg-card p-6">
+              <div key={p.step} className="rounded-2xl border border-border/60 bg-card p-6">
                 <p className="text-xs font-medium tracking-widest text-muted-foreground">{p.step}</p>
                 <h3 className="mt-3 text-base font-semibold tracking-tight">{p.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{p.description}</p>
@@ -72,15 +71,12 @@ function ServicesIndex() {
 
       <Section className="border-t border-border/60">
         <div className="grid gap-12 md:grid-cols-[1fr_2fr]">
-          <div>
-            <Eyebrow>FAQ</Eyebrow>
-            <h2 className="mt-3 text-2xl font-semibold tracking-tight md:text-3xl">
-              Common questions
-            </h2>
-            <p className="mt-4 text-sm text-muted-foreground">
-              Not seeing yours? Ask on the contact page.
-            </p>
-          </div>
+          <SectionTitle
+            eyebrow="FAQ"
+            title="Common questions"
+            description="Not seeing yours? Ask on the contact page."
+            size="sm"
+          />
           <Accordion type="single" collapsible className="w-full">
             {serviceFaq.map((f, i) => (
               <AccordionItem key={f.q} value={`item-${i}`}>
@@ -94,15 +90,12 @@ function ServicesIndex() {
         </div>
       </Section>
 
-      <Section className="border-t border-border/60">
-        <div className="rounded-2xl border border-border/60 bg-card px-8 py-14 text-center md:px-16">
-          <h2 className="mx-auto max-w-xl text-2xl font-semibold tracking-tight md:text-3xl">
-            Have a project in mind?
-          </h2>
-          <p className="mx-auto mt-3 max-w-lg text-muted-foreground">
-            Tell me about it — I'll come back with an honest take within 48 hours.
-          </p>
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+      <CTA
+        eyebrow="Ready to start?"
+        title="Have a project in mind?"
+        description="Tell me about it — I'll come back with an honest take within 48 hours."
+        actions={
+          <>
             <DSButton asChild size="lg">
               <Link to="/contact">
                 Start a conversation <ArrowRight />
@@ -113,9 +106,10 @@ function ServicesIndex() {
                 <Mail /> Email me
               </a>
             </DSButton>
-          </div>
-        </div>
-      </Section>
+          </>
+        }
+      />
     </>
   );
 }
+
