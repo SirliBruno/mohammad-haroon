@@ -516,8 +516,8 @@ function About() {
         <Reveal>
           <SectionTitle
             eyebrow="التقنيات"
-            title="الأدوات وراء العمل."
-            description="مركّز عن قصد. أتعمّق في مجموعة صغيرة من الأدوات بدلًا من التشتّت."
+            title="أدواتي اليوميّة."
+            description="أختار عددًا قليلًا من الأدوات لأُتقنها، بدل التنقّل بين كل جديد."
           />
         </Reveal>
         <Reveal delay={0.05}>
@@ -554,7 +554,7 @@ function About() {
         <Reveal>
           <SectionTitle
             eyebrow="أسلوب العمل"
-            title="كيف يحدث العمل فعلًا."
+            title="كيف يسير العمل معي."
           />
         </Reveal>
         <Reveal delay={0.05}>
@@ -589,7 +589,7 @@ function About() {
         <Reveal>
           <SectionTitle
             eyebrow="خارج العمل"
-            title="اهتمامات تُشحن الطاقة."
+            title="اهتمامات تُعيد الشحن."
           />
         </Reveal>
         <Reveal delay={0.05}>
@@ -622,11 +622,10 @@ function About() {
                   الخطوة التالية
                 </p>
                 <h2 className="mt-3 text-3xl font-semibold tracking-tight text-foreground text-balance md:text-4xl lg:text-5xl">
-                  اقرأ السيرة الذاتية أو ابدأ محادثة.
+                  اقرأ السيرة الذاتية، أو لنبدأ محادثة.
                 </h2>
                 <p className="mt-4 max-w-xl text-base text-muted-foreground md:text-lg">
-                  حمّل الملف إن كنت تُقيّم للتوظيف، أو أرسل رسالة إن كان لديك
-                  مشروع في ذهنك.
+                  حمّل الملف إن كنتَ تُقيّم للتوظيف، أو راسلني إن كان لديك مشروع في ذهنك.
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-3 md:justify-end">
