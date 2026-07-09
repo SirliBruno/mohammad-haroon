@@ -22,7 +22,7 @@ export function Timeline({
             aria-hidden
             className="absolute -start-[7px] top-1.5 size-3 rounded-full border-2 border-background bg-primary"
           />
-          <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+          <p className="text-xs font-medium tracking-wider text-muted-foreground">
             {item.date}
           </p>
           <h4 className="mt-1 text-base font-semibold text-foreground">{item.title}</h4>
