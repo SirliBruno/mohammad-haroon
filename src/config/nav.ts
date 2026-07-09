@@ -2,12 +2,12 @@ export type NavItem = { label: string; to: string };
 
 export const primaryNav: NavItem[] = [
   { label: "الرئيسية", to: "/" },
-  { label: "نبذة عني", to: "/about" },
+  { label: "من أنا", to: "/about" },
   { label: "المشاريع", to: "/work" },
   { label: "الخدمات", to: "/services" },
-  { label: "الخبرات", to: "/career" },
-  { label: "المدونة", to: "/blog" },
-  { label: "تواصل معي", to: "/contact" },
+  { label: "المسيرة", to: "/career" },
+  { label: "المدوّنة", to: "/blog" },
+  { label: "تواصل", to: "/contact" },
 ];
 
 export const footerNav: { title: string; items: NavItem[] }[] = [
