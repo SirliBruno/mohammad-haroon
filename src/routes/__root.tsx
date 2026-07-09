@@ -54,27 +54,26 @@ function NotFoundComponent() {
           الصفحة غير موجودة
         </h1>
         <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-          الصفحة التي تبحث عنها غير متوفرة، أو تم نقلها، أو لا تزال قيد الإعداد.
-          يمكنك العودة إلى إحدى الوجهات أدناه.
+          الصفحة التي تبحث عنها غير متاحة، أو نُقلت إلى مكان آخر، أو لا تزال قيد الإعداد. اختر إحدى الوجهات أدناه للمتابعة.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
           <Link
             to="/"
             className="inline-flex items-center justify-center rounded-md bg-foreground px-4 py-2 text-sm font-medium text-background transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
-            العودة إلى الرئيسية
+            العودة إلى الرئيسيّة
           </Link>
           <Link
             to="/work"
             className="inline-flex items-center justify-center rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
-            استعرض أعمالي
+            استعرض المشاريع
           </Link>
           <Link
             to="/contact"
             className="inline-flex items-center justify-center rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
-            تواصل معي
+            تواصل
           </Link>
         </div>
       </div>
@@ -93,10 +92,10 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
     <div className="flex min-h-dvh items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          حدث خطأ غير متوقع
+          حدث خطأ غير متوقّع
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          يرجى المحاولة مرة أخرى، أو العودة إلى الصفحة الرئيسية.
+          يُرجى المحاولة مرّة أخرى، أو العودة إلى الصفحة الرئيسيّة.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
@@ -112,7 +111,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
             href="/"
             className="inline-flex items-center justify-center rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
           >
-            العودة إلى الرئيسية
+            العودة إلى الرئيسيّة
           </a>
         </div>
       </div>
@@ -159,7 +158,7 @@ function RootShell({ children }: { children: ReactNode }) {
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:right-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-foreground focus:px-3 focus:py-2 focus:text-sm focus:text-background"
         >
-          تجاوز إلى المحتوى
+          الانتقال إلى المحتوى
         </a>
         {children}
         <Scripts />

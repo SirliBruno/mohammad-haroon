@@ -55,11 +55,12 @@ const trustedCompanies = [
 ];
 
 const statistics = [
-  { value: "+5", label: "موقع تم إطلاقه", hint: "تسويقي ومنتجات" },
-  { value: "+10", label: "متجر إلكتروني", hint: "Shopify ومخصص" },
-  { value: "متعدّدة", label: "شركات تعاملت معها", hint: "من ناشئة إلى وكالات" },
-  { value: "متاح", label: "لاستقبال المشاريع", hint: "أماكن محدودة للربع القادم" },
+  { value: "+5", label: "موقع منشور", hint: "منتجات وصفحات تسويقية" },
+  { value: "+10", label: "متجر إلكتروني", hint: "Shopify وحلول مخصّصة" },
+  { value: "متنوّعة", label: "قطاعات وشركات", hint: "من الناشئة إلى الوكالات" },
+  { value: "متاح", label: "لمشاريع جديدة", hint: "أماكن محدودة للربع القادم" },
 ];
+
 
 const skillGroups = [
   {
@@ -129,19 +130,19 @@ const currentFocus = [
     icon: Zap,
     title: "أنظمة تصميم قابلة للتوسّع",
     description:
-      "بناء التوكنز والعناصر والأنماط لإصدار جديد لمنتج في قطاع التقنية المالية.",
+      "بناء التوكنز والمكوّنات والأنماط لإصدار جديد في قطاع التقنية المالية.",
   },
   {
     icon: Server,
-    title: "تجارة إلكترونية على الحافة",
+    title: "متاجر إلكترونية على الحافة",
     description:
-      "بناء متاجر تجريبية على TanStack Start وCloudflare — سلات أسرع، وكود أنظف.",
+      "بناء متاجر على TanStack Start وCloudflare — تجربة أسرع، وكود أنظف.",
   },
   {
     icon: Sparkles,
-    title: "الحركة كلغة تواصل",
+    title: "الحركة كأداة تواصل",
     description:
-      "توثيق نظام حركة يجعل الأنيميشن يُعبّر عن الحالة لا مجرد زخرفة.",
+      "توثيق نظام حركة يجعل الأنيميشن يُعبّر عن الحالة، لا مجرّد لمسة جمالية.",
   },
 ];
 
@@ -151,21 +152,21 @@ const ideas = [
     tag: "تجربة",
     title: "تحليلات هادئة",
     description:
-      "لوحة تخبرك بما تغيّر — في جملة واحدة — بدلًا من إغراقك بالرسوم البيانية.",
+      "لوحة تُلخّص لك التغيّر في جملة واحدة، بدل إغراقك بعشرات الرسوم البيانية.",
   },
   {
     icon: Compass,
     tag: "تصوّر",
-    title: "نظام رائد الأعمال",
+    title: "لوحة رائد الأعمال",
     description:
-      "واجهة واحدة لأهم ثلاثة أشياء يفعلها المؤسّس: يتحدث مع المستخدمين، يُطلق، ويقرّر.",
+      "واجهة واحدة لأهمّ ثلاث مهام يوميّة: الحديث مع المستخدمين، الإطلاق، واتّخاذ القرار.",
   },
   {
     icon: Layers,
-    tag: "نموذج أولي",
-    title: "وصفات مكوّنات",
+    tag: "نموذج أوّلي",
+    title: "وصفات مكوّنات جاهزة",
     description:
-      "مكتبة من وصفات shadcn الجاهزة — انسخ، الصق، أطلق. دون إعادة كتابة أي كود.",
+      "مكتبة من وصفات shadcn: انسخ، الصق، وأطلق — بلا إعادة كتابة للكود.",
   },
 ];
 
@@ -197,7 +198,7 @@ function Home() {
       >
         <Reveal>
           <Eyebrow className="mx-auto justify-center" id="trusted-heading">
-            شركات ومنتجات وثقت بأعمالنا
+            علامات تجارية وفرق عملت معها
           </Eyebrow>
         </Reveal>
         <Reveal delay={0.05}>
@@ -222,8 +223,8 @@ function Home() {
         <Reveal>
           <SectionTitle
             eyebrow="بالأرقام"
-            title="سِجلّ عمل هادئ ومؤثّر."
-            description="أرقام متزنة ونتائج حادّة. كل شراكة موجّهة نحو نتيجة محدّدة."
+            title="سِجلّ عمل بالأرقام."
+            description="أرقام مختصرة ونتائج ملموسة. كل شراكة موجّهة نحو نتيجة واضحة."
           />
         </Reveal>
         <Reveal delay={0.05}>
@@ -250,8 +251,8 @@ function Home() {
         <Reveal>
           <SectionTitle
             eyebrow="الخدمات"
-            title="كيف يمكننا العمل معًا."
-            description="جلسات مركّزة، وعقود شهرية، واستشارات — كل خدمة مصممة لتحقيق نتيجة محدّدة، لا لملء الجدول."
+            title="طرق العمل معي."
+            description="جلسات مركّزة، وعقود شهرية، واستشارات — كل خدمة مصمّمة لنتيجة واحدة واضحة، لا لملء الجدول."
             actions={
               <DSButton asChild variant="ghost" size="sm">
                 <Link to="/services">
@@ -287,8 +288,8 @@ function Home() {
         <Reveal>
           <SectionTitle
             eyebrow="أعمال مختارة"
-            title="مشاريع تستحق الاستكشاف."
-            description="مجموعة من الشراكات التي تحوّلت فيها التفاصيل الدقيقة إلى نتائج حقيقية."
+            title="مشاريع أفتخر بها."
+            description="نماذج من شراكات تحوّلت فيها تفاصيل صغيرة إلى نتائج ملموسة."
             actions={
               <DSButton asChild variant="ghost" size="sm">
                 <Link to="/work">
@@ -325,9 +326,9 @@ function Home() {
           <Reveal>
             <SectionTitle
               as="h2"
-              eyebrow="الخبرات"
-              title="مسيرة قصيرة ومدروسة."
-              description="أبقيت السيرة المهنية مركّزة عن قصد — كل محطة اخترتها لعمق التجربة، لا لبريق الاسم."
+              eyebrow="المسيرة"
+              title="مسيرة قصيرة ومركّزة."
+              description="أبقيتُ المحطّات قليلة عن قصد — كلّ تجربة اخترتها لعمقها، لا لبريق الاسم."
             />
             <div className="mt-8">
               <DSButton asChild variant="outline" size="md">
@@ -350,8 +351,8 @@ function Home() {
         <Reveal>
           <SectionTitle
             eyebrow="المهارات"
-            title="التقنيات وراء العمل."
-            description="التصميم والهندسة بمعيار واحد. أبقى مركّزًا لأتعمّق أكثر."
+            title="أدواتي اليومية."
+            description="أُركّز على مجموعة صغيرة من الأدوات لأُتقنها، لا لأتنقّل بينها."
           />
         </Reveal>
         <Reveal delay={0.05}>
@@ -386,7 +387,7 @@ function Home() {
           <div className="mt-10 flex justify-center">
             <DSButton asChild variant="ghost" size="md">
               <Link to="/about">
-                استعرض القائمة الكاملة
+                اعرف عنّي أكثر
                 <ArrowUpRight />
               </Link>
             </DSButton>
@@ -399,7 +400,7 @@ function Home() {
           <SectionTitle
             eyebrow="الشهادات"
             title="تعلّم موثّق."
-            description="شهادات رسمية من جهات أحترم عملها."
+            description="شهادات رسمية من جهات أُقدِّر عملها."
             actions={
               <span className="hidden items-center gap-2 rounded-full border border-border/70 bg-background px-3 py-1 text-xs text-muted-foreground md:inline-flex">
                 <Award className="size-3.5" aria-hidden />
@@ -423,8 +424,8 @@ function Home() {
         <Reveal>
           <SectionTitle
             eyebrow="آراء العملاء"
-            title="ماذا يقول شركاؤنا."
-            description="كلمات كريمة من الأشخاص الذين عملت معهم."
+            title="بكلمات من عملت معهم."
+            description="شهادات مختصرة من فرق شاركتها الرحلة."
           />
         </Reveal>
         <Reveal delay={0.05}>
@@ -440,7 +441,7 @@ function Home() {
           <div className="mt-10 flex justify-center">
             <DSButton asChild variant="outline" size="md">
               <Link to="/contact">
-                كن دراسة الحالة القادمة
+                لنبدأ مشروعك القادم
                 <ArrowLeft />
               </Link>
             </DSButton>
@@ -452,8 +453,8 @@ function Home() {
         <Reveal>
           <SectionTitle
             eyebrow="حاليًا"
-            title="ما الذي أركّز عليه هذا الربع."
-            description="قائمة قصيرة ومحدّثة — ثلاث قضايا تشغل وقتي واهتمامي الآن."
+            title="ما يشغلني هذا الربع."
+            description="قائمة قصيرة ومحدَّثة — ثلاث قضايا تأخذ معظم وقتي الآن."
           />
         </Reveal>
         <Reveal delay={0.05}>
@@ -493,12 +494,12 @@ function Home() {
         <Reveal>
           <SectionTitle
             eyebrow="مختبر الأفكار"
-            title="أفكار قيد التشكّل، بشفافية."
-            description="مفاهيم وتجارب ونماذج أولية أستكشفها — بعضها سيرى النور، ومعظمها لن يفعل."
+            title="أفكار قيد التشكّل."
+            description="مفاهيم ونماذج أوّليّة أستكشفها بصوت مرتفع — بعضها يرى النور، وأكثرها لا يفعل."
             actions={
               <DSButton asChild variant="ghost" size="sm">
                 <Link to="/ideas">
-                  استعرض المختبر
+                  زُر المختبر
                   <ArrowUpRight />
                 </Link>
               </DSButton>
@@ -531,7 +532,7 @@ function Home() {
                       to="/ideas"
                       className="mt-6 inline-flex items-center gap-1 text-xs font-medium text-foreground/80 transition-colors hover:text-foreground"
                     >
-                      تابع الأفكار
+                      المزيد من الأفكار
                       <ArrowUpRight className="size-3.5" />
                     </Link>
                   </DSCard>
@@ -545,9 +546,9 @@ function Home() {
       <Section id="writing" className="border-t border-border/60">
         <Reveal>
           <SectionTitle
-            eyebrow="المدونة"
+            eyebrow="المدوّنة"
             title="أحدث المقالات."
-            description="ملاحظات قصيرة حول التصميم والهندسة وممارسة إطلاق المنتجات."
+            description="ملاحظات مختصرة عن التصميم والهندسة وممارسة إطلاق المنتجات."
             actions={
               <DSButton asChild variant="ghost" size="sm">
                 <Link to="/blog">
@@ -597,7 +598,7 @@ function Home() {
           <div className="mt-8 flex justify-center">
             <DSButton asChild variant="outline" size="md">
               <Link to="/blog">
-                استعرض المدونة
+                زُر المدوّنة
                 <ArrowLeft />
               </Link>
             </DSButton>
@@ -619,19 +620,18 @@ function Home() {
             <div className="relative mx-auto max-w-3xl text-center">
               <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/70 px-3 py-1 text-xs text-muted-foreground backdrop-blur-sm">
                 <ShieldCheck className="size-3.5" aria-hidden />
-                أستقبل مشاريع جديدة لهذا الربع
+                أستقبل مشاريع جديدة هذا الربع
               </div>
               <h2 className="mt-6 text-3xl font-semibold tracking-tight text-foreground text-balance md:text-5xl">
-                لنبنِ معًا شيئًا يستحق الإطلاق.
+                لنُطلق معًا شيئًا يستحقّ.
               </h2>
               <p className="mt-4 text-base text-muted-foreground md:text-lg">
-                سواء كنت تُطلق منتجًا جديدًا، أو تُعيد تصميم منتج قائم، أو تعمل
-                على التوسّع — ابدأ بمحادثة قصيرة. إن لم نكن الشراكة المناسبة، سأخبرك بصراحة.
+                سواء كنت تُطلق منتجًا جديدًا، أو تُعيد تصميم منتج قائم، أو تعمل على التوسّع — نبدأ بمحادثة قصيرة. وإن لم أكن الشريك المناسب، سأقول لك ذلك بصراحة.
               </p>
               <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
                 <DSButton asChild size="lg" variant="primary">
                   <Link to="/contact">
-                    ابدأ مشروعًا
+                    ابدأ مشروعك
                     <ArrowLeft />
                   </Link>
                 </DSButton>
@@ -643,7 +643,7 @@ function Home() {
                 </DSButton>
               </div>
               <p className="mt-6 text-xs text-muted-foreground">
-                زمن الرد المعتاد · خلال 24 ساعة · {site.location}
+                متوسّط الرد · خلال 24 ساعة · {site.location}
               </p>
             </div>
           </div>

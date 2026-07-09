@@ -195,7 +195,7 @@ function ServiceDetail() {
 
       {service.workflow.length ? (
         <Section className="border-t border-border/60">
-          <Eyebrow>منهجية العمل</Eyebrow>
+          <Eyebrow>منهجيّة العمل</Eyebrow>
           <h2 className="mt-3 max-w-2xl text-2xl font-semibold tracking-tight md:text-3xl">
             كيف سنعمل معًا
           </h2>
@@ -289,15 +289,15 @@ function ServiceDetail() {
             className="pointer-events-none absolute inset-0 -z-10 opacity-60 [mask-image:radial-gradient(60%_60%_at_50%_0%,black,transparent)] bg-linear-to-b from-primary/8 to-transparent"
           />
           <h2 className="mx-auto max-w-xl text-2xl font-semibold tracking-tight md:text-3xl">
-            جاهز لبدء {service.title}؟
+            جاهز للبدء بـ{service.title}؟
           </h2>
           <p className="mx-auto mt-3 max-w-lg text-muted-foreground">
-            أخبرني بما تحتاج بناءه — سأعود إليك برأي صريح خلال 48 ساعة.
+            اكتب لي عمّا تودّ بناءه — يصلك رأي صريح خلال 48 ساعة.
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
             <DSButton asChild size="lg">
               <Link to="/contact">
-                تواصل معي <ArrowLeft />
+                تواصل <ArrowLeft />
               </Link>
             </DSButton>
             <DSButton asChild size="lg" variant="outline">
@@ -318,9 +318,9 @@ function ServiceNotFound() {
     <Section>
       <div className="mx-auto max-w-md text-center">
         <p className="text-xs font-medium tracking-[0.14em] text-muted-foreground" dir="ltr">404</p>
-        <h1 className="mt-3 text-3xl font-semibold tracking-tight">الخدمة غير موجودة</h1>
+        <h1 className="mt-3 text-3xl font-semibold tracking-tight">لم نعثر على الخدمة</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          لا توجد خدمة تطابق «{slug}».
+          لا توجد خدمة باسم «{slug}».
         </p>
         <div className="mt-6">
           <DSButton asChild variant="outline">

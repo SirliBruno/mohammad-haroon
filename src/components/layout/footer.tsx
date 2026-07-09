@@ -42,7 +42,7 @@ export function Footer() {
                 to="/contact"
                 className="inline-flex items-center gap-2 rounded-md bg-foreground px-3 py-1.5 text-xs font-medium text-background transition-opacity hover:opacity-90"
               >
-                تواصل معي
+                تواصل
               </Link>
             </div>
           </div>

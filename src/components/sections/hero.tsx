@@ -14,10 +14,10 @@ const socialIcon: Record<string, typeof Github> = {
 };
 
 const stats = [
-  { value: "+5", label: "موقع تم إطلاقه" },
+  { value: "+5", label: "موقع منشور" },
   { value: "+10", label: "متجر إلكتروني" },
-  { value: "متعدّدة", label: "شركات تعاملت معها" },
-  { value: "متاح", label: "لاستقبال المشاريع" },
+  { value: "متنوّعة", label: "قطاعات وشركات" },
+  { value: "متاح", label: "لمشاريع جديدة" },
 ];
 
 export function Hero() {
@@ -97,27 +97,25 @@ export function Hero() {
                 <span className="absolute inset-0 animate-ping rounded-full bg-emerald-500/60" />
                 <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
               </span>
-              <span>مرحبًا — أنا {site.shortName}</span>
+              <span>مرحبًا، أنا {site.shortName}</span>
             </div>
 
             <h1
               id="hero-heading"
               className="mt-6 text-4xl font-semibold tracking-tight text-foreground text-balance sm:text-5xl md:text-6xl lg:leading-[1.15]"
             >
-              نبني{" "}
-              <span className="text-gradient-brand">منتجات رقمية</span> تساعد
-              شركتك على النمو.
+              أُصمّم وأُطوِّر{" "}
+              <span className="text-gradient-brand">منتجات رقمية</span> تُنمّي أعمالك.
             </h1>
 
             <p className="mt-4 text-sm font-medium tracking-[0.14em] text-muted-foreground">
-              {site.name} — مطوّر ويب · مصمم واجهات · مهندس منتجات رقمية
+              {site.name} — مطوّر ويب · مصمم واجهات · مهندس منتجات
             </p>
 
             <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
-              متخصص في تطوير المواقع وتصميم الواجهات وبناء المتاجر الإلكترونية،
-              أساعد الشركات ورواد الأعمال على إطلاق تجارب رقمية متميزة تحقّق
-              نتائج فعلية.
+              مواقع، وواجهات، ومتاجر إلكترونية للشركات ورواد الأعمال. تصميم واضح وتنفيذ سريع، بنتائج يمكن قياسها.
             </p>
+
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <DSButton asChild size="lg" variant="primary">
@@ -134,7 +132,7 @@ export function Hero() {
               </DSButton>
               <DSButton asChild size="lg" variant="ghost">
                 <Link to="/contact">
-                  احجز استشارة
+                  ابدأ محادثة
                   <ArrowUpRight />
                 </Link>
               </DSButton>
@@ -142,7 +140,7 @@ export function Hero() {
 
             <div className="mt-10 flex items-center gap-5">
               <span className="text-xs tracking-[0.14em] text-muted-foreground">
-                تابعني
+                للتواصل
               </span>
               <span aria-hidden className="h-px w-8 bg-border" />
               <ul className="flex items-center gap-1">

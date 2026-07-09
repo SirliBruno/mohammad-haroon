@@ -6,7 +6,7 @@ export const Route = createFileRoute("/uses")({
   head: () => ({
     meta: buildMeta({
       title: "أدواتي",
-      description: "الأدوات والتقنيات والمعدات التي يستخدمها محمد هارون.",
+      description: "الأدوات والبرامج والمعدّات التي أستخدمها في العمل اليومي.",
       path: "/uses",
     }),
   }),

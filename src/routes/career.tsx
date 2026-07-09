@@ -39,8 +39,8 @@ import {
 export const Route = createFileRoute("/career")({
   head: () => ({
     meta: buildMeta({
-      title: "الخبرات — السيرة المهنية والتعليم والشهادات",
-      description: `الخبرة المهنية والتعليم والشهادات والمهارات واللغات والجوائز لـ ${site.name}. حمّل السيرة الذاتية الأحدث — ${site.availabilityLabel}.`,
+      title: "المسيرة — الخبرة والتعليم والشهادات",
+      description: `الخبرة المهنيّة والتعليم والشهادات والمهارات واللغات والجوائز لـ ${site.name}. حمّل السيرة الذاتية الأحدث — ${site.availabilityLabel}.`,
       path: "/career",
       type: "profile",
     }),
@@ -105,9 +105,9 @@ function CareerPage() {
   return (
     <>
       <PageHeader
-        eyebrow="الخبرات"
-        title="الخبرة والتعليم وكل ما بينهما"
-        description={`${site.role} مع سِجلّ حافل بإطلاق منتجات مميّزة ومدروسة. مُنسَّق للمسؤولين عن التوظيف — سهل التصفح، وسريع التحقق، وجاهز للتحميل.`}
+        eyebrow="المسيرة"
+        title="الخبرة والتعليم وما بينهما"
+        description={`${site.role} مع سِجلّ حافل بمنتجات مُطلَقة ومدروسة. مُنسَّق للمسؤولين عن التوظيف: سهل التصفّح، سريع التحقّق، وجاهز للتحميل.`}
       />
 
       <Section size="sm">
@@ -123,7 +123,7 @@ function CareerPage() {
                   <MapPin className="size-3.5" aria-hidden /> {site.location}
                 </span>
                 <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <Calendar className="size-3.5" aria-hidden /> آخر تحديث للسيرة الذاتية: {resumeMeta.updated}
+                  <Calendar className="size-3.5" aria-hidden /> آخر تحديث للسيرة: {resumeMeta.updated}
                 </span>
               </div>
               <h2 className="mt-4 text-lg font-semibold tracking-tight text-foreground md:text-xl">
@@ -141,7 +141,7 @@ function CareerPage() {
               </DSButton>
               <DSButton asChild size="lg" variant="outline">
                 <Link to="/contact">
-                  <Mail /> تواصل معي
+                  <Mail /> تواصل
                 </Link>
               </DSButton>
             </div>

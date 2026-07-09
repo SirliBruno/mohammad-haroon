@@ -9,9 +9,9 @@ import { articles } from "@/data/writing";
 export const Route = createFileRoute("/blog/")({
   head: () => ({
     meta: buildMeta({
-      title: "المدونة",
+      title: "المدوّنة",
       description:
-        "مقالات وملاحظات حول المنتجات والتصميم وهندسة الويب — بقلم محمد هارون.",
+        "مقالات وملاحظات حول المنتجات، والتصميم، وهندسة الويب — بقلم محمد هارون.",
       path: "/blog",
     }),
     links: [{ rel: "canonical", href: "/blog" }],
@@ -27,15 +27,15 @@ function BlogIndex() {
   return (
     <>
       <PageHeader
-        eyebrow="المدونة"
-        title="مقالات وأفكار"
-        description="مقالات دورية عن الحرفية وأنظمة التصميم وإطلاق برمجيات تستحق الاستخدام."
+        eyebrow="المدوّنة"
+        title="مقالات وملاحظات"
+        description="مقالات دوريّة عن الحرفة، وأنظمة التصميم، وممارسة إطلاق منتجات تستحقّ الاستخدام."
       />
       <Section>
         {posts.length === 0 ? (
           <EmptyState
             title="لا توجد مقالات بعد"
-            description="أول مقال قادم قريبًا."
+            description="أوّل مقالة قادمة قريبًا."
           />
         ) : (
           <ul className="divide-y divide-border/60 border-y border-border/60">

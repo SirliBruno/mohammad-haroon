@@ -50,9 +50,9 @@ import { site } from "@/config/site";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: buildMeta({
-      title: "تواصل معي",
+      title: "تواصل",
       description:
-        "تواصل مع محمد هارون — للتوظيف، أو المشاريع الحرة، أو الشراكات. أرد على جميع الرسائل خلال يومَي عمل.",
+        "تواصل مع محمد هارون — للتوظيف، أو المشاريع الحرّة، أو الشراكات. أرد على كلّ الرسائل خلال يومَي عمل.",
       path: "/contact",
     }),
     links: [{ rel: "canonical", href: "/contact" }],
@@ -87,51 +87,51 @@ const channels = [
     label: "البريد الإلكتروني",
     value: site.email,
     href: `mailto:${site.email}`,
-    hint: "الأنسب للتفاصيل الكاملة",
+    hint: "الأنسب لعرض المشروع بالتفصيل",
   },
   {
     icon: MessageCircle,
     label: "واتساب",
     value: site.whatsappDisplay,
     href: whatsappHref,
-    hint: "للاستفسارات السريعة والمواعيد",
+    hint: "للأسئلة السريعة وحجز المواعيد",
   },
   {
     icon: Linkedin,
     label: "لينكدإن",
     value: "in/mharoon",
     href: "https://linkedin.com/",
-    hint: "للفرص المهنية والتعارف",
+    hint: "للفرص المهنيّة والتعارف",
   },
   {
     icon: Github,
-    label: "قيت هَب",
+    label: "GitHub",
     value: "@mharoon",
     href: "https://github.com/",
-    hint: "الكود والمشاريع المفتوحة",
+    hint: "الكود والمشاريع مفتوحة المصدر",
   },
 ] as const;
 
 const faqs = [
   {
-    q: "ما هو زمن الرد المعتاد لديك؟",
-    a: "خلال يومَي عمل — وغالبًا في اليوم نفسه إذا وصلت الرسالة قبل الساعة 3 عصرًا بتوقيت السعودية.",
+    q: "كم يستغرق الرد عادةً؟",
+    a: "خلال يومَي عمل، وغالبًا في اليوم نفسه إن وصلت الرسالة قبل الثالثة عصرًا بتوقيت السعوديّة.",
   },
   {
-    q: "هل تقبل المشاريع قصيرة المدى؟",
-    a: "نعم. من صفحة مقصودة خلال أسبوعين إلى مشروع منتج متكامل. سأخبرك بصراحة إن لم أكن الأنسب للمشروع.",
+    q: "هل تقبل المشاريع القصيرة؟",
+    a: "نعم — من صفحة مقصودة خلال أسبوعين، إلى مشروع منتج متكامل. وإن لم أكن الشريك المناسب، أخبرك بصراحة.",
   },
   {
-    q: "ما المعلومات التي تُسرّع الرد؟",
-    a: "ملخص من سطر واحد للمشكلة، والجدول الزمني، ونطاق ميزانية تقريبي إن أمكن. الروابط لمنتجك الحالي أو ملفات Figma تُعدّ كنزًا.",
+    q: "ما الذي يُسرّع الرد؟",
+    a: "ملخّص للمشكلة في سطر أو سطرين، والجدول الزمني، ونطاق ميزانيّة تقريبي إن أمكن. روابط منتجك الحالي أو ملفّ Figma تفتح كل الأبواب.",
   },
   {
-    q: "هل تُوقّع اتفاقيات عدم إفصاح؟",
-    a: "بكل سرور — أُوقّع اتفاقية عدم إفصاح متبادلة قبل المكالمة الأولى للأعمال الحساسة. فقط اذكر ذلك في رسالتك.",
+    q: "هل تُوقّع اتفاقيّة عدم إفصاح؟",
+    a: "بكلّ سرور — أُوقّع NDA متبادلة قبل المكالمة الأولى للأعمال الحسّاسة. فقط أشِر إلى ذلك في رسالتك.",
   },
   {
     q: "أين مقرّك؟ وهل تسافر؟",
-    a: `${site.location} — أعمل مع فرق حول العالم بتوقيت ${site.timezone}، وأسافر لجلسات الانطلاق حين يستدعي الأمر ذلك.`,
+    a: `${site.location} — أعمل مع فرق حول العالم بتوقيت ${site.timezone}، وأسافر لجلسات الانطلاق حين يستدعي الأمر.`,
   },
 ];
 
@@ -172,7 +172,7 @@ function ContactPage() {
     } catch (err) {
       console.error(err);
       setServerError(
-        "حدث خطأ غير متوقع أثناء إرسال الرسالة. يُرجى مراسلتي مباشرة عبر " + site.email + "."
+        "حدث خطأ غير متوقّع أثناء إرسال الرسالة. يُرجى مراسلتي مباشرة عبر " + site.email + "."
       );
     }
   };
@@ -180,10 +180,11 @@ function ContactPage() {
   return (
     <>
       <PageHeader
-        eyebrow="تواصل معي"
-        title="لنتحدّث سويًا"
-        description="سواء كنت تبحث عن توظيف، أو مشروع حر، أو حتى مجرد سؤال — أقرأ كل الرسائل وأرد خلال يومَي عمل."
+        eyebrow="تواصل"
+        title="لنتحدّث"
+        description="توظيف، أو مشروع حرّ، أو حتى سؤال عابر — أقرأ كلّ الرسائل بنفسي، وأرد خلال يومَي عمل."
       />
+
 
       <Section size="sm">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -207,7 +208,7 @@ function ContactPage() {
                     <p className="truncate text-xs text-muted-foreground">{c.hint}</p>
                   </div>
                 </div>
-                <p className="mt-4 truncate text-sm text-foreground/80 group-hover:text-foreground" dir={c.label === "قيت هَب" || c.label === "لينكدإن" ? "ltr" : undefined}>
+                <p className="mt-4 truncate text-sm text-foreground/80 group-hover:text-foreground" dir={c.label === "GitHub" || c.label === "لينكدإن" ? "ltr" : undefined}>
                   {c.value}
                 </p>
                 <ArrowLeft
@@ -226,11 +227,11 @@ function ContactPage() {
           <div>
             {submitted ? (
               <SuccessState
-                title="تم استلام رسالتك"
-                description="شكرًا لتواصلك. سأرد عليك خلال يومَي عمل — وغالبًا في وقت أقصر."
+                title="وصلت رسالتك"
+                description="شكرًا لتواصلك. أرد عادةً خلال يومَي عمل، وغالبًا في وقت أقصر."
                 action={
                   <DSButton variant="outline" onClick={() => setSubmitted(false)}>
-                    إرسال رسالة أخرى
+                    إرسال رسالة جديدة
                   </DSButton>
                 }
               />
@@ -261,7 +262,7 @@ function ContactPage() {
                     aria-live="polite"
                     className="rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive"
                   >
-                    يرجى تصحيح الحقول المميّزة أدناه.
+                    يُرجى تصحيح الحقول المميّزة أدناه.
                   </div>
                 ) : null}
 
@@ -299,14 +300,14 @@ function ContactPage() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="hire">وظيفة بدوام كامل</SelectItem>
-                      <SelectItem value="freelance">مشروع حر</SelectItem>
+                      <SelectItem value="freelance">مشروع حرّ</SelectItem>
                       <SelectItem value="collab">شراكة أو تعاون</SelectItem>
                       <SelectItem value="other">شيء آخر</SelectItem>
                     </SelectContent>
                   </Select>
                 </Field>
 
-                <Field id="budget" label="الميزانية (اختياري)" hint="نطاق تقريبي بالريال أو الدولار.">
+                <Field id="budget" label="الميزانيّة (اختياري)" hint="نطاق تقريبي بالريال أو الدولار.">
                   <Input
                     id="budget"
                     placeholder="مثال: 40,000 – 100,000 ريال"
@@ -320,7 +321,7 @@ function ContactPage() {
                   label="الرسالة"
                   required
                   rows={6}
-                  placeholder="أخبرني عن المشكلة، والجدول الزمني، وما هي النتيجة المثالية بالنسبة لك."
+                  placeholder="اكتب لي عن المشكلة، والجدول الزمني، والنتيجة المثاليّة كما تراها."
                   error={errors.message?.message}
                   {...register("message")}
                 />
@@ -352,7 +353,7 @@ function ContactPage() {
                   />
                   <div>
                     <Label htmlFor="consent" className="text-sm font-normal text-foreground/80">
-                      أوافق على أن يحتفظ {site.shortName} برسالتي لأغراض الرد فقط.
+                      أوافق على احتفاظ {site.shortName} برسالتي بغرض الرد فقط.
                     </Label>
                     {errors.consent ? (
                       <p id="consent-error" role="alert" className="mt-1 text-xs text-destructive">
@@ -364,12 +365,12 @@ function ContactPage() {
 
                 <div className="flex flex-wrap items-center gap-4">
                   <DSButton type="submit" size="lg" disabled={isSubmitting}>
-                    {isSubmitting ? "جارٍ الإرسال…" : "إرسال"}
+                    {isSubmitting ? "جارٍ الإرسال…" : "إرسال الرسالة"}
                     {!isSubmitting ? <ArrowLeft /> : null}
                   </DSButton>
                   <p className="flex items-center gap-2 text-xs text-muted-foreground">
                     <Shield className="size-3.5" aria-hidden />
-                    محميّ ضد المحتوى المزعج. بدون أي متتبّعات خارجية.
+                    محميّ ضدّ الرسائل المزعجة، بلا أي متتبّعات خارجيّة.
                   </p>
                 </div>
               </form>
@@ -378,14 +379,14 @@ function ContactPage() {
 
           <aside className="space-y-6 lg:sticky lg:top-24 lg:self-start">
             <div className="rounded-xl border border-border/60 bg-card p-6">
-              <Eyebrow>ماذا تتوقع</Eyebrow>
+              <Eyebrow>ما الذي يحدث بعد الإرسال</Eyebrow>
               <ul className="mt-4 space-y-4 text-sm">
                 <li className="flex items-start gap-3">
                   <Clock className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />
                   <div>
-                    <p className="font-medium text-foreground">الرد خلال 48 ساعة</p>
+                    <p className="font-medium text-foreground">رد خلال 48 ساعة</p>
                     <p className="mt-0.5 text-muted-foreground">
-                      خلال أيام العمل. أقرأ كل رسالة بنفسي.
+                      في أيّام العمل. أقرأ كلّ رسالة بنفسي.
                     </p>
                   </div>
                 </li>
@@ -394,16 +395,16 @@ function ContactPage() {
                   <div>
                     <p className="font-medium text-foreground">مكالمة قصيرة</p>
                     <p className="mt-0.5 text-muted-foreground">
-                      إن كنّا شراكة مناسبة، نحجز 30 دقيقة للاتفاق على النطاق.
+                      إن كنّا الشراكة المناسبة، نحجز 30 دقيقة للاتّفاق على نطاق العمل.
                     </p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
                   <Sparkles className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />
                   <div>
-                    <p className="font-medium text-foreground">عرض مخصص</p>
+                    <p className="font-medium text-foreground">عرض مخصّص</p>
                     <p className="mt-0.5 text-muted-foreground">
-                      النطاق والجدول الزمني والسعر — دون أي مفاجآت لاحقًا.
+                      نطاق واضح، وجدول زمني، وسعر ثابت — بلا مفاجآت لاحقة.
                     </p>
                   </div>
                 </li>
@@ -430,14 +431,14 @@ function ContactPage() {
 
 
             <div className="rounded-xl border border-border/60 bg-card p-6">
-              <Eyebrow>تفضّل المحادثة السريعة؟</Eyebrow>
+              <Eyebrow>تُفضّل المحادثة السريعة؟</Eyebrow>
               <p className="mt-3 text-sm text-muted-foreground">
-                واتساب هو الأسرع للاستفسارات القصيرة أو تحديد موعد.
+                واتساب هو الأسرع للأسئلة القصيرة وحجز المواعيد.
               </p>
               <DSButton asChild variant="outline" size="sm" className="mt-4 w-full">
                 <a href={whatsappHref} target="_blank" rel="noopener noreferrer">
                   <MessageCircle />
-                  التواصل عبر واتساب
+                  محادثة عبر واتساب
                 </a>
               </DSButton>
             </div>
@@ -450,10 +451,10 @@ function ContactPage() {
           <div>
             <Eyebrow>الأسئلة الشائعة</Eyebrow>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight text-foreground text-balance md:text-4xl lg:text-5xl">
-              قبل أن تكتب
+              قبل أن ترسل
             </h2>
             <p className="mt-4 text-muted-foreground">
-              بعض الأسئلة الأكثر شيوعًا. إن لم يكن سؤالك هنا، أرسله وسأجيبك بكل سرور.
+              أسئلة يتكرّر طرحها. إن لم يكن سؤالك هنا، أرسله وسأجيبك بكلّ سرور.
             </p>
           </div>
           <Accordion type="single" collapsible className="w-full">
@@ -471,9 +472,9 @@ function ContactPage() {
 
 
       <CTA
-        eyebrow="تفضّل الطريق المباشر؟"
-        title="تخطَّ النموذج — تواصل معي مباشرة."
-        description="راسلني عبر البريد، أو واتساب، أو تواصل معي على لينكدإن. اختر ما يناسبك."
+        eyebrow="تُفضّل الطريق المباشر؟"
+        title="تجاوز النموذج — راسلني مباشرة."
+        description="بريد، أو واتساب، أو لينكدإن — اختر ما يناسبك، والرد يصلك بنفس السرعة."
         actions={
           <>
             <DSButton asChild size="lg">

@@ -216,8 +216,8 @@ function About() {
   return (
     <>
       <PageHeader
-        eyebrow="نبذة عني"
-        title={`أنا ${site.shortName}. أُصمّم وأُطوّر البرمجيات بذوق رفيع.`}
+        eyebrow="من أنا"
+        title={`أنا ${site.shortName}. أُصمّم وأُطوِّر منتجات رقمية بحرفة.`}
         description={profile.bio}
       />
 
@@ -226,14 +226,10 @@ function About() {
           <Reveal>
             <div className="space-y-5 text-base leading-relaxed text-foreground/85 md:text-lg">
               <p>
-                أنا مطوّر ويب، ومصمم واجهات، وطالب في تقنية المعلومات، أبني
-                حلولًا رقمية لرواد الأعمال والفرق الصغيرة. أهتم بالتفاصيل التي
-                يتجاهلها الآخرون — انزياح البكسل، والحركة التي تصل بإطار متأخر،
-                والنص الذي يمكن أن يكون أقصر.
+                مطوّر ويب، ومصمم واجهات، وطالب في تقنية المعلومات. أبني حلولًا رقميّة لرواد الأعمال والفرق الصغيرة، وأهتمّ بالتفاصيل التي يمرّ عليها غيري بسرعة: البكسل الزائد، والحركة التي تصل بإطار متأخّر، والجملة التي يمكن أن تكون أقصر.
               </p>
               <p>
-                معظم عملي يقع عند تقاطع التصميم والكود: واجهات تبدو مدروسة،
-                وتُسلَّم في موعدها، وتصمد أمام المستخدمين الحقيقيين.
+                معظم عملي في المنطقة الرماديّة بين التصميم والكود: واجهات تبدو مدروسة، تُسلَّم في موعدها، وتصمد أمام المستخدم الحقيقي لا في العروض فقط.
               </p>
             </div>
           </Reveal>
@@ -252,7 +248,7 @@ function About() {
                 </div>
                 <p className="mt-2 inline-flex items-center gap-1.5 text-sm text-muted-foreground">
                   <MapPin className="size-3.5" aria-hidden />
-                  {site.location} · نعمل مع العملاء حول العالم
+                  {site.location} · أعمل مع فرق حول العالم
                 </p>
               </div>
               <div className="flex flex-wrap gap-2">
@@ -296,9 +292,9 @@ function About() {
       <Section className="border-t border-border/60">
         <Reveal>
           <SectionTitle
-            eyebrow="مسيرتي المهنية"
+            eyebrow="مسيرتي المهنيّة"
             title="طريق قصير، عن قصد."
-            description="أبقيت المسار مركّزًا لأتعمّق أكثر. التصميم والكود بمعيار واحد."
+            description="أبقيتُ المسار مركّزًا لأتعمّق أكثر — التصميم والكود بمعيار واحد."
           />
         </Reveal>
         <Reveal delay={0.05}>
@@ -306,21 +302,21 @@ function About() {
             {[
               {
                 year: "البداية",
-                title: "الفضول أولًا، ثم الحرفية",
+                title: "فضول أوّلًا، ثم حرفة",
                 body:
-                  "بدأت بصفحات مقصودة أثناء دراسة تقنية المعلومات. أدركت أن التصميم يشدّني بقدر ما يشدّني الكود.",
+                  "بدأتُ بصفحات مقصودة أثناء دراستي في تقنية المعلومات، واكتشفتُ أنّ التصميم يشدّني بقدر ما يشدّني الكود.",
               },
               {
                 year: "المنتصف",
                 title: "الإطلاق في بيئة الإنتاج",
                 body:
-                  "متاجر، ولوحات تحكم، ومواقع تسويقية — مع مستخدمين حقيقيين، ومواعيد نهائية حقيقية.",
+                  "متاجر ولوحات تحكّم ومواقع تسويقيّة، مع مستخدمين حقيقيّين ومواعيد لا تتأجّل.",
               },
               {
                 year: "الآن",
-                title: "برمجيات مدروسة",
+                title: "منتجات مدروسة، لا كثيرة",
                 body:
-                  "شراكات مختارة فقط. التركيز على واجهات تبدو بديهية وراقية بهدوء.",
+                  "شراكات مختارة فقط، وتركيز على واجهات تبدو بديهيّة وراقية بلا ضجيج.",
               },
             ].map((chapter) => (
               <DSCard key={chapter.year} variant="surface" padding="lg" className="h-full">
@@ -425,11 +421,10 @@ function About() {
               <div className="relative">
                 <p className="text-xs font-medium tracking-[0.14em] text-primary">الرسالة</p>
                 <h3 className="mt-3 text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
-                  مساعدة الشركات على إطلاق منتجات رقمية يستمتع الناس باستخدامها.
+                  مساعدة الشركات على إطلاق منتجات رقميّة يستمتع الناس باستخدامها.
                 </h3>
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground md:text-base">
-                  سواء كان موقعًا تسويقيًا، أو متجرًا، أو منتجًا متكاملًا،
-                  الرسالة واحدة: واجهات هادئة، ونتائج حادّة، دون شاشات مهدورة.
+                  موقع تسويقي، أو متجر، أو منتج متكامل — الرسالة واحدة: واجهات هادئة، ونتائج ملموسة، بلا شاشات زائدة.
                 </p>
               </div>
             </DSCard>
@@ -443,11 +438,10 @@ function About() {
               <div className="relative">
                 <p className="text-xs font-medium tracking-[0.14em] text-accent">الرؤية</p>
                 <h3 className="mt-3 text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
-                  شريك بجودة استوديو حقيقي للفرق التي تعامل البرمجيات كحرفة.
+                  شريك بمستوى استوديو متخصّص للفرق التي تُعامل البرمجيّات كحرفة.
                 </h3>
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground md:text-base">
-                  على المدى الطويل: بناء ممارسة صغيرة ومدروسة معروفة بتفاصيلها —
-                  من النوع الذي يمكنك الإشارة إليه دون تحفّظ.
+                  على المدى الطويل: ممارسة صغيرة ومدروسة، تُعرَف بتفاصيلها، ويمكن الإشارة إليها بلا تحفّظ.
                 </p>
               </div>
             </DSCard>
@@ -458,9 +452,9 @@ function About() {
       <Section className="border-t border-border/60">
         <Reveal>
           <SectionTitle
-            eyebrow="القيم الأساسية"
-            title="مبادئ ألتزم بها."
-            description="البوصلة — نفسها في السنة الأولى والسنة الثامنة."
+            eyebrow="القيم"
+            title="مبادئ لا أتنازل عنها."
+            description="بوصلة العمل — نفسها في السنة الأولى والسنة الثامنة."
           />
         </Reveal>
         <Reveal delay={0.05}>
@@ -522,8 +516,8 @@ function About() {
         <Reveal>
           <SectionTitle
             eyebrow="التقنيات"
-            title="الأدوات وراء العمل."
-            description="مركّز عن قصد. أتعمّق في مجموعة صغيرة من الأدوات بدلًا من التشتّت."
+            title="أدواتي اليوميّة."
+            description="أختار عددًا قليلًا من الأدوات لأُتقنها، بدل التنقّل بين كل جديد."
           />
         </Reveal>
         <Reveal delay={0.05}>
@@ -560,7 +554,7 @@ function About() {
         <Reveal>
           <SectionTitle
             eyebrow="أسلوب العمل"
-            title="كيف يحدث العمل فعلًا."
+            title="كيف يسير العمل معي."
           />
         </Reveal>
         <Reveal delay={0.05}>
@@ -595,7 +589,7 @@ function About() {
         <Reveal>
           <SectionTitle
             eyebrow="خارج العمل"
-            title="اهتمامات تُشحن الطاقة."
+            title="اهتمامات تُعيد الشحن."
           />
         </Reveal>
         <Reveal delay={0.05}>
@@ -628,11 +622,10 @@ function About() {
                   الخطوة التالية
                 </p>
                 <h2 className="mt-3 text-3xl font-semibold tracking-tight text-foreground text-balance md:text-4xl lg:text-5xl">
-                  اقرأ السيرة الذاتية أو ابدأ محادثة.
+                  اقرأ السيرة الذاتية، أو لنبدأ محادثة.
                 </h2>
                 <p className="mt-4 max-w-xl text-base text-muted-foreground md:text-lg">
-                  حمّل الملف إن كنت تُقيّم للتوظيف، أو أرسل رسالة إن كان لديك
-                  مشروع في ذهنك.
+                  حمّل الملف إن كنتَ تُقيّم للتوظيف، أو راسلني إن كان لديك مشروع في ذهنك.
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-3 md:justify-end">
