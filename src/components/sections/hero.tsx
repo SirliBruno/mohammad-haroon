@@ -132,7 +132,7 @@ export function Hero() {
               </DSButton>
               <DSButton asChild size="lg" variant="ghost">
                 <Link to="/contact">
-                  احجز استشارة
+                  ابدأ محادثة
                   <ArrowUpRight />
                 </Link>
               </DSButton>
@@ -140,7 +140,7 @@ export function Hero() {
 
             <div className="mt-10 flex items-center gap-5">
               <span className="text-xs tracking-[0.14em] text-muted-foreground">
-                تابعني
+                للتواصل
               </span>
               <span aria-hidden className="h-px w-8 bg-border" />
               <ul className="flex items-center gap-1">
