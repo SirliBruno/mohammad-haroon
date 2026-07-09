@@ -379,14 +379,14 @@ function ContactPage() {
 
           <aside className="space-y-6 lg:sticky lg:top-24 lg:self-start">
             <div className="rounded-xl border border-border/60 bg-card p-6">
-              <Eyebrow>ماذا تتوقع</Eyebrow>
+              <Eyebrow>ما الذي يحدث بعد الإرسال</Eyebrow>
               <ul className="mt-4 space-y-4 text-sm">
                 <li className="flex items-start gap-3">
                   <Clock className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />
                   <div>
-                    <p className="font-medium text-foreground">الرد خلال 48 ساعة</p>
+                    <p className="font-medium text-foreground">رد خلال 48 ساعة</p>
                     <p className="mt-0.5 text-muted-foreground">
-                      خلال أيام العمل. أقرأ كل رسالة بنفسي.
+                      في أيّام العمل. أقرأ كلّ رسالة بنفسي.
                     </p>
                   </div>
                 </li>
@@ -395,16 +395,16 @@ function ContactPage() {
                   <div>
                     <p className="font-medium text-foreground">مكالمة قصيرة</p>
                     <p className="mt-0.5 text-muted-foreground">
-                      إن كنّا شراكة مناسبة، نحجز 30 دقيقة للاتفاق على النطاق.
+                      إن كنّا الشراكة المناسبة، نحجز 30 دقيقة للاتّفاق على نطاق العمل.
                     </p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
                   <Sparkles className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />
                   <div>
-                    <p className="font-medium text-foreground">عرض مخصص</p>
+                    <p className="font-medium text-foreground">عرض مخصّص</p>
                     <p className="mt-0.5 text-muted-foreground">
-                      النطاق والجدول الزمني والسعر — دون أي مفاجآت لاحقًا.
+                      نطاق واضح، وجدول زمني، وسعر ثابت — بلا مفاجآت لاحقة.
                     </p>
                   </div>
                 </li>
@@ -431,14 +431,14 @@ function ContactPage() {
 
 
             <div className="rounded-xl border border-border/60 bg-card p-6">
-              <Eyebrow>تفضّل المحادثة السريعة؟</Eyebrow>
+              <Eyebrow>تُفضّل المحادثة السريعة؟</Eyebrow>
               <p className="mt-3 text-sm text-muted-foreground">
-                واتساب هو الأسرع للاستفسارات القصيرة أو تحديد موعد.
+                واتساب هو الأسرع للأسئلة القصيرة وحجز المواعيد.
               </p>
               <DSButton asChild variant="outline" size="sm" className="mt-4 w-full">
                 <a href={whatsappHref} target="_blank" rel="noopener noreferrer">
                   <MessageCircle />
-                  التواصل عبر واتساب
+                  محادثة عبر واتساب
                 </a>
               </DSButton>
             </div>
@@ -451,10 +451,10 @@ function ContactPage() {
           <div>
             <Eyebrow>الأسئلة الشائعة</Eyebrow>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight text-foreground text-balance md:text-4xl lg:text-5xl">
-              قبل أن تكتب
+              قبل أن ترسل
             </h2>
             <p className="mt-4 text-muted-foreground">
-              بعض الأسئلة الأكثر شيوعًا. إن لم يكن سؤالك هنا، أرسله وسأجيبك بكل سرور.
+              أسئلة يتكرّر طرحها. إن لم يكن سؤالك هنا، أرسله وسأجيبك بكلّ سرور.
             </p>
           </div>
           <Accordion type="single" collapsible className="w-full">
@@ -472,9 +472,9 @@ function ContactPage() {
 
 
       <CTA
-        eyebrow="تفضّل الطريق المباشر؟"
-        title="تخطَّ النموذج — تواصل معي مباشرة."
-        description="راسلني عبر البريد، أو واتساب، أو تواصل معي على لينكدإن. اختر ما يناسبك."
+        eyebrow="تُفضّل الطريق المباشر؟"
+        title="تجاوز النموذج — راسلني مباشرة."
+        description="بريد، أو واتساب، أو لينكدإن — اختر ما يناسبك، والرد يصلك بنفس السرعة."
         actions={
           <>
             <DSButton asChild size="lg">
