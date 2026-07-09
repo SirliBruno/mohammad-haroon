@@ -9,7 +9,7 @@ import { site } from "@/config/site";
 const iconFor: Record<string, typeof Github> = {
   GitHub: Github,
   LinkedIn: Linkedin,
-  Email: Mail,
+  "البريد الإلكتروني": Mail,
   X: Twitter,
 };
 
@@ -24,7 +24,6 @@ export function Footer() {
       />
       <Container>
         <div className="grid gap-12 py-16 md:grid-cols-12">
-          {/* Brand block */}
           <div className="md:col-span-5">
             <Logo />
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted-foreground">
@@ -37,22 +36,21 @@ export function Footer() {
                 className="inline-flex items-center gap-2 rounded-md border border-border/70 bg-background px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-muted"
               >
                 <Download className="size-3.5" aria-hidden />
-                Download resume
+                تحميل السيرة الذاتية
               </a>
               <Link
                 to="/contact"
                 className="inline-flex items-center gap-2 rounded-md bg-foreground px-3 py-1.5 text-xs font-medium text-background transition-opacity hover:opacity-90"
               >
-                Get in touch
+                تواصل معي
               </Link>
             </div>
           </div>
 
-          {/* Nav groups */}
           <div className="grid grid-cols-2 gap-8 md:col-span-5 md:grid-cols-3">
             {footerNav.map((group) => (
               <div key={group.title}>
-                <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
+                <p className="text-xs font-medium tracking-[0.14em] text-muted-foreground">
                   {group.title}
                 </p>
                 <ul className="mt-4 space-y-2.5">
@@ -71,10 +69,9 @@ export function Footer() {
             ))}
           </div>
 
-          {/* Social block */}
           <div className="md:col-span-2">
-            <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
-              Elsewhere
+            <p className="text-xs font-medium tracking-[0.14em] text-muted-foreground">
+              حسابات أخرى
             </p>
             <ul className="mt-4 space-y-2.5">
               {socials.map((s) => {
@@ -99,42 +96,15 @@ export function Footer() {
 
         <div className="flex flex-col items-start justify-between gap-4 border-t border-border/60 py-6 md:flex-row md:items-center">
           <p className="text-xs text-muted-foreground">
-            © {year} {site.name}. All rights reserved.
+            © {year} {site.name}. جميع الحقوق محفوظة.
           </p>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-muted-foreground" dir="ltr">
             Built with{" "}
-            <a
-              href="https://react.dev"
-              rel="noreferrer"
-              className="text-foreground/80 transition-colors hover:text-foreground"
-            >
-              React
-            </a>
-            ,{" "}
-            <a
-              href="https://tanstack.com/start"
-              rel="noreferrer"
-              className="text-foreground/80 transition-colors hover:text-foreground"
-            >
-              TanStack Start
-            </a>
-            ,{" "}
-            <a
-              href="https://tailwindcss.com"
-              rel="noreferrer"
-              className="text-foreground/80 transition-colors hover:text-foreground"
-            >
-              Tailwind
-            </a>
+            <a href="https://react.dev" rel="noreferrer" className="text-foreground/80 transition-colors hover:text-foreground">React</a>,{" "}
+            <a href="https://tanstack.com/start" rel="noreferrer" className="text-foreground/80 transition-colors hover:text-foreground">TanStack Start</a>,{" "}
+            <a href="https://tailwindcss.com" rel="noreferrer" className="text-foreground/80 transition-colors hover:text-foreground">Tailwind</a>
             {" & "}
-            <a
-              href="https://motion.dev"
-              rel="noreferrer"
-              className="text-foreground/80 transition-colors hover:text-foreground"
-            >
-              Motion
-            </a>
-            .
+            <a href="https://motion.dev" rel="noreferrer" className="text-foreground/80 transition-colors hover:text-foreground">Motion</a>.
           </p>
         </div>
       </Container>
