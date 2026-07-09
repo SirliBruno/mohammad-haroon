@@ -9,9 +9,9 @@ import { articles } from "@/data/writing";
 export const Route = createFileRoute("/blog/")({
   head: () => ({
     meta: buildMeta({
-      title: "Blog",
+      title: "المدونة",
       description:
-        "Essays and notes on product, design, and engineering craft — by Mohammad Haroon.",
+        "مقالات وملاحظات حول المنتجات والتصميم وهندسة الويب — بقلم محمد هارون.",
       path: "/blog",
     }),
     links: [{ rel: "canonical", href: "/blog" }],
@@ -27,15 +27,15 @@ function BlogIndex() {
   return (
     <>
       <PageHeader
-        eyebrow="Blog"
-        title="Writing"
-        description="Occasional essays on craft, design systems, and shipping software worth using."
+        eyebrow="المدونة"
+        title="مقالات وأفكار"
+        description="مقالات دورية عن الحرفية وأنظمة التصميم وإطلاق برمجيات تستحق الاستخدام."
       />
       <Section>
         {posts.length === 0 ? (
           <EmptyState
-            title="No posts yet"
-            description="First essay coming soon."
+            title="لا توجد مقالات بعد"
+            description="أول مقال قادم قريبًا."
           />
         ) : (
           <ul className="divide-y divide-border/60 border-y border-border/60">
@@ -49,15 +49,15 @@ function BlogIndex() {
                   <div className="min-w-0 flex-1">
                     <p className="text-xs text-muted-foreground">
                       <time dateTime={post.publishedAt}>
-                        {new Date(post.publishedAt).toLocaleDateString("en-US", {
-                          month: "short",
+                        {new Date(post.publishedAt).toLocaleDateString("ar-SA", {
+                          month: "long",
                           day: "numeric",
                           year: "numeric",
                         })}
                       </time>
                       {" · "}
-                      {post.readingTime} min read
-                      {post.tags.length ? " · " + post.tags.join(", ") : ""}
+                      {post.readingTime} دقائق قراءة
+                      {post.tags.length ? " · " + post.tags.join("، ") : ""}
                     </p>
                     <h2 className="mt-2 text-xl font-medium tracking-tight text-foreground transition-colors group-hover:text-primary md:text-2xl">
                       {post.title}
@@ -68,7 +68,7 @@ function BlogIndex() {
                   </div>
                   <ArrowUpRight
                     aria-hidden
-                    className="mt-1 size-4 shrink-0 text-muted-foreground transition-transform duration-300 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-foreground"
+                    className="mt-1 size-4 shrink-0 text-muted-foreground transition-transform duration-300 ease-out group-hover:-translate-y-0.5 group-hover:text-foreground"
                   />
                 </Link>
               </li>

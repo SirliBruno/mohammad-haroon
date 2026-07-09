@@ -18,7 +18,7 @@ export const Route = createFileRoute("/blog/$slug")({
     if (!loaderData) {
       return {
         meta: buildMeta({
-          title: "Post not found",
+          title: "المقال غير موجود",
           path: `/blog/${params.slug}`,
           noindex: true,
         }),
@@ -64,22 +64,22 @@ function BlogPost() {
     <>
       <header className="border-b border-border/60 pt-28 pb-16 md:pt-36 md:pb-20">
         <Container>
-          <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground">
+          <nav aria-label="مسار التنقل" className="text-sm text-muted-foreground">
             <Link to="/blog" className="inline-flex items-center gap-1 hover:text-foreground">
-              <ArrowLeft className="size-3.5" /> All posts
+              <ArrowRight className="size-3.5" /> جميع المقالات
             </Link>
           </nav>
           <div className="mx-auto mt-6 max-w-3xl">
             <p className="text-xs text-muted-foreground">
               <time dateTime={article.publishedAt}>
-                {new Date(article.publishedAt).toLocaleDateString("en-US", {
+                {new Date(article.publishedAt).toLocaleDateString("ar-SA", {
                   month: "long",
                   day: "numeric",
                   year: "numeric",
                 })}
               </time>
               {" · "}
-              {article.readingTime} min read
+              {article.readingTime} دقائق قراءة
             </p>
             <h1 className="mt-3 text-4xl font-semibold tracking-tight text-balance md:text-5xl lg:text-6xl">
               {article.title}
@@ -117,11 +117,10 @@ function BlogPost() {
         </div>
       </Section>
 
-      {/* Related */}
       {related.length ? (
         <Section className="border-t border-border/60">
-          <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
-            Keep reading
+          <p className="text-xs font-medium tracking-[0.14em] text-muted-foreground">
+            اقرأ المزيد
           </p>
           <ul className="mt-6 divide-y divide-border/60 border-y border-border/60">
             {related.map((r) => (
@@ -134,7 +133,7 @@ function BlogPost() {
                   <span className="text-base font-medium text-foreground transition-colors group-hover:text-primary md:text-lg">
                     {r.title}
                   </span>
-                  <ArrowRight className="size-4 shrink-0 text-muted-foreground transition-colors group-hover:text-foreground" />
+                  <ArrowLeft className="size-4 shrink-0 text-muted-foreground transition-colors group-hover:text-foreground" />
                 </Link>
               </li>
             ))}
@@ -142,20 +141,19 @@ function BlogPost() {
         </Section>
       ) : null}
 
-      {/* CTA */}
       <CTA
-        eyebrow="Thanks for reading"
-        title="Enjoyed this?"
-        description="I write a few times a month. If you'd like to work together, get in touch."
+        eyebrow="شكرًا للقراءة"
+        title="أعجبك المقال؟"
+        description="أكتب مقالات جديدة عدة مرات في الشهر. إن أردت العمل معًا، تواصل معي."
         actions={
           <>
             <DSButton asChild size="lg">
               <Link to="/contact">
-                Get in touch <ArrowRight />
+                تواصل معي <ArrowLeft />
               </Link>
             </DSButton>
             <DSButton asChild size="lg" variant="outline">
-              <Link to="/blog">More writing</Link>
+              <Link to="/blog">مقالات أخرى</Link>
             </DSButton>
           </>
         }
@@ -169,14 +167,14 @@ function PostNotFound() {
   return (
     <Section>
       <div className="mx-auto max-w-md text-center">
-        <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">404</p>
-        <h1 className="mt-3 text-3xl font-semibold tracking-tight">Post not found</h1>
+        <p className="text-xs font-medium tracking-[0.14em] text-muted-foreground" dir="ltr">404</p>
+        <h1 className="mt-3 text-3xl font-semibold tracking-tight">المقال غير موجود</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          No essay matches "{slug}".
+          لا يوجد مقال يطابق «{slug}».
         </p>
         <div className="mt-6">
           <DSButton asChild variant="outline">
-            <Link to="/blog">All posts</Link>
+            <Link to="/blog">جميع المقالات</Link>
           </DSButton>
         </div>
       </div>
