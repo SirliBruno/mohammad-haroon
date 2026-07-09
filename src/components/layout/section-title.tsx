@@ -2,6 +2,13 @@ import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Eyebrow } from "@/components/typography/eyebrow";
 
+type Size = "default" | "sm";
+
+const titleScale: Record<Size, string> = {
+  default: "text-3xl md:text-4xl lg:text-5xl",
+  sm: "text-2xl md:text-3xl",
+};
+
 export function SectionTitle({
   eyebrow,
   title,
@@ -10,6 +17,8 @@ export function SectionTitle({
   actions,
   className,
   as: As = "h2",
+  size = "default",
+  id,
 }: {
   eyebrow?: string;
   title: ReactNode;
@@ -18,6 +27,8 @@ export function SectionTitle({
   actions?: ReactNode;
   className?: string;
   as?: "h1" | "h2" | "h3";
+  size?: Size;
+  id?: string;
 }) {
   const centered = align === "center";
   return (
@@ -31,11 +42,22 @@ export function SectionTitle({
     >
       <div className={cn("min-w-0", centered && "max-w-2xl")}>
         {eyebrow ? <Eyebrow className="mb-3">{eyebrow}</Eyebrow> : null}
-        <As className="text-3xl font-semibold tracking-tight text-foreground text-balance md:text-4xl lg:text-5xl">
+        <As
+          id={id}
+          className={cn(
+            "font-semibold tracking-tight text-foreground text-balance",
+            titleScale[size],
+          )}
+        >
           {title}
         </As>
         {description ? (
-          <p className="mt-3 max-w-2xl text-base text-muted-foreground md:text-lg">
+          <p
+            className={cn(
+              "mt-3 max-w-2xl text-muted-foreground",
+              size === "sm" ? "text-base" : "text-base md:text-lg",
+            )}
+          >
             {description}
           </p>
         ) : null}
