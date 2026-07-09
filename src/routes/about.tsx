@@ -1,6 +1,7 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { motion, useReducedMotion } from "motion/react";
 import type { ReactNode } from "react";
+import { Reveal } from "@/components/motion/reveal";
+import { AvailabilityBadge } from "@/components/ds/availability-badge";
 import {
   ArrowRight,
   BookOpen,
