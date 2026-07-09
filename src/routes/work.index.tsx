@@ -263,29 +263,29 @@ function WorkIndex() {
 function statusMeta(status: Project["status"]) {
   switch (status) {
     case "live":
-      return { label: "Live", dot: "bg-emerald-500" };
+      return { label: "منشور", dot: "bg-emerald-500" };
     case "in-progress":
-      return { label: "In progress", dot: "bg-amber-500" };
+      return { label: "قيد التنفيذ", dot: "bg-amber-500" };
     case "concept":
-      return { label: "Concept", dot: "bg-sky-500" };
+      return { label: "تصوّر", dot: "bg-sky-500" };
     case "archived":
-      return { label: "Archived", dot: "bg-muted-foreground" };
+      return { label: "مؤرشف", dot: "bg-muted-foreground" };
   }
 }
 
 function categoryGradient(category: ProjectCategory) {
   switch (category) {
-    case "Websites":
+    case "مواقع إلكترونية":
       return "from-sky-500/25 via-indigo-500/15 to-transparent";
-    case "E-commerce":
+    case "تجارة إلكترونية":
       return "from-emerald-500/25 via-teal-500/15 to-transparent";
-    case "UI Design":
+    case "تصميم واجهات":
       return "from-fuchsia-500/25 via-purple-500/15 to-transparent";
-    case "Graphic Design":
+    case "تصميم جرافيكي":
       return "from-orange-500/25 via-rose-500/15 to-transparent";
-    case "Marketing":
+    case "تسويق":
       return "from-amber-500/25 via-yellow-500/15 to-transparent";
-    case "Photography":
+    case "تصوير":
       return "from-slate-500/25 via-zinc-500/15 to-transparent";
   }
 }
