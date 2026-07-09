@@ -18,7 +18,7 @@ export const Route = createFileRoute("/services/")({
     meta: buildMeta({
       title: "الخدمات",
       description:
-        "خدمات تطوير الويب و WordPress و WooCommerce وتصميم الواجهات والتصميم الجرافيكي — مصمّمة للشركات الطموحة والعلامات التجارية.",
+        "خدمات تطوير الويب، ومتاجر WordPress وWooCommerce، وتصميم الواجهات، والهوية البصريّة — لشركات وعلامات تجاريّة طموحة.",
       path: "/services",
     }),
     links: [{ rel: "canonical", href: "/services" }],
@@ -32,7 +32,7 @@ function ServicesIndex() {
       <PageHeader
         eyebrow="الخدمات"
         title="تصميم وتطوير احترافي متكامل"
-        description="سبع خدمات متخصّصة تُغطّي دورة حياة المنتج الرقمي كاملة — من صفحة مقصودة واحدة إلى متجر إلكتروني متكامل وكل ما بينهما."
+        description="سبع خدمات متخصّصة تُغطّي دورة حياة المنتج الرقمي بأكملها — من صفحة مقصودة واحدة إلى متجر إلكتروني كامل، وكلّ ما بينهما."
       />
 
       <Section>
@@ -52,8 +52,8 @@ function ServicesIndex() {
 
       <Section className="border-t border-border/60">
         <SectionTitle
-          eyebrow="منهجية العمل"
-          title="كيف تسير كل شراكة معنا"
+          eyebrow="منهجيّة العمل"
+          title="كيف تسير كلّ شراكة"
           size="sm"
         />
         <div className="mt-10">
@@ -73,8 +73,8 @@ function ServicesIndex() {
         <div className="grid gap-12 md:grid-cols-[1fr_2fr]">
           <SectionTitle
             eyebrow="الأسئلة الشائعة"
-            title="الأسئلة الأكثر شيوعًا"
-            description="لم تجد سؤالك؟ اطرحه عبر صفحة التواصل."
+            title="الأسئلة الأكثر تكرارًا"
+            description="لم تجد سؤالك؟ اطرحه من صفحة التواصل."
             size="sm"
           />
           <Accordion type="single" collapsible className="w-full">
@@ -93,7 +93,7 @@ function ServicesIndex() {
       <CTA
         eyebrow="جاهز للبدء؟"
         title="هل لديك مشروع في ذهنك؟"
-        description="أخبرني عنه — سأعود إليك برأي صريح خلال 48 ساعة."
+        description="اكتب لي عنه — يصلك رأي صريح خلال 48 ساعة."
         actions={
           <>
             <DSButton asChild size="lg">

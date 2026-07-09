@@ -289,15 +289,15 @@ function ServiceDetail() {
             className="pointer-events-none absolute inset-0 -z-10 opacity-60 [mask-image:radial-gradient(60%_60%_at_50%_0%,black,transparent)] bg-linear-to-b from-primary/8 to-transparent"
           />
           <h2 className="mx-auto max-w-xl text-2xl font-semibold tracking-tight md:text-3xl">
-            جاهز لبدء {service.title}؟
+            جاهز للبدء بـ{service.title}؟
           </h2>
           <p className="mx-auto mt-3 max-w-lg text-muted-foreground">
-            أخبرني بما تحتاج بناءه — سأعود إليك برأي صريح خلال 48 ساعة.
+            اكتب لي عمّا تودّ بناءه — يصلك رأي صريح خلال 48 ساعة.
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
             <DSButton asChild size="lg">
               <Link to="/contact">
-                تواصل معي <ArrowLeft />
+                تواصل <ArrowLeft />
               </Link>
             </DSButton>
             <DSButton asChild size="lg" variant="outline">
