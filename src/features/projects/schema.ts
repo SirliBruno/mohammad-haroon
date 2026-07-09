@@ -7,6 +7,15 @@ export const mediaSchema = z.object({
   height: z.number().optional(),
 });
 
+export const projectCategories = [
+  "Websites",
+  "E-commerce",
+  "UI Design",
+  "Graphic Design",
+  "Marketing",
+  "Photography",
+] as const;
+
 export const projectSchema = z.object({
   slug: z.string(),
   title: z.string(),
@@ -15,6 +24,7 @@ export const projectSchema = z.object({
   role: z.string(),
   client: z.string().optional(),
   year: z.number(),
+  category: z.enum(projectCategories).default("Websites"),
   tags: z.array(z.string()).default([]),
   stack: z.array(z.string()).default([]),
   cover: mediaSchema,
@@ -22,8 +32,10 @@ export const projectSchema = z.object({
   metrics: z.array(z.object({ label: z.string(), value: z.string() })).optional(),
   links: z.array(z.object({ label: z.string(), href: z.string().url() })).optional(),
   featured: z.boolean().default(false),
-  status: z.enum(["live", "archived", "concept"]).default("live"),
+  status: z.enum(["live", "in-progress", "archived", "concept"]).default("live"),
 });
+
+export type ProjectCategory = (typeof projectCategories)[number];
 
 export type Project = z.infer<typeof projectSchema>;
 export type Media = z.infer<typeof mediaSchema>;

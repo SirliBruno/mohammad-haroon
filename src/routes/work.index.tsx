@@ -1,18 +1,24 @@
 import { useMemo, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowUpRight, Search, X, Sparkles, ChevronLeft, ChevronRight } from "lucide-react";
 import { buildMeta } from "@/features/seo/build-meta";
 import { PageHeader } from "@/components/layout/page-header";
 import { Section } from "@/components/layout/section";
-import { Grid, ProjectCard, EmptyState, DSButton } from "@/components/ds";
+import { Grid, EmptyState, DSButton, DSCard } from "@/components/ds";
 import { projects } from "@/data/projects";
+import { projectCategories, type Project, type ProjectCategory } from "@/features/projects/schema";
 import { cn } from "@/lib/utils";
+
+const PAGE_SIZE = 6;
+const CATEGORY_FILTERS = ["All", ...projectCategories] as const;
+type CategoryFilter = (typeof CATEGORY_FILTERS)[number];
 
 export const Route = createFileRoute("/work/")({
   head: () => ({
     meta: buildMeta({
       title: "Projects",
       description:
-        "Selected projects and case studies by Mohammad Haroon — SaaS, fintech, developer tools.",
+        "Selected projects — websites, e-commerce, UI design, graphic design, marketing and photography work.",
       path: "/work",
     }),
     links: [{ rel: "canonical", href: "/work" }],
@@ -21,95 +27,407 @@ export const Route = createFileRoute("/work/")({
 });
 
 function WorkIndex() {
-  const allTags = useMemo(
-    () => Array.from(new Set(projects.flatMap((p) => p.tags))).sort(),
-    [],
-  );
-  const [activeTag, setActiveTag] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
+  const [category, setCategory] = useState<CategoryFilter>("All");
+  const [page, setPage] = useState(1);
 
-  const filtered = activeTag
-    ? projects.filter((p) => p.tags.includes(activeTag))
-    : projects;
+  const featured = useMemo(() => projects.filter((p) => p.featured), []);
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return projects.filter((p) => {
+      if (category !== "All" && p.category !== category) return false;
+      if (!q) return true;
+      const hay = [
+        p.title,
+        p.summary,
+        p.client ?? "",
+        p.category,
+        ...p.tags,
+        ...p.stack,
+      ]
+        .join(" ")
+        .toLowerCase();
+      return hay.includes(q);
+    });
+  }, [query, category]);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const safePage = Math.min(page, totalPages);
+  const paginated = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
+
+  const categoryCounts = useMemo(() => {
+    const map = new Map<string, number>();
+    for (const p of projects) map.set(p.category, (map.get(p.category) ?? 0) + 1);
+    return map;
+  }, []);
+
+  function updateQuery(v: string) {
+    setQuery(v);
+    setPage(1);
+  }
+  function updateCategory(v: CategoryFilter) {
+    setCategory(v);
+    setPage(1);
+  }
 
   return (
     <>
       <PageHeader
         eyebrow="Projects"
-        title="Selected work"
-        description="A curated look at recent projects — the problem, the role I played, and what shipped."
+        title="Work I'm proud of"
+        description="A living archive of client and personal work across product, commerce, brand, and image-making."
       />
-      <Section>
-        {allTags.length ? (
-          <div
-            className="flex flex-wrap items-center gap-2"
-            role="radiogroup"
-            aria-label="Filter projects by tag"
-          >
-            <FilterChip
-              active={activeTag === null}
-              onClick={() => setActiveTag(null)}
-            >
-              All
-            </FilterChip>
-            {allTags.map((tag) => (
-              <FilterChip
-                key={tag}
-                active={activeTag === tag}
-                onClick={() => setActiveTag(tag)}
-              >
-                {tag}
-              </FilterChip>
-            ))}
-          </div>
-        ) : null}
 
-        <div className="mt-10">
+      {/* Featured */}
+      {featured.length ? (
+        <Section>
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              <p className="inline-flex items-center gap-1.5 text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
+                <Sparkles className="size-3.5 text-primary" aria-hidden /> Featured
+              </p>
+              <h2 className="mt-2 text-2xl font-semibold tracking-tight md:text-3xl">
+                Highlights from the archive
+              </h2>
+            </div>
+          </div>
+          <div className="mt-8">
+            <Grid cols={{ base: 1, md: 2, lg: 3 }} gap="lg">
+              {featured.slice(0, 3).map((p) => (
+                <PremiumProjectCard key={p.slug} project={p} featured />
+              ))}
+            </Grid>
+          </div>
+        </Section>
+      ) : null}
+
+      {/* Search + Filters */}
+      <Section className="border-t border-border/60">
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">
+              All projects
+            </h2>
+            <div className="relative w-full md:max-w-sm">
+              <Search
+                aria-hidden
+                className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+              />
+              <input
+                type="search"
+                value={query}
+                onChange={(e) => updateQuery(e.target.value)}
+                placeholder="Search by title, tag, tech…"
+                aria-label="Search projects"
+                className="h-10 w-full rounded-full border border-border/60 bg-card pl-9 pr-9 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring/40"
+              />
+              {query ? (
+                <button
+                  type="button"
+                  onClick={() => updateQuery("")}
+                  aria-label="Clear search"
+                  className="absolute right-2 top-1/2 grid size-6 -translate-y-1/2 place-items-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
+                >
+                  <X className="size-3.5" />
+                </button>
+              ) : null}
+            </div>
+          </div>
+
+          <div
+            role="radiogroup"
+            aria-label="Filter by category"
+            className="flex flex-wrap items-center gap-2"
+          >
+            {CATEGORY_FILTERS.map((c) => {
+              const active = category === c;
+              const count = c === "All" ? projects.length : categoryCounts.get(c) ?? 0;
+              return (
+                <button
+                  key={c}
+                  type="button"
+                  role="radio"
+                  aria-checked={active}
+                  onClick={() => updateCategory(c)}
+                  className={cn(
+                    "inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-xs font-medium transition-all",
+                    active
+                      ? "border-foreground bg-foreground text-background shadow-sm"
+                      : "border-border/60 bg-card text-muted-foreground hover:border-foreground/40 hover:text-foreground",
+                  )}
+                >
+                  {c}
+                  <span
+                    className={cn(
+                      "rounded-full px-1.5 py-0.5 text-[10px] font-medium tabular-nums",
+                      active
+                        ? "bg-background/15 text-background"
+                        : "bg-muted text-muted-foreground",
+                    )}
+                  >
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          <p className="text-xs text-muted-foreground" aria-live="polite">
+            {filtered.length === 0
+              ? "No projects match your filters."
+              : `Showing ${(safePage - 1) * PAGE_SIZE + 1}–${Math.min(
+                  safePage * PAGE_SIZE,
+                  filtered.length,
+                )} of ${filtered.length}`}
+          </p>
+        </div>
+
+        <div className="mt-8">
           {filtered.length === 0 ? (
             <EmptyState
-              title="No projects match that filter"
-              description="Try clearing the filter to see everything."
+              title="No projects match"
+              description="Try a different search or clear your filters."
               action={
-                <DSButton variant="outline" size="sm" onClick={() => setActiveTag(null)}>
-                  Reset filter
+                <DSButton
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setQuery("");
+                    setCategory("All");
+                    setPage(1);
+                  }}
+                >
+                  Reset
                 </DSButton>
               }
             />
           ) : (
             <Grid cols={{ base: 1, md: 2, lg: 3 }} gap="lg">
-              {filtered.map((p) => (
-                <ProjectCard key={p.slug} project={p} />
+              {paginated.map((p) => (
+                <PremiumProjectCard key={p.slug} project={p} />
               ))}
             </Grid>
           )}
         </div>
+
+        {totalPages > 1 ? (
+          <nav
+            aria-label="Pagination"
+            className="mt-12 flex items-center justify-center gap-2"
+          >
+            <button
+              type="button"
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={safePage === 1}
+              aria-label="Previous page"
+              className="grid size-9 place-items-center rounded-full border border-border/60 bg-card text-muted-foreground transition-colors hover:border-foreground/40 hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              <ChevronLeft className="size-4" />
+            </button>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => {
+              const active = n === safePage;
+              return (
+                <button
+                  key={n}
+                  type="button"
+                  onClick={() => setPage(n)}
+                  aria-current={active ? "page" : undefined}
+                  className={cn(
+                    "min-w-9 rounded-full px-3 py-1.5 text-xs font-medium tabular-nums transition-colors",
+                    active
+                      ? "bg-foreground text-background"
+                      : "border border-border/60 bg-card text-muted-foreground hover:border-foreground/40 hover:text-foreground",
+                  )}
+                >
+                  {n}
+                </button>
+              );
+            })}
+            <button
+              type="button"
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              disabled={safePage === totalPages}
+              aria-label="Next page"
+              className="grid size-9 place-items-center rounded-full border border-border/60 bg-card text-muted-foreground transition-colors hover:border-foreground/40 hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              <ChevronRight className="size-4" />
+            </button>
+          </nav>
+        ) : null}
       </Section>
     </>
   );
 }
 
-function FilterChip({
-  active,
-  onClick,
-  children,
+function statusMeta(status: Project["status"]) {
+  switch (status) {
+    case "live":
+      return { label: "Live", dot: "bg-emerald-500" };
+    case "in-progress":
+      return { label: "In progress", dot: "bg-amber-500" };
+    case "concept":
+      return { label: "Concept", dot: "bg-sky-500" };
+    case "archived":
+      return { label: "Archived", dot: "bg-muted-foreground" };
+  }
+}
+
+function categoryGradient(category: ProjectCategory) {
+  switch (category) {
+    case "Websites":
+      return "from-sky-500/25 via-indigo-500/15 to-transparent";
+    case "E-commerce":
+      return "from-emerald-500/25 via-teal-500/15 to-transparent";
+    case "UI Design":
+      return "from-fuchsia-500/25 via-purple-500/15 to-transparent";
+    case "Graphic Design":
+      return "from-orange-500/25 via-rose-500/15 to-transparent";
+    case "Marketing":
+      return "from-amber-500/25 via-yellow-500/15 to-transparent";
+    case "Photography":
+      return "from-slate-500/25 via-zinc-500/15 to-transparent";
+  }
+}
+
+function PremiumProjectCard({
+  project,
+  featured = false,
 }: {
-  active: boolean;
-  onClick: () => void;
-  children: React.ReactNode;
+  project: Project;
+  featured?: boolean;
 }) {
+  const status = statusMeta(project.status);
   return (
-    <button
-      type="button"
-      role="radio"
-      aria-checked={active}
-      onClick={onClick}
-      className={cn(
-        "rounded-full border px-3 py-1 text-xs font-medium transition-colors",
-        active
-          ? "border-foreground bg-foreground text-background"
-          : "border-border bg-background text-muted-foreground hover:border-border hover:text-foreground",
-      )}
+    <DSCard
+      variant="surface"
+      interactive
+      padding="none"
+      className="group relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:border-foreground/20 hover:shadow-xl"
     >
-      {children}
-    </button>
+      <Link
+        to="/work/$slug"
+        params={{ slug: project.slug }}
+        className="block focus-visible:outline-none"
+      >
+        {/* Cover */}
+        <div className="relative aspect-[16/10] overflow-hidden bg-muted">
+          {project.cover?.src ? (
+            <img
+              src={project.cover.src}
+              alt={project.cover.alt}
+              className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+              loading="lazy"
+            />
+          ) : (
+            <div
+              className={cn(
+                "relative size-full bg-linear-to-br",
+                categoryGradient(project.category),
+              )}
+            >
+              <div
+                aria-hidden
+                className="absolute inset-0 opacity-40"
+                style={{
+                  backgroundImage:
+                    "radial-gradient(circle at 1px 1px, hsl(var(--foreground) / 0.08) 1px, transparent 0)",
+                  backgroundSize: "22px 22px",
+                }}
+              />
+              <div className="absolute inset-0 grid place-items-center">
+                <span className="text-4xl font-semibold tracking-tight text-foreground/80 md:text-5xl">
+                  {project.title.split(" — ")[0]}
+                </span>
+              </div>
+            </div>
+          )}
+
+          {/* Overlay gradient on hover */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 bg-linear-to-t from-background/60 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+          />
+
+          {/* Top-left: category */}
+          <div className="absolute left-4 top-4 flex items-center gap-2">
+            <span className="rounded-full border border-border/60 bg-background/80 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-foreground backdrop-blur">
+              {project.category}
+            </span>
+            {featured ? (
+              <span className="inline-flex items-center gap-1 rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-primary backdrop-blur">
+                <Sparkles className="size-3" /> Featured
+              </span>
+            ) : null}
+          </div>
+
+          {/* Top-right: status */}
+          <div className="absolute right-4 top-4">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/80 px-2.5 py-1 text-[10px] font-medium text-foreground backdrop-blur">
+              <span className={cn("size-1.5 rounded-full", status.dot)} aria-hidden />
+              {status.label}
+            </span>
+          </div>
+
+          {/* Arrow */}
+          <div className="absolute bottom-4 right-4 grid size-10 translate-y-2 place-items-center rounded-full border border-border/60 bg-background/90 text-foreground opacity-0 backdrop-blur transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+            <ArrowUpRight className="size-4" />
+          </div>
+        </div>
+
+        {/* Body */}
+        <div className="p-6">
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <span className="tabular-nums">{project.year}</span>
+            {project.client ? (
+              <>
+                <span aria-hidden>·</span>
+                <span className="truncate">{project.client}</span>
+              </>
+            ) : null}
+          </div>
+          <h3 className="mt-2 text-lg font-semibold tracking-tight text-foreground">
+            {project.title}
+          </h3>
+          <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
+            {project.summary}
+          </p>
+
+          {project.tags.length ? (
+            <div className="mt-4 flex flex-wrap gap-1.5">
+              {project.tags.slice(0, 3).map((t) => (
+                <span
+                  key={t}
+                  className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground"
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
+          ) : null}
+
+          {project.stack.length ? (
+            <div className="mt-4 flex flex-wrap items-center gap-1.5 border-t border-border/60 pt-4">
+              <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+                Stack
+              </span>
+              {project.stack.slice(0, 4).map((s) => (
+                <span
+                  key={s}
+                  className="rounded-md border border-border/60 bg-card px-1.5 py-0.5 text-[10px] font-medium text-foreground/70"
+                >
+                  {s}
+                </span>
+              ))}
+              {project.stack.length > 4 ? (
+                <span className="text-[10px] text-muted-foreground">
+                  +{project.stack.length - 4}
+                </span>
+              ) : null}
+            </div>
+          ) : null}
+        </div>
+      </Link>
+    </DSCard>
   );
 }
