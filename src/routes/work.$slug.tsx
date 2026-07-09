@@ -7,6 +7,7 @@ import { Section } from "@/components/layout/section";
 import { Eyebrow } from "@/components/typography/eyebrow";
 import { DSButton, Grid, TagGroup, Prose } from "@/components/ds";
 import { projects } from "@/data/projects";
+import type { Project } from "@/features/projects/schema";
 import { site } from "@/config/site";
 
 export const Route = createFileRoute("/work/$slug")({
@@ -56,7 +57,7 @@ export const Route = createFileRoute("/work/$slug")({
 });
 
 function CaseStudy() {
-  const { project } = Route.useLoaderData();
+  const { project } = Route.useLoaderData() as { project: Project };
   const currentIndex = projects.findIndex((p) => p.slug === project.slug);
   const prev = currentIndex > 0 ? projects[currentIndex - 1] : null;
   const next = currentIndex < projects.length - 1 ? projects[currentIndex + 1] : null;

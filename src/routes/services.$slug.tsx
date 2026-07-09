@@ -6,6 +6,7 @@ import { Section } from "@/components/layout/section";
 import { Eyebrow } from "@/components/typography/eyebrow";
 import { DSButton } from "@/components/ds";
 import { services, serviceProcess } from "@/data/services";
+import type { Service } from "@/features/services/schema";
 import { site } from "@/config/site";
 
 export const Route = createFileRoute("/services/$slug")({
