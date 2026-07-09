@@ -18,7 +18,7 @@ export const Route = createFileRoute("/work/")({
     meta: buildMeta({
       title: "المشاريع",
       description:
-        "أعمال مختارة — مواقع، ومتاجر إلكترونية، وتصميم واجهات، وتصميم جرافيكي، وحملات تسويقية، وتصوير.",
+        "أعمال مختارة — مواقع، ومتاجر إلكترونيّة، وواجهات، وهويّات بصريّة، وحملات، وصور.",
       path: "/work",
     }),
     links: [{ rel: "canonical", href: "/work" }],
@@ -76,7 +76,7 @@ function WorkIndex() {
       <PageHeader
         eyebrow="المشاريع"
         title="أعمال أفتخر بها"
-        description="أرشيف حيّ لأعمالي مع العملاء ومشاريعي الشخصية — منتجات، وتجارة إلكترونية، وهويات، وتصوير."
+        description="أرشيف حيّ لأعمالي مع العملاء ومشاريعي الخاصّة — منتجات، وتجارة إلكترونيّة، وهويّات، وصور."
       />
 
       {featured.length ? (
@@ -87,7 +87,7 @@ function WorkIndex() {
                 <Sparkles className="size-3.5 text-primary" aria-hidden /> مميّز
               </p>
               <h2 className="mt-2 text-2xl font-semibold tracking-tight md:text-3xl">
-                أبرز أعمال الأرشيف
+                أبرز الأعمال
               </h2>
             </div>
           </div>
@@ -116,7 +116,7 @@ function WorkIndex() {
                 type="search"
                 value={query}
                 onChange={(e) => updateQuery(e.target.value)}
-                placeholder="ابحث بالعنوان أو الوسم أو التقنية…"
+                placeholder="ابحث بالعنوان أو الوسم أو التقنيّة…"
                 aria-label="ابحث في المشاريع"
                 className="h-10 w-full rounded-full border border-border/60 bg-card pr-9 pl-9 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring/40"
               />
@@ -173,7 +173,7 @@ function WorkIndex() {
 
           <p className="text-xs text-muted-foreground" aria-live="polite">
             {filtered.length === 0
-              ? "لا توجد مشاريع تطابق التصفية."
+              ? "لا توجد مشاريع تُطابق الفلترة."
               : `يظهر ${(safePage - 1) * PAGE_SIZE + 1}–${Math.min(
                   safePage * PAGE_SIZE,
                   filtered.length,
