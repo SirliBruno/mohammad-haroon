@@ -82,30 +82,6 @@ export const Route = createFileRoute("/career")({
   component: CareerPage,
 });
 
-function Reveal({
-  children,
-  delay = 0,
-  className,
-}: {
-  children: React.ReactNode;
-  delay?: number;
-  className?: string;
-}) {
-  const reduce = useReducedMotion();
-  if (reduce) return <div className={className}>{children}</div>;
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 14 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
 function SectionHeading({
   eyebrow,
   title,
@@ -116,14 +92,10 @@ function SectionHeading({
   id?: string;
 }) {
   return (
-    <div id={id} className="scroll-mt-24">
-      <Eyebrow>{eyebrow}</Eyebrow>
-      <h2 className="mt-3 text-2xl font-semibold tracking-tight md:text-3xl">
-        {title}
-      </h2>
-    </div>
+    <SectionTitle eyebrow={eyebrow} title={title} size="sm" id={id} className="scroll-mt-24" />
   );
 }
+
 
 function CareerPage() {
   const linkedin = socials.find((s) => s.label.toLowerCase() === "linkedin");
