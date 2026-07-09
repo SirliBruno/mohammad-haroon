@@ -1,15 +1,13 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
-import type { ReactNode } from "react";
 import { Reveal } from "@/components/motion/reveal";
 import { AvailabilityBadge } from "@/components/ds/availability-badge";
 import {
-  ArrowRight,
+  ArrowLeft,
   BookOpen,
   Braces,
   Coffee,
   Compass,
   Download,
-  Figma,
   GraduationCap,
   Layers,
   Mail,
@@ -41,105 +39,101 @@ import { profile, values } from "@/data/profile";
 import { site } from "@/config/site";
 import { personJsonLd } from "@/features/seo/jsonld";
 
-// ------------------------------------------------------------
-// Local content
-// ------------------------------------------------------------
-
 const careerTimeline: TimelineItem[] = [
   {
-    date: "2025 — Present",
-    title: "Freelance Product Engineer",
-    meta: "Independent · Remote",
+    date: "2025 — حتى الآن",
+    title: "مهندس منتجات مستقل",
+    meta: "عمل حر · عن بُعد",
     description:
-      "Partnering with founders to design and ship premium web products, storefronts, and design systems.",
+      "شراكات مع رواد الأعمال لتصميم وإطلاق منتجات ويب متميزة، ومتاجر إلكترونية، وأنظمة تصميم.",
   },
   {
     date: "2024",
-    title: "Design Engineer",
-    meta: "Boutique product studios",
+    title: "مهندس تصميم",
+    meta: "استوديوهات منتجات متخصصة",
     description:
-      "Led interface work across dashboards, editors, and marketing surfaces for early-stage SaaS teams.",
+      "قدت أعمال الواجهات عبر لوحات التحكم والمحرّرات والصفحات التسويقية لفرق SaaS في مراحلها المبكرة.",
   },
   {
     date: "2023",
-    title: "Frontend Developer",
-    meta: "Agency retainers",
+    title: "مطوّر واجهات أمامية",
+    meta: "عقود مع وكالات",
     description:
-      "Shipped Shopify and headless storefronts for lifestyle brands and DTC operators.",
+      "أطلقت متاجر Shopify وHeadless لعلامات نمط الحياة والعلامات التجارية المباشرة للمستهلك.",
   },
   {
     date: "2022",
-    title: "First freelance clients",
-    meta: "Nights & weekends",
+    title: "أول العملاء المستقلين",
+    meta: "المساءات ونهايات الأسبوع",
     description:
-      "Built landing pages and small stores while studying — the beginning of a habit that stuck.",
+      "طوّرت صفحات مقصودة ومتاجر صغيرة أثناء الدراسة — بداية عادة استمرت معي.",
   },
 ];
 
 const education = [
   {
-    period: "2022 — Present",
-    title: "Bachelor of Information Technology",
-    place: "University coursework · in progress",
+    period: "2022 — حتى الآن",
+    title: "بكالوريوس تقنية المعلومات",
+    place: "الجامعة · قيد الإتمام",
     detail:
-      "Focus on software engineering, human–computer interaction, and web systems.",
+      "تخصص في هندسة البرمجيات، وتفاعل الإنسان مع الحاسب، وأنظمة الويب.",
   },
   {
     period: "2024",
-    title: "Meta Front-End Developer",
+    title: "شهادة مطوّر واجهات أمامية — Meta",
     place: "Meta · Coursera",
-    detail: "React, accessibility, and modern JavaScript at production scale.",
+    detail: "React، والوصولية، وJavaScript الحديث بمستوى الإنتاج.",
   },
   {
     period: "2024",
-    title: "Google UX Design",
+    title: "شهادة تصميم تجربة المستخدم — Google",
     place: "Google · Coursera",
-    detail: "Research, prototyping, and design system fundamentals.",
+    detail: "البحث، والنماذج الأولية، وأساسيات نظام التصميم.",
   },
 ];
 
 const experiencePillars = [
   {
     icon: Palette,
-    title: "Design",
+    title: "التصميم",
     description:
-      "UI, UX, and design systems — from token to shipped component.",
-    tags: ["UI", "UX Research", "Design Systems", "Motion"],
+      "واجهات، وتجربة مستخدم، وأنظمة تصميم — من التوكن إلى المكوّن الجاهز للإطلاق.",
+    tags: ["UI", "بحث UX", "أنظمة تصميم", "الحركة"],
   },
   {
     icon: Braces,
-    title: "Engineering",
+    title: "الهندسة",
     description:
-      "Production-grade frontend in React and TypeScript, end to end.",
+      "واجهات أمامية بجودة إنتاج باستخدام React وTypeScript، من البداية للنهاية.",
     tags: ["React", "TypeScript", "Next.js", "TanStack"],
   },
   {
     icon: Store,
-    title: "Commerce",
+    title: "التجارة الإلكترونية",
     description:
-      "Shopify and headless stores tuned for conversion and craft.",
+      "متاجر Shopify وHeadless مُحسَّنة للتحويل والحرفية.",
     tags: ["Shopify", "Stripe", "Headless CMS", "SEO"],
   },
 ];
 
 const techStack = [
   {
-    group: "Design",
+    group: "التصميم",
     icon: Palette,
     items: ["Figma", "Framer", "Rive", "Adobe CC"],
   },
   {
-    group: "Frontend",
+    group: "الواجهات الأمامية",
     icon: Braces,
     items: ["React", "TypeScript", "Next.js", "TanStack Start", "Tailwind CSS"],
   },
   {
-    group: "Commerce & CMS",
+    group: "التجارة الإلكترونية وإدارة المحتوى",
     icon: Store,
     items: ["Shopify", "Sanity", "Contentful", "Stripe"],
   },
   {
-    group: "Ops & Tooling",
+    group: "العمليات والأدوات",
     icon: Wrench,
     items: ["Vercel", "Cloudflare", "GitHub", "Linear", "Notion"],
   },
@@ -148,69 +142,62 @@ const techStack = [
 const workingStyle = [
   {
     icon: Target,
-    title: "Small scope, sharp outcomes",
+    title: "نطاق مركّز، ونتائج حادّة",
     description:
-      "One goal per engagement. If it can't be described in a sentence, it isn't scoped yet.",
+      "هدف واحد لكل شراكة. إذا لم يمكن وصفه بجملة واحدة، فإنه ليس محدّدًا بعد.",
   },
   {
     icon: MessageCircle,
-    title: "Async by default",
+    title: "التواصل غير المتزامن أولًا",
     description:
-      "Loom, Linear, and clear writing. Meetings only when they move the work forward.",
+      "Loom وLinear وكتابة واضحة. الاجتماعات فقط حين تدفع العمل قُدُمًا.",
   },
   {
     icon: Zap,
-    title: "Shipping mindset",
+    title: "عقلية الإطلاق",
     description:
-      "Working software from week one. Momentum beats meetings every time.",
+      "برنامج قابل للعمل من الأسبوع الأول. الزخم يتفوّق على الاجتماعات دائمًا.",
   },
   {
     icon: Layers,
-    title: "Systems that outlive me",
+    title: "أنظمة تدوم أطول مني",
     description:
-      "Tokens, patterns, and docs so the next hire ships as fast as I did.",
+      "توكنز وأنماط وتوثيق تجعل الموظف الجديد يُطلق بنفس سرعتي.",
   },
 ];
 
 const currentFocus = [
   {
     icon: Sparkles,
-    title: "Design systems that scale",
-    detail: "Fintech tokens & primitives for a Q2 release.",
+    title: "أنظمة تصميم قابلة للتوسّع",
+    detail: "توكنز وعناصر تقنية مالية لإصدار الربع الثاني.",
   },
   {
     icon: Zap,
-    title: "Edge-first commerce",
-    detail: "Storefronts on TanStack Start + Cloudflare.",
+    title: "تجارة إلكترونية على الحافة",
+    detail: "متاجر على TanStack Start + Cloudflare.",
   },
   {
     icon: Compass,
-    title: "Motion as a language",
-    detail: "Codifying how animation communicates state.",
+    title: "الحركة كلغة تواصل",
+    detail: "توثيق كيف تُعبّر الحركة عن الحالة.",
   },
 ];
 
 const interests = [
-  { icon: BookOpen, label: "Reading essays" },
-  { icon: Mountain, label: "Long walks" },
-  { icon: Coffee, label: "Specialty coffee" },
-  { icon: Music, label: "Ambient music" },
-  { icon: Figma, label: "Type & lettering" },
+  { icon: BookOpen, label: "قراءة المقالات" },
+  { icon: Mountain, label: "المشي الطويل" },
+  { icon: Coffee, label: "القهوة المختصة" },
+  { icon: Music, label: "الموسيقى الهادئة" },
+  { icon: Palette, label: "الخط والطباعة" },
 ];
-
-
-
-
-// ------------------------------------------------------------
-// Route
-// ------------------------------------------------------------
 
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: buildMeta({
-      title: "About",
+      title: "نبذة عني",
       description:
-        "Mohammad Haroon — IT Student, Web Developer, UI Designer, and Digital Solutions Specialist. Story, mission, and how I work.",
+        "محمد هارون — مطوّر ويب، مصمم واجهات، ومهندس منتجات رقمية. القصة والرسالة وأسلوب العمل.",
       path: "/about",
       type: "profile",
     }),
@@ -229,27 +216,24 @@ function About() {
   return (
     <>
       <PageHeader
-        eyebrow="About"
-        title={`I'm ${site.shortName}. I design and build software with taste.`}
+        eyebrow="نبذة عني"
+        title={`أنا ${site.shortName}. أُصمّم وأُطوّر البرمجيات بذوق رفيع.`}
         description={profile.bio}
       />
 
-      {/* Biography + sidebar */}
       <Section>
         <div className="grid gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:gap-16">
           <Reveal>
             <div className="space-y-5 text-base leading-relaxed text-foreground/85 md:text-lg">
               <p>
-                I'm an IT Student, Web Developer, and UI Designer building
-                digital solutions for founders and small teams. I care about
-                the details others skip — the two-pixel misalignment, the
-                animation that arrives one frame too late, the copy that
-                could be shorter.
+                أنا مطوّر ويب، ومصمم واجهات، وطالب في تقنية المعلومات، أبني
+                حلولًا رقمية لرواد الأعمال والفرق الصغيرة. أهتم بالتفاصيل التي
+                يتجاهلها الآخرون — انزياح البكسل، والحركة التي تصل بإطار متأخر،
+                والنص الذي يمكن أن يكون أقصر.
               </p>
               <p>
-                Most of my work sits at the seam between design and code:
-                interfaces that feel considered, ship on time, and hold up
-                under real users.
+                معظم عملي يقع عند تقاطع التصميم والكود: واجهات تبدو مدروسة،
+                وتُسلَّم في موعدها، وتصمد أمام المستخدمين الحقيقيين.
               </p>
             </div>
           </Reveal>
@@ -257,8 +241,8 @@ function About() {
           <Reveal delay={0.05}>
             <DSCard variant="surface" padding="lg" className="space-y-6">
               <div>
-                <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
-                  Currently
+                <p className="text-xs font-medium tracking-[0.14em] text-muted-foreground">
+                  حاليًا
                 </p>
                 <div className="mt-3">
                   <AvailabilityBadge
@@ -268,26 +252,26 @@ function About() {
                 </div>
                 <p className="mt-2 inline-flex items-center gap-1.5 text-sm text-muted-foreground">
                   <MapPin className="size-3.5" aria-hidden />
-                  Based {site.location} · working globally
+                  {site.location} · نعمل مع العملاء حول العالم
                 </p>
               </div>
               <div className="flex flex-wrap gap-2">
                 <DSButton asChild size="sm" variant="primary">
                   <Link to="/contact">
-                    Get in touch
-                    <ArrowRight />
+                    تواصل معي
+                    <ArrowLeft />
                   </Link>
                 </DSButton>
                 <DSButton asChild size="sm" variant="outline">
                   <a href="/resume.pdf" download>
                     <Download />
-                    Resume
+                    السيرة الذاتية
                   </a>
                 </DSButton>
               </div>
               <div className="border-t border-border/60 pt-5">
-                <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
-                  Elsewhere
+                <p className="text-xs font-medium tracking-[0.14em] text-muted-foreground">
+                  حسابات أخرى
                 </p>
                 <ul className="mt-3 space-y-2">
                   {profile.socials.map((s) => (
@@ -309,39 +293,38 @@ function About() {
         </div>
       </Section>
 
-      {/* Professional Story */}
       <Section className="border-t border-border/60">
         <Reveal>
           <SectionTitle
-            eyebrow="Professional story"
-            title="A short path, on purpose."
-            description="I've stayed narrow so I could go deep. Design and code, held to the same bar."
+            eyebrow="مسيرتي المهنية"
+            title="طريق قصير، عن قصد."
+            description="أبقيت المسار مركّزًا لأتعمّق أكثر. التصميم والكود بمعيار واحد."
           />
         </Reveal>
         <Reveal delay={0.05}>
           <div className="mt-10 grid gap-6 md:grid-cols-3">
             {[
               {
-                year: "The start",
-                title: "Curiosity, then craft",
+                year: "البداية",
+                title: "الفضول أولًا، ثم الحرفية",
                 body:
-                  "Started with landing pages while studying IT. Realized I liked the design half as much as the code.",
+                  "بدأت بصفحات مقصودة أثناء دراسة تقنية المعلومات. أدركت أن التصميم يشدّني بقدر ما يشدّني الكود.",
               },
               {
-                year: "The middle",
-                title: "Shipping in production",
+                year: "المنتصف",
+                title: "الإطلاق في بيئة الإنتاج",
                 body:
-                  "Storefronts, dashboards, and marketing sites — with real users, real deadlines, real feedback loops.",
+                  "متاجر، ولوحات تحكم، ومواقع تسويقية — مع مستخدمين حقيقيين، ومواعيد نهائية حقيقية.",
               },
               {
-                year: "Now",
-                title: "Considered software",
+                year: "الآن",
+                title: "برمجيات مدروسة",
                 body:
-                  "Chosen engagements only. Focus on interfaces that feel obvious and quietly premium.",
+                  "شراكات مختارة فقط. التركيز على واجهات تبدو بديهية وراقية بهدوء.",
               },
             ].map((chapter) => (
               <DSCard key={chapter.year} variant="surface" padding="lg" className="h-full">
-                <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
+                <p className="text-xs font-medium tracking-[0.14em] text-muted-foreground">
                   {chapter.year}
                 </p>
                 <h3 className="mt-3 text-base font-semibold tracking-tight text-foreground">
@@ -356,26 +339,17 @@ function About() {
         </Reveal>
       </Section>
 
-      {/* Career Timeline + Education */}
       <Section className="border-t border-border/60">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
           <Reveal>
-            <SectionTitle
-              as="h2"
-              eyebrow="Career"
-              title="The timeline."
-            />
+            <SectionTitle as="h2" eyebrow="المسيرة المهنية" title="الجدول الزمني." />
             <DSCard variant="surface" padding="lg" className="mt-8">
               <Timeline items={careerTimeline} />
             </DSCard>
           </Reveal>
 
           <Reveal delay={0.05}>
-            <SectionTitle
-              as="h2"
-              eyebrow="Education"
-              title="Studies & credentials."
-            />
+            <SectionTitle as="h2" eyebrow="التعليم" title="الدراسة والشهادات." />
             <ul className="mt-8 space-y-4">
               {education.map((e) => (
                 <li key={e.title}>
@@ -385,7 +359,7 @@ function About() {
                         <GraduationCap className="size-4" aria-hidden />
                       </span>
                       <div className="min-w-0 flex-1">
-                        <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
+                        <p className="text-xs font-medium tracking-[0.14em] text-muted-foreground">
                           {e.period}
                         </p>
                         <h3 className="mt-1 text-base font-semibold tracking-tight text-foreground">
@@ -403,13 +377,12 @@ function About() {
         </div>
       </Section>
 
-      {/* Experience */}
       <Section className="border-t border-border/60">
         <Reveal>
           <SectionTitle
-            eyebrow="Experience"
-            title="Three disciplines. One bar."
-            description="Where I've spent my time and where I add the most value."
+            eyebrow="الخبرات"
+            title="ثلاثة تخصصات. معيار واحد."
+            description="حيث قضيت وقتي وحيث أُقدّم أعلى قيمة."
           />
         </Reveal>
         <Reveal delay={0.05}>
@@ -441,26 +414,22 @@ function About() {
         </Reveal>
       </Section>
 
-      {/* Mission & Vision */}
       <Section className="border-t border-border/60">
         <div className="grid gap-6 md:grid-cols-2">
           <Reveal>
             <DSCard variant="surface" padding="lg" className="relative h-full overflow-hidden">
               <div
                 aria-hidden
-                className="pointer-events-none absolute -right-16 -top-16 size-40 rounded-full bg-primary/10 blur-2xl"
+                className="pointer-events-none absolute -left-16 -top-16 size-40 rounded-full bg-primary/10 blur-2xl"
               />
               <div className="relative">
-                <p className="text-xs font-medium uppercase tracking-[0.14em] text-primary">
-                  Mission
-                </p>
+                <p className="text-xs font-medium tracking-[0.14em] text-primary">الرسالة</p>
                 <h3 className="mt-3 text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
-                  Help businesses ship digital products people actually enjoy using.
+                  مساعدة الشركات على إطلاق منتجات رقمية يستمتع الناس باستخدامها.
                 </h3>
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground md:text-base">
-                  Whether it's a marketing site, a store, or a full product,
-                  the mission is the same: quiet interfaces, sharp outcomes,
-                  no wasted screens.
+                  سواء كان موقعًا تسويقيًا، أو متجرًا، أو منتجًا متكاملًا،
+                  الرسالة واحدة: واجهات هادئة، ونتائج حادّة، دون شاشات مهدورة.
                 </p>
               </div>
             </DSCard>
@@ -469,19 +438,16 @@ function About() {
             <DSCard variant="surface" padding="lg" className="relative h-full overflow-hidden">
               <div
                 aria-hidden
-                className="pointer-events-none absolute -right-16 -top-16 size-40 rounded-full bg-accent/10 blur-2xl"
+                className="pointer-events-none absolute -left-16 -top-16 size-40 rounded-full bg-accent/10 blur-2xl"
               />
               <div className="relative">
-                <p className="text-xs font-medium uppercase tracking-[0.14em] text-accent">
-                  Vision
-                </p>
+                <p className="text-xs font-medium tracking-[0.14em] text-accent">الرؤية</p>
                 <h3 className="mt-3 text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
-                  A studio-quality partner for teams that treat software like craft.
+                  شريك بجودة استوديو حقيقي للفرق التي تعامل البرمجيات كحرفة.
                 </h3>
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground md:text-base">
-                  Long-term: build a small, deliberate practice known for
-                  the details — the kind of work you can point at without
-                  qualifications.
+                  على المدى الطويل: بناء ممارسة صغيرة ومدروسة معروفة بتفاصيلها —
+                  من النوع الذي يمكنك الإشارة إليه دون تحفّظ.
                 </p>
               </div>
             </DSCard>
@@ -489,13 +455,12 @@ function About() {
         </div>
       </Section>
 
-      {/* Core Values */}
       <Section className="border-t border-border/60">
         <Reveal>
           <SectionTitle
-            eyebrow="Core values"
-            title="Principles I hold to."
-            description="The compass — the same in year one as in year eight."
+            eyebrow="القيم الأساسية"
+            title="مبادئ ألتزم بها."
+            description="البوصلة — نفسها في السنة الأولى والسنة الثامنة."
           />
         </Reveal>
         <Reveal delay={0.05}>
@@ -504,7 +469,7 @@ function About() {
               {values.map((v, i) => (
                 <DSCard key={v.title} variant="outline" padding="lg" className="h-full">
                   <div className="flex items-baseline gap-3">
-                    <span className="text-xs font-mono text-muted-foreground">
+                    <span className="text-xs font-mono text-muted-foreground" dir="ltr">
                       0{i + 1}
                     </span>
                     <h3 className="text-lg font-semibold tracking-tight text-foreground">
@@ -521,13 +486,12 @@ function About() {
         </Reveal>
       </Section>
 
-      {/* Current Focus */}
       <Section className="border-t border-border/60">
         <Reveal>
           <SectionTitle
-            eyebrow="Now"
-            title="What has my attention this quarter."
-            description="A short list — updated as things ship."
+            eyebrow="حاليًا"
+            title="ما يشغل اهتمامي هذا الربع."
+            description="قائمة قصيرة — تُحدَّث كلما اكتمل شيء."
           />
         </Reveal>
         <Reveal delay={0.05}>
@@ -546,7 +510,7 @@ function About() {
                     <p className="text-sm font-semibold text-foreground">{f.title}</p>
                     <p className="text-xs text-muted-foreground">{f.detail}</p>
                   </div>
-                  <DSBadge variant="subtle">In progress</DSBadge>
+                  <DSBadge variant="subtle">قيد التنفيذ</DSBadge>
                 </li>
               );
             })}
@@ -554,13 +518,12 @@ function About() {
         </Reveal>
       </Section>
 
-      {/* Tech Stack */}
       <Section className="border-t border-border/60">
         <Reveal>
           <SectionTitle
-            eyebrow="Tech stack"
-            title="The tools behind the work."
-            description="Narrow on purpose. I go deep on a small set of tools instead of shallow on many."
+            eyebrow="التقنيات"
+            title="الأدوات وراء العمل."
+            description="مركّز عن قصد. أتعمّق في مجموعة صغيرة من الأدوات بدلًا من التشتّت."
           />
         </Reveal>
         <Reveal delay={0.05}>
@@ -593,12 +556,11 @@ function About() {
         </Reveal>
       </Section>
 
-      {/* Working Style */}
       <Section className="border-t border-border/60">
         <Reveal>
           <SectionTitle
-            eyebrow="Working style"
-            title="How the work actually happens."
+            eyebrow="أسلوب العمل"
+            title="كيف يحدث العمل فعلًا."
           />
         </Reveal>
         <Reveal delay={0.05}>
@@ -629,12 +591,11 @@ function About() {
         </Reveal>
       </Section>
 
-      {/* Personal Interests */}
       <Section className="border-t border-border/60">
         <Reveal>
           <SectionTitle
-            eyebrow="Off the clock"
-            title="Interests that keep the tank full."
+            eyebrow="خارج العمل"
+            title="اهتمامات تُشحن الطاقة."
           />
         </Reveal>
         <Reveal delay={0.05}>
@@ -654,7 +615,6 @@ function About() {
         </Reveal>
       </Section>
 
-      {/* Resume + CTA */}
       <Section className="border-t border-border/60">
         <Reveal>
           <div className="relative overflow-hidden rounded-3xl border border-border/60 bg-card px-6 py-16 md:px-16 md:py-20">
@@ -664,28 +624,28 @@ function About() {
             />
             <div className="relative grid gap-10 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] md:items-end">
               <div>
-                <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
-                  Next step
+                <p className="text-xs font-medium tracking-[0.14em] text-muted-foreground">
+                  الخطوة التالية
                 </p>
                 <h2 className="mt-3 text-3xl font-semibold tracking-tight text-foreground text-balance md:text-4xl lg:text-5xl">
-                  Read the résumé, or start a conversation.
+                  اقرأ السيرة الذاتية أو ابدأ محادثة.
                 </h2>
                 <p className="mt-4 max-w-xl text-base text-muted-foreground md:text-lg">
-                  Grab the PDF if you're evaluating for a role, or drop a note
-                  if you have a project in mind.
+                  حمّل الملف إن كنت تُقيّم للتوظيف، أو أرسل رسالة إن كان لديك
+                  مشروع في ذهنك.
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-3 md:justify-end">
                 <DSButton asChild size="lg" variant="primary">
                   <a href="/resume.pdf" download>
                     <Download />
-                    Download résumé
+                    تحميل السيرة الذاتية
                   </a>
                 </DSButton>
                 <DSButton asChild size="lg" variant="outline">
                   <Link to="/contact">
                     <Mail />
-                    Get in touch
+                    تواصل معي
                   </Link>
                 </DSButton>
               </div>

@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowUpRight, Search, X, Sparkles, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowUpRight, Search, X, Sparkles, ChevronRight, ChevronLeft } from "lucide-react";
 import { buildMeta } from "@/features/seo/build-meta";
 import { PageHeader } from "@/components/layout/page-header";
 import { Section } from "@/components/layout/section";
@@ -10,15 +10,15 @@ import { projectCategories, type Project, type ProjectCategory } from "@/feature
 import { cn } from "@/lib/utils";
 
 const PAGE_SIZE = 6;
-const CATEGORY_FILTERS = ["All", ...projectCategories] as const;
+const CATEGORY_FILTERS = ["الكل", ...projectCategories] as const;
 type CategoryFilter = (typeof CATEGORY_FILTERS)[number];
 
 export const Route = createFileRoute("/work/")({
   head: () => ({
     meta: buildMeta({
-      title: "Projects",
+      title: "المشاريع",
       description:
-        "Selected projects — websites, e-commerce, UI design, graphic design, marketing and photography work.",
+        "أعمال مختارة — مواقع، ومتاجر إلكترونية، وتصميم واجهات، وتصميم جرافيكي، وحملات تسويقية، وتصوير.",
       path: "/work",
     }),
     links: [{ rel: "canonical", href: "/work" }],
@@ -28,7 +28,7 @@ export const Route = createFileRoute("/work/")({
 
 function WorkIndex() {
   const [query, setQuery] = useState("");
-  const [category, setCategory] = useState<CategoryFilter>("All");
+  const [category, setCategory] = useState<CategoryFilter>("الكل");
   const [page, setPage] = useState(1);
 
   const featured = useMemo(() => projects.filter((p) => p.featured), []);
@@ -36,7 +36,7 @@ function WorkIndex() {
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return projects.filter((p) => {
-      if (category !== "All" && p.category !== category) return false;
+      if (category !== "الكل" && p.category !== category) return false;
       if (!q) return true;
       const hay = [
         p.title,
@@ -74,21 +74,20 @@ function WorkIndex() {
   return (
     <>
       <PageHeader
-        eyebrow="Projects"
-        title="Work I'm proud of"
-        description="A living archive of client and personal work across product, commerce, brand, and image-making."
+        eyebrow="المشاريع"
+        title="أعمال أفتخر بها"
+        description="أرشيف حيّ لأعمالي مع العملاء ومشاريعي الشخصية — منتجات، وتجارة إلكترونية، وهويات، وتصوير."
       />
 
-      {/* Featured */}
       {featured.length ? (
         <Section>
           <div className="flex items-end justify-between gap-4">
             <div>
-              <p className="inline-flex items-center gap-1.5 text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
-                <Sparkles className="size-3.5 text-primary" aria-hidden /> Featured
+              <p className="inline-flex items-center gap-1.5 text-xs font-medium tracking-[0.14em] text-muted-foreground">
+                <Sparkles className="size-3.5 text-primary" aria-hidden /> مميّز
               </p>
               <h2 className="mt-2 text-2xl font-semibold tracking-tight md:text-3xl">
-                Highlights from the archive
+                أبرز أعمال الأرشيف
               </h2>
             </div>
           </div>
@@ -102,32 +101,31 @@ function WorkIndex() {
         </Section>
       ) : null}
 
-      {/* Search + Filters */}
       <Section className="border-t border-border/60">
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">
-              All projects
+              جميع المشاريع
             </h2>
             <div className="relative w-full md:max-w-sm">
               <Search
                 aria-hidden
-                className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+                className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
               />
               <input
                 type="search"
                 value={query}
                 onChange={(e) => updateQuery(e.target.value)}
-                placeholder="Search by title, tag, tech…"
-                aria-label="Search projects"
-                className="h-10 w-full rounded-full border border-border/60 bg-card pl-9 pr-9 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring/40"
+                placeholder="ابحث بالعنوان أو الوسم أو التقنية…"
+                aria-label="ابحث في المشاريع"
+                className="h-10 w-full rounded-full border border-border/60 bg-card pr-9 pl-9 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring/40"
               />
               {query ? (
                 <button
                   type="button"
                   onClick={() => updateQuery("")}
-                  aria-label="Clear search"
-                  className="absolute right-2 top-1/2 grid size-6 -translate-y-1/2 place-items-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
+                  aria-label="مسح البحث"
+                  className="absolute left-2 top-1/2 grid size-6 -translate-y-1/2 place-items-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
                 >
                   <X className="size-3.5" />
                 </button>
@@ -137,12 +135,12 @@ function WorkIndex() {
 
           <div
             role="radiogroup"
-            aria-label="Filter by category"
+            aria-label="تصفية حسب الفئة"
             className="flex flex-wrap items-center gap-2"
           >
             {CATEGORY_FILTERS.map((c) => {
               const active = category === c;
-              const count = c === "All" ? projects.length : categoryCounts.get(c) ?? 0;
+              const count = c === "الكل" ? projects.length : categoryCounts.get(c) ?? 0;
               return (
                 <button
                   key={c}
@@ -175,30 +173,30 @@ function WorkIndex() {
 
           <p className="text-xs text-muted-foreground" aria-live="polite">
             {filtered.length === 0
-              ? "No projects match your filters."
-              : `Showing ${(safePage - 1) * PAGE_SIZE + 1}–${Math.min(
+              ? "لا توجد مشاريع تطابق التصفية."
+              : `يظهر ${(safePage - 1) * PAGE_SIZE + 1}–${Math.min(
                   safePage * PAGE_SIZE,
                   filtered.length,
-                )} of ${filtered.length}`}
+                )} من أصل ${filtered.length}`}
           </p>
         </div>
 
         <div className="mt-8">
           {filtered.length === 0 ? (
             <EmptyState
-              title="No projects match"
-              description="Try a different search or clear your filters."
+              title="لا توجد مشاريع مطابقة"
+              description="جرّب بحثًا مختلفًا أو أعد ضبط التصفية."
               action={
                 <DSButton
                   variant="outline"
                   size="sm"
                   onClick={() => {
                     setQuery("");
-                    setCategory("All");
+                    setCategory("الكل");
                     setPage(1);
                   }}
                 >
-                  Reset
+                  إعادة الضبط
                 </DSButton>
               }
             />
@@ -213,17 +211,17 @@ function WorkIndex() {
 
         {totalPages > 1 ? (
           <nav
-            aria-label="Pagination"
+            aria-label="التنقل بين الصفحات"
             className="mt-12 flex items-center justify-center gap-2"
           >
             <button
               type="button"
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={safePage === 1}
-              aria-label="Previous page"
+              aria-label="الصفحة السابقة"
               className="grid size-9 place-items-center rounded-full border border-border/60 bg-card text-muted-foreground transition-colors hover:border-foreground/40 hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
             >
-              <ChevronLeft className="size-4" />
+              <ChevronRight className="size-4" />
             </button>
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => {
               const active = n === safePage;
@@ -248,10 +246,10 @@ function WorkIndex() {
               type="button"
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={safePage === totalPages}
-              aria-label="Next page"
+              aria-label="الصفحة التالية"
               className="grid size-9 place-items-center rounded-full border border-border/60 bg-card text-muted-foreground transition-colors hover:border-foreground/40 hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
             >
-              <ChevronRight className="size-4" />
+              <ChevronLeft className="size-4" />
             </button>
           </nav>
         ) : null}
@@ -351,12 +349,12 @@ function PremiumProjectCard({
 
           {/* Top-left: category */}
           <div className="absolute left-4 top-4 flex items-center gap-2">
-            <span className="rounded-full border border-border/60 bg-background/80 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-foreground backdrop-blur">
+            <span className="rounded-full border border-border/60 bg-background/80 px-2.5 py-1 text-[10px] font-medium tracking-wider text-foreground backdrop-blur">
               {project.category}
             </span>
             {featured ? (
-              <span className="inline-flex items-center gap-1 rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-primary backdrop-blur">
-                <Sparkles className="size-3" /> Featured
+              <span className="inline-flex items-center gap-1 rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-[10px] font-medium tracking-wider text-primary backdrop-blur">
+                <Sparkles className="size-3" /> مميّز
               </span>
             ) : null}
           </div>
@@ -408,8 +406,8 @@ function PremiumProjectCard({
 
           {project.stack.length ? (
             <div className="mt-4 flex flex-wrap items-center gap-1.5 border-t border-border/60 pt-4">
-              <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
-                Stack
+              <span className="text-[10px] font-medium tracking-wider text-muted-foreground">
+                التقنيات
               </span>
               {project.stack.slice(0, 4).map((s) => (
                 <span
