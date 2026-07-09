@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WorkRouteImport } from './routes/work'
 import { Route as UsesRouteImport } from './routes/uses'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as IdeasRouteImport } from './routes/ideas'
@@ -35,6 +36,11 @@ const WorkRoute = WorkRouteImport.update({
 const UsesRoute = UsesRouteImport.update({
   id: '/uses',
   path: '/uses',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ServicesRoute = ServicesRouteImport.update({
@@ -122,6 +128,7 @@ export interface FileRoutesByFullPath {
   '/ideas': typeof IdeasRoute
   '/products': typeof ProductsRoute
   '/services': typeof ServicesRouteWithChildren
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/uses': typeof UsesRoute
   '/work': typeof WorkRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
@@ -139,6 +146,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/ideas': typeof IdeasRoute
   '/products': typeof ProductsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/uses': typeof UsesRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
@@ -158,6 +166,7 @@ export interface FileRoutesById {
   '/ideas': typeof IdeasRoute
   '/products': typeof ProductsRoute
   '/services': typeof ServicesRouteWithChildren
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/uses': typeof UsesRoute
   '/work': typeof WorkRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
@@ -179,6 +188,7 @@ export interface FileRouteTypes {
     | '/ideas'
     | '/products'
     | '/services'
+    | '/sitemap.xml'
     | '/uses'
     | '/work'
     | '/blog/$slug'
@@ -196,6 +206,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/ideas'
     | '/products'
+    | '/sitemap.xml'
     | '/uses'
     | '/blog/$slug'
     | '/services/$slug'
@@ -214,6 +225,7 @@ export interface FileRouteTypes {
     | '/ideas'
     | '/products'
     | '/services'
+    | '/sitemap.xml'
     | '/uses'
     | '/work'
     | '/blog/$slug'
@@ -234,6 +246,7 @@ export interface RootRouteChildren {
   IdeasRoute: typeof IdeasRoute
   ProductsRoute: typeof ProductsRoute
   ServicesRoute: typeof ServicesRouteWithChildren
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   UsesRoute: typeof UsesRoute
   WorkRoute: typeof WorkRouteWithChildren
   ApiPublicContactRoute: typeof ApiPublicContactRoute
@@ -253,6 +266,13 @@ declare module '@tanstack/react-router' {
       path: '/uses'
       fullPath: '/uses'
       preLoaderRoute: typeof UsesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/services': {
@@ -410,6 +430,7 @@ const rootRouteChildren: RootRouteChildren = {
   IdeasRoute: IdeasRoute,
   ProductsRoute: ProductsRoute,
   ServicesRoute: ServicesRouteWithChildren,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   UsesRoute: UsesRoute,
   WorkRoute: WorkRouteWithChildren,
   ApiPublicContactRoute: ApiPublicContactRoute,
