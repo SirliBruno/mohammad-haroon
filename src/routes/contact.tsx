@@ -186,42 +186,41 @@ function ContactPage() {
       />
 
       {/* Channels */}
-      <Section className="pt-16">
-        <Container>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {channels.map((c) => {
-              const Icon = c.icon;
-              const external = c.href.startsWith("http");
-              return (
-                <a
-                  key={c.label}
-                  href={c.href}
-                  target={external ? "_blank" : undefined}
-                  rel={external ? "noopener noreferrer" : undefined}
-                  className="group relative flex flex-col rounded-xl border border-border/60 bg-card p-5 transition-all duration-300 hover:border-primary/40 hover:-translate-y-0.5 hover:shadow-lg"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
-                      <Icon className="size-5" aria-hidden />
-                    </span>
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium text-foreground">{c.label}</p>
-                      <p className="truncate text-xs text-muted-foreground">{c.hint}</p>
-                    </div>
+      <Section size="sm">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {channels.map((c) => {
+            const Icon = c.icon;
+            const external = c.href.startsWith("http");
+            return (
+              <a
+                key={c.label}
+                href={c.href}
+                target={external ? "_blank" : undefined}
+                rel={external ? "noopener noreferrer" : undefined}
+                className="group relative flex flex-col rounded-2xl border border-border/60 bg-card p-5 transition-[transform,box-shadow,border-color] duration-200 ease-out will-change-transform hover:border-primary/40 hover:shadow-lg motion-safe:hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
+                    <Icon className="size-5" aria-hidden />
+                  </span>
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-foreground">{c.label}</p>
+                    <p className="truncate text-xs text-muted-foreground">{c.hint}</p>
                   </div>
-                  <p className="mt-4 truncate text-sm text-foreground/80 group-hover:text-foreground">
-                    {c.value}
-                  </p>
-                  <ArrowRight
-                    className="absolute right-4 top-4 size-4 text-muted-foreground opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0.5"
-                    aria-hidden
-                  />
-                </a>
-              );
-            })}
-          </div>
-        </Container>
+                </div>
+                <p className="mt-4 truncate text-sm text-foreground/80 group-hover:text-foreground">
+                  {c.value}
+                </p>
+                <ArrowRight
+                  className="absolute right-4 top-4 size-4 text-muted-foreground opacity-0 transition-[opacity,transform] duration-200 ease-out group-hover:opacity-100 motion-safe:group-hover:translate-x-0.5"
+                  aria-hidden
+                />
+              </a>
+            );
+          })}
+        </div>
       </Section>
+
 
       {/* Form + sidebar */}
       <Section>
