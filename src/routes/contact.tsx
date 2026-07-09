@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createFileRoute } from "@tanstack/react-router";
 import {
-  ArrowRight,
+  ArrowLeft,
   Calendar,
   Clock,
   Mail,
@@ -50,9 +50,9 @@ import { site } from "@/config/site";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: buildMeta({
-      title: "Contact",
+      title: "تواصل معي",
       description:
-        "Get in touch with Mohammad Haroon — hire, freelance projects, collaborations. Reply within two working days.",
+        "تواصل مع محمد هارون — للتوظيف، أو المشاريع الحرة، أو الشراكات. أرد على جميع الرسائل خلال يومَي عمل.",
       path: "/contact",
     }),
     links: [{ rel: "canonical", href: "/contact" }],
@@ -62,7 +62,7 @@ export const Route = createFileRoute("/contact")({
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "ContactPage",
-          name: `Contact ${site.name}`,
+          name: `تواصل مع ${site.name}`,
           url: `${site.url}/contact`,
           about: {
             "@type": "Person",
@@ -78,60 +78,60 @@ export const Route = createFileRoute("/contact")({
 });
 
 const whatsappHref = `https://wa.me/${site.whatsapp.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
-  "Hi Haroon — I found you via your site.",
+  "مرحبًا هارون — تواصلت معك من خلال موقعك.",
 )}`;
 
 const channels = [
   {
     icon: Mail,
-    label: "Email",
+    label: "البريد الإلكتروني",
     value: site.email,
     href: `mailto:${site.email}`,
-    hint: "Best for detailed briefs",
+    hint: "الأنسب للتفاصيل الكاملة",
   },
   {
     icon: MessageCircle,
-    label: "WhatsApp",
+    label: "واتساب",
     value: site.whatsappDisplay,
     href: whatsappHref,
-    hint: "Quick questions & scheduling",
+    hint: "للاستفسارات السريعة والمواعيد",
   },
   {
     icon: Linkedin,
-    label: "LinkedIn",
+    label: "لينكدإن",
     value: "in/mharoon",
     href: "https://linkedin.com/",
-    hint: "Roles & professional intros",
+    hint: "للفرص المهنية والتعارف",
   },
   {
     icon: Github,
-    label: "GitHub",
+    label: "قيت هَب",
     value: "@mharoon",
     href: "https://github.com/",
-    hint: "Code, issues & OSS",
+    hint: "الكود والمشاريع المفتوحة",
   },
 ] as const;
 
 const faqs = [
   {
-    q: "What's your typical response time?",
-    a: "Within two working days — usually the same day if it lands before 3pm my time.",
+    q: "ما هو زمن الرد المعتاد لديك؟",
+    a: "خلال يومَي عمل — وغالبًا في اليوم نفسه إذا وصلت الرسالة قبل الساعة 3 عصرًا بتوقيت السعودية.",
   },
   {
-    q: "Do you take on short projects?",
-    a: "Yes. Anything from a two-week landing page to a full product engagement. I'll tell you honestly if I'm not the right fit.",
+    q: "هل تقبل المشاريع قصيرة المدى؟",
+    a: "نعم. من صفحة مقصودة خلال أسبوعين إلى مشروع منتج متكامل. سأخبرك بصراحة إن لم أكن الأنسب للمشروع.",
   },
   {
-    q: "What information helps you reply faster?",
-    a: "A one-line summary of the problem, your timeline, and — if relevant — a rough budget range. Links to existing product, brand, or Figma are gold.",
+    q: "ما المعلومات التي تُسرّع الرد؟",
+    a: "ملخص من سطر واحد للمشكلة، والجدول الزمني، ونطاق ميزانية تقريبي إن أمكن. الروابط لمنتجك الحالي أو ملفات Figma تُعدّ كنزًا.",
   },
   {
-    q: "Do you sign NDAs?",
-    a: "Happy to sign a mutual NDA before a first call for sensitive work. Just mention it in your message.",
+    q: "هل تُوقّع اتفاقيات عدم إفصاح؟",
+    a: "بكل سرور — أُوقّع اتفاقية عدم إفصاح متبادلة قبل المكالمة الأولى للأعمال الحساسة. فقط اذكر ذلك في رسالتك.",
   },
   {
-    q: "Where are you based and do you travel?",
-    a: `${site.location} — I work with teams globally on ${site.timezone.replace("UTC", "GMT")} overlap and travel for kick-offs when it matters.`,
+    q: "أين مقرّك؟ وهل تسافر؟",
+    a: `${site.location} — أعمل مع فرق حول العالم بتوقيت ${site.timezone}، وأسافر لجلسات الانطلاق حين يستدعي الأمر ذلك.`,
   },
 ];
 
@@ -172,7 +172,7 @@ function ContactPage() {
     } catch (err) {
       console.error(err);
       setServerError(
-        "Something went wrong. Please email me directly at " + site.email + ".",
+        "حدث خطأ غير متوقع أثناء إرسال الرسالة. يُرجى مراسلتي مباشرة عبر " + site.email + "."
       );
     }
   };
@@ -180,12 +180,11 @@ function ContactPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Contact"
-        title="Let's talk"
-        description="Whether it's a hire, a freelance project, or just a question — I read everything and reply within two working days."
+        eyebrow="تواصل معي"
+        title="لنتحدّث سويًا"
+        description="سواء كنت تبحث عن توظيف، أو مشروع حر، أو حتى مجرد سؤال — أقرأ كل الرسائل وأرد خلال يومَي عمل."
       />
 
-      {/* Channels */}
       <Section size="sm">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {channels.map((c) => {
@@ -208,11 +207,11 @@ function ContactPage() {
                     <p className="truncate text-xs text-muted-foreground">{c.hint}</p>
                   </div>
                 </div>
-                <p className="mt-4 truncate text-sm text-foreground/80 group-hover:text-foreground">
+                <p className="mt-4 truncate text-sm text-foreground/80 group-hover:text-foreground" dir={c.label === "قيت هَب" || c.label === "لينكدإن" ? "ltr" : undefined}>
                   {c.value}
                 </p>
-                <ArrowRight
-                  className="absolute right-4 top-4 size-4 text-muted-foreground opacity-0 transition-[opacity,transform] duration-200 ease-out group-hover:opacity-100 motion-safe:group-hover:translate-x-0.5"
+                <ArrowLeft
+                  className="absolute left-4 top-4 size-4 text-muted-foreground opacity-0 transition-[opacity,transform] duration-200 ease-out group-hover:opacity-100 motion-safe:group-hover:-translate-x-0.5"
                   aria-hidden
                 />
               </a>
@@ -222,18 +221,16 @@ function ContactPage() {
       </Section>
 
 
-      {/* Form + sidebar */}
       <Section>
         <div className="grid gap-12 lg:grid-cols-[3fr_2fr]">
-          {/* Form */}
           <div>
             {submitted ? (
               <SuccessState
-                title="Message received"
-                description="Thanks for reaching out. I'll get back to you within two working days — usually sooner."
+                title="تم استلام رسالتك"
+                description="شكرًا لتواصلك. سأرد عليك خلال يومَي عمل — وغالبًا في وقت أقصر."
                 action={
                   <DSButton variant="outline" onClick={() => setSubmitted(false)}>
-                    Send another message
+                    إرسال رسالة أخرى
                   </DSButton>
                 }
               />
@@ -245,7 +242,7 @@ function ContactPage() {
                 className="space-y-6"
               >
                 <h2 id="contact-form-heading" className="sr-only">
-                  Contact form
+                  نموذج التواصل
                 </h2>
 
                 {serverError ? (
@@ -264,23 +261,23 @@ function ContactPage() {
                     aria-live="polite"
                     className="rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive"
                   >
-                    Please fix the highlighted fields below.
+                    يرجى تصحيح الحقول المميّزة أدناه.
                   </div>
                 ) : null}
 
                 <div className="grid gap-6 sm:grid-cols-2">
                   <TextField
                     id="name"
-                    label="Your name"
+                    label="الاسم"
                     required
                     autoComplete="name"
-                    placeholder="Jane Doe"
+                    placeholder="اكتب اسمك الكامل"
                     error={errors.name?.message}
                     {...register("name")}
                   />
                   <TextField
                     id="email"
-                    label="Email"
+                    label="البريد الإلكتروني"
                     type="email"
                     required
                     autoComplete="email"
@@ -290,29 +287,29 @@ function ContactPage() {
                   />
                 </div>
 
-                <Field id="type" label="What's this about?" required error={errors.type?.message}>
+                <Field id="type" label="نوع المشروع" required error={errors.type?.message}>
                   <Select
                     value={type}
                     onValueChange={(v) =>
                       setValue("type", v as Inquiry["type"], { shouldValidate: true })
                     }
                   >
-                    <SelectTrigger id="type" aria-label="Inquiry type">
+                    <SelectTrigger id="type" aria-label="نوع الاستفسار">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="hire">Full-time role</SelectItem>
-                      <SelectItem value="freelance">Freelance project</SelectItem>
-                      <SelectItem value="collab">Collaboration</SelectItem>
-                      <SelectItem value="other">Something else</SelectItem>
+                      <SelectItem value="hire">وظيفة بدوام كامل</SelectItem>
+                      <SelectItem value="freelance">مشروع حر</SelectItem>
+                      <SelectItem value="collab">شراكة أو تعاون</SelectItem>
+                      <SelectItem value="other">شيء آخر</SelectItem>
                     </SelectContent>
                   </Select>
                 </Field>
 
-                <Field id="budget" label="Budget (optional)" hint="Rough range in USD is perfect.">
+                <Field id="budget" label="الميزانية (اختياري)" hint="نطاق تقريبي بالريال أو الدولار.">
                   <Input
                     id="budget"
-                    placeholder="e.g. $10k–$25k"
+                    placeholder="مثال: 40,000 – 100,000 ريال"
                     autoComplete="off"
                     {...register("budget")}
                   />
@@ -320,20 +317,20 @@ function ContactPage() {
 
                 <TextAreaField
                   id="message"
-                  label="Message"
+                  label="الرسالة"
                   required
                   rows={6}
-                  placeholder="Tell me about the problem, the timeline, and what a great outcome would look like."
+                  placeholder="أخبرني عن المشكلة، والجدول الزمني، وما هي النتيجة المثالية بالنسبة لك."
                   error={errors.message?.message}
                   {...register("message")}
                 />
 
-                {/* Honeypot — hidden from users, catches bots */}
+                {/* حقل فخ لالتقاط الروبوتات */}
                 <div
                   aria-hidden="true"
                   className="pointer-events-none absolute -left-[10000px] size-0 overflow-hidden opacity-0"
                 >
-                  <label htmlFor="company">Company (leave blank)</label>
+                  <label htmlFor="company">الشركة (اتركه فارغًا)</label>
                   <input
                     id="company"
                     type="text"
@@ -355,7 +352,7 @@ function ContactPage() {
                   />
                   <div>
                     <Label htmlFor="consent" className="text-sm font-normal text-foreground/80">
-                      I'm ok with {site.shortName} storing this message to reply.
+                      أوافق على أن يحتفظ {site.shortName} برسالتي لأغراض الرد فقط.
                     </Label>
                     {errors.consent ? (
                       <p id="consent-error" role="alert" className="mt-1 text-xs text-destructive">
@@ -367,47 +364,46 @@ function ContactPage() {
 
                 <div className="flex flex-wrap items-center gap-4">
                   <DSButton type="submit" size="lg" disabled={isSubmitting}>
-                    {isSubmitting ? "Sending…" : "Send inquiry"}
-                    {!isSubmitting ? <ArrowRight /> : null}
+                    {isSubmitting ? "جارٍ الإرسال…" : "إرسال"}
+                    {!isSubmitting ? <ArrowLeft /> : null}
                   </DSButton>
                   <p className="flex items-center gap-2 text-xs text-muted-foreground">
                     <Shield className="size-3.5" aria-hidden />
-                    Protected against spam. No third-party trackers.
+                    محميّ ضد المحتوى المزعج. بدون أي متتبّعات خارجية.
                   </p>
                 </div>
               </form>
             )}
           </div>
 
-          {/* Info sidebar */}
           <aside className="space-y-6 lg:sticky lg:top-24 lg:self-start">
             <div className="rounded-xl border border-border/60 bg-card p-6">
-              <Eyebrow>What to expect</Eyebrow>
+              <Eyebrow>ماذا تتوقع</Eyebrow>
               <ul className="mt-4 space-y-4 text-sm">
                 <li className="flex items-start gap-3">
                   <Clock className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />
                   <div>
-                    <p className="font-medium text-foreground">Reply within 48h</p>
+                    <p className="font-medium text-foreground">الرد خلال 48 ساعة</p>
                     <p className="mt-0.5 text-muted-foreground">
-                      Working days. I read every message myself.
+                      خلال أيام العمل. أقرأ كل رسالة بنفسي.
                     </p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
                   <Calendar className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />
                   <div>
-                    <p className="font-medium text-foreground">A short call</p>
+                    <p className="font-medium text-foreground">مكالمة قصيرة</p>
                     <p className="mt-0.5 text-muted-foreground">
-                      If we're a fit, we'll book 30 minutes to align on scope.
+                      إن كنّا شراكة مناسبة، نحجز 30 دقيقة للاتفاق على النطاق.
                     </p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
                   <Sparkles className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />
                   <div>
-                    <p className="font-medium text-foreground">A tailored proposal</p>
+                    <p className="font-medium text-foreground">عرض مخصص</p>
                     <p className="mt-0.5 text-muted-foreground">
-                      Scope, timeline, and pricing — no surprises later.
+                      النطاق والجدول الزمني والسعر — دون أي مفاجآت لاحقًا.
                     </p>
                   </div>
                 </li>
@@ -415,7 +411,7 @@ function ContactPage() {
             </div>
 
             <div className="rounded-2xl border border-border/60 bg-card p-6">
-              <Eyebrow>Availability</Eyebrow>
+              <Eyebrow>التوفّر</Eyebrow>
               <div className="mt-3">
                 <AvailabilityBadge
                   available={site.available}
@@ -434,14 +430,14 @@ function ContactPage() {
 
 
             <div className="rounded-xl border border-border/60 bg-card p-6">
-              <Eyebrow>Prefer chat?</Eyebrow>
+              <Eyebrow>تفضّل المحادثة السريعة؟</Eyebrow>
               <p className="mt-3 text-sm text-muted-foreground">
-                WhatsApp is fastest for short questions or scheduling.
+                واتساب هو الأسرع للاستفسارات القصيرة أو تحديد موعد.
               </p>
               <DSButton asChild variant="outline" size="sm" className="mt-4 w-full">
                 <a href={whatsappHref} target="_blank" rel="noopener noreferrer">
                   <MessageCircle />
-                  Message on WhatsApp
+                  التواصل عبر واتساب
                 </a>
               </DSButton>
             </div>
@@ -449,23 +445,21 @@ function ContactPage() {
         </div>
       </Section>
 
-      {/* FAQ */}
       <Section className="border-t border-border/60">
         <div className="grid gap-12 lg:grid-cols-[1fr_2fr]">
           <div>
-            <Eyebrow>FAQ</Eyebrow>
+            <Eyebrow>الأسئلة الشائعة</Eyebrow>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight text-foreground text-balance md:text-4xl lg:text-5xl">
-              Before you write
+              قبل أن تكتب
             </h2>
             <p className="mt-4 text-muted-foreground">
-              A few things people usually ask. If your question isn't here, send it over — happy
-              to answer.
+              بعض الأسئلة الأكثر شيوعًا. إن لم يكن سؤالك هنا، أرسله وسأجيبك بكل سرور.
             </p>
           </div>
           <Accordion type="single" collapsible className="w-full">
             {faqs.map((f, i) => (
               <AccordionItem key={f.q} value={`item-${i}`}>
-                <AccordionTrigger className="text-left text-base font-medium">
+                <AccordionTrigger className="text-right text-base font-medium">
                   {f.q}
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">{f.a}</AccordionContent>
@@ -477,21 +471,21 @@ function ContactPage() {
 
 
       <CTA
-        eyebrow="Still reading?"
-        title="Skip the form — say hi directly."
-        description="Email me, ping me on WhatsApp, or connect on LinkedIn. Whatever's easiest."
+        eyebrow="تفضّل الطريق المباشر؟"
+        title="تخطَّ النموذج — تواصل معي مباشرة."
+        description="راسلني عبر البريد، أو واتساب، أو تواصل معي على لينكدإن. اختر ما يناسبك."
         actions={
           <>
             <DSButton asChild size="lg">
               <a href={`mailto:${site.email}`}>
                 <Mail />
-                Email {site.shortName}
+                راسل {site.shortName}
               </a>
             </DSButton>
             <DSButton asChild variant="outline" size="lg">
               <a href={whatsappHref} target="_blank" rel="noopener noreferrer">
                 <MessageCircle />
-                WhatsApp
+                واتساب
               </a>
             </DSButton>
           </>
