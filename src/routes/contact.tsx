@@ -17,7 +17,7 @@ import {
 import { buildMeta } from "@/features/seo/build-meta";
 import { PageHeader } from "@/components/layout/page-header";
 import { Section } from "@/components/layout/section";
-import { Container } from "@/components/layout/container";
+import { AvailabilityBadge } from "@/components/ds/availability-badge";
 import { Eyebrow } from "@/components/typography/eyebrow";
 import {
   DSButton,
@@ -414,21 +414,13 @@ function ContactPage() {
               </ul>
             </div>
 
-            <div className="rounded-xl border border-border/60 bg-card p-6">
+            <div className="rounded-2xl border border-border/60 bg-card p-6">
               <Eyebrow>Availability</Eyebrow>
-              <div className="mt-3 flex items-center gap-2">
-                <span
-                  className={`relative flex size-2.5 shrink-0 ${site.available ? "" : "opacity-60"}`}
-                  aria-hidden
-                >
-                  {site.available ? (
-                    <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-500 opacity-60" />
-                  ) : null}
-                  <span
-                    className={`relative inline-flex size-2.5 rounded-full ${site.available ? "bg-emerald-500" : "bg-muted-foreground"}`}
-                  />
-                </span>
-                <p className="text-sm font-medium text-foreground">{site.availabilityLabel}</p>
+              <div className="mt-3">
+                <AvailabilityBadge
+                  available={site.available}
+                  label={site.availabilityLabel}
+                />
               </div>
               <p className="mt-3 flex items-start gap-2 text-sm text-muted-foreground">
                 <MapPin className="mt-0.5 size-4 shrink-0" aria-hidden />
@@ -439,6 +431,7 @@ function ContactPage() {
                 </span>
               </p>
             </div>
+
 
             <div className="rounded-xl border border-border/60 bg-card p-6">
               <Eyebrow>Prefer chat?</Eyebrow>
