@@ -1,8 +1,17 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Globe, Layout, ShoppingBag, Sparkles, Palette, Rocket, Wrench, type LucideIcon } from "lucide-react";
 import { DSCard, DSCardTitle, DSCardDescription } from "./card";
-import { DSBadge } from "./badge";
 import { cn } from "@/lib/utils";
 import type { Service } from "@/features/services/schema";
+
+const iconMap: Record<string, LucideIcon> = {
+  Globe,
+  Layout,
+  ShoppingBag,
+  Sparkles,
+  Palette,
+  Rocket,
+  Wrench,
+};
 
 export function ServiceCard({
   service,
@@ -11,19 +20,22 @@ export function ServiceCard({
   service: Service;
   className?: string;
 }) {
+  const Icon = service.icon ? iconMap[service.icon] ?? Sparkles : Sparkles;
   return (
-    <DSCard variant="surface" padding="lg" className={cn("flex h-full flex-col", className)}>
+    <DSCard variant="surface" padding="lg" className={cn("group flex h-full flex-col", className)}>
       <div className="flex items-center justify-between">
-        <DSBadge variant="subtle">{service.engagement}</DSBadge>
-        {service.startingAt ? (
-          <span className="text-xs text-muted-foreground">from {service.startingAt}</span>
+        <span className="grid size-10 place-items-center rounded-lg border border-border/60 bg-muted/50 text-primary">
+          <Icon className="size-5" aria-hidden />
+        </span>
+        {service.timeline ? (
+          <span className="text-xs text-muted-foreground">{service.timeline}</span>
         ) : null}
       </div>
       <DSCardTitle className="mt-6 text-lg">{service.title}</DSCardTitle>
       <DSCardDescription className="mt-2">{service.summary}</DSCardDescription>
       {service.deliverables.length ? (
         <ul className="mt-6 space-y-2 text-sm">
-          {service.deliverables.map((d) => (
+          {service.deliverables.slice(0, 3).map((d) => (
             <li key={d} className="flex items-start gap-2 text-foreground/80">
               <ArrowRight aria-hidden className="mt-0.5 size-3.5 shrink-0 text-primary" />
               <span>{d}</span>
