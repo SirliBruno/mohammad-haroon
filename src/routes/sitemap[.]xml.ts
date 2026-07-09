@@ -3,7 +3,7 @@ import type {} from "@tanstack/react-start";
 import { site } from "@/config/site";
 import { projects } from "@/data/projects";
 import { services } from "@/data/services";
-import { writing } from "@/data/writing";
+import { articles } from "@/data/writing";
 
 interface SitemapEntry {
   path: string;
@@ -33,7 +33,7 @@ export const Route = createFileRoute("/sitemap.xml")({
         const dynamicEntries: SitemapEntry[] = [
           ...projects.map((p) => ({ path: `/work/${p.slug}`, changefreq: "monthly" as const, priority: "0.7" })),
           ...services.map((s) => ({ path: `/services/${s.slug}`, changefreq: "monthly" as const, priority: "0.7" })),
-          ...writing.map((w) => ({ path: `/blog/${w.slug}`, changefreq: "monthly" as const, priority: "0.6" })),
+          ...articles.map((w) => ({ path: `/blog/${w.slug}`, changefreq: "monthly" as const, priority: "0.6" })),
         ];
 
         const urls = [...staticEntries, ...dynamicEntries].map((e) =>
