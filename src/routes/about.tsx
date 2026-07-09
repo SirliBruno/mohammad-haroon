@@ -1,6 +1,7 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { motion, useReducedMotion } from "motion/react";
 import type { ReactNode } from "react";
+import { Reveal } from "@/components/motion/reveal";
+import { AvailabilityBadge } from "@/components/ds/availability-badge";
 import {
   ArrowRight,
   BookOpen,
@@ -197,24 +198,8 @@ const interests = [
   { icon: Figma, label: "Type & lettering" },
 ];
 
-// ------------------------------------------------------------
-// Motion helper
-// ------------------------------------------------------------
 
-function Reveal({ children, delay = 0 }: { children: ReactNode; delay?: number }) {
-  const reduce = useReducedMotion();
-  if (reduce) return <>{children}</>;
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 14 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-10%" }}
-      transition={{ duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] }}
-    >
-      {children}
-    </motion.div>
-  );
-}
+
 
 // ------------------------------------------------------------
 // Route
@@ -275,13 +260,12 @@ function About() {
                 <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
                   Currently
                 </p>
-                <p className="mt-3 inline-flex items-center gap-2 text-sm text-foreground">
-                  <span className="relative flex size-2">
-                    <span className="absolute inset-0 animate-ping rounded-full bg-emerald-500/60" />
-                    <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
-                  </span>
-                  {site.availabilityLabel}
-                </p>
+                <div className="mt-3">
+                  <AvailabilityBadge
+                    available={site.available}
+                    label={site.availabilityLabel}
+                  />
+                </div>
                 <p className="mt-2 inline-flex items-center gap-1.5 text-sm text-muted-foreground">
                   <MapPin className="size-3.5" aria-hidden />
                   Based {site.location} · working globally

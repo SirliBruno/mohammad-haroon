@@ -3,7 +3,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { buildMeta } from "@/features/seo/build-meta";
 import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
-import { Prose, DSButton, TagGroup } from "@/components/ds";
+import { Prose, DSButton, TagGroup, CTA } from "@/components/ds";
 import { articles } from "@/data/writing";
 import type { Article } from "@/features/writing/schema";
 import { site } from "@/config/site";
@@ -62,7 +62,7 @@ function BlogPost() {
 
   return (
     <>
-      <header className="border-b border-border/60 pt-24 pb-14 md:pt-32 md:pb-16">
+      <header className="border-b border-border/60 pt-28 pb-16 md:pt-36 md:pb-20">
         <Container>
           <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground">
             <Link to="/blog" className="inline-flex items-center gap-1 hover:text-foreground">
@@ -143,15 +143,12 @@ function BlogPost() {
       ) : null}
 
       {/* CTA */}
-      <Section className="border-t border-border/60">
-        <div className="mx-auto max-w-2xl rounded-2xl border border-border/60 bg-card p-10 text-center">
-          <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">
-            Enjoyed this?
-          </h2>
-          <p className="mt-3 text-muted-foreground">
-            I write a few times a month. If you'd like to work together, get in touch.
-          </p>
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
+      <CTA
+        eyebrow="Thanks for reading"
+        title="Enjoyed this?"
+        description="I write a few times a month. If you'd like to work together, get in touch."
+        actions={
+          <>
             <DSButton asChild size="lg">
               <Link to="/contact">
                 Get in touch <ArrowRight />
@@ -160,9 +157,9 @@ function BlogPost() {
             <DSButton asChild size="lg" variant="outline">
               <Link to="/blog">More writing</Link>
             </DSButton>
-          </div>
-        </div>
-      </Section>
+          </>
+        }
+      />
     </>
   );
 }

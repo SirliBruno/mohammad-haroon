@@ -42,3 +42,4 @@ export { Prose } from "./prose";
 export { DSLink } from "./link";
 export { Kbd } from "./kbd";
 export { PageTransition, Stagger } from "./motion";
+export { AvailabilityBadge } from "./availability-badge";

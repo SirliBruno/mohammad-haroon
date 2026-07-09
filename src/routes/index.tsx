@@ -16,8 +16,10 @@ import {
   Wrench,
   Zap,
 } from "lucide-react";
-import { motion, useReducedMotion } from "motion/react";
 import type { ReactNode } from "react";
+
+import { Reveal } from "@/components/motion/reveal";
+import { Eyebrow } from "@/components/typography/eyebrow";
 
 import { buildMeta } from "@/features/seo/build-meta";
 import { Section } from "@/components/layout/section";
@@ -174,23 +176,9 @@ const ideas = [
 ];
 
 // ------------------------------------------------------------
-// Motion helpers
+// Route
 // ------------------------------------------------------------
 
-function Reveal({ children, delay = 0 }: { children: ReactNode; delay?: number }) {
-  const reduce = useReducedMotion();
-  if (reduce) return <>{children}</>;
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 14 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-10%" }}
-      transition={{ duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] }}
-    >
-      {children}
-    </motion.div>
-  );
-}
 
 // ------------------------------------------------------------
 // Route
@@ -218,33 +206,34 @@ function Home() {
       <Hero />
 
       {/* 2 — Trusted companies */}
-      <section aria-labelledby="trusted-heading" className="border-t border-border/60 py-14">
-        <Container>
-          <Reveal>
-            <p
-              id="trusted-heading"
-              className="text-center text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground"
-            >
-              Trusted by teams shipping serious product
-            </p>
-          </Reveal>
-          <Reveal delay={0.05}>
-            <ul
-              role="list"
-              className="mt-8 grid grid-cols-2 items-center gap-x-8 gap-y-6 opacity-80 sm:grid-cols-4 md:grid-cols-8"
-            >
-              {trustedCompanies.map((name) => (
-                <li
-                  key={name}
-                  className="text-center text-sm font-semibold tracking-tight text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  {name}
-                </li>
-              ))}
-            </ul>
-          </Reveal>
-        </Container>
-      </section>
+      <Section
+        id="trusted"
+        size="sm"
+        ariaLabelledby="trusted-heading"
+        className="border-t border-border/60"
+      >
+        <Reveal>
+          <Eyebrow className="mx-auto justify-center" id="trusted-heading">
+            Trusted by teams shipping serious product
+          </Eyebrow>
+        </Reveal>
+        <Reveal delay={0.05}>
+          <ul
+            role="list"
+            className="mt-8 grid grid-cols-2 items-center gap-x-8 gap-y-6 opacity-80 sm:grid-cols-4 md:grid-cols-8"
+          >
+            {trustedCompanies.map((name) => (
+              <li
+                key={name}
+                className="text-center text-sm font-semibold tracking-tight text-muted-foreground transition-colors hover:text-foreground"
+              >
+                {name}
+              </li>
+            ))}
+          </ul>
+        </Reveal>
+      </Section>
+
 
       {/* 3 — Statistics */}
       <Section id="stats" className="border-t border-border/60">

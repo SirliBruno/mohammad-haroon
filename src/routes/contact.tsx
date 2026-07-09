@@ -17,7 +17,7 @@ import {
 import { buildMeta } from "@/features/seo/build-meta";
 import { PageHeader } from "@/components/layout/page-header";
 import { Section } from "@/components/layout/section";
-import { Container } from "@/components/layout/container";
+import { AvailabilityBadge } from "@/components/ds/availability-badge";
 import { Eyebrow } from "@/components/typography/eyebrow";
 import {
   DSButton,
@@ -186,42 +186,41 @@ function ContactPage() {
       />
 
       {/* Channels */}
-      <Section className="pt-16">
-        <Container>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {channels.map((c) => {
-              const Icon = c.icon;
-              const external = c.href.startsWith("http");
-              return (
-                <a
-                  key={c.label}
-                  href={c.href}
-                  target={external ? "_blank" : undefined}
-                  rel={external ? "noopener noreferrer" : undefined}
-                  className="group relative flex flex-col rounded-xl border border-border/60 bg-card p-5 transition-all duration-300 hover:border-primary/40 hover:-translate-y-0.5 hover:shadow-lg"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
-                      <Icon className="size-5" aria-hidden />
-                    </span>
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium text-foreground">{c.label}</p>
-                      <p className="truncate text-xs text-muted-foreground">{c.hint}</p>
-                    </div>
+      <Section size="sm">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {channels.map((c) => {
+            const Icon = c.icon;
+            const external = c.href.startsWith("http");
+            return (
+              <a
+                key={c.label}
+                href={c.href}
+                target={external ? "_blank" : undefined}
+                rel={external ? "noopener noreferrer" : undefined}
+                className="group relative flex flex-col rounded-2xl border border-border/60 bg-card p-5 transition-[transform,box-shadow,border-color] duration-200 ease-out will-change-transform hover:border-primary/40 hover:shadow-lg motion-safe:hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
+                    <Icon className="size-5" aria-hidden />
+                  </span>
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-foreground">{c.label}</p>
+                    <p className="truncate text-xs text-muted-foreground">{c.hint}</p>
                   </div>
-                  <p className="mt-4 truncate text-sm text-foreground/80 group-hover:text-foreground">
-                    {c.value}
-                  </p>
-                  <ArrowRight
-                    className="absolute right-4 top-4 size-4 text-muted-foreground opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0.5"
-                    aria-hidden
-                  />
-                </a>
-              );
-            })}
-          </div>
-        </Container>
+                </div>
+                <p className="mt-4 truncate text-sm text-foreground/80 group-hover:text-foreground">
+                  {c.value}
+                </p>
+                <ArrowRight
+                  className="absolute right-4 top-4 size-4 text-muted-foreground opacity-0 transition-[opacity,transform] duration-200 ease-out group-hover:opacity-100 motion-safe:group-hover:translate-x-0.5"
+                  aria-hidden
+                />
+              </a>
+            );
+          })}
+        </div>
       </Section>
+
 
       {/* Form + sidebar */}
       <Section>
@@ -415,21 +414,13 @@ function ContactPage() {
               </ul>
             </div>
 
-            <div className="rounded-xl border border-border/60 bg-card p-6">
+            <div className="rounded-2xl border border-border/60 bg-card p-6">
               <Eyebrow>Availability</Eyebrow>
-              <div className="mt-3 flex items-center gap-2">
-                <span
-                  className={`relative flex size-2.5 shrink-0 ${site.available ? "" : "opacity-60"}`}
-                  aria-hidden
-                >
-                  {site.available ? (
-                    <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-500 opacity-60" />
-                  ) : null}
-                  <span
-                    className={`relative inline-flex size-2.5 rounded-full ${site.available ? "bg-emerald-500" : "bg-muted-foreground"}`}
-                  />
-                </span>
-                <p className="text-sm font-medium text-foreground">{site.availabilityLabel}</p>
+              <div className="mt-3">
+                <AvailabilityBadge
+                  available={site.available}
+                  label={site.availabilityLabel}
+                />
               </div>
               <p className="mt-3 flex items-start gap-2 text-sm text-muted-foreground">
                 <MapPin className="mt-0.5 size-4 shrink-0" aria-hidden />
@@ -440,6 +431,7 @@ function ContactPage() {
                 </span>
               </p>
             </div>
+
 
             <div className="rounded-xl border border-border/60 bg-card p-6">
               <Eyebrow>Prefer chat?</Eyebrow>
@@ -458,32 +450,31 @@ function ContactPage() {
       </Section>
 
       {/* FAQ */}
-      <Section>
-        <Container>
-          <div className="grid gap-12 lg:grid-cols-[1fr_2fr]">
-            <div>
-              <Eyebrow>FAQ</Eyebrow>
-              <h2 className="mt-3 text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
-                Before you write
-              </h2>
-              <p className="mt-4 text-muted-foreground">
-                A few things people usually ask. If your question isn't here, send it over — happy
-                to answer.
-              </p>
-            </div>
-            <Accordion type="single" collapsible className="w-full">
-              {faqs.map((f, i) => (
-                <AccordionItem key={f.q} value={`item-${i}`}>
-                  <AccordionTrigger className="text-left text-base font-medium">
-                    {f.q}
-                  </AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground">{f.a}</AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
+      <Section className="border-t border-border/60">
+        <div className="grid gap-12 lg:grid-cols-[1fr_2fr]">
+          <div>
+            <Eyebrow>FAQ</Eyebrow>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight text-foreground text-balance md:text-4xl lg:text-5xl">
+              Before you write
+            </h2>
+            <p className="mt-4 text-muted-foreground">
+              A few things people usually ask. If your question isn't here, send it over — happy
+              to answer.
+            </p>
           </div>
-        </Container>
+          <Accordion type="single" collapsible className="w-full">
+            {faqs.map((f, i) => (
+              <AccordionItem key={f.q} value={`item-${i}`}>
+                <AccordionTrigger className="text-left text-base font-medium">
+                  {f.q}
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">{f.a}</AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
       </Section>
+
 
       <CTA
         eyebrow="Still reading?"

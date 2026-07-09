@@ -15,11 +15,13 @@ import {
   MapPin,
   Sparkles,
 } from "lucide-react";
-import { motion, useReducedMotion } from "motion/react";
 import { buildMeta } from "@/features/seo/build-meta";
 import { PageHeader } from "@/components/layout/page-header";
 import { Section } from "@/components/layout/section";
+import { SectionTitle } from "@/components/layout/section-title";
 import { Eyebrow } from "@/components/typography/eyebrow";
+import { Reveal } from "@/components/motion/reveal";
+import { AvailabilityBadge } from "@/components/ds/availability-badge";
 import { DSButton, DSCard, Grid } from "@/components/ds";
 import { site } from "@/config/site";
 import { socials } from "@/config/socials";
@@ -81,30 +83,6 @@ export const Route = createFileRoute("/career")({
   component: CareerPage,
 });
 
-function Reveal({
-  children,
-  delay = 0,
-  className,
-}: {
-  children: React.ReactNode;
-  delay?: number;
-  className?: string;
-}) {
-  const reduce = useReducedMotion();
-  if (reduce) return <div className={className}>{children}</div>;
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 14 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
 function SectionHeading({
   eyebrow,
   title,
@@ -115,14 +93,10 @@ function SectionHeading({
   id?: string;
 }) {
   return (
-    <div id={id} className="scroll-mt-24">
-      <Eyebrow>{eyebrow}</Eyebrow>
-      <h2 className="mt-3 text-2xl font-semibold tracking-tight md:text-3xl">
-        {title}
-      </h2>
-    </div>
+    <SectionTitle eyebrow={eyebrow} title={title} size="sm" id={id} className="scroll-mt-24" />
   );
 }
+
 
 function CareerPage() {
   const linkedin = socials.find((s) => s.label.toLowerCase() === "linkedin");
@@ -137,24 +111,15 @@ function CareerPage() {
       />
 
       {/* Availability + quick actions */}
-      <Section className="pt-10 md:pt-12">
+      <Section size="sm">
         <Reveal>
           <div className="flex flex-col gap-6 rounded-2xl border border-border/60 bg-card p-6 md:flex-row md:items-center md:justify-between md:p-8">
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-3">
-                {site.available ? (
-                  <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-600 dark:text-emerald-400">
-                    <span className="relative flex size-2">
-                      <span className="absolute inset-0 animate-ping rounded-full bg-emerald-500/60" />
-                      <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
-                    </span>
-                    {site.availabilityLabel}
-                  </span>
-                ) : (
-                  <span className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
-                    Not currently available
-                  </span>
-                )}
+                <AvailabilityBadge
+                  available={site.available}
+                  label={site.available ? site.availabilityLabel : "Not currently available"}
+                />
                 <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
                   <MapPin className="size-3.5" aria-hidden /> {site.location}
                 </span>
@@ -186,7 +151,8 @@ function CareerPage() {
       </Section>
 
       {/* Body + Sticky Recruiter Sidebar */}
-      <Section className="pt-8 md:pt-10">
+      <Section size="sm">
+
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_320px]">
           <div className="min-w-0 space-y-16">
             {/* Experience Timeline */}

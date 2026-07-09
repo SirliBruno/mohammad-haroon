@@ -16,11 +16,12 @@ import {
   Wrench,
 } from "lucide-react";
 import { useEffect } from "react";
-import { motion, useReducedMotion } from "motion/react";
 import { buildMeta } from "@/features/seo/build-meta";
 import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
-import { Eyebrow } from "@/components/typography/eyebrow";
+import { SectionTitle } from "@/components/layout/section-title";
+import { Reveal } from "@/components/motion/reveal";
+import { AvailabilityBadge } from "@/components/ds/availability-badge";
 import { DSButton, Grid, TagGroup } from "@/components/ds";
 import { projects } from "@/data/projects";
 import type { Project } from "@/features/projects/schema";
@@ -86,29 +87,6 @@ function statusMeta(status: Project["status"]) {
   }
 }
 
-function Reveal({
-  children,
-  delay = 0,
-  className,
-}: {
-  children: React.ReactNode;
-  delay?: number;
-  className?: string;
-}) {
-  const reduce = useReducedMotion();
-  if (reduce) return <div className={className}>{children}</div>;
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-}
 
 function CaseStudy() {
   const { project } = Route.useLoaderData() as { project: Project };
@@ -124,7 +102,7 @@ function CaseStudy() {
   return (
     <>
       {/* Hero */}
-      <header className="relative overflow-hidden border-b border-border/60 pt-24 pb-16 md:pt-32 md:pb-20">
+      <header className="relative overflow-hidden border-b border-border/60 pt-28 pb-16 md:pt-36 md:pb-20">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 -z-10 bg-linear-to-b from-primary/5 via-transparent to-transparent"
@@ -530,14 +508,7 @@ function CaseStudy() {
 }
 
 function SectionHeading({ eyebrow, title }: { eyebrow: string; title: string }) {
-  return (
-    <div>
-      <Eyebrow>{eyebrow}</Eyebrow>
-      <h2 className="mt-3 text-2xl font-semibold tracking-tight md:text-3xl">
-        {title}
-      </h2>
-    </div>
-  );
+  return <SectionTitle eyebrow={eyebrow} title={title} size="sm" />;
 }
 
 function SidebarRow({
