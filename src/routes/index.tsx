@@ -494,12 +494,12 @@ function Home() {
         <Reveal>
           <SectionTitle
             eyebrow="مختبر الأفكار"
-            title="أفكار قيد التشكّل، بشفافية."
-            description="مفاهيم وتجارب ونماذج أولية أستكشفها — بعضها سيرى النور، ومعظمها لن يفعل."
+            title="أفكار قيد التشكّل."
+            description="مفاهيم ونماذج أوّليّة أستكشفها بصوت مرتفع — بعضها يرى النور، وأكثرها لا يفعل."
             actions={
               <DSButton asChild variant="ghost" size="sm">
                 <Link to="/ideas">
-                  استعرض المختبر
+                  زُر المختبر
                   <ArrowUpRight />
                 </Link>
               </DSButton>
@@ -532,7 +532,7 @@ function Home() {
                       to="/ideas"
                       className="mt-6 inline-flex items-center gap-1 text-xs font-medium text-foreground/80 transition-colors hover:text-foreground"
                     >
-                      تابع الأفكار
+                      المزيد من الأفكار
                       <ArrowUpRight className="size-3.5" />
                     </Link>
                   </DSCard>
@@ -546,9 +546,9 @@ function Home() {
       <Section id="writing" className="border-t border-border/60">
         <Reveal>
           <SectionTitle
-            eyebrow="المدونة"
+            eyebrow="المدوّنة"
             title="أحدث المقالات."
-            description="ملاحظات قصيرة حول التصميم والهندسة وممارسة إطلاق المنتجات."
+            description="ملاحظات مختصرة عن التصميم والهندسة وممارسة إطلاق المنتجات."
             actions={
               <DSButton asChild variant="ghost" size="sm">
                 <Link to="/blog">
