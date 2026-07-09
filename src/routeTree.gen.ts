@@ -17,7 +17,6 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as WorkIndexRouteImport } from './routes/work.index'
-import { Route as WritingSlugRouteImport } from './routes/writing.$slug'
 import { Route as WorkSlugRouteImport } from './routes/work.$slug'
 import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
 
@@ -61,11 +60,6 @@ const WorkIndexRoute = WorkIndexRouteImport.update({
   path: '/',
   getParentRoute: () => WorkRoute,
 } as any)
-const WritingSlugRoute = WritingSlugRouteImport.update({
-  id: '/writing/$slug',
-  path: '/writing/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const WorkSlugRoute = WorkSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -86,7 +80,6 @@ export interface FileRoutesByFullPath {
   '/uses': typeof UsesRoute
   '/work': typeof WorkRouteWithChildren
   '/work/$slug': typeof WorkSlugRoute
-  '/writing/$slug': typeof WritingSlugRoute
   '/work/': typeof WorkIndexRoute
   '/api/public/contact': typeof ApiPublicContactRoute
 }
@@ -98,7 +91,6 @@ export interface FileRoutesByTo {
   '/products': typeof ProductsRoute
   '/uses': typeof UsesRoute
   '/work/$slug': typeof WorkSlugRoute
-  '/writing/$slug': typeof WritingSlugRoute
   '/work': typeof WorkIndexRoute
   '/api/public/contact': typeof ApiPublicContactRoute
 }
@@ -112,7 +104,6 @@ export interface FileRoutesById {
   '/uses': typeof UsesRoute
   '/work': typeof WorkRouteWithChildren
   '/work/$slug': typeof WorkSlugRoute
-  '/writing/$slug': typeof WritingSlugRoute
   '/work/': typeof WorkIndexRoute
   '/api/public/contact': typeof ApiPublicContactRoute
 }
@@ -127,7 +118,6 @@ export interface FileRouteTypes {
     | '/uses'
     | '/work'
     | '/work/$slug'
-    | '/writing/$slug'
     | '/work/'
     | '/api/public/contact'
   fileRoutesByTo: FileRoutesByTo
@@ -139,7 +129,6 @@ export interface FileRouteTypes {
     | '/products'
     | '/uses'
     | '/work/$slug'
-    | '/writing/$slug'
     | '/work'
     | '/api/public/contact'
   id:
@@ -152,7 +141,6 @@ export interface FileRouteTypes {
     | '/uses'
     | '/work'
     | '/work/$slug'
-    | '/writing/$slug'
     | '/work/'
     | '/api/public/contact'
   fileRoutesById: FileRoutesById
@@ -165,7 +153,6 @@ export interface RootRouteChildren {
   ProductsRoute: typeof ProductsRoute
   UsesRoute: typeof UsesRoute
   WorkRoute: typeof WorkRouteWithChildren
-  WritingSlugRoute: typeof WritingSlugRoute
   ApiPublicContactRoute: typeof ApiPublicContactRoute
 }
 
@@ -227,13 +214,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkIndexRouteImport
       parentRoute: typeof WorkRoute
     }
-    '/writing/$slug': {
-      id: '/writing/$slug'
-      path: '/writing/$slug'
-      fullPath: '/writing/$slug'
-      preLoaderRoute: typeof WritingSlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/work/$slug': {
       id: '/work/$slug'
       path: '/$slug'
@@ -271,7 +251,6 @@ const rootRouteChildren: RootRouteChildren = {
   ProductsRoute: ProductsRoute,
   UsesRoute: UsesRoute,
   WorkRoute: WorkRouteWithChildren,
-  WritingSlugRoute: WritingSlugRoute,
   ApiPublicContactRoute: ApiPublicContactRoute,
 }
 export const routeTree = rootRouteImport
