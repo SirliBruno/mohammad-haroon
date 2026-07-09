@@ -9,26 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as WritingRouteImport } from './routes/writing'
 import { Route as WorkRouteImport } from './routes/work'
 import { Route as UsesRouteImport } from './routes/uses'
-import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as IdeasRouteImport } from './routes/ideas'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as WritingIndexRouteImport } from './routes/writing.index'
 import { Route as WorkIndexRouteImport } from './routes/work.index'
 import { Route as WritingSlugRouteImport } from './routes/writing.$slug'
 import { Route as WorkSlugRouteImport } from './routes/work.$slug'
 import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
 
-const WritingRoute = WritingRouteImport.update({
-  id: '/writing',
-  path: '/writing',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const WorkRoute = WorkRouteImport.update({
   id: '/work',
   path: '/work',
@@ -37,11 +29,6 @@ const WorkRoute = WorkRouteImport.update({
 const UsesRoute = UsesRouteImport.update({
   id: '/uses',
   path: '/uses',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ServicesRoute = ServicesRouteImport.update({
-  id: '/services',
-  path: '/services',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProductsRoute = ProductsRouteImport.update({
@@ -69,20 +56,15 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const WritingIndexRoute = WritingIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => WritingRoute,
-} as any)
 const WorkIndexRoute = WorkIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => WorkRoute,
 } as any)
 const WritingSlugRoute = WritingSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => WritingRoute,
+  id: '/writing/$slug',
+  path: '/writing/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const WorkSlugRoute = WorkSlugRouteImport.update({
   id: '/$slug',
@@ -101,14 +83,11 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/ideas': typeof IdeasRoute
   '/products': typeof ProductsRoute
-  '/services': typeof ServicesRoute
   '/uses': typeof UsesRoute
   '/work': typeof WorkRouteWithChildren
-  '/writing': typeof WritingRouteWithChildren
   '/work/$slug': typeof WorkSlugRoute
   '/writing/$slug': typeof WritingSlugRoute
   '/work/': typeof WorkIndexRoute
-  '/writing/': typeof WritingIndexRoute
   '/api/public/contact': typeof ApiPublicContactRoute
 }
 export interface FileRoutesByTo {
@@ -117,12 +96,10 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/ideas': typeof IdeasRoute
   '/products': typeof ProductsRoute
-  '/services': typeof ServicesRoute
   '/uses': typeof UsesRoute
   '/work/$slug': typeof WorkSlugRoute
   '/writing/$slug': typeof WritingSlugRoute
   '/work': typeof WorkIndexRoute
-  '/writing': typeof WritingIndexRoute
   '/api/public/contact': typeof ApiPublicContactRoute
 }
 export interface FileRoutesById {
@@ -132,14 +109,11 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/ideas': typeof IdeasRoute
   '/products': typeof ProductsRoute
-  '/services': typeof ServicesRoute
   '/uses': typeof UsesRoute
   '/work': typeof WorkRouteWithChildren
-  '/writing': typeof WritingRouteWithChildren
   '/work/$slug': typeof WorkSlugRoute
   '/writing/$slug': typeof WritingSlugRoute
   '/work/': typeof WorkIndexRoute
-  '/writing/': typeof WritingIndexRoute
   '/api/public/contact': typeof ApiPublicContactRoute
 }
 export interface FileRouteTypes {
@@ -150,14 +124,11 @@ export interface FileRouteTypes {
     | '/contact'
     | '/ideas'
     | '/products'
-    | '/services'
     | '/uses'
     | '/work'
-    | '/writing'
     | '/work/$slug'
     | '/writing/$slug'
     | '/work/'
-    | '/writing/'
     | '/api/public/contact'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -166,12 +137,10 @@ export interface FileRouteTypes {
     | '/contact'
     | '/ideas'
     | '/products'
-    | '/services'
     | '/uses'
     | '/work/$slug'
     | '/writing/$slug'
     | '/work'
-    | '/writing'
     | '/api/public/contact'
   id:
     | '__root__'
@@ -180,14 +149,11 @@ export interface FileRouteTypes {
     | '/contact'
     | '/ideas'
     | '/products'
-    | '/services'
     | '/uses'
     | '/work'
-    | '/writing'
     | '/work/$slug'
     | '/writing/$slug'
     | '/work/'
-    | '/writing/'
     | '/api/public/contact'
   fileRoutesById: FileRoutesById
 }
@@ -197,22 +163,14 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   IdeasRoute: typeof IdeasRoute
   ProductsRoute: typeof ProductsRoute
-  ServicesRoute: typeof ServicesRoute
   UsesRoute: typeof UsesRoute
   WorkRoute: typeof WorkRouteWithChildren
-  WritingRoute: typeof WritingRouteWithChildren
+  WritingSlugRoute: typeof WritingSlugRoute
   ApiPublicContactRoute: typeof ApiPublicContactRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/writing': {
-      id: '/writing'
-      path: '/writing'
-      fullPath: '/writing'
-      preLoaderRoute: typeof WritingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/work': {
       id: '/work'
       path: '/work'
@@ -225,13 +183,6 @@ declare module '@tanstack/react-router' {
       path: '/uses'
       fullPath: '/uses'
       preLoaderRoute: typeof UsesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/services': {
-      id: '/services'
-      path: '/services'
-      fullPath: '/services'
-      preLoaderRoute: typeof ServicesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/products': {
@@ -269,13 +220,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/writing/': {
-      id: '/writing/'
-      path: '/'
-      fullPath: '/writing/'
-      preLoaderRoute: typeof WritingIndexRouteImport
-      parentRoute: typeof WritingRoute
-    }
     '/work/': {
       id: '/work/'
       path: '/'
@@ -285,10 +229,10 @@ declare module '@tanstack/react-router' {
     }
     '/writing/$slug': {
       id: '/writing/$slug'
-      path: '/$slug'
+      path: '/writing/$slug'
       fullPath: '/writing/$slug'
       preLoaderRoute: typeof WritingSlugRouteImport
-      parentRoute: typeof WritingRoute
+      parentRoute: typeof rootRouteImport
     }
     '/work/$slug': {
       id: '/work/$slug'
@@ -319,29 +263,15 @@ const WorkRouteChildren: WorkRouteChildren = {
 
 const WorkRouteWithChildren = WorkRoute._addFileChildren(WorkRouteChildren)
 
-interface WritingRouteChildren {
-  WritingSlugRoute: typeof WritingSlugRoute
-  WritingIndexRoute: typeof WritingIndexRoute
-}
-
-const WritingRouteChildren: WritingRouteChildren = {
-  WritingSlugRoute: WritingSlugRoute,
-  WritingIndexRoute: WritingIndexRoute,
-}
-
-const WritingRouteWithChildren =
-  WritingRoute._addFileChildren(WritingRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   ContactRoute: ContactRoute,
   IdeasRoute: IdeasRoute,
   ProductsRoute: ProductsRoute,
-  ServicesRoute: ServicesRoute,
   UsesRoute: UsesRoute,
   WorkRoute: WorkRouteWithChildren,
-  WritingRoute: WritingRouteWithChildren,
+  WritingSlugRoute: WritingSlugRoute,
   ApiPublicContactRoute: ApiPublicContactRoute,
 }
 export const routeTree = rootRouteImport
