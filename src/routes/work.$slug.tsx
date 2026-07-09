@@ -102,7 +102,7 @@ function CaseStudy() {
   return (
     <>
       {/* Hero */}
-      <header className="relative overflow-hidden border-b border-border/60 pt-24 pb-16 md:pt-32 md:pb-20">
+      <header className="relative overflow-hidden border-b border-border/60 pt-28 pb-16 md:pt-36 md:pb-20">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 -z-10 bg-linear-to-b from-primary/5 via-transparent to-transparent"

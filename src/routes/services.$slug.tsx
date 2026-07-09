@@ -114,7 +114,7 @@ function ServiceDetail() {
 
   return (
     <>
-      <header className="border-b border-border/60 pt-24 pb-16 md:pt-32 md:pb-20">
+      <header className="border-b border-border/60 pt-28 pb-16 md:pt-36 md:pb-20">
         <Container>
           <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground">
             <Link to="/services" className="inline-flex items-center gap-1 hover:text-foreground">
