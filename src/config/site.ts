@@ -15,7 +15,7 @@ export const site = {
   timezone: "GMT+03:00",
   workingHours: "الأحد–الخميس · 9:00 ص – 6:00 م",
   available: true,
-  availabilityLabel: "متاح لاستقبال المشاريع",
+  availabilityLabel: "متاح لمشاريع جديدة",
 } as const;
 
 export type Site = typeof site;
