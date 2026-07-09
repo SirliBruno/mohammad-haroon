@@ -16,11 +16,12 @@ import {
   Wrench,
 } from "lucide-react";
 import { useEffect } from "react";
-import { motion, useReducedMotion } from "motion/react";
 import { buildMeta } from "@/features/seo/build-meta";
 import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
-import { Eyebrow } from "@/components/typography/eyebrow";
+import { SectionTitle } from "@/components/layout/section-title";
+import { Reveal } from "@/components/motion/reveal";
+import { AvailabilityBadge } from "@/components/ds/availability-badge";
 import { DSButton, Grid, TagGroup } from "@/components/ds";
 import { projects } from "@/data/projects";
 import type { Project } from "@/features/projects/schema";
