@@ -96,7 +96,7 @@ function BlogPost() {
       <Section className="pt-12 md:pt-16">
         <div className="mx-auto max-w-2xl">
           <Prose size="lg">
-            {article.body.split(/\n{2,}/).map((block, i) => {
+            {(article.body as string).split(/\n{2,}/).map((block: string, i: number) => {
               const trimmed = block.trim();
               if (trimmed.startsWith("## ")) {
                 return <h2 key={i}>{trimmed.slice(3)}</h2>;
@@ -104,7 +104,7 @@ function BlogPost() {
               if (trimmed.startsWith("- ")) {
                 return (
                   <ul key={i}>
-                    {trimmed.split("\n").map((li, j) => (
+                    {trimmed.split("\n").map((li: string, j: number) => (
                       <li key={j}>{li.replace(/^-\s+/, "")}</li>
                     ))}
                   </ul>
