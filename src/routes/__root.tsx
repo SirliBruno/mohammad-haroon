@@ -20,21 +20,61 @@ import { site } from "@/config/site";
 import { ScrollProgress } from "@/components/layout/scroll-progress";
 import { ScrollToTop } from "@/components/layout/scroll-to-top";
 
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: site.name,
+  url: site.url,
+  jobTitle: site.role,
+  email: `mailto:${site.email}`,
+  sameAs: [] as string[],
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: site.name,
+  url: site.url,
+  inLanguage: site.locale,
+  potentialAction: {
+    "@type": "SearchAction",
+    target: `${site.url}/blog?q={search_term_string}`,
+    "query-input": "required name=search_term_string",
+  },
+};
+
 function NotFoundComponent() {
   return (
     <div className="flex min-h-dvh items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">404</p>
-        <h1 className="mt-3 text-3xl font-semibold tracking-tight text-foreground">Page not found</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+      <div className="max-w-lg text-center">
+        <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
+          Error 404
         </p>
-        <div className="mt-6">
+        <h1 className="mt-3 text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
+          This page wandered off
+        </h1>
+        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+          The page you're looking for doesn't exist, has moved, or is still being drafted.
+          Try one of the routes below.
+        </p>
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-md bg-foreground px-4 py-2 text-sm font-medium text-background transition-opacity hover:opacity-90"
+            className="inline-flex items-center justify-center rounded-md bg-foreground px-4 py-2 text-sm font-medium text-background transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             Return home
+          </Link>
+          <Link
+            to="/work"
+            className="inline-flex items-center justify-center rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          >
+            View work
+          </Link>
+          <Link
+            to="/contact"
+            className="inline-flex items-center justify-center rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          >
+            Get in touch
           </Link>
         </div>
       </div>
@@ -96,7 +136,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap",
       },
     ],
-    scripts: [{ children: themeInitScript }],
+    scripts: [
+      { children: themeInitScript },
+      { type: "application/ld+json", children: JSON.stringify(organizationJsonLd) },
+      { type: "application/ld+json", children: JSON.stringify(websiteJsonLd) },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
