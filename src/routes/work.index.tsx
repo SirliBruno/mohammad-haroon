@@ -184,8 +184,8 @@ function WorkIndex() {
         <div className="mt-8">
           {filtered.length === 0 ? (
             <EmptyState
-              title="لا توجد مشاريع مطابقة"
-              description="جرّب بحثًا مختلفًا أو أعد ضبط التصفية."
+              title="لا نتائج مُطابقة"
+              description="جرّب كلمة بحث أخرى، أو أعد ضبط الفلترة."
               action={
                 <DSButton
                   variant="outline"
