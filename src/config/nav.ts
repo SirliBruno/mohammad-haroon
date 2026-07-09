@@ -17,14 +17,16 @@ export const footerNav: { title: string; items: NavItem[] }[] = [
     ],
   },
   {
-    title: "About",
+    title: "Company",
     items: [
       { label: "About", to: "/about" },
       { label: "Contact", to: "/contact" },
     ],
   },
   {
-    title: "Writing",
-    items: [{ label: "Blog", to: "/blog" }],
+    title: "Resources",
+    items: [
+      { label: "Blog", to: "/blog" },
+    ],
   },
 ];

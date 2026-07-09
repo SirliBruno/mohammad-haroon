@@ -17,6 +17,8 @@ import { Nav } from "@/components/layout/nav";
 import { Footer } from "@/components/layout/footer";
 import { buildMeta } from "@/features/seo/build-meta";
 import { site } from "@/config/site";
+import { ScrollProgress } from "@/components/layout/scroll-progress";
+import { ScrollToTop } from "@/components/layout/scroll-to-top";
 
 function NotFoundComponent() {
   return (
@@ -129,11 +131,13 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="system">
         <div className="flex min-h-dvh flex-col">
+          <ScrollProgress />
           <Nav />
           <main id="main" className="flex-1">
             <Outlet />
           </main>
           <Footer />
+          <ScrollToTop />
         </div>
       </ThemeProvider>
     </QueryClientProvider>
