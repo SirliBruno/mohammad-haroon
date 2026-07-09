@@ -9,7 +9,11 @@ export const site = {
   locale: "en",
   direction: "ltr" as "ltr" | "rtl",
   email: "hello@mohammadharoon.com",
+  whatsapp: "+10000000000",
+  whatsappDisplay: "+1 (000) 000-0000",
   location: "Remote",
+  timezone: "UTC+05:00",
+  workingHours: "Mon–Fri · 9:00–18:00",
   available: true,
   availabilityLabel: "Open to opportunities",
 } as const;
