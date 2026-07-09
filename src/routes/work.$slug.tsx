@@ -154,7 +154,7 @@ function CaseStudy() {
               ) : null}
               <DSButton asChild size="lg" variant="ghost">
                 <Link to="/contact">
-                  ابدأ مشروعًا <ArrowLeft />
+                  ابدأ مشروعك <ArrowLeft />
                 </Link>
               </DSButton>
             </div>
@@ -505,9 +505,9 @@ function ProjectNotFound() {
         <p className="text-xs font-medium tracking-[0.14em] text-muted-foreground" dir="ltr">
           404
         </p>
-        <h1 className="mt-3 text-3xl font-semibold tracking-tight">المشروع غير موجود</h1>
+        <h1 className="mt-3 text-3xl font-semibold tracking-tight">لم نعثر على المشروع</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          لا يوجد مشروع يطابق «{slug}».
+          لا يوجد مشروع باسم «{slug}».
         </p>
         <div className="mt-6">
           <DSButton asChild variant="outline">
@@ -528,7 +528,7 @@ function ProjectError({ error, reset }: { error: Error; reset: () => void }) {
     <Section>
       <div className="mx-auto max-w-md text-center">
         <h1 className="text-xl font-semibold tracking-tight">تعذّر تحميل هذا المشروع</h1>
-        <p className="mt-2 text-sm text-muted-foreground">حاول مرة أخرى أو ارجع إلى جميع المشاريع.</p>
+        <p className="mt-2 text-sm text-muted-foreground">حاول مرّة أخرى أو ارجع إلى قائمة المشاريع.</p>
         <div className="mt-6 flex justify-center gap-2">
           <DSButton
             variant="outline"

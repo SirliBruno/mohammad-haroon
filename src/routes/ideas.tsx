@@ -6,7 +6,7 @@ export const Route = createFileRoute("/ideas")({
   head: () => ({
     meta: buildMeta({
       title: "مختبر الأفكار",
-      description: "مختبر للأفكار المستقبلية والنماذج الأولية والاستكشافات.",
+      description: "مختبر لأفكار مستقبليّة، ونماذج أوّليّة، واستكشافات مفتوحة.",
       path: "/ideas",
     }),
   }),
