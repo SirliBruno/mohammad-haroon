@@ -508,14 +508,7 @@ function CaseStudy() {
 }
 
 function SectionHeading({ eyebrow, title }: { eyebrow: string; title: string }) {
-  return (
-    <div>
-      <Eyebrow>{eyebrow}</Eyebrow>
-      <h2 className="mt-3 text-2xl font-semibold tracking-tight md:text-3xl">
-        {title}
-      </h2>
-    </div>
-  );
+  return <SectionTitle eyebrow={eyebrow} title={title} size="sm" />;
 }
 
 function SidebarRow({
