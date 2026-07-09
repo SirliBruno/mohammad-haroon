@@ -65,18 +65,21 @@ export function Hero() {
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
         <motion.div
           className="absolute -top-24 -left-24 size-[520px] rounded-full bg-primary/20 blur-3xl"
+          style={{ willChange: "transform, opacity" }}
           initial={{ opacity: 0.5, scale: 1 }}
           animate={reduce ? {} : { opacity: [0.35, 0.55, 0.35], scale: [1, 1.05, 1], x: [0, 24, 0], y: [0, 16, 0] }}
           transition={{ duration: 14, ease: "easeInOut", repeat: Infinity }}
         />
         <motion.div
           className="absolute -bottom-32 right-[-10%] size-[560px] rounded-full bg-accent/20 blur-3xl"
+          style={{ willChange: "transform, opacity" }}
           initial={{ opacity: 0.4, scale: 1 }}
           animate={reduce ? {} : { opacity: [0.3, 0.5, 0.3], scale: [1, 1.07, 1], x: [0, -20, 0], y: [0, -18, 0] }}
           transition={{ duration: 18, ease: "easeInOut", repeat: Infinity, delay: 1.2 }}
         />
         <motion.div
           className="absolute top-1/2 left-1/2 size-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/10 blur-3xl"
+          style={{ willChange: "opacity" }}
           initial={{ opacity: 0.3 }}
           animate={reduce ? {} : { opacity: [0.2, 0.35, 0.2] }}
           transition={{ duration: 10, ease: "easeInOut", repeat: Infinity }}
@@ -102,7 +105,7 @@ export function Hero() {
 
             <h1
               id="hero-heading"
-              className="mt-6 text-4xl font-semibold tracking-tight text-foreground text-balance sm:text-5xl md:text-6xl lg:text-[64px] lg:leading-[1.05]"
+              className="mt-6 text-4xl font-semibold tracking-tight text-foreground text-balance sm:text-5xl md:text-6xl lg:leading-[1.05]"
             >
               Building{" "}
               <span className="text-gradient-brand">Digital Products</span> That
