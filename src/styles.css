@@ -242,3 +242,50 @@
     padding-inline: 2rem;
   }
 }
+
+@utility story-link {
+  position: relative;
+  display: inline-block;
+}
+@utility story-link {
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    height: 1px;
+    width: 100%;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right center;
+    transition: transform var(--duration-base) var(--ease-out-quart);
+  }
+  &:hover::after {
+    transform: scaleX(1);
+    transform-origin: left center;
+  }
+}
+
+@utility text-balance {
+  text-wrap: balance;
+}
+
+@utility text-gradient-brand {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+@utility shimmer-bg {
+  background: linear-gradient(
+    90deg,
+    color-mix(in oklab, var(--color-muted) 60%, transparent) 0%,
+    color-mix(in oklab, var(--color-muted-foreground) 12%, transparent) 50%,
+    color-mix(in oklab, var(--color-muted) 60%, transparent) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s linear infinite;
+}
+
