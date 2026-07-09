@@ -11,9 +11,11 @@ export const projects: Project[] = [
     role: "Lead product designer & frontend engineer",
     client: "Northwind",
     year: 2025,
+    timeline: "12 weeks",
     category: "UI Design",
     tags: ["SaaS", "Analytics", "Design system"],
     stack: ["React", "TypeScript", "Tailwind", "Postgres", "Recharts"],
+    tools: ["Figma", "Linear", "Notion", "Loom"],
     cover: { src: "", alt: "Northwind dashboard cover" },
     gallery: [],
     metrics: [
@@ -21,6 +23,38 @@ export const projects: Project[] = [
       { label: "Weekly active reports", value: "+218%" },
       { label: "Support tickets", value: "-41%" },
     ],
+    github: "https://github.com/example/northwind",
+    liveDemo: "https://northwind.example.com",
+    problem:
+      "Every new user hit a blank canvas. Building a first useful report took over 12 minutes on average, and 38% of trial accounts never made it past that step. The product felt powerful in demos and paralyzing in practice.",
+    goals: [
+      "Get first-time users to a useful view within a minute",
+      "Cut analytics-related support tickets in half",
+      "Keep the underlying flexibility power users depend on",
+    ],
+    research:
+      "Twelve interviews with operators across e-commerce, SaaS and marketplaces revealed the same pattern: people didn't want to build charts, they wanted to answer three or four recurring questions. We mapped those questions to templates and let the raw builder live one click away.",
+    solution:
+      "A curated home surface with opinionated decision-ready dashboards, a fast command menu for jumping between reports, and a rebuilt query builder for the moments when defaults aren't enough. Every screen was designed mobile-first because 40% of usage happens on phones between meetings.",
+    designProcess: [
+      { title: "Discovery", description: "Stakeholder interviews, audit of the existing product, competitive teardown." },
+      { title: "Wireframes", description: "Low-fi flows validated with five customers before any pixel got polished." },
+      { title: "High-fi", description: "Design system extension, motion spec, and prototyping in Figma." },
+      { title: "Handoff", description: "Weekly pairing sessions with engineering — no over-the-wall handoffs." },
+    ],
+    development:
+      "Built with React, TypeScript and Tailwind on top of a bespoke charting layer over Recharts. Everything is server-driven; the frontend never computes aggregates. Route-level code splitting keeps the initial JS payload under 90kb gzipped, and the whole app is SSR-ready for shareable report links.",
+    lessons: [
+      "Opinionated defaults outperform infinite flexibility for most users.",
+      "Mobile-first constraints made the desktop UI sharper, not weaker.",
+      "Weekly demos to real customers beat any internal review cycle.",
+    ],
+    testimonial: {
+      quote:
+        "The redesign didn't just make Northwind prettier — it changed how our customers describe the product. It went from a tool they had to learn to a tool that answered their questions.",
+      author: "Priya Shah",
+      role: "Head of Product, Northwind",
+    },
     featured: true,
     status: "live",
   },
