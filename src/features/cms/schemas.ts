@@ -30,8 +30,20 @@ export const mediaKind = z.enum(["image", "video", "document", "audio", "other"]
 const optionalUrl = z.string().url().max(2048).optional().nullable();
 const optionalText = (max = 4000) => z.string().trim().max(max).optional().nullable();
 const stringArray = (max = 40) => z.array(z.string().trim().min(1).max(80)).max(max).default([]);
-const jsonArray = z.array(z.unknown()).default([]);
-const jsonObject = z.record(z.unknown()).optional().nullable();
+// Supabase's generated `Json` type. Recursive so nested arrays/objects work.
+type JsonValue = string | number | boolean | null | { [k: string]: JsonValue } | JsonValue[];
+const jsonValueSchema: z.ZodType<JsonValue> = z.lazy(() =>
+  z.union([
+    z.string(),
+    z.number(),
+    z.boolean(),
+    z.null(),
+    z.array(jsonValueSchema),
+    z.record(jsonValueSchema),
+  ]),
+);
+const jsonArray = z.array(jsonValueSchema).default([]);
+const jsonObject = z.record(jsonValueSchema).optional().nullable();
 
 export const listParamsSchema = z.object({
   limit: z.number().int().min(1).max(200).default(24),
