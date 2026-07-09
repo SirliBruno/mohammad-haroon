@@ -55,11 +55,12 @@ const trustedCompanies = [
 ];
 
 const statistics = [
-  { value: "+5", label: "موقع تم إطلاقه", hint: "تسويقي ومنتجات" },
-  { value: "+10", label: "متجر إلكتروني", hint: "Shopify ومخصص" },
-  { value: "متعدّدة", label: "شركات تعاملت معها", hint: "من ناشئة إلى وكالات" },
-  { value: "متاح", label: "لاستقبال المشاريع", hint: "أماكن محدودة للربع القادم" },
+  { value: "+5", label: "موقع منشور", hint: "منتجات وصفحات تسويقية" },
+  { value: "+10", label: "متجر إلكتروني", hint: "Shopify وحلول مخصّصة" },
+  { value: "متنوّعة", label: "قطاعات وشركات", hint: "من الناشئة إلى الوكالات" },
+  { value: "متاح", label: "لمشاريع جديدة", hint: "أماكن محدودة للربع القادم" },
 ];
+
 
 const skillGroups = [
   {
