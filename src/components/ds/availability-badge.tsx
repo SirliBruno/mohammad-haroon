@@ -1,13 +1,5 @@
 import { cn } from "@/lib/utils";
 
-/**
- * Small "available" pill with a pulsing dot. Replaces the hardcoded
- * emerald pattern that was duplicated across the hero, about, career
- * and contact pages.
- *
- * `tone="muted"` renders a subtle inline dot only; `tone="pill"` renders
- * the full bordered chip.
- */
 export function AvailabilityBadge({
   available = true,
   label,
@@ -19,7 +11,7 @@ export function AvailabilityBadge({
   tone?: "pill" | "dot";
   className?: string;
 }) {
-  const text = label ?? (available ? "Available for work" : "Currently unavailable");
+  const text = label ?? (available ? "متاح للعمل" : "غير متاح حاليًا");
   const dotColor = available ? "bg-emerald-500" : "bg-muted-foreground";
   const dotHalo = available ? "bg-emerald-500/60" : "bg-muted-foreground/40";
 

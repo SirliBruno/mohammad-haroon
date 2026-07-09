@@ -43,7 +43,7 @@ export function ProjectCard({
             </h3>
             <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{project.summary}</p>
           </div>
-          <ArrowUpRight className="mt-1 size-4 shrink-0 text-muted-foreground transition-transform duration-300 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-foreground" />
+          <ArrowUpRight className="mt-1 size-4 shrink-0 text-muted-foreground transition-transform duration-300 ease-out group-hover:translate-y-[-2px] rtl:group-hover:-translate-x-0.5 ltr:group-hover:translate-x-0.5 group-hover:text-foreground" />
         </div>
       </Link>
     </DSCard>
