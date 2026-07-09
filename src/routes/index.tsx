@@ -1,10 +1,9 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { buildMeta } from "@/features/seo/build-meta";
-import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
 import { Eyebrow } from "@/components/typography/eyebrow";
-import { AvailabilityBadge } from "@/components/brand/availability-badge";
+import { Hero } from "@/components/sections/hero";
 import { DSButton, Grid, ProjectCard, ServiceCard, TestimonialQuote } from "@/components/ds";
 import { site } from "@/config/site";
 import { projects } from "@/data/projects";
@@ -30,40 +29,8 @@ function Home() {
 
   return (
     <>
-      {/* Hero */}
-      <section className="relative overflow-hidden pt-20 pb-24 md:pt-28 md:pb-32">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[420px] opacity-70 [mask-image:radial-gradient(60%_60%_at_50%_0%,black,transparent)] bg-linear-to-b from-primary/10 via-accent/5 to-transparent"
-        />
-        <Container>
-          <div className="mx-auto max-w-4xl text-center md:text-left md:mx-0">
-            <div className="mb-6 flex justify-center md:justify-start">
-              <AvailabilityBadge className="inline-flex" />
-            </div>
-            <Eyebrow>{site.role}</Eyebrow>
-            <h1 className="mt-5 text-5xl font-semibold tracking-tight text-foreground text-balance md:text-6xl lg:text-7xl">
-              {site.tagline}
-            </h1>
-            <p className="mt-6 max-w-2xl text-lg text-muted-foreground md:text-xl">
-              I'm {site.shortName} — I design and build premium interfaces for
-              founders and product teams who care about craft. Focused,
-              opinionated, shipped.
-            </p>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3 md:justify-start">
-              <DSButton asChild size="lg" variant="primary">
-                <Link to="/work">
-                  See selected work
-                  <ArrowRight />
-                </Link>
-              </DSButton>
-              <DSButton asChild size="lg" variant="outline">
-                <Link to="/contact">Start a project</Link>
-              </DSButton>
-            </div>
-          </div>
-        </Container>
-      </section>
+      <Hero />
+
 
       {/* Selected work */}
       <Section id="work" className="border-t border-border/60 pt-16 md:pt-24">
