@@ -195,7 +195,7 @@ function ServiceDetail() {
 
       {service.workflow.length ? (
         <Section className="border-t border-border/60">
-          <Eyebrow>منهجية العمل</Eyebrow>
+          <Eyebrow>منهجيّة العمل</Eyebrow>
           <h2 className="mt-3 max-w-2xl text-2xl font-semibold tracking-tight md:text-3xl">
             كيف سنعمل معًا
           </h2>
@@ -318,9 +318,9 @@ function ServiceNotFound() {
     <Section>
       <div className="mx-auto max-w-md text-center">
         <p className="text-xs font-medium tracking-[0.14em] text-muted-foreground" dir="ltr">404</p>
-        <h1 className="mt-3 text-3xl font-semibold tracking-tight">الخدمة غير موجودة</h1>
+        <h1 className="mt-3 text-3xl font-semibold tracking-tight">لم نعثر على الخدمة</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          لا توجد خدمة تطابق «{slug}».
+          لا توجد خدمة باسم «{slug}».
         </p>
         <div className="mt-6">
           <DSButton asChild variant="outline">
