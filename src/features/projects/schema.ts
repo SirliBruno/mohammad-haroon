@@ -27,7 +27,7 @@ export const projectSchema = z.object({
   category: z.enum(projectCategories).default("Websites"),
   tags: z.array(z.string()).default([]),
   stack: z.array(z.string()).default([]),
-  tools: z.array(z.string()).default([]),
+  tools: z.array(z.string()).optional(),
   timeline: z.string().optional(),
   cover: mediaSchema,
   gallery: z.array(mediaSchema).default([]),
@@ -36,14 +36,14 @@ export const projectSchema = z.object({
   github: z.string().optional(),
   liveDemo: z.string().optional(),
   problem: z.string().optional(),
-  goals: z.array(z.string()).default([]),
+  goals: z.array(z.string()).optional(),
   research: z.string().optional(),
   solution: z.string().optional(),
   designProcess: z
     .array(z.object({ title: z.string(), description: z.string() }))
-    .default([]),
+    .optional(),
   development: z.string().optional(),
-  lessons: z.array(z.string()).default([]),
+  lessons: z.array(z.string()).optional(),
   testimonial: z
     .object({
       quote: z.string(),
