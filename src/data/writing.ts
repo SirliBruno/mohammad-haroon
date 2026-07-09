@@ -3,72 +3,72 @@ import type { Article } from "@/features/writing/schema";
 export const articles: Article[] = [
   {
     slug: "the-quiet-interface",
-    title: "The quiet interface",
+    title: "الواجهة الهادئة",
     excerpt:
-      "The best software feels like nothing at all. A short essay on restraint as a design principle.",
+      "أفضل البرمجيات هي التي لا تُلاحظها. مقالة قصيرة عن الاحتراف في ضبط النفس كمبدأ تصميمي.",
     publishedAt: "2026-05-14",
-    tags: ["Design", "Craft"],
+    tags: ["تصميم", "حرفية"],
     readingTime: 5,
-    body: `The best interfaces don't announce themselves. They recede, letting the work happen.
+    body: `أفضل الواجهات لا تفرض حضورها. تنسحب بهدوء لتفسح المجال للعمل.
 
-We've spent a decade adding: more color, more motion, more surfaces, more chrome. Every framework ships with a "look at me" mode enabled by default. The result is products that shout, and users who tune out.
+قضينا عقدًا كاملًا في الإضافة: مزيد من الألوان، والحركة، والأسطح، والحواف. كل إطار عمل يأتي بوضع "انظر إليّ" مُفعّلًا افتراضيًا. النتيجة منتجات تصرخ، ومستخدمون يُغلقون آذانهم.
 
-## Restraint as a feature
+## ضبط النفس ميزة
 
-Every element on a screen competes for attention. Every animation, every gradient, every emoji in a button. When everything is loud, nothing is. Restraint isn't the absence of design — it's the discipline to decide what deserves the user's attention this second.
+كل عنصر على الشاشة يتنافس على الانتباه. كل حركة، كل تدرّج لوني، كل رمز في زر. حين يعلو كل شيء، لا يعلو شيء. ضبط النفس ليس غياب التصميم — بل هو الانضباط في تقرير ما يستحق انتباه المستخدم في هذه اللحظة.
 
-## What quiet looks like
+## كيف تبدو الواجهة الهادئة
 
-- One primary action per view. At most one secondary.
-- Motion that serves comprehension, not decoration.
-- Copy that says the thing, then stops.
-- Neutral surfaces, saturated accents used sparingly.
+- إجراء رئيسي واحد لكل شاشة. وإجراء ثانوي واحد على الأكثر.
+- حركة تخدم الفهم لا الزخرفة.
+- نص يقول المطلوب، ثم يتوقف.
+- أسطح محايدة، وألوان مميزة تُستخدم باقتصاد.
 
-A quiet interface trusts its user. That trust is the whole game.`,
+الواجهة الهادئة تثق بمستخدمها. وهذه الثقة هي جوهر اللعبة كلها.`,
   },
   {
     slug: "design-systems-are-a-product",
-    title: "Your design system is a product",
+    title: "نظام التصميم لديك هو منتج بحد ذاته",
     excerpt:
-      "The teams that treat their internal system like a product ship better software. Here's the mental model.",
+      "الفرق التي تتعامل مع نظامها الداخلي كمنتج تُنتج برمجيات أفضل. إليك النموذج الذهني المطلوب.",
     publishedAt: "2026-04-02",
-    tags: ["Design systems", "Engineering"],
+    tags: ["أنظمة التصميم", "هندسة"],
     readingTime: 8,
-    body: `Design systems fail for the same reason internal tools fail: nobody owns the user experience.
+    body: `أنظمة التصميم تفشل لنفس سبب فشل الأدوات الداخلية: لا أحد يمتلك تجربة المستخدم فيها.
 
-## Who is the user?
+## من هو المستخدم؟
 
-Your design system's user is the engineer who has fifteen minutes to add a modal to a page. If your system doesn't make that engineer's fifteen minutes feel great, adoption dies.
+مستخدم نظام التصميم لديك هو المهندس الذي أمامه خمس عشرة دقيقة لإضافة نافذة منبثقة إلى صفحة. إن لم يجعل نظامك تلك الدقائق الخمس عشرة تجربة رائعة، فإن التبنّي يموت.
 
-## Symptoms of a system without an owner
+## علامات نظام بلا مالك
 
-- Undocumented components you can only learn by reading the source.
-- Three ways to build a button, none of them blessed.
-- A Figma library and a codebase that quietly disagree.
-- No changelog. No migration path. No deprecation policy.
+- مكوّنات غير موثّقة لا تعرفها إلا بقراءة الكود المصدري.
+- ثلاث طرق لبناء زر، لا واحدة منها معتمدة.
+- مكتبة فيغما وقاعدة كود لا تتفقان بصمت.
+- لا سجل تغييرات. لا مسار ترقية. لا سياسة إهمال.
 
-## Treat it like a product
+## تعامل معه كمنتج
 
-Ship a changelog. Do office hours. Interview your users. Write docs like your career depends on adoption, because it does.`,
+أطلق سجل تغييرات. اعقد ساعات مكتبية. قابل مستخدميك. اكتب التوثيق كأن مسيرتك المهنية تعتمد على التبنّي، لأنها تعتمد فعلًا عليه.`,
   },
   {
     slug: "hire-for-taste",
-    title: "Hire for taste",
+    title: "التوظيف على أساس الذوق",
     excerpt:
-      "Skills are trainable. Taste is a proxy for judgment, and judgment is what makes senior engineers senior.",
+      "المهارات قابلة للتدريب. أما الذوق فهو مقياس للحكمة، والحكمة هي ما يصنع المهندس الخبير.",
     publishedAt: "2026-02-20",
-    tags: ["Hiring", "Team"],
+    tags: ["توظيف", "فريق"],
     readingTime: 6,
-    body: `Every senior hire I've regretted had strong skills and weak taste.
+    body: `كل تعيين خبير ندمت عليه كان صاحب مهارات قوية وذوق ضعيف.
 
-Taste is the accumulated judgment of what to do and — more importantly — what not to do. It's what stops a senior engineer from adding a third abstraction layer when two would do.
+الذوق هو الحكمة المتراكمة حول ما يجب فعله — والأهم — ما لا يجب فعله. هو ما يمنع مهندسًا خبيرًا من إضافة طبقة تجريد ثالثة حين تكفي طبقتان.
 
-## Interviewing for taste
+## المقابلة على أساس الذوق
 
-Ask candidates to critique work — real work, with real trade-offs. Watch what they notice first. The engineer who spots the missing loading state before the missing test is telling you something.
+اطلب من المرشحين نقد أعمال حقيقية بمقايضاتها الحقيقية. لاحظ ما يلفت انتباههم أولًا. المهندس الذي يلاحظ غياب حالة التحميل قبل غياب الاختبار يُخبرك بشيء مهم.
 
-## Taste is not opinion
+## الذوق ليس رأيًا
 
-Opinions are cheap. Taste is opinions calibrated by shipping. Look for scar tissue, not preferences.`,
+الآراء رخيصة. الذوق هو آراء مُعايَرة بالتنفيذ. ابحث عن الندوب لا التفضيلات.`,
   },
 ];
