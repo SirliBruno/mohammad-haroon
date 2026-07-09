@@ -216,8 +216,8 @@ function About() {
   return (
     <>
       <PageHeader
-        eyebrow="نبذة عني"
-        title={`أنا ${site.shortName}. أُصمّم وأُطوّر البرمجيات بذوق رفيع.`}
+        eyebrow="من أنا"
+        title={`أنا ${site.shortName}. أُصمّم وأُطوِّر منتجات رقمية بحرفة.`}
         description={profile.bio}
       />
 
