@@ -131,11 +131,13 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="system">
         <div className="flex min-h-dvh flex-col">
+          <ScrollProgress />
           <Nav />
           <main id="main" className="flex-1">
             <Outlet />
           </main>
           <Footer />
+          <ScrollToTop />
         </div>
       </ThemeProvider>
     </QueryClientProvider>
