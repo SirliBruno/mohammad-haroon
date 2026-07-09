@@ -598,7 +598,7 @@ function Home() {
           <div className="mt-8 flex justify-center">
             <DSButton asChild variant="outline" size="md">
               <Link to="/blog">
-                استعرض المدونة
+                زُر المدوّنة
                 <ArrowLeft />
               </Link>
             </DSButton>
@@ -620,19 +620,18 @@ function Home() {
             <div className="relative mx-auto max-w-3xl text-center">
               <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/70 px-3 py-1 text-xs text-muted-foreground backdrop-blur-sm">
                 <ShieldCheck className="size-3.5" aria-hidden />
-                أستقبل مشاريع جديدة لهذا الربع
+                أستقبل مشاريع جديدة هذا الربع
               </div>
               <h2 className="mt-6 text-3xl font-semibold tracking-tight text-foreground text-balance md:text-5xl">
-                لنبنِ معًا شيئًا يستحق الإطلاق.
+                لنُطلق معًا شيئًا يستحقّ.
               </h2>
               <p className="mt-4 text-base text-muted-foreground md:text-lg">
-                سواء كنت تُطلق منتجًا جديدًا، أو تُعيد تصميم منتج قائم، أو تعمل
-                على التوسّع — ابدأ بمحادثة قصيرة. إن لم نكن الشراكة المناسبة، سأخبرك بصراحة.
+                سواء كنت تُطلق منتجًا جديدًا، أو تُعيد تصميم منتج قائم، أو تعمل على التوسّع — نبدأ بمحادثة قصيرة. وإن لم أكن الشريك المناسب، سأقول لك ذلك بصراحة.
               </p>
               <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
                 <DSButton asChild size="lg" variant="primary">
                   <Link to="/contact">
-                    ابدأ مشروعًا
+                    ابدأ مشروعك
                     <ArrowLeft />
                   </Link>
                 </DSButton>
@@ -644,7 +643,7 @@ function Home() {
                 </DSButton>
               </div>
               <p className="mt-6 text-xs text-muted-foreground">
-                زمن الرد المعتاد · خلال 24 ساعة · {site.location}
+                متوسّط الرد · خلال 24 ساعة · {site.location}
               </p>
             </div>
           </div>
