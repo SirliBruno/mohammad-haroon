@@ -300,14 +300,14 @@ function ContactPage() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="hire">وظيفة بدوام كامل</SelectItem>
-                      <SelectItem value="freelance">مشروع حر</SelectItem>
+                      <SelectItem value="freelance">مشروع حرّ</SelectItem>
                       <SelectItem value="collab">شراكة أو تعاون</SelectItem>
                       <SelectItem value="other">شيء آخر</SelectItem>
                     </SelectContent>
                   </Select>
                 </Field>
 
-                <Field id="budget" label="الميزانية (اختياري)" hint="نطاق تقريبي بالريال أو الدولار.">
+                <Field id="budget" label="الميزانيّة (اختياري)" hint="نطاق تقريبي بالريال أو الدولار.">
                   <Input
                     id="budget"
                     placeholder="مثال: 40,000 – 100,000 ريال"
@@ -321,7 +321,7 @@ function ContactPage() {
                   label="الرسالة"
                   required
                   rows={6}
-                  placeholder="أخبرني عن المشكلة، والجدول الزمني، وما هي النتيجة المثالية بالنسبة لك."
+                  placeholder="اكتب لي عن المشكلة، والجدول الزمني، والنتيجة المثاليّة كما تراها."
                   error={errors.message?.message}
                   {...register("message")}
                 />
@@ -353,7 +353,7 @@ function ContactPage() {
                   />
                   <div>
                     <Label htmlFor="consent" className="text-sm font-normal text-foreground/80">
-                      أوافق على أن يحتفظ {site.shortName} برسالتي لأغراض الرد فقط.
+                      أوافق على احتفاظ {site.shortName} برسالتي بغرض الرد فقط.
                     </Label>
                     {errors.consent ? (
                       <p id="consent-error" role="alert" className="mt-1 text-xs text-destructive">
@@ -365,12 +365,12 @@ function ContactPage() {
 
                 <div className="flex flex-wrap items-center gap-4">
                   <DSButton type="submit" size="lg" disabled={isSubmitting}>
-                    {isSubmitting ? "جارٍ الإرسال…" : "إرسال"}
+                    {isSubmitting ? "جارٍ الإرسال…" : "إرسال الرسالة"}
                     {!isSubmitting ? <ArrowLeft /> : null}
                   </DSButton>
                   <p className="flex items-center gap-2 text-xs text-muted-foreground">
                     <Shield className="size-3.5" aria-hidden />
-                    محميّ ضد المحتوى المزعج. بدون أي متتبّعات خارجية.
+                    محميّ ضدّ الرسائل المزعجة، بلا أي متتبّعات خارجيّة.
                   </p>
                 </div>
               </form>
