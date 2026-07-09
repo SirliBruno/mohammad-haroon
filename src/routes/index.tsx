@@ -288,8 +288,8 @@ function Home() {
         <Reveal>
           <SectionTitle
             eyebrow="أعمال مختارة"
-            title="مشاريع تستحق الاستكشاف."
-            description="مجموعة من الشراكات التي تحوّلت فيها التفاصيل الدقيقة إلى نتائج حقيقية."
+            title="مشاريع أفتخر بها."
+            description="نماذج من شراكات تحوّلت فيها تفاصيل صغيرة إلى نتائج ملموسة."
             actions={
               <DSButton asChild variant="ghost" size="sm">
                 <Link to="/work">
@@ -326,9 +326,9 @@ function Home() {
           <Reveal>
             <SectionTitle
               as="h2"
-              eyebrow="الخبرات"
-              title="مسيرة قصيرة ومدروسة."
-              description="أبقيت السيرة المهنية مركّزة عن قصد — كل محطة اخترتها لعمق التجربة، لا لبريق الاسم."
+              eyebrow="المسيرة"
+              title="مسيرة قصيرة ومركّزة."
+              description="أبقيتُ المحطّات قليلة عن قصد — كلّ تجربة اخترتها لعمقها، لا لبريق الاسم."
             />
             <div className="mt-8">
               <DSButton asChild variant="outline" size="md">
@@ -351,8 +351,8 @@ function Home() {
         <Reveal>
           <SectionTitle
             eyebrow="المهارات"
-            title="التقنيات وراء العمل."
-            description="التصميم والهندسة بمعيار واحد. أبقى مركّزًا لأتعمّق أكثر."
+            title="أدواتي اليومية."
+            description="أُركّز على مجموعة صغيرة من الأدوات لأُتقنها، لا لأتنقّل بينها."
           />
         </Reveal>
         <Reveal delay={0.05}>
@@ -387,7 +387,7 @@ function Home() {
           <div className="mt-10 flex justify-center">
             <DSButton asChild variant="ghost" size="md">
               <Link to="/about">
-                استعرض القائمة الكاملة
+                اعرف عنّي أكثر
                 <ArrowUpRight />
               </Link>
             </DSButton>
@@ -400,7 +400,7 @@ function Home() {
           <SectionTitle
             eyebrow="الشهادات"
             title="تعلّم موثّق."
-            description="شهادات رسمية من جهات أحترم عملها."
+            description="شهادات رسمية من جهات أُقدِّر عملها."
             actions={
               <span className="hidden items-center gap-2 rounded-full border border-border/70 bg-background px-3 py-1 text-xs text-muted-foreground md:inline-flex">
                 <Award className="size-3.5" aria-hidden />
@@ -424,8 +424,8 @@ function Home() {
         <Reveal>
           <SectionTitle
             eyebrow="آراء العملاء"
-            title="ماذا يقول شركاؤنا."
-            description="كلمات كريمة من الأشخاص الذين عملت معهم."
+            title="بكلمات من عملت معهم."
+            description="شهادات مختصرة من فرق شاركتها الرحلة."
           />
         </Reveal>
         <Reveal delay={0.05}>
@@ -441,7 +441,7 @@ function Home() {
           <div className="mt-10 flex justify-center">
             <DSButton asChild variant="outline" size="md">
               <Link to="/contact">
-                كن دراسة الحالة القادمة
+                لنبدأ مشروعك القادم
                 <ArrowLeft />
               </Link>
             </DSButton>
@@ -453,8 +453,8 @@ function Home() {
         <Reveal>
           <SectionTitle
             eyebrow="حاليًا"
-            title="ما الذي أركّز عليه هذا الربع."
-            description="قائمة قصيرة ومحدّثة — ثلاث قضايا تشغل وقتي واهتمامي الآن."
+            title="ما يشغلني هذا الربع."
+            description="قائمة قصيرة ومحدَّثة — ثلاث قضايا تأخذ معظم وقتي الآن."
           />
         </Reveal>
         <Reveal delay={0.05}>
