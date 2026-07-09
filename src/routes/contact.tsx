@@ -227,11 +227,11 @@ function ContactPage() {
           <div>
             {submitted ? (
               <SuccessState
-                title="تم استلام رسالتك"
-                description="شكرًا لتواصلك. سأرد عليك خلال يومَي عمل — وغالبًا في وقت أقصر."
+                title="وصلت رسالتك"
+                description="شكرًا لتواصلك. أرد عادةً خلال يومَي عمل، وغالبًا في وقت أقصر."
                 action={
                   <DSButton variant="outline" onClick={() => setSubmitted(false)}>
-                    إرسال رسالة أخرى
+                    إرسال رسالة جديدة
                   </DSButton>
                 }
               />
@@ -262,7 +262,7 @@ function ContactPage() {
                     aria-live="polite"
                     className="rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive"
                   >
-                    يرجى تصحيح الحقول المميّزة أدناه.
+                    يُرجى تصحيح الحقول المميّزة أدناه.
                   </div>
                 ) : null}
 
