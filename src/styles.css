@@ -63,9 +63,42 @@
 
   --shadow-xs: 0 1px 2px 0 rgb(9 9 11 / 0.04);
   --shadow-sm: 0 1px 3px 0 rgb(9 9 11 / 0.06), 0 1px 2px -1px rgb(9 9 11 / 0.04);
+  --shadow-md: 0 4px 12px -2px rgb(9 9 11 / 0.06), 0 2px 6px -2px rgb(9 9 11 / 0.04);
+  --shadow-lg: 0 12px 32px -8px rgb(9 9 11 / 0.10), 0 4px 12px -4px rgb(9 9 11 / 0.05);
+  --shadow-glow: 0 0 0 1px color-mix(in oklab, var(--primary) 12%, transparent), 0 8px 24px -8px color-mix(in oklab, var(--primary) 25%, transparent);
 
   --ease-out-quart: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 400ms;
+
+  --container-sm: 40rem;
+  --container-md: 48rem;
+  --container-lg: 64rem;
+  --container-xl: 80rem;
+  --container-2xl: 90rem;
+
+  --animate-shimmer: shimmer 2s linear infinite;
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-fade-up: fade-up 0.5s var(--ease-out-quart) both;
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 }
+
 
 :root {
   --radius: 0.5rem;
