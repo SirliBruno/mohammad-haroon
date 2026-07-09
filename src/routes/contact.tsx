@@ -450,32 +450,31 @@ function ContactPage() {
       </Section>
 
       {/* FAQ */}
-      <Section>
-        <Container>
-          <div className="grid gap-12 lg:grid-cols-[1fr_2fr]">
-            <div>
-              <Eyebrow>FAQ</Eyebrow>
-              <h2 className="mt-3 text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
-                Before you write
-              </h2>
-              <p className="mt-4 text-muted-foreground">
-                A few things people usually ask. If your question isn't here, send it over — happy
-                to answer.
-              </p>
-            </div>
-            <Accordion type="single" collapsible className="w-full">
-              {faqs.map((f, i) => (
-                <AccordionItem key={f.q} value={`item-${i}`}>
-                  <AccordionTrigger className="text-left text-base font-medium">
-                    {f.q}
-                  </AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground">{f.a}</AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
+      <Section className="border-t border-border/60">
+        <div className="grid gap-12 lg:grid-cols-[1fr_2fr]">
+          <div>
+            <Eyebrow>FAQ</Eyebrow>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight text-foreground text-balance md:text-4xl lg:text-5xl">
+              Before you write
+            </h2>
+            <p className="mt-4 text-muted-foreground">
+              A few things people usually ask. If your question isn't here, send it over — happy
+              to answer.
+            </p>
           </div>
-        </Container>
+          <Accordion type="single" collapsible className="w-full">
+            {faqs.map((f, i) => (
+              <AccordionItem key={f.q} value={`item-${i}`}>
+                <AccordionTrigger className="text-left text-base font-medium">
+                  {f.q}
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">{f.a}</AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
       </Section>
+
 
       <CTA
         eyebrow="Still reading?"
