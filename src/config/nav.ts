@@ -21,15 +21,15 @@ export const footerNav: { title: string; items: NavItem[] }[] = [
   {
     title: "التعريف",
     items: [
-      { label: "نبذة عني", to: "/about" },
-      { label: "تواصل معي", to: "/contact" },
+      { label: "من أنا", to: "/about" },
+      { label: "تواصل", to: "/contact" },
     ],
   },
   {
     title: "مصادر",
     items: [
-      { label: "المدونة", to: "/blog" },
-      { label: "الخبرات", to: "/career" },
+      { label: "المدوّنة", to: "/blog" },
+      { label: "المسيرة", to: "/career" },
     ],
   },
 ];
