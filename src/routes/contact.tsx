@@ -172,7 +172,7 @@ function ContactPage() {
     } catch (err) {
       console.error(err);
       setServerError(
-        "حدث خطأ غير متوقع أثناء إرسال الرسالة. يُرجى مراسلتي مباشرة عبر " + site.email + "."
+        "حدث خطأ غير متوقّع أثناء إرسال الرسالة. يُرجى مراسلتي مباشرة عبر " + site.email + "."
       );
     }
   };
@@ -180,10 +180,11 @@ function ContactPage() {
   return (
     <>
       <PageHeader
-        eyebrow="تواصل معي"
-        title="لنتحدّث سويًا"
-        description="سواء كنت تبحث عن توظيف، أو مشروع حر، أو حتى مجرد سؤال — أقرأ كل الرسائل وأرد خلال يومَي عمل."
+        eyebrow="تواصل"
+        title="لنتحدّث"
+        description="توظيف، أو مشروع حرّ، أو حتى سؤال عابر — أقرأ كلّ الرسائل بنفسي، وأرد خلال يومَي عمل."
       />
+
 
       <Section size="sm">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
