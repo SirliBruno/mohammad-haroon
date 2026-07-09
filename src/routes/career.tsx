@@ -111,24 +111,15 @@ function CareerPage() {
       />
 
       {/* Availability + quick actions */}
-      <Section className="pt-10 md:pt-12">
+      <Section size="sm">
         <Reveal>
           <div className="flex flex-col gap-6 rounded-2xl border border-border/60 bg-card p-6 md:flex-row md:items-center md:justify-between md:p-8">
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-3">
-                {site.available ? (
-                  <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-600 dark:text-emerald-400">
-                    <span className="relative flex size-2">
-                      <span className="absolute inset-0 animate-ping rounded-full bg-emerald-500/60" />
-                      <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
-                    </span>
-                    {site.availabilityLabel}
-                  </span>
-                ) : (
-                  <span className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
-                    Not currently available
-                  </span>
-                )}
+                <AvailabilityBadge
+                  available={site.available}
+                  label={site.available ? site.availabilityLabel : "Not currently available"}
+                />
                 <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
                   <MapPin className="size-3.5" aria-hidden /> {site.location}
                 </span>
@@ -160,7 +151,8 @@ function CareerPage() {
       </Section>
 
       {/* Body + Sticky Recruiter Sidebar */}
-      <Section className="pt-8 md:pt-10">
+      <Section size="sm">
+
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_320px]">
           <div className="min-w-0 space-y-16">
             {/* Experience Timeline */}
