@@ -143,13 +143,13 @@ function BlogPost() {
 
       <CTA
         eyebrow="شكرًا للقراءة"
-        title="أعجبك المقال؟"
-        description="أكتب مقالات جديدة عدة مرات في الشهر. إن أردت العمل معًا، تواصل معي."
+        title="أعجبتك المقالة؟"
+        description="أنشر مقالات جديدة عدّة مرّات شهريًا. وإن أردت العمل معًا، تواصل."
         actions={
           <>
             <DSButton asChild size="lg">
               <Link to="/contact">
-                تواصل معي <ArrowLeft />
+                تواصل <ArrowLeft />
               </Link>
             </DSButton>
             <DSButton asChild size="lg" variant="outline">
@@ -168,9 +168,9 @@ function PostNotFound() {
     <Section>
       <div className="mx-auto max-w-md text-center">
         <p className="text-xs font-medium tracking-[0.14em] text-muted-foreground" dir="ltr">404</p>
-        <h1 className="mt-3 text-3xl font-semibold tracking-tight">المقال غير موجود</h1>
+        <h1 className="mt-3 text-3xl font-semibold tracking-tight">لم نعثر على المقالة</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          لا يوجد مقال يطابق «{slug}».
+          لا توجد مقالة باسم «{slug}».
         </p>
         <div className="mt-6">
           <DSButton asChild variant="outline">
