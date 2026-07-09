@@ -5,6 +5,7 @@ import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
 import { Prose, DSButton, TagGroup } from "@/components/ds";
 import { articles } from "@/data/writing";
+import type { Article } from "@/features/writing/schema";
 import { site } from "@/config/site";
 
 export const Route = createFileRoute("/blog/$slug")({
@@ -55,7 +56,7 @@ export const Route = createFileRoute("/blog/$slug")({
 });
 
 function BlogPost() {
-  const { article } = Route.useLoaderData();
+  const { article } = Route.useLoaderData() as { article: Article };
   const currentIndex = articles.findIndex((a) => a.slug === article.slug);
   const related = articles.filter((_, i) => i !== currentIndex).slice(0, 2);
 
