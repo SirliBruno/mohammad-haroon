@@ -80,7 +80,11 @@ export async function listRows<T extends TableName>(
     onlyPublished,
   } = opts;
 
-  let query = supabase.from(table).select("*", { count: "exact" });
+  // Filter chain is column-name-generic; the strictly-typed builder can't
+  // model that with an unknown `T`. Cast to a loose builder here and
+  // re-narrow the returned rows on the way out.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let query: any = supabase.from(table).select("*", { count: "exact" });
 
   if (onlyPublished) query = query.eq("content_status", "published");
   if (status) query = query.eq("content_status", status);
@@ -94,7 +98,6 @@ export async function listRows<T extends TableName>(
 
   const order = orderBy ?? "created_at";
   query = query.order(order, { ascending: ascending ?? false, nullsFirst: false });
-
   query = query.range(offset, offset + limit - 1);
 
   const { data, error, count } = await query;
@@ -102,7 +105,7 @@ export async function listRows<T extends TableName>(
 
   return {
     rows: (data ?? []) as Database["public"]["Tables"][T]["Row"][],
-    count: count ?? 0,
+    count: (count as number | null) ?? 0,
     limit,
     offset,
   };
@@ -113,9 +116,13 @@ export async function getRowById<T extends TableName>(
   table: T,
   id: string,
 ) {
-  const { data, error } = await supabase.from(table).select("*").eq("id", id).maybeSingle();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data, error } = await (supabase.from(table) as any)
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
   if (error) throw new Error(`[${table}] get failed: ${error.message}`);
-  return data as Database["public"]["Tables"][T]["Row"] | null;
+  return (data ?? null) as Database["public"]["Tables"][T]["Row"] | null;
 }
 
 export async function getRowBySlug<T extends TableName>(
@@ -124,11 +131,12 @@ export async function getRowBySlug<T extends TableName>(
   slug: string,
   onlyPublished = false,
 ) {
-  let q = supabase.from(table).select("*").eq("slug", slug);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let q: any = (supabase.from(table) as any).select("*").eq("slug", slug);
   if (onlyPublished) q = q.eq("content_status", "published");
   const { data, error } = await q.maybeSingle();
   if (error) throw new Error(`[${table}] get by slug failed: ${error.message}`);
-  return data as Database["public"]["Tables"][T]["Row"] | null;
+  return (data ?? null) as Database["public"]["Tables"][T]["Row"] | null;
 }
 
 export async function createRow<T extends TableName>(
