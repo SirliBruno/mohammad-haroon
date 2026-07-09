@@ -4,6 +4,7 @@ export const primaryNav: NavItem[] = [
   { label: "Projects", to: "/work" },
   { label: "Services", to: "/services" },
   { label: "About", to: "/about" },
+  { label: "Career", to: "/career" },
   { label: "Blog", to: "/blog" },
   { label: "Contact", to: "/contact" },
 ];
