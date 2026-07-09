@@ -50,9 +50,9 @@ import { site } from "@/config/site";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: buildMeta({
-      title: "تواصل معي",
+      title: "تواصل",
       description:
-        "تواصل مع محمد هارون — للتوظيف، أو المشاريع الحرة، أو الشراكات. أرد على جميع الرسائل خلال يومَي عمل.",
+        "تواصل مع محمد هارون — للتوظيف، أو المشاريع الحرّة، أو الشراكات. أرد على كلّ الرسائل خلال يومَي عمل.",
       path: "/contact",
     }),
     links: [{ rel: "canonical", href: "/contact" }],
