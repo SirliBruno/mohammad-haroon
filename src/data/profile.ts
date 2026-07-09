@@ -6,7 +6,7 @@ export const profile: Profile = {
   name: site.name,
   role: site.role,
   tagline: site.tagline,
-  bio: "I'm Mohammad Haroon — a product engineer and designer. I help startups and founders ship interfaces that feel obvious, calm, and premium. My work lives at the intersection of design systems, frontend engineering, and product thinking.",
+  bio: "أنا محمد هارون — مهندس منتجات رقمية ومصمم واجهات. أساعد رواد الأعمال والشركات الناشئة على إطلاق منتجات رقمية تجمع بين الوضوح والذوق الرفيع والأداء العالي. أعمل عند تقاطع أنظمة التصميم وهندسة الواجهات الأمامية والتفكير المنتجي.",
   location: site.location,
   available: site.available,
   socials,
@@ -14,30 +14,30 @@ export const profile: Profile = {
 
 export const values = [
   {
-    title: "Craft over speed",
+    title: "الحرفية قبل السرعة",
     description:
-      "Details compound. I sweat spacing, motion, and copy the same way I sweat architecture — because that's what separates a product from a screen.",
+      "التفاصيل هي ما يصنع الفرق. أُولي اهتمامًا بالمسافات، والحركة، والكلمات، بنفس القدر الذي أوليه للمعمارية التقنية — لأن هذا ما يميز المنتج الحقيقي عن مجرد شاشة.",
   },
   {
-    title: "Simple beats clever",
+    title: "البساطة تفوق التعقيد",
     description:
-      "The best interfaces disappear. I default to boring, obvious solutions and only reach for complexity when the problem earns it.",
+      "أفضل الواجهات هي تلك التي تختفي بهدوء. أبدأ دائمًا بالحلول الواضحة والمباشرة، ولا ألجأ إلى التعقيد إلا حين يستحق ذلك.",
   },
   {
-    title: "Outcomes, not deliverables",
+    title: "النتائج لا المخرجات",
     description:
-      "I measure work by what it moves — activation, retention, revenue — not by the number of screens shipped.",
+      "أقيس عملي بما يُحرّكه فعليًا — التفعيل، والاحتفاظ، والإيرادات — لا بعدد الشاشات المُسلَّمة.",
   },
   {
-    title: "Systems that scale",
+    title: "أنظمة قابلة للتطوير",
     description:
-      "Tokens, components, and patterns that survive contact with the next hire, the next release, and the next redesign.",
+      "توكنز ومكوّنات وأنماط تصمد أمام كل موظف جديد، وكل إصدار قادم، وكل إعادة تصميم مستقبلية.",
   },
 ];
 
 export const highlights = [
-  { label: "Years shipping product", value: "8+" },
-  { label: "Products launched", value: "40+" },
-  { label: "Founding teams shipped with", value: "12" },
-  { label: "Countries collaborated across", value: "18" },
+  { label: "سنوات في تطوير المنتجات", value: "+8" },
+  { label: "منتج تم إطلاقه", value: "+40" },
+  { label: "فريق مؤسِّس عملت معه", value: "12" },
+  { label: "دولة تعاونت معها", value: "18" },
 ];
