@@ -36,12 +36,13 @@ export function Field({
           {required ? <span aria-hidden className="ms-0.5 text-destructive">*</span> : null}
         </Label>
       </div>
-      {React.cloneElement(children as React.ReactElement, {
+      {React.cloneElement(children as React.ReactElement<Record<string, unknown>>, {
         id,
         "aria-invalid": !!error || undefined,
         "aria-describedby": [hintId, errorId].filter(Boolean).join(" ") || undefined,
         "aria-required": required || undefined,
       })}
+
       {hint && !error ? (
         <p id={hintId} className="text-xs text-muted-foreground">
           {hint}
