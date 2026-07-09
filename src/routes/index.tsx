@@ -1,24 +1,28 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { buildMeta } from "@/features/seo/build-meta";
+import { Section } from "@/components/layout/section";
+import { Eyebrow } from "@/components/typography/eyebrow";
+import { site } from "@/config/site";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: buildMeta({ description: site.description, path: "/" }),
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <Section>
+      <div className="max-w-3xl">
+        <Eyebrow>Foundation ready</Eyebrow>
+        <h1 className="mt-5 text-5xl font-semibold tracking-tight text-foreground md:text-6xl lg:text-7xl">
+          {site.tagline}
+        </h1>
+        <p className="mt-6 max-w-xl text-lg text-muted-foreground md:text-xl">
+          {site.description}
+        </p>
+      </div>
+    </Section>
   );
 }
