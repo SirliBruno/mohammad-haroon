@@ -248,7 +248,7 @@ function About() {
                 </div>
                 <p className="mt-2 inline-flex items-center gap-1.5 text-sm text-muted-foreground">
                   <MapPin className="size-3.5" aria-hidden />
-                  {site.location} · نعمل مع العملاء حول العالم
+                  {site.location} · أعمل مع فرق حول العالم
                 </p>
               </div>
               <div className="flex flex-wrap gap-2">
