@@ -11,6 +11,7 @@ export const site = {
   email: "hello@mohammadharoon.com",
   location: "Remote",
   available: true,
+  availabilityLabel: "Open to opportunities",
 } as const;
 
 export type Site = typeof site;

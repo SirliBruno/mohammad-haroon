@@ -1,29 +1,30 @@
 export type NavItem = { label: string; to: string };
 
 export const primaryNav: NavItem[] = [
-  { label: "Work", to: "/work" },
+  { label: "Projects", to: "/work" },
   { label: "Services", to: "/services" },
-  { label: "Products", to: "/products" },
-  { label: "Writing", to: "/writing" },
   { label: "About", to: "/about" },
+  { label: "Blog", to: "/blog" },
+  { label: "Contact", to: "/contact" },
 ];
 
 export const footerNav: { title: string; items: NavItem[] }[] = [
   {
-    title: "Explore",
+    title: "Work",
     items: [
-      { label: "Work", to: "/work" },
-      { label: "Products", to: "/products" },
-      { label: "Ideas", to: "/ideas" },
-      { label: "Uses", to: "/uses" },
+      { label: "Projects", to: "/work" },
+      { label: "Services", to: "/services" },
     ],
   },
   {
-    title: "Connect",
+    title: "About",
     items: [
-      { label: "Services", to: "/services" },
-      { label: "Writing", to: "/writing" },
+      { label: "About", to: "/about" },
       { label: "Contact", to: "/contact" },
     ],
+  },
+  {
+    title: "Writing",
+    items: [{ label: "Blog", to: "/blog" }],
   },
 ];
