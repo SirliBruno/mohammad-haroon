@@ -144,10 +144,9 @@ export async function createRow<T extends TableName>(
   table: T,
   values: Database["public"]["Tables"][T]["Insert"],
 ) {
-  const { data, error } = await supabase
-    .from(table)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .insert(values as any)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data, error } = await (supabase.from(table) as any)
+    .insert(values)
     .select("*")
     .single();
   if (error) throw new Error(`[${table}] create failed: ${error.message}`);
@@ -160,10 +159,9 @@ export async function updateRow<T extends TableName>(
   id: string,
   patch: Database["public"]["Tables"][T]["Update"],
 ) {
-  const { data, error } = await supabase
-    .from(table)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .update(patch as any)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data, error } = await (supabase.from(table) as any)
+    .update(patch)
     .eq("id", id)
     .select("*")
     .single();
@@ -172,7 +170,8 @@ export async function updateRow<T extends TableName>(
 }
 
 export async function deleteRow<T extends TableName>(supabase: Db, table: T, id: string) {
-  const { error } = await supabase.from(table).delete().eq("id", id);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { error } = await (supabase.from(table) as any).delete().eq("id", id);
   if (error) throw new Error(`[${table}] delete failed: ${error.message}`);
   return { id, deleted: true as const };
 }
