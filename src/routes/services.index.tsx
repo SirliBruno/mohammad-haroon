@@ -102,7 +102,7 @@ function ServicesIndex() {
               </Link>
             </DSButton>
             <DSButton asChild size="lg" variant="outline">
-              <a href="mailto:hello@example.com">
+              <a href={`mailto:${site.email}`}>
                 <Mail /> راسلني عبر البريد
               </a>
             </DSButton>
