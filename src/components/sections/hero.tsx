@@ -1,24 +1,10 @@
 import { Link } from "@tanstack/react-router";
 import { motion, useReducedMotion } from "motion/react";
-import { ArrowLeft, ArrowUpRight, Download, Github, Linkedin, Mail, Twitter } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Download } from "lucide-react";
 import { DSButton } from "@/components/ds";
 import { Container } from "@/components/layout/container";
-import { site } from "@/config/site";
-import { socials } from "@/config/socials";
-
-const socialIcon: Record<string, typeof Github> = {
-  GitHub: Github,
-  LinkedIn: Linkedin,
-  "البريد الإلكتروني": Mail,
-  X: Twitter,
-};
-
-const stats = [
-  { value: "+5", label: "موقع منشور" },
-  { value: "+10", label: "متجر إلكتروني" },
-  { value: "متنوّعة", label: "قطاعات وشركات" },
-  { value: "متاح", label: "لمشاريع جديدة" },
-];
+import { LaptopFrame, PhoneFrame, TabletFrame } from "@/components/mockups/devices";
+import { DashboardUI, MobileAppUI, TabletReadUI } from "@/components/mockups/ui-samples";
 
 export function Hero() {
   const reduce = useReducedMotion();
@@ -26,98 +12,54 @@ export function Hero() {
   return (
     <section
       aria-labelledby="hero-heading"
-      className="relative isolate overflow-hidden pt-24 pb-16 md:pt-32 md:pb-24"
+      className="relative isolate overflow-hidden pt-28 pb-20 md:pt-36 md:pb-28"
     >
+      {/* Subtle backdrop */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-20 [mask-image:radial-gradient(75%_60%_at_50%_35%,black,transparent)]"
+        className="pointer-events-none absolute inset-0 -z-10 [mask-image:radial-gradient(70%_60%_at_50%_20%,black,transparent)]"
       >
         <div
-          className="absolute inset-0 opacity-[0.22] dark:opacity-[0.18]"
+          className="absolute inset-0 opacity-[0.14] dark:opacity-[0.10]"
           style={{
             backgroundImage:
               "linear-gradient(to right, var(--color-border) 1px, transparent 1px), linear-gradient(to bottom, var(--color-border) 1px, transparent 1px)",
             backgroundSize: "56px 56px",
           }}
         />
-        {!reduce && (
-          <motion.div
-            className="absolute inset-0"
-            initial={{ backgroundPositionX: 0, backgroundPositionY: 0 }}
-            animate={{ backgroundPositionX: 56, backgroundPositionY: 56 }}
-            transition={{ duration: 22, ease: "linear", repeat: Infinity }}
-            style={{
-              backgroundImage:
-                "linear-gradient(to right, color-mix(in oklab, var(--color-primary) 22%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklab, var(--color-primary) 22%, transparent) 1px, transparent 1px)",
-              backgroundSize: "56px 56px",
-              opacity: 0.08,
-              maskImage:
-                "radial-gradient(40% 40% at 30% 30%, black, transparent)",
-              WebkitMaskImage:
-                "radial-gradient(40% 40% at 30% 30%, black, transparent)",
-            }}
-          />
-        )}
-      </div>
-
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <motion.div
-          className="absolute -top-24 -right-24 size-[520px] rounded-full bg-primary/20 blur-3xl"
-          style={{ willChange: "transform, opacity" }}
-          initial={{ opacity: 0.5, scale: 1 }}
-          animate={reduce ? {} : { opacity: [0.35, 0.55, 0.35], scale: [1, 1.05, 1], x: [0, -24, 0], y: [0, 16, 0] }}
-          transition={{ duration: 14, ease: "easeInOut", repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute -bottom-32 left-[-10%] size-[560px] rounded-full bg-accent/20 blur-3xl"
-          style={{ willChange: "transform, opacity" }}
-          initial={{ opacity: 0.4, scale: 1 }}
-          animate={reduce ? {} : { opacity: [0.3, 0.5, 0.3], scale: [1, 1.07, 1], x: [0, 20, 0], y: [0, -18, 0] }}
-          transition={{ duration: 18, ease: "easeInOut", repeat: Infinity, delay: 1.2 }}
-        />
-        <motion.div
-          className="absolute top-1/2 left-1/2 size-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/10 blur-3xl"
-          style={{ willChange: "opacity" }}
-          initial={{ opacity: 0.3 }}
-          animate={reduce ? {} : { opacity: [0.2, 0.35, 0.2] }}
-          transition={{ duration: 10, ease: "easeInOut", repeat: Infinity }}
-        />
+        <div className="absolute -top-32 left-1/2 size-[720px] -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
       </div>
 
       <Container>
-        <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-16">
+        <div className="grid items-center gap-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-20">
+          {/* Left: copy */}
           <motion.div
             initial={reduce ? false : { opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             className="min-w-0"
           >
-            <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/60 px-3 py-1 text-xs text-muted-foreground backdrop-blur-sm">
+            <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/70 px-3 py-1 text-xs text-muted-foreground backdrop-blur-sm">
               <span className="relative flex size-2">
                 <span className="absolute inset-0 animate-ping rounded-full bg-emerald-500/60" />
                 <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
               </span>
-              <span>مرحبًا، أنا {site.shortName}</span>
+              <span>متاح لمشاريع جديدة</span>
             </div>
 
             <h1
               id="hero-heading"
-              className="mt-6 text-4xl font-semibold tracking-tight text-foreground text-balance sm:text-5xl md:text-6xl lg:leading-[1.15]"
+              className="mt-6 text-4xl font-semibold tracking-tight text-foreground text-balance sm:text-5xl md:text-6xl lg:leading-[1.1]"
             >
-              أُصمّم وأُطوِّر{" "}
-              <span className="text-gradient-brand">منتجات رقمية</span> تُنمّي أعمالك.
+              أُساعد الشركات على بناء{" "}
+              <span className="text-gradient-brand">منتجات رقمية أفضل</span>.
             </h1>
 
-            <p className="mt-4 text-sm font-medium tracking-[0.14em] text-muted-foreground">
-              {site.name} — مطوّر ويب · مصمم واجهات · مهندس منتجات
+            <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
+              أُصمّم وأُطوّر مواقع حديثة ومتاجر إلكترونية وحلولًا رقمية تُركّز على الأداء، وتجربة المستخدم، ونموّ الأعمال.
             </p>
 
-            <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
-              مواقع، وواجهات، ومتاجر إلكترونية للشركات ورواد الأعمال. تصميم واضح وتنفيذ سريع، بنتائج يمكن قياسها.
-            </p>
-
-
-            <div className="mt-8 flex flex-wrap items-center gap-3">
+            <div className="mt-9 flex flex-wrap items-center gap-3">
               <DSButton asChild size="lg" variant="primary">
                 <Link to="/work">
                   استعرض أعمالي
@@ -132,138 +74,55 @@ export function Hero() {
               </DSButton>
               <DSButton asChild size="lg" variant="ghost">
                 <Link to="/contact">
-                  ابدأ محادثة
+                  تواصل معي
                   <ArrowUpRight />
                 </Link>
               </DSButton>
             </div>
-
-            <div className="mt-10 flex items-center gap-5">
-              <span className="text-xs tracking-[0.14em] text-muted-foreground">
-                للتواصل
-              </span>
-              <span aria-hidden className="h-px w-8 bg-border" />
-              <ul className="flex items-center gap-1">
-                {socials.map((s) => {
-                  const Icon = socialIcon[s.label] ?? Mail;
-                  return (
-                    <li key={s.label}>
-                      <a
-                        href={s.href}
-                        rel="noreferrer"
-                        aria-label={`${s.label} — ${s.handle}`}
-                        className="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-                      >
-                        <Icon className="size-4" aria-hidden />
-                      </a>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
           </motion.div>
 
+          {/* Right: device composition */}
           <motion.div
             initial={reduce ? false : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-            className="relative mx-auto w-full max-w-md lg:max-w-none"
+            transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            className="relative mx-auto w-full max-w-xl lg:max-w-none"
+            dir="ltr"
           >
-            <div className="relative aspect-[4/5] w-full">
-              <div
-                aria-hidden
-                className="absolute -inset-4 rounded-3xl bg-linear-to-br from-primary/25 via-accent/15 to-transparent blur-2xl"
-              />
-              <div className="relative h-full w-full overflow-hidden rounded-2xl border border-border/70 bg-card shadow-lg">
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    backgroundImage:
-                      "linear-gradient(to right, color-mix(in oklab, var(--color-foreground) 6%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklab, var(--color-foreground) 6%, transparent) 1px, transparent 1px)",
-                    backgroundSize: "24px 24px",
-                  }}
-                />
-                <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-background/70" />
-                <div className="absolute inset-0 grid place-items-center">
-                  <div className="text-center">
-                    <div className="mx-auto grid size-28 place-items-center rounded-full border border-border bg-background/70 backdrop-blur-md">
-                      <span className="text-2xl font-semibold tracking-tight text-foreground" dir="ltr">
-                        MH
-                      </span>
-                    </div>
-                    <p className="mt-4 text-xs font-medium tracking-[0.14em] text-muted-foreground">
-                      الصورة الشخصية
-                    </p>
-                  </div>
-                </div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5, duration: 0.5 }}
-                  className="absolute right-4 top-4 rounded-full border border-border/70 bg-background/80 px-3 py-1 text-[11px] font-medium text-foreground backdrop-blur-md"
-                >
-                  {site.location}
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6, duration: 0.5 }}
-                  className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-border/70 bg-background/80 px-3 py-1 text-[11px] font-medium text-foreground backdrop-blur-md"
-                >
-                  <span className="size-1.5 rounded-full bg-emerald-500" />
-                  متاح
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.75, duration: 0.5 }}
-                  className="absolute bottom-4 right-4 left-4 flex items-center justify-between rounded-xl border border-border/70 bg-background/85 px-3 py-2 text-xs backdrop-blur-md"
-                >
-                  <span className="font-medium text-foreground">{site.role}</span>
-                  <span className="text-muted-foreground">{site.availabilityLabel}</span>
-                </motion.div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-
-        <motion.dl
-          initial={reduce ? false : { opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-16 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border/60 bg-border/60 md:mt-20 md:grid-cols-4"
-        >
-          {stats.map((s) => (
+            {/* Ambient glow */}
             <div
-              key={s.label}
-              className="group bg-background px-5 py-6 transition-colors hover:bg-muted/40 md:px-6 md:py-8"
-            >
-              <dt className="text-xs tracking-[0.14em] text-muted-foreground">
-                {s.label}
-              </dt>
-              <dd className="mt-2 text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
-                {s.value}
-              </dd>
-            </div>
-          ))}
-        </motion.dl>
+              aria-hidden
+              className="pointer-events-none absolute -inset-8 -z-10 rounded-[3rem] bg-linear-to-br from-primary/15 via-accent/10 to-transparent blur-3xl"
+            />
 
-        <div className="mt-12 hidden justify-center md:flex">
-          <a
-            href="#work"
-            aria-label="التمرير إلى الأعمال"
-            className="group inline-flex flex-col items-center gap-2 text-xs tracking-[0.14em] text-muted-foreground transition-colors hover:text-foreground"
-          >
-            <span>مرّر للأسفل</span>
-            <span className="relative flex h-9 w-5 items-start justify-center rounded-full border border-border/70">
-              <motion.span
-                className="mt-1.5 h-2 w-1 rounded-full bg-foreground/70"
-                animate={reduce ? {} : { y: [0, 10, 0], opacity: [0.8, 0.2, 0.8] }}
-                transition={{ duration: 1.8, ease: "easeInOut", repeat: Infinity }}
-              />
-            </span>
-          </a>
+            <LaptopFrame>
+              <DashboardUI />
+            </LaptopFrame>
+
+            {/* Floating phone (bottom-left) */}
+            <motion.div
+              initial={reduce ? false : { opacity: 0, y: 30, rotate: -6 }}
+              animate={{ opacity: 1, y: 0, rotate: -6 }}
+              transition={{ duration: 0.8, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              className="absolute -bottom-10 left-2 w-[26%] max-w-[150px] sm:-bottom-12 sm:left-4 sm:w-[24%] md:-bottom-14 md:left-6"
+            >
+              <PhoneFrame>
+                <MobileAppUI />
+              </PhoneFrame>
+            </motion.div>
+
+            {/* Floating tablet (bottom-right) */}
+            <motion.div
+              initial={reduce ? false : { opacity: 0, y: 30, rotate: 5 }}
+              animate={{ opacity: 1, y: 0, rotate: 5 }}
+              transition={{ duration: 0.8, delay: 0.65, ease: [0.22, 1, 0.36, 1] }}
+              className="absolute -bottom-8 right-0 w-[42%] max-w-[260px] sm:-bottom-10 sm:right-2 md:-bottom-12"
+            >
+              <TabletFrame>
+                <TabletReadUI />
+              </TabletFrame>
+            </motion.div>
+          </motion.div>
         </div>
       </Container>
     </section>
