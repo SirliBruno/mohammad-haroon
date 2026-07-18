@@ -3,8 +3,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { ArrowLeft, ArrowUpRight, Download } from "lucide-react";
 import { DSButton } from "@/components/ds";
 import { Container } from "@/components/layout/container";
-import { LaptopFrame, PhoneFrame, TabletFrame } from "@/components/mockups/devices";
-import { DashboardUI, MobileAppUI, TabletReadUI } from "@/components/mockups/ui-samples";
+import { ProjectsShowcase3D } from "@/components/sections/projects-showcase-3d";
 
 export function Hero() {
   const reduce = useReducedMotion();
@@ -81,48 +80,10 @@ export function Hero() {
             </div>
           </motion.div>
 
-          {/* Right: device composition */}
-          <motion.div
-            initial={reduce ? false : { opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-            className="relative mx-auto w-full max-w-xl lg:max-w-none"
-            dir="ltr"
-          >
-            {/* Ambient glow */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute -inset-8 -z-10 rounded-[3rem] bg-linear-to-br from-primary/15 via-accent/10 to-transparent blur-3xl"
-            />
-
-            <LaptopFrame>
-              <DashboardUI />
-            </LaptopFrame>
-
-            {/* Floating phone (bottom-left) */}
-            <motion.div
-              initial={reduce ? false : { opacity: 0, y: 30, rotate: -6 }}
-              animate={{ opacity: 1, y: 0, rotate: -6 }}
-              transition={{ duration: 0.8, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute -bottom-10 left-2 w-[26%] max-w-[150px] sm:-bottom-12 sm:left-4 sm:w-[24%] md:-bottom-14 md:left-6"
-            >
-              <PhoneFrame>
-                <MobileAppUI />
-              </PhoneFrame>
-            </motion.div>
-
-            {/* Floating tablet (bottom-right) */}
-            <motion.div
-              initial={reduce ? false : { opacity: 0, y: 30, rotate: 5 }}
-              animate={{ opacity: 1, y: 0, rotate: 5 }}
-              transition={{ duration: 0.8, delay: 0.65, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute -bottom-8 right-0 w-[42%] max-w-[260px] sm:-bottom-10 sm:right-2 md:-bottom-12"
-            >
-              <TabletFrame>
-                <TabletReadUI />
-              </TabletFrame>
-            </motion.div>
-          </motion.div>
+          {/* Right (visually left in RTL): projects 3D showcase */}
+          <div className="min-w-0">
+            <ProjectsShowcase3D />
+          </div>
         </div>
       </Container>
     </section>
