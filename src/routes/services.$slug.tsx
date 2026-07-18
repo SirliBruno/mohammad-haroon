@@ -1,24 +1,10 @@
 import { Link, createFileRoute, notFound } from "@tanstack/react-router";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Check,
-  Clock,
-  Mail,
-  Sparkles,
-  Globe,
-  Layout,
-  ShoppingBag,
-  Palette,
-  Rocket,
-  Wrench,
-  type LucideIcon,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Clock, Mail, Sparkles } from "lucide-react";
 import { buildMeta } from "@/features/seo/build-meta";
 import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
 import { Eyebrow } from "@/components/typography/eyebrow";
-import { DSButton } from "@/components/ds";
+import { DSButton, CTA, serviceIconMap } from "@/components/ds";
 import {
   Accordion,
   AccordionContent,
@@ -28,16 +14,6 @@ import {
 import { services } from "@/data/services";
 import type { Service } from "@/features/services/schema";
 import { site } from "@/config/site";
-
-const iconMap: Record<string, LucideIcon> = {
-  Globe,
-  Layout,
-  ShoppingBag,
-  Sparkles,
-  Palette,
-  Rocket,
-  Wrench,
-};
 
 export const Route = createFileRoute("/services/$slug")({
   loader: ({ params }) => {
