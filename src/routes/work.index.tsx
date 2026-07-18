@@ -8,6 +8,7 @@ import { Grid, EmptyState, DSButton, DSCard } from "@/components/ds";
 import { projects } from "@/data/projects";
 import { projectCategories, type Project, type ProjectCategory } from "@/features/projects/schema";
 import { cn } from "@/lib/utils";
+import { statusMeta } from "@/lib/project-status";
 
 const PAGE_SIZE = 6;
 const CATEGORY_FILTERS = ["الكل", ...projectCategories] as const;
@@ -258,18 +259,6 @@ function WorkIndex() {
   );
 }
 
-function statusMeta(status: Project["status"]) {
-  switch (status) {
-    case "live":
-      return { label: "منشور", dot: "bg-emerald-500" };
-    case "in-progress":
-      return { label: "قيد التنفيذ", dot: "bg-amber-500" };
-    case "concept":
-      return { label: "تصوّر", dot: "bg-sky-500" };
-    case "archived":
-      return { label: "مؤرشف", dot: "bg-muted-foreground" };
-  }
-}
 
 function categoryGradient(category: ProjectCategory) {
   switch (category) {
