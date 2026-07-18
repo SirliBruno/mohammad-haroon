@@ -105,9 +105,9 @@ function ProjectCard3D({
 }) {
   const isCenter = position === "center";
 
-  // "start" = leading edge in reading direction (right in RTL, left in LTR).
-  // "end"   = trailing edge.
-  const transform =
+  // Transform is applied only from md+ via inline style; on mobile side cards
+  // are hidden and center card renders flat.
+  const mdTransform =
     position === "start"
       ? "perspective(1600px) rotateY(-20deg) translateX(-6%) scale(0.9)"
       : position === "end"
@@ -116,15 +116,25 @@ function ProjectCard3D({
 
   return (
     <motion.article
-      layout
-      initial={{ opacity: 0 }}
-      animate={{ opacity: isCenter ? 1 : 0.55 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-      style={{ transform, transformStyle: "preserve-3d" }}
+      key={project.slug}
+      initial={{ opacity: 0, scale: 0.96 }}
+      animate={{ opacity: isCenter ? 1 : 0.55, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.96 }}
+      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+      style={
+        {
+          // Custom prop consumed via arbitrary-value class below.
+          ["--md-transform" as string]: mdTransform,
+          transformStyle: "preserve-3d",
+        } as React.CSSProperties
+      }
       className={[
-        "relative rounded-2xl border border-border/60 bg-card p-5 shadow-lg backdrop-blur-md",
-        isCenter ? "z-20 w-[68%] shadow-2xl" : "z-10 w-[44%]",
+        "relative rounded-2xl border border-border/60 bg-card p-4 shadow-lg backdrop-blur-md md:p-5",
+        // Apply the 3D transform only on md+ so mobile stays flat and readable.
+        "md:[transform:var(--md-transform)]",
+        isCenter
+          ? "z-20 w-full max-w-sm shadow-2xl md:w-full md:max-w-none"
+          : "z-10 hidden w-full md:block",
       ].join(" ")}
     >
       {isCenter && (
@@ -176,6 +186,7 @@ function ProjectCard3D({
     </motion.article>
   );
 }
+
 
 export function ProjectsShowcase3D() {
   const reduce = useReducedMotion();
