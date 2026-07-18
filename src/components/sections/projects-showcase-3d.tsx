@@ -245,7 +245,7 @@ export function ProjectsShowcase3D() {
       />
 
       {/* Stage */}
-      <div className="relative flex min-h-[28rem] items-center justify-center md:min-h-[34rem]">
+      <div className="relative flex min-h-[26rem] items-center justify-center sm:min-h-[30rem] md:min-h-[34rem]">
         {/* Previous (start edge) — chevron points toward reading start */}
         <button
           type="button"
@@ -256,17 +256,22 @@ export function ProjectsShowcase3D() {
           <ChevronRight className="size-4" aria-hidden />
         </button>
 
-        <div className="flex w-full items-stretch justify-center px-10 [&>*:not(:first-child)]:-ms-8">
-          <AnimatePresence mode="popLayout" initial={false}>
-            {trio.map((slot) => (
-              <ProjectCard3D
-                key={slot.project.slug}
-                project={slot.project}
-                position={slot.position}
-                index={slot.index}
-              />
-            ))}
-          </AnimatePresence>
+        {/* Fixed 3-slot grid on md+: DOM order stays start/center/end regardless
+            of which project sits in each slot, so cards never shift horizontally
+            during navigation. On mobile only the center slot renders. */}
+        <div className="grid w-full max-w-md grid-cols-1 place-items-center gap-0 px-10 md:max-w-none md:grid-cols-3 md:[&>div:not(:first-child)]:-ms-8">
+          {trio.map((slot) => (
+            <div key={slot.position} className="relative w-full md:w-auto">
+              <AnimatePresence mode="wait" initial={false}>
+                <ProjectCard3D
+                  key={slot.project.slug}
+                  project={slot.project}
+                  position={slot.position}
+                  index={slot.index}
+                />
+              </AnimatePresence>
+            </div>
+          ))}
         </div>
 
         {/* Next (end edge) */}
@@ -279,6 +284,7 @@ export function ProjectsShowcase3D() {
           <ChevronLeft className="size-4" aria-hidden />
         </button>
       </div>
+
 
       {/* Dots */}
       <div className="mt-6 flex items-center justify-center gap-2" role="tablist">
