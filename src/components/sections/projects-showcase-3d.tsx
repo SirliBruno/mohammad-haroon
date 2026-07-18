@@ -197,7 +197,20 @@ export function ProjectsShowcase3D() {
     { project: featured[endIdx], position: "end" as const, index: endIdx },
   ];
 
-  const go = (dir: 1 | -1) => setActive((a) => (a + dir + total) % total);
+  const go = useCallback(
+    (dir: 1 | -1) => setActive((a) => (a + dir + total) % total),
+    [total],
+  );
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      // In RTL, ArrowRight = previous (start), ArrowLeft = next (end).
+      if (e.key === "ArrowRight") go(-1);
+      else if (e.key === "ArrowLeft") go(1);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [go]);
 
   return (
     <motion.div
@@ -221,22 +234,22 @@ export function ProjectsShowcase3D() {
       />
 
       {/* Stage */}
-      <div className="relative flex items-center justify-center">
+      <div className="relative flex min-h-[28rem] items-center justify-center md:min-h-[34rem]">
         {/* Previous (start edge) — chevron points toward reading start */}
         <button
           type="button"
           onClick={() => go(-1)}
           aria-label="المشروع السابق"
-          className="absolute start-0 z-30 grid size-9 place-items-center rounded-full border border-border/60 bg-card/80 text-foreground/80 backdrop-blur transition-colors hover:bg-card hover:text-foreground md:-start-4"
+          className="absolute start-0 z-30 grid size-10 place-items-center rounded-full border border-border/60 bg-card/90 text-foreground/80 shadow-md backdrop-blur transition-colors hover:bg-card hover:text-foreground md:-start-4"
         >
           <ChevronRight className="size-4" aria-hidden />
         </button>
 
-        <div className="flex w-full items-stretch justify-center px-8 [&>*:not(:first-child)]:-ms-6">
+        <div className="flex w-full items-stretch justify-center px-10 [&>*:not(:first-child)]:-ms-8">
           <AnimatePresence mode="popLayout" initial={false}>
             {trio.map((slot) => (
               <ProjectCard3D
-                key={`${slot.position}-${slot.project.slug}`}
+                key={slot.project.slug}
                 project={slot.project}
                 position={slot.position}
                 index={slot.index}
@@ -250,7 +263,7 @@ export function ProjectsShowcase3D() {
           type="button"
           onClick={() => go(1)}
           aria-label="المشروع التالي"
-          className="absolute end-0 z-30 grid size-9 place-items-center rounded-full border border-border/60 bg-card/80 text-foreground/80 backdrop-blur transition-colors hover:bg-card hover:text-foreground md:-end-4"
+          className="absolute end-0 z-30 grid size-10 place-items-center rounded-full border border-border/60 bg-card/90 text-foreground/80 shadow-md backdrop-blur transition-colors hover:bg-card hover:text-foreground md:-end-4"
         >
           <ChevronLeft className="size-4" aria-hidden />
         </button>
