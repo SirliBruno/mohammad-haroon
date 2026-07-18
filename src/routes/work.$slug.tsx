@@ -26,6 +26,7 @@ import { projects } from "@/data/projects";
 import type { Project } from "@/features/projects/schema";
 import { site } from "@/config/site";
 import { cn } from "@/lib/utils";
+import { statusMeta } from "@/lib/project-status";
 
 export const Route = createFileRoute("/work/$slug")({
   loader: ({ params }) => {
