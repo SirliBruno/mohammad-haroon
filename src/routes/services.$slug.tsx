@@ -258,19 +258,12 @@ function ServiceDetail() {
         </Section>
       ) : null}
 
-      <Section className="border-t border-border/60">
-        <div className="relative overflow-hidden rounded-2xl border border-border/60 bg-card px-8 py-14 text-center md:px-16">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 -z-10 opacity-60 [mask-image:radial-gradient(60%_60%_at_50%_0%,black,transparent)] bg-linear-to-b from-primary/8 to-transparent"
-          />
-          <h2 className="mx-auto max-w-xl text-2xl font-semibold tracking-tight md:text-3xl">
-            جاهز للبدء بـ{service.title}؟
-          </h2>
-          <p className="mx-auto mt-3 max-w-lg text-muted-foreground">
-            اكتب لي عمّا تودّ بناءه — يصلك رأي صريح خلال 48 ساعة.
-          </p>
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+      <CTA
+        className="border-t border-border/60"
+        title={`جاهز للبدء بـ${service.title}؟`}
+        description="اكتب لي عمّا تودّ بناءه — يصلك رأي صريح خلال 48 ساعة."
+        actions={
+          <>
             <DSButton asChild size="lg">
               <Link to="/contact">
                 تواصل <ArrowLeft />
@@ -281,9 +274,9 @@ function ServiceDetail() {
                 <Mail /> راسلني عبر البريد
               </a>
             </DSButton>
-          </div>
-        </div>
-      </Section>
+          </>
+        }
+      />
     </>
   );
 }
