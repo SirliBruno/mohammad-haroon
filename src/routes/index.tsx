@@ -9,6 +9,7 @@ import { Container } from "@/components/layout/container";
 import { Hero } from "@/components/sections/hero";
 import {
   CertificateCard,
+  CTA,
   DSButton,
   DSCard,
   DSBadge,
