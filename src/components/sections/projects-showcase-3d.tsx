@@ -109,22 +109,22 @@ function ProjectCard3D({
   // "end"   = trailing edge.
   const transform =
     position === "start"
-      ? "perspective(1400px) rotateY(-22deg) translateX(-4%) scale(0.86)"
+      ? "perspective(1600px) rotateY(-20deg) translateX(-6%) scale(0.9)"
       : position === "end"
-        ? "perspective(1400px) rotateY(22deg) translateX(4%) scale(0.86)"
-        : "perspective(1400px) rotateY(0deg) scale(1)";
+        ? "perspective(1600px) rotateY(20deg) translateX(6%) scale(0.9)"
+        : "perspective(1600px) rotateY(0deg) scale(1)";
 
   return (
     <motion.article
       layout
       initial={{ opacity: 0 }}
-      animate={{ opacity: isCenter ? 1 : 0.6 }}
+      animate={{ opacity: isCenter ? 1 : 0.55 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       style={{ transform, transformStyle: "preserve-3d" }}
       className={[
-        "relative rounded-2xl border border-border/60 bg-card p-4 shadow-lg backdrop-blur-md",
-        isCenter ? "z-20 w-[62%] shadow-xl" : "z-10 w-[38%]",
+        "relative rounded-2xl border border-border/60 bg-card p-5 shadow-lg backdrop-blur-md",
+        isCenter ? "z-20 w-[68%] shadow-2xl" : "z-10 w-[44%]",
       ].join(" ")}
     >
       {isCenter && (
