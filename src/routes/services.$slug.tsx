@@ -59,7 +59,7 @@ export const Route = createFileRoute("/services/$slug")({
 });
 
 function ServiceIllustration({ service }: { service: Service }) {
-  const Icon = service.icon ? iconMap[service.icon] ?? Sparkles : Sparkles;
+  const Icon = service.icon ? serviceIconMap[service.icon] ?? Sparkles : Sparkles;
   return (
     <div
       aria-hidden
