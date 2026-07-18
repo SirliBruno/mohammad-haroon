@@ -5,7 +5,7 @@ import { Reveal } from "@/components/motion/reveal";
 import { buildMeta } from "@/features/seo/build-meta";
 import { Section } from "@/components/layout/section";
 import { SectionTitle } from "@/components/layout/section-title";
-import { Container } from "@/components/layout/container";
+
 import { Hero } from "@/components/sections/hero";
 import {
   CertificateCard,
