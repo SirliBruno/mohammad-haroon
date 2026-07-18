@@ -1,9 +1,42 @@
 import { Link } from "@tanstack/react-router";
 import { motion, useReducedMotion } from "motion/react";
-import { ArrowLeft, ArrowUpRight, Download } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Github, Linkedin, Mail, Twitter } from "lucide-react";
 import { DSButton } from "@/components/ds";
 import { Container } from "@/components/layout/container";
-import { ProjectsShowcase3D } from "@/components/sections/projects-showcase-3d";
+import { HeroProjectsCarousel } from "@/components/sections/hero-projects-carousel";
+import { socials } from "@/config/socials";
+
+const socialIcon: Record<string, typeof Github> = {
+  LinkedIn: Linkedin,
+  GitHub: Github,
+  X: Twitter,
+  "البريد الإلكتروني": Mail,
+};
+
+// Tiny drifting particles — pure decoration, disabled under reduced motion.
+function Particles() {
+  const dots = [
+    { top: "12%", left: "18%", d: 9 },
+    { top: "28%", left: "72%", d: 11 },
+    { top: "58%", left: "38%", d: 13 },
+    { top: "74%", left: "82%", d: 10 },
+    { top: "42%", left: "8%", d: 12 },
+    { top: "80%", left: "22%", d: 14 },
+  ];
+  return (
+    <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+      {dots.map((p, i) => (
+        <motion.span
+          key={i}
+          className="absolute size-1 rounded-full bg-primary/40 shadow-[0_0_12px_rgba(37,99,235,0.5)]"
+          style={{ top: p.top, left: p.left }}
+          animate={{ y: [0, -14, 0], opacity: [0.25, 0.7, 0.25] }}
+          transition={{ duration: p.d, repeat: Infinity, ease: "easeInOut", delay: i * 0.6 }}
+        />
+      ))}
+    </div>
+  );
+}
 
 export function Hero() {
   const reduce = useReducedMotion();
@@ -11,34 +44,36 @@ export function Hero() {
   return (
     <section
       aria-labelledby="hero-heading"
-      className="relative isolate overflow-hidden pt-28 pb-20 md:pt-36 md:pb-28"
+      className="relative isolate overflow-hidden pt-24 pb-20 md:pt-28 md:pb-24"
     >
-      {/* Subtle backdrop */}
+      {/* Background — fine grid + radial + particles */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 [mask-image:radial-gradient(70%_60%_at_50%_20%,black,transparent)]"
+        className="pointer-events-none absolute inset-0 -z-10 [mask-image:radial-gradient(75%_65%_at_50%_20%,black,transparent)]"
       >
         <div
-          className="absolute inset-0 opacity-[0.14] dark:opacity-[0.10]"
+          className="absolute inset-0 opacity-[0.12] dark:opacity-[0.08]"
           style={{
             backgroundImage:
               "linear-gradient(to right, var(--color-border) 1px, transparent 1px), linear-gradient(to bottom, var(--color-border) 1px, transparent 1px)",
-            backgroundSize: "56px 56px",
+            backgroundSize: "64px 64px",
           }}
         />
-        <div className="absolute -top-32 left-1/2 size-[720px] -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
+        <div className="absolute -top-40 left-1/2 size-[820px] -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
+        <div className="absolute bottom-[-20%] right-[-10%] size-[520px] rounded-full bg-accent/10 blur-3xl" />
       </div>
+      {!reduce && <Particles />}
 
       <Container>
-        <div className="grid items-center gap-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-20">
-          {/* Left: copy */}
+        <div className="grid items-center gap-14 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.1fr)] lg:gap-20">
+          {/* Copy (right side in RTL) */}
           <motion.div
-            initial={reduce ? false : { opacity: 0, y: 12 }}
+            initial={reduce ? false : { opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             className="min-w-0"
           >
-            <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/70 px-3 py-1 text-xs text-muted-foreground backdrop-blur-sm">
+            <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/70 px-3 py-1 text-xs text-muted-foreground backdrop-blur-md">
               <span className="relative flex size-2">
                 <span className="absolute inset-0 animate-ping rounded-full bg-emerald-500/60" />
                 <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
@@ -48,42 +83,66 @@ export function Hero() {
 
             <h1
               id="hero-heading"
-              className="mt-6 text-4xl font-semibold tracking-tight text-foreground text-balance sm:text-5xl md:text-6xl lg:leading-[1.1]"
+              className="mt-7 text-[2.5rem] font-semibold tracking-tight text-foreground text-balance leading-[1.08] sm:text-5xl md:text-6xl lg:text-[4.25rem]"
             >
-              أُساعد الشركات على بناء{" "}
-              <span className="text-gradient-brand">منتجات رقمية أفضل</span>.
+              أصنع منتجات رقمية
+              <br />
+              <span className="text-gradient-brand">تُقاس بجودتها</span>.
             </h1>
 
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
-              أُصمّم وأُطوّر مواقع حديثة ومتاجر إلكترونية وحلولًا رقمية تُركّز على الأداء، وتجربة المستخدم، ونموّ الأعمال.
+            <p className="mt-6 max-w-lg text-base leading-relaxed text-muted-foreground md:text-lg">
+              مواقع ومتاجر ومنتجات SaaS مصمّمة بحِرَفية عالية — تجربة هادئة، أداء سريع، وتفاصيل مصقولة تظهر في كل نقرة.
             </p>
 
-            <div className="mt-9 flex flex-wrap items-center gap-3">
+            <div className="mt-10 flex flex-wrap items-center gap-3">
               <DSButton asChild size="lg" variant="primary">
                 <Link to="/work">
-                  استعرض أعمالي
+                  استعرض الأعمال
                   <ArrowLeft />
                 </Link>
               </DSButton>
               <DSButton asChild size="lg" variant="outline">
-                <a href="/resume.pdf" download>
-                  <Download />
-                  تحميل السيرة الذاتية
-                </a>
-              </DSButton>
-              <DSButton asChild size="lg" variant="ghost">
                 <Link to="/contact">
-                  تواصل معي
+                  ابدأ مشروعًا
                   <ArrowUpRight />
                 </Link>
               </DSButton>
             </div>
+
+            {/* Social links */}
+            <div className="mt-10 flex items-center gap-3">
+              <span className="text-xs text-muted-foreground">تواصل:</span>
+              <div className="h-px flex-1 max-w-16 bg-border/60" />
+              <ul className="flex items-center gap-2">
+                {socials.map((s) => {
+                  const Icon = socialIcon[s.label] ?? Mail;
+                  return (
+                    <li key={s.label}>
+                      <a
+                        href={s.href}
+                        target={s.href.startsWith("http") ? "_blank" : undefined}
+                        rel="noreferrer noopener"
+                        aria-label={s.label}
+                        className="grid size-9 place-items-center rounded-full border border-border/60 bg-background/60 text-foreground/80 backdrop-blur-sm transition-colors hover:border-primary/40 hover:text-primary"
+                      >
+                        <Icon className="size-4" aria-hidden />
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
           </motion.div>
 
-          {/* Right (visually left in RTL): projects 3D showcase */}
-          <div className="min-w-0">
-            <ProjectsShowcase3D />
-          </div>
+          {/* Carousel (left side in RTL) */}
+          <motion.div
+            initial={reduce ? false : { opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            className="min-w-0"
+          >
+            <HeroProjectsCarousel />
+          </motion.div>
         </div>
       </Container>
     </section>
