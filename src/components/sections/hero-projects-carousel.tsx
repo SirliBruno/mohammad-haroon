@@ -494,5 +494,3 @@ export function HeroProjectsCarousel() {
   );
 }
 
-// Unused import guard for the transform util (kept for future extension).
-void useTransform;
