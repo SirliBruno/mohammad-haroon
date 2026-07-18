@@ -3,8 +3,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { ArrowLeft, ArrowUpRight, Download } from "lucide-react";
 import { DSButton } from "@/components/ds";
 import { Container } from "@/components/layout/container";
-import { LaptopFrame, PhoneFrame, TabletFrame } from "@/components/mockups/devices";
-import { DashboardUI, MobileAppUI, TabletReadUI } from "@/components/mockups/ui-samples";
+import { ProjectsShowcase3D } from "@/components/sections/projects-showcase-3d";
 
 export function Hero() {
   const reduce = useReducedMotion();
