@@ -259,7 +259,7 @@ export function ProjectsShowcase3D() {
         {/* Fixed 3-slot grid on md+: DOM order stays start/center/end regardless
             of which project sits in each slot, so cards never shift horizontally
             during navigation. On mobile only the center slot renders. */}
-        <div className="grid w-full max-w-md grid-cols-1 place-items-center gap-0 px-10 md:max-w-none md:grid-cols-3 md:[&>div:not(:first-child)]:-ms-8">
+        <div className="grid w-full max-w-md grid-cols-1 place-items-center gap-0 px-10 md:max-w-none md:grid-cols-[1fr_1.55fr_1fr] md:[&>div:not(:first-child)]:-ms-6">
           {trio.map((slot) => (
             <div key={slot.position} className="relative w-full md:w-auto">
               <AnimatePresence mode="wait" initial={false}>
