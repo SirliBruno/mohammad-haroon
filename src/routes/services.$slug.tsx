@@ -1,24 +1,10 @@
 import { Link, createFileRoute, notFound } from "@tanstack/react-router";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Check,
-  Clock,
-  Mail,
-  Sparkles,
-  Globe,
-  Layout,
-  ShoppingBag,
-  Palette,
-  Rocket,
-  Wrench,
-  type LucideIcon,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Clock, Mail, Sparkles } from "lucide-react";
 import { buildMeta } from "@/features/seo/build-meta";
 import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
 import { Eyebrow } from "@/components/typography/eyebrow";
-import { DSButton } from "@/components/ds";
+import { DSButton, CTA, serviceIconMap } from "@/components/ds";
 import {
   Accordion,
   AccordionContent,
@@ -28,16 +14,6 @@ import {
 import { services } from "@/data/services";
 import type { Service } from "@/features/services/schema";
 import { site } from "@/config/site";
-
-const iconMap: Record<string, LucideIcon> = {
-  Globe,
-  Layout,
-  ShoppingBag,
-  Sparkles,
-  Palette,
-  Rocket,
-  Wrench,
-};
 
 export const Route = createFileRoute("/services/$slug")({
   loader: ({ params }) => {
@@ -83,7 +59,7 @@ export const Route = createFileRoute("/services/$slug")({
 });
 
 function ServiceIllustration({ service }: { service: Service }) {
-  const Icon = service.icon ? iconMap[service.icon] ?? Sparkles : Sparkles;
+  const Icon = service.icon ? serviceIconMap[service.icon] ?? Sparkles : Sparkles;
   return (
     <div
       aria-hidden
@@ -282,19 +258,12 @@ function ServiceDetail() {
         </Section>
       ) : null}
 
-      <Section className="border-t border-border/60">
-        <div className="relative overflow-hidden rounded-2xl border border-border/60 bg-card px-8 py-14 text-center md:px-16">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 -z-10 opacity-60 [mask-image:radial-gradient(60%_60%_at_50%_0%,black,transparent)] bg-linear-to-b from-primary/8 to-transparent"
-          />
-          <h2 className="mx-auto max-w-xl text-2xl font-semibold tracking-tight md:text-3xl">
-            جاهز للبدء بـ{service.title}؟
-          </h2>
-          <p className="mx-auto mt-3 max-w-lg text-muted-foreground">
-            اكتب لي عمّا تودّ بناءه — يصلك رأي صريح خلال 48 ساعة.
-          </p>
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+      <CTA
+        className="border-t border-border/60"
+        title={`جاهز للبدء بـ${service.title}؟`}
+        description="اكتب لي عمّا تودّ بناءه — يصلك رأي صريح خلال 48 ساعة."
+        actions={
+          <>
             <DSButton asChild size="lg">
               <Link to="/contact">
                 تواصل <ArrowLeft />
@@ -305,9 +274,9 @@ function ServiceDetail() {
                 <Mail /> راسلني عبر البريد
               </a>
             </DSButton>
-          </div>
-        </div>
-      </Section>
+          </>
+        }
+      />
     </>
   );
 }

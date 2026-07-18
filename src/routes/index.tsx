@@ -5,10 +5,11 @@ import { Reveal } from "@/components/motion/reveal";
 import { buildMeta } from "@/features/seo/build-meta";
 import { Section } from "@/components/layout/section";
 import { SectionTitle } from "@/components/layout/section-title";
-import { Container } from "@/components/layout/container";
+
 import { Hero } from "@/components/sections/hero";
 import {
   CertificateCard,
+  CTA,
   DSButton,
   DSCard,
   DSBadge,
@@ -375,44 +376,30 @@ function Home() {
       </Section>
 
       {/* ================= FINAL CTA ================= */}
-      <Section className="border-t border-border/60" size="lg">
-        <Reveal>
-          <Container>
-            <div className="relative overflow-hidden rounded-3xl border border-border/60 bg-card px-6 py-20 text-center md:px-16 md:py-28">
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-0 -z-10 opacity-70 [mask-image:radial-gradient(60%_60%_at_50%_0%,black,transparent)] bg-linear-to-b from-primary/12 via-accent/6 to-transparent"
-              />
-              <p className="text-xs tracking-[0.2em] text-muted-foreground">
-                لنبدأ
-              </p>
-              <h2 className="mt-4 mx-auto max-w-3xl text-4xl font-semibold tracking-tight text-foreground text-balance md:text-6xl">
-                لنُطلق معًا شيئًا يستحقّ.
-              </h2>
-              <p className="mx-auto mt-5 max-w-xl text-base text-muted-foreground md:text-lg">
-                محادثة قصيرة تكفي لنعرف إن كنّا الشريكين المناسبين لهذا المشروع.
-              </p>
-              <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-                <DSButton asChild size="lg" variant="primary">
-                  <Link to="/contact">
-                    تواصل معي
-                    <ArrowLeft />
-                  </Link>
-                </DSButton>
-                <DSButton asChild size="lg" variant="outline">
-                  <Link to="/work">
-                    استعرض الأعمال
-                    <ArrowUpRight />
-                  </Link>
-                </DSButton>
-              </div>
-              <p className="mt-8 text-xs text-muted-foreground">
-                متوسّط الرد · خلال 24 ساعة · {site.location}
-              </p>
-            </div>
-          </Container>
-        </Reveal>
-      </Section>
+      <Reveal>
+        <CTA
+          className="border-t border-border/60"
+          eyebrow="لنبدأ"
+          title="لنُطلق معًا شيئًا يستحقّ."
+          description="محادثة قصيرة تكفي لنعرف إن كنّا الشريكين المناسبين لهذا المشروع."
+          actions={
+            <>
+              <DSButton asChild size="lg" variant="primary">
+                <Link to="/contact">
+                  تواصل معي
+                  <ArrowLeft />
+                </Link>
+              </DSButton>
+              <DSButton asChild size="lg" variant="outline">
+                <Link to="/work">
+                  استعرض الأعمال
+                  <ArrowUpRight />
+                </Link>
+              </DSButton>
+            </>
+          }
+        />
+      </Reveal>
     </>
   );
 }

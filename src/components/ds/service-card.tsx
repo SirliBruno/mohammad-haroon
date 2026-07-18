@@ -3,7 +3,8 @@ import { DSCard, DSCardTitle, DSCardDescription } from "./card";
 import { cn } from "@/lib/utils";
 import type { Service } from "@/features/services/schema";
 
-const iconMap: Record<string, LucideIcon> = {
+// Shared across service surfaces (service cards + service detail page).
+export const serviceIconMap: Record<string, LucideIcon> = {
   Globe,
   Layout,
   ShoppingBag,
@@ -20,7 +21,7 @@ export function ServiceCard({
   service: Service;
   className?: string;
 }) {
-  const Icon = service.icon ? iconMap[service.icon] ?? Sparkles : Sparkles;
+  const Icon = service.icon ? serviceIconMap[service.icon] ?? Sparkles : Sparkles;
   return (
     <DSCard variant="surface" padding="lg" className={cn("group flex h-full flex-col", className)}>
       <div className="flex items-center justify-between">

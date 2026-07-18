@@ -6,6 +6,7 @@ import { Section } from "@/components/layout/section";
 import { SectionTitle } from "@/components/layout/section-title";
 import { DSButton, Grid, ServiceCard, CTA } from "@/components/ds";
 import { services, serviceProcess, serviceFaq } from "@/data/services";
+import { site } from "@/config/site";
 import {
   Accordion,
   AccordionContent,
@@ -102,7 +103,7 @@ function ServicesIndex() {
               </Link>
             </DSButton>
             <DSButton asChild size="lg" variant="outline">
-              <a href="mailto:hello@example.com">
+              <a href={`mailto:${site.email}`}>
                 <Mail /> راسلني عبر البريد
               </a>
             </DSButton>

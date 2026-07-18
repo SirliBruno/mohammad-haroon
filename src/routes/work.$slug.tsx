@@ -26,6 +26,7 @@ import { projects } from "@/data/projects";
 import type { Project } from "@/features/projects/schema";
 import { site } from "@/config/site";
 import { cn } from "@/lib/utils";
+import { statusMeta } from "@/lib/project-status";
 
 export const Route = createFileRoute("/work/$slug")({
   loader: ({ params }) => {
@@ -73,18 +74,6 @@ export const Route = createFileRoute("/work/$slug")({
   component: CaseStudy,
 });
 
-function statusMeta(status: Project["status"]) {
-  switch (status) {
-    case "live":
-      return { label: "منشور", dot: "bg-emerald-500" };
-    case "in-progress":
-      return { label: "قيد التنفيذ", dot: "bg-amber-500" };
-    case "concept":
-      return { label: "تصوّر", dot: "bg-sky-500" };
-    case "archived":
-      return { label: "مؤرشف", dot: "bg-muted-foreground" };
-  }
-}
 
 
 function CaseStudy() {

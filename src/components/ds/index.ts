@@ -21,7 +21,7 @@ export type { DSCardProps } from "./card";
 export { Grid } from "./grid";
 
 export { ProjectCard } from "./project-card";
-export { ServiceCard } from "./service-card";
+export { ServiceCard, serviceIconMap } from "./service-card";
 export { CertificateCard } from "./certificate-card";
 export type { Certificate } from "./certificate-card";
 

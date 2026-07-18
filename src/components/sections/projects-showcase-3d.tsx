@@ -11,64 +11,63 @@ import {
   Palette,
   Smartphone,
   FileText,
+  type LucideIcon,
 } from "lucide-react";
 import { projects } from "@/data/projects";
 import type { Project } from "@/features/projects/schema";
 
-// Icon per category — kept subtle, sits in a rounded chip
+// Module-scope maps — hoisted to avoid re-creation per render.
+const CATEGORY_ICONS: Record<string, LucideIcon> = {
+  "مواقع إلكترونية": Globe,
+  "تصميم واجهات": LayoutDashboard,
+  "تجارة إلكترونية": ShoppingBag,
+  "تصميم جرافيك": Palette,
+  "تطبيقات": Smartphone,
+  "تصوير": FileText,
+};
+
 function CategoryIcon({ category }: { category: string }) {
-  const map: Record<string, React.ComponentType<{ className?: string }>> = {
-    "مواقع إلكترونية": Globe,
-    "تصميم واجهات": LayoutDashboard,
-    "تجارة إلكترونية": ShoppingBag,
-    "تصميم جرافيك": Palette,
-    "تطبيقات": Smartphone,
-    "تصوير": FileText,
-  };
-  const Icon = map[category] ?? LayoutDashboard;
-  return <Icon className="size-4" />;
+  const Icon = CATEGORY_ICONS[category] ?? LayoutDashboard;
+  return <Icon className="size-4" aria-hidden />;
 }
 
-// Faux browser/dashboard preview surface inside each card
+// Faux preview surface inside each card — uses design tokens so it adapts to theme.
 function CardPreview({ project, index }: { project: Project; index: number }) {
-  // Vary preview style per index so the trio feels distinct like the reference
   const variant = index % 3;
 
   return (
-    <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl border border-white/10 bg-linear-to-br from-slate-900 via-slate-950 to-black">
+    <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl border border-border/60 bg-linear-to-br from-muted/70 to-muted/30">
       {/* traffic dots */}
-      <div className="flex items-center gap-1.5 border-b border-white/5 px-3 py-2">
-        <span className="size-1.5 rounded-full bg-white/20" />
-        <span className="size-1.5 rounded-full bg-white/20" />
-        <span className="size-1.5 rounded-full bg-white/20" />
+      <div className="flex items-center gap-1.5 border-b border-border/60 px-3 py-2" dir="ltr">
+        <span className="size-1.5 rounded-full bg-foreground/20" />
+        <span className="size-1.5 rounded-full bg-foreground/20" />
+        <span className="size-1.5 rounded-full bg-foreground/20" />
       </div>
 
       {variant === 0 && (
-        // Landing / hero mock
         <div className="grid h-[calc(100%-1.75rem)] grid-cols-5 gap-2 p-3">
           <div className="col-span-3 space-y-1.5">
-            <div className="h-2 w-3/4 rounded-full bg-white/25" />
-            <div className="h-2 w-1/2 rounded-full bg-white/15" />
+            <div className="h-2 w-3/4 rounded-full bg-foreground/25" />
+            <div className="h-2 w-1/2 rounded-full bg-foreground/15" />
             <div className="mt-2 h-14 w-full rounded-md bg-linear-to-br from-primary/40 to-primary/10" />
             <div className="h-2 w-16 rounded-full bg-primary/70" />
           </div>
-          <div className="col-span-2 rounded-md bg-white/5" />
+          <div className="col-span-2 rounded-md bg-foreground/5" />
         </div>
       )}
 
       {variant === 1 && (
-        // Dashboard mock
         <div className="grid h-[calc(100%-1.75rem)] grid-cols-[28%_1fr] gap-1.5 p-2">
-          <div className="space-y-1 rounded-md bg-white/[0.04] p-1.5">
+          <div className="space-y-1 rounded-md bg-foreground/[0.04] p-1.5">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="h-1.5 w-full rounded-full bg-white/10" />
+              <div key={i} className="h-1.5 w-full rounded-full bg-foreground/10" />
             ))}
           </div>
           <div className="grid grid-cols-2 gap-1.5">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="rounded-md bg-white/[0.04] p-1.5">
-                <div className="h-1.5 w-1/2 rounded-full bg-white/20" />
-                <div className="mt-1 h-4 w-2/3 rounded-full bg-white/10" />
+              <div key={i} className="rounded-md bg-foreground/[0.04] p-1.5">
+                <div className="h-1.5 w-1/2 rounded-full bg-foreground/20" />
+                <div className="mt-1 h-4 w-2/3 rounded-full bg-foreground/10" />
               </div>
             ))}
           </div>
@@ -76,25 +75,20 @@ function CardPreview({ project, index }: { project: Project; index: number }) {
       )}
 
       {variant === 2 && (
-        // E-commerce grid mock
         <div className="grid h-[calc(100%-1.75rem)] grid-cols-3 gap-1.5 p-2">
           {Array.from({ length: 3 }).map((_, i) => (
             <div
               key={i}
-              className="rounded-md border border-white/10 bg-white/[0.03] p-1.5"
+              className="rounded-md border border-border/60 bg-foreground/[0.03] p-1.5"
             >
-              <div className="aspect-square rounded bg-linear-to-br from-white/10 to-white/[0.02]" />
-              <div className="mt-1 h-1.5 w-3/4 rounded-full bg-white/15" />
-              <div className="mt-1 h-1.5 w-1/2 rounded-full bg-white/10" />
+              <div className="aspect-square rounded bg-linear-to-br from-foreground/10 to-foreground/[0.02]" />
+              <div className="mt-1 h-1.5 w-3/4 rounded-full bg-foreground/15" />
+              <div className="mt-1 h-1.5 w-1/2 rounded-full bg-foreground/10" />
             </div>
           ))}
         </div>
       )}
 
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 bg-linear-to-b from-transparent via-transparent to-black/40"
-      />
       <span className="sr-only">{project.title}</span>
     </div>
   );
@@ -106,58 +100,55 @@ function ProjectCard3D({
   index,
 }: {
   project: Project;
-  position: "left" | "center" | "right";
+  position: "start" | "center" | "end";
   index: number;
 }) {
   const isCenter = position === "center";
 
+  // "start" = leading edge in reading direction (right in RTL, left in LTR).
+  // "end"   = trailing edge.
   const transform =
-    position === "left"
-      ? "perspective(1400px) rotateY(22deg) translateX(4%) scale(0.86)"
-      : position === "right"
-        ? "perspective(1400px) rotateY(-22deg) translateX(-4%) scale(0.86)"
+    position === "start"
+      ? "perspective(1400px) rotateY(-22deg) translateX(-4%) scale(0.86)"
+      : position === "end"
+        ? "perspective(1400px) rotateY(22deg) translateX(4%) scale(0.86)"
         : "perspective(1400px) rotateY(0deg) scale(1)";
 
   return (
     <motion.article
       layout
       initial={{ opacity: 0 }}
-      animate={{ opacity: isCenter ? 1 : 0.55 }}
+      animate={{ opacity: isCenter ? 1 : 0.6 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
       style={{ transform, transformStyle: "preserve-3d" }}
       className={[
-        "relative rounded-3xl border border-white/10 bg-linear-to-b from-slate-900/80 to-slate-950/90 p-4 shadow-2xl backdrop-blur-md",
-        isCenter ? "z-20 w-[62%]" : "z-10 w-[38%] blur-[0.5px]",
+        "relative rounded-2xl border border-border/60 bg-card p-4 shadow-lg backdrop-blur-md",
+        isCenter ? "z-20 w-[62%] shadow-xl" : "z-10 w-[38%]",
       ].join(" ")}
-      dir="rtl"
     >
-      {/* Glow ring on center */}
       {isCenter && (
         <div
           aria-hidden
-          className="pointer-events-none absolute -inset-px rounded-3xl ring-1 ring-primary/25"
+          className="pointer-events-none absolute -inset-px rounded-2xl ring-1 ring-primary/25"
         />
       )}
 
       <CardPreview project={project} index={index} />
 
-      {/* Body */}
       <div className="mt-4 flex items-start justify-between gap-3">
-        <h3 className="line-clamp-1 text-sm font-semibold text-white md:text-base">
+        <h3 className="line-clamp-1 text-sm font-semibold text-foreground md:text-base">
           {project.title.split("—")[0].trim()}
         </h3>
         <span className="grid size-8 shrink-0 place-items-center rounded-full bg-primary/15 text-primary">
           <CategoryIcon category={project.category} />
         </span>
       </div>
-      <p className="mt-1 text-[11px] text-white/50 md:text-xs">
-        {project.category}
-      </p>
+      <p className="mt-1 text-xs text-muted-foreground">{project.category}</p>
 
       {isCenter && (
         <>
-          <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-white/70 md:text-sm">
+          <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-muted-foreground md:text-sm">
             {project.summary}
           </p>
 
@@ -165,7 +156,8 @@ function ProjectCard3D({
             {project.stack.slice(0, 3).map((tech) => (
               <span
                 key={tech}
-                className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] text-white/80 md:text-xs"
+                className="rounded-full border border-border/60 bg-muted/40 px-2.5 py-1 text-xs text-foreground/80"
+                dir="ltr"
               >
                 {tech}
               </span>
@@ -174,9 +166,9 @@ function ProjectCard3D({
               to="/work/$slug"
               params={{ slug: project.slug }}
               aria-label={`فتح مشروع ${project.title}`}
-              className="mr-auto grid size-7 place-items-center rounded-full border border-white/10 bg-white/5 text-white/80 transition hover:bg-white/10 hover:text-white"
+              className="ms-auto grid size-7 place-items-center rounded-full border border-border/60 bg-muted/40 text-foreground/80 transition-colors hover:bg-muted hover:text-foreground"
             >
-              <ExternalLink className="size-3.5" />
+              <ExternalLink className="size-3.5" aria-hidden />
             </Link>
           </div>
         </>
@@ -187,19 +179,22 @@ function ProjectCard3D({
 
 export function ProjectsShowcase3D() {
   const reduce = useReducedMotion();
-  const featured = useMemo(() => projects.filter((p) => p.featured).slice(0, 6), []);
+  const featured = useMemo(
+    () => projects.filter((p) => p.featured).slice(0, 6),
+    [],
+  );
   const [active, setActive] = useState(0);
 
   if (featured.length < 3) return null;
 
   const total = featured.length;
-  const leftIdx = (active - 1 + total) % total;
-  const rightIdx = (active + 1) % total;
+  const startIdx = (active - 1 + total) % total;
+  const endIdx = (active + 1) % total;
 
   const trio = [
-    { project: featured[leftIdx], position: "left" as const, index: leftIdx },
+    { project: featured[startIdx], position: "start" as const, index: startIdx },
     { project: featured[active], position: "center" as const, index: active },
-    { project: featured[rightIdx], position: "right" as const, index: rightIdx },
+    { project: featured[endIdx], position: "end" as const, index: endIdx },
   ];
 
   const go = (dir: 1 | -1) => setActive((a) => (a + dir + total) % total);
@@ -208,35 +203,36 @@ export function ProjectsShowcase3D() {
     <motion.div
       initial={reduce ? false : { opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
       className="relative isolate w-full"
-      dir="ltr"
+      aria-roledescription="عرض شرائح"
+      aria-label="أحدث المشاريع"
     >
-      {/* Section eyebrow — mimics the reference top-right pill */}
-      <div className="mb-6 flex items-center justify-end gap-2 pr-2 text-xs text-white/70" dir="rtl">
-        <span className="size-1.5 rounded-full bg-primary shadow-[0_0_12px_theme(colors.primary.DEFAULT)]" />
+      {/* Eyebrow */}
+      <div className="mb-6 flex items-center justify-end gap-2 pe-2 text-xs text-muted-foreground">
+        <span className="size-1.5 rounded-full bg-primary" />
         <span>أحدث المشاريع</span>
       </div>
 
       {/* Ambient glow */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -inset-10 -z-10 rounded-[3rem] bg-linear-to-br from-primary/20 via-accent/10 to-transparent blur-3xl"
+        className="pointer-events-none absolute -inset-10 -z-10 rounded-[3rem] bg-linear-to-br from-primary/15 via-accent/10 to-transparent blur-3xl"
       />
 
       {/* Stage */}
       <div className="relative flex items-center justify-center">
-        {/* Prev */}
+        {/* Previous (start edge) — chevron points toward reading start */}
         <button
           type="button"
           onClick={() => go(-1)}
           aria-label="المشروع السابق"
-          className="absolute left-0 z-30 grid size-9 place-items-center rounded-full border border-white/10 bg-white/5 text-white/80 backdrop-blur transition hover:bg-white/10 hover:text-white md:-left-4"
+          className="absolute start-0 z-30 grid size-9 place-items-center rounded-full border border-border/60 bg-card/80 text-foreground/80 backdrop-blur transition-colors hover:bg-card hover:text-foreground md:-start-4"
         >
-          <ChevronLeft className="size-4" />
+          <ChevronRight className="size-4" aria-hidden />
         </button>
 
-        <div className="flex w-full items-stretch justify-center gap-[-2%] px-8 [&>*:not(:first-child)]:-ml-6">
+        <div className="flex w-full items-stretch justify-center px-8 [&>*:not(:first-child)]:-ms-6">
           <AnimatePresence mode="popLayout" initial={false}>
             {trio.map((slot) => (
               <ProjectCard3D
@@ -249,31 +245,41 @@ export function ProjectsShowcase3D() {
           </AnimatePresence>
         </div>
 
-        {/* Next */}
+        {/* Next (end edge) */}
         <button
           type="button"
           onClick={() => go(1)}
           aria-label="المشروع التالي"
-          className="absolute right-0 z-30 grid size-9 place-items-center rounded-full border border-white/10 bg-white/5 text-white/80 backdrop-blur transition hover:bg-white/10 hover:text-white md:-right-4"
+          className="absolute end-0 z-30 grid size-9 place-items-center rounded-full border border-border/60 bg-card/80 text-foreground/80 backdrop-blur transition-colors hover:bg-card hover:text-foreground md:-end-4"
         >
-          <ChevronRight className="size-4" />
+          <ChevronLeft className="size-4" aria-hidden />
         </button>
       </div>
 
       {/* Dots */}
-      <div className="mt-6 flex items-center justify-center gap-2">
+      <div className="mt-6 flex items-center justify-center gap-2" role="tablist">
         {featured.map((p, i) => (
           <button
             key={p.slug}
             type="button"
+            role="tab"
+            aria-selected={i === active}
+            aria-current={i === active ? "true" : undefined}
             onClick={() => setActive(i)}
             aria-label={`عرض المشروع ${i + 1}`}
             className={[
-              "h-1.5 rounded-full transition-all",
-              i === active ? "w-6 bg-primary" : "w-1.5 bg-white/25 hover:bg-white/40",
+              "h-1.5 rounded-full transition-[width,background-color]",
+              i === active
+                ? "w-6 bg-primary"
+                : "w-1.5 bg-muted-foreground/25 hover:bg-muted-foreground/40",
             ].join(" ")}
           />
         ))}
+      </div>
+
+      {/* Live region for screen readers */}
+      <div className="sr-only" aria-live="polite">
+        {featured[active]?.title}
       </div>
     </motion.div>
   );
