@@ -105,9 +105,9 @@ function ProjectCard3D({
 }) {
   const isCenter = position === "center";
 
-  // "start" = leading edge in reading direction (right in RTL, left in LTR).
-  // "end"   = trailing edge.
-  const transform =
+  // Transform is applied only from md+ via inline style; on mobile side cards
+  // are hidden and center card renders flat.
+  const mdTransform =
     position === "start"
       ? "perspective(1600px) rotateY(-20deg) translateX(-6%) scale(0.9)"
       : position === "end"
@@ -116,15 +116,25 @@ function ProjectCard3D({
 
   return (
     <motion.article
-      layout
-      initial={{ opacity: 0 }}
-      animate={{ opacity: isCenter ? 1 : 0.55 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-      style={{ transform, transformStyle: "preserve-3d" }}
+      key={project.slug}
+      initial={{ opacity: 0, scale: 0.96 }}
+      animate={{ opacity: isCenter ? 1 : 0.55, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.96 }}
+      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+      style={
+        {
+          // Custom prop consumed via arbitrary-value class below.
+          ["--md-transform" as string]: mdTransform,
+          transformStyle: "preserve-3d",
+        } as React.CSSProperties
+      }
       className={[
-        "relative rounded-2xl border border-border/60 bg-card p-5 shadow-lg backdrop-blur-md",
-        isCenter ? "z-20 w-[68%] shadow-2xl" : "z-10 w-[44%]",
+        "relative rounded-2xl border border-border/60 bg-card p-4 shadow-lg backdrop-blur-md md:p-5",
+        // Apply the 3D transform only on md+ so mobile stays flat and readable.
+        "md:[transform:var(--md-transform)]",
+        isCenter
+          ? "z-20 w-full max-w-sm shadow-2xl md:w-full md:max-w-none"
+          : "z-10 hidden w-full md:block",
       ].join(" ")}
     >
       {isCenter && (
@@ -176,6 +186,7 @@ function ProjectCard3D({
     </motion.article>
   );
 }
+
 
 export function ProjectsShowcase3D() {
   const reduce = useReducedMotion();
@@ -234,7 +245,7 @@ export function ProjectsShowcase3D() {
       />
 
       {/* Stage */}
-      <div className="relative flex min-h-[28rem] items-center justify-center md:min-h-[34rem]">
+      <div className="relative flex min-h-[26rem] items-center justify-center sm:min-h-[30rem] md:min-h-[34rem]">
         {/* Previous (start edge) — chevron points toward reading start */}
         <button
           type="button"
@@ -245,17 +256,22 @@ export function ProjectsShowcase3D() {
           <ChevronRight className="size-4" aria-hidden />
         </button>
 
-        <div className="flex w-full items-stretch justify-center px-10 [&>*:not(:first-child)]:-ms-8">
-          <AnimatePresence mode="popLayout" initial={false}>
-            {trio.map((slot) => (
-              <ProjectCard3D
-                key={slot.project.slug}
-                project={slot.project}
-                position={slot.position}
-                index={slot.index}
-              />
-            ))}
-          </AnimatePresence>
+        {/* Fixed 3-slot grid on md+: DOM order stays start/center/end regardless
+            of which project sits in each slot, so cards never shift horizontally
+            during navigation. On mobile only the center slot renders. */}
+        <div className="grid w-full max-w-md grid-cols-1 place-items-center gap-0 px-10 md:max-w-none md:grid-cols-[1fr_1.55fr_1fr] md:[&>div:not(:first-child)]:-ms-6">
+          {trio.map((slot) => (
+            <div key={slot.position} className="relative w-full md:w-auto">
+              <AnimatePresence mode="wait" initial={false}>
+                <ProjectCard3D
+                  key={slot.project.slug}
+                  project={slot.project}
+                  position={slot.position}
+                  index={slot.index}
+                />
+              </AnimatePresence>
+            </div>
+          ))}
         </div>
 
         {/* Next (end edge) */}
@@ -268,6 +284,7 @@ export function ProjectsShowcase3D() {
           <ChevronLeft className="size-4" aria-hidden />
         </button>
       </div>
+
 
       {/* Dots */}
       <div className="mt-6 flex items-center justify-center gap-2" role="tablist">
