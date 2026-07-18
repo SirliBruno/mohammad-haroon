@@ -140,109 +140,72 @@ function Home() {
           />
         </Reveal>
 
-        <div className="mt-16 space-y-24 md:mt-24 md:space-y-40">
+        <div className="mt-24 space-y-32 md:mt-32 md:space-y-56">
           {featured.map((project, i) => {
             const MockupUI = featuredMockups[project.slug] ?? DashboardUI;
-            const reversed = i % 2 === 1;
             return (
               <Reveal key={project.slug}>
-                <article
-                  className={`grid items-center gap-10 lg:gap-16 ${
-                    reversed
-                      ? "lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]"
-                      : "lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]"
-                  }`}
-                >
-                  {/* Mockup */}
-                  <div className={reversed ? "lg:order-2" : ""}>
-                    <div className="relative">
-                      <div
-                        aria-hidden
-                        className="pointer-events-none absolute -inset-6 -z-10 rounded-[2rem] bg-linear-to-br from-primary/12 via-accent/8 to-transparent blur-2xl"
-                      />
-                      {/* Replace <MockupUI /> below with <img src="..." /> when you have real screenshots. */}
-                      {project.cover?.src ? (
-                        <BrowserFrame url={new URL(project.liveDemo ?? "https://example.com").host}>
-                          <img
-                            src={project.cover.src}
-                            alt={project.cover.alt}
-                            className="size-full object-cover"
-                          />
-                        </BrowserFrame>
-                      ) : (
-                        <BrowserFrame
-                          url={
-                            project.liveDemo
-                              ? new URL(project.liveDemo).host
-                              : `${project.slug}.app`
-                          }
-                        >
-                          <MockupUI />
-                        </BrowserFrame>
-                      )}
-                    </div>
+                <article className="mx-auto max-w-6xl">
+                  {/* Eyebrow meta */}
+                  <div className="mb-8 flex items-center justify-between gap-4 text-xs tracking-[0.18em] text-muted-foreground md:mb-12">
+                    <span>
+                      {String(i + 1).padStart(2, "0")} — {project.client ?? "منتج ذاتي"}
+                    </span>
+                    <span>{project.year}</span>
                   </div>
 
-                  {/* Content */}
-                  <div className={reversed ? "lg:order-1" : ""}>
-                    <div className="flex items-center gap-2 text-xs tracking-[0.14em] text-muted-foreground">
-                      <span>مشروع {String(i + 1).padStart(2, "0")}</span>
-                      <span aria-hidden>·</span>
-                      <span>{project.year}</span>
+                  {/* Screenshot — the hero of the section */}
+                  <Link
+                    to="/work/$slug"
+                    params={{ slug: project.slug }}
+                    className="group relative block"
+                    aria-label={project.title}
+                  >
+                    <div
+                      aria-hidden
+                      className="pointer-events-none absolute -inset-10 -z-10 rounded-[3rem] bg-linear-to-br from-primary/12 via-accent/8 to-transparent blur-3xl"
+                    />
+                    {/* Replace this <BrowserFrame> content with <img src="..." /> when a real screenshot exists. */}
+                    {project.cover?.src ? (
+                      <BrowserFrame
+                        url={
+                          project.liveDemo
+                            ? new URL(project.liveDemo).host
+                            : `${project.slug}.app`
+                        }
+                        className="transition-transform duration-700 ease-out group-hover:-translate-y-1"
+                      >
+                        <img
+                          src={project.cover.src}
+                          alt={project.cover.alt}
+                          className="size-full object-cover"
+                        />
+                      </BrowserFrame>
+                    ) : (
+                      <BrowserFrame
+                        url={
+                          project.liveDemo
+                            ? new URL(project.liveDemo).host
+                            : `${project.slug}.app`
+                        }
+                        className="transition-transform duration-700 ease-out group-hover:-translate-y-1"
+                      >
+                        <MockupUI />
+                      </BrowserFrame>
+                    )}
+                  </Link>
+
+                  {/* Minimal caption */}
+                  <div className="mt-14 grid gap-8 md:mt-20 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] md:items-end md:gap-16">
+                    <div className="min-w-0">
+                      <h3 className="text-3xl font-semibold tracking-tight text-foreground text-balance md:text-5xl">
+                        {project.title}
+                      </h3>
+                      <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
+                        {project.summary}
+                      </p>
                     </div>
-                    <h3 className="mt-4 text-3xl font-semibold tracking-tight text-foreground text-balance md:text-4xl">
-                      {project.title}
-                    </h3>
-                    <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
-                      {project.summary}
-                    </p>
-
-                    <dl className="mt-8 grid grid-cols-2 gap-6 border-y border-border/60 py-6 text-sm">
-                      <div>
-                        <dt className="text-xs tracking-[0.14em] text-muted-foreground">
-                          نوع العميل
-                        </dt>
-                        <dd className="mt-1.5 font-medium text-foreground">
-                          {project.client ?? "منتج ذاتي"}
-                        </dd>
-                      </div>
-                      <div>
-                        <dt className="text-xs tracking-[0.14em] text-muted-foreground">
-                          القطاع
-                        </dt>
-                        <dd className="mt-1.5 font-medium text-foreground">{project.category}</dd>
-                      </div>
-                    </dl>
-
-                    {project.stack.length ? (
-                      <div className="mt-6">
-                        <p className="text-xs tracking-[0.14em] text-muted-foreground">
-                          التقنيات
-                        </p>
-                        <div className="mt-3 flex flex-wrap gap-2">
-                          {project.stack.slice(0, 6).map((s) => (
-                            <DSBadge key={s} variant="outline">
-                              {s}
-                            </DSBadge>
-                          ))}
-                        </div>
-                      </div>
-                    ) : null}
-
-                    {project.metrics?.length ? (
-                      <ul className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3">
-                        {project.metrics.slice(0, 3).map((m) => (
-                          <li key={m.label}>
-                            <p className="text-2xl font-semibold tracking-tight text-foreground">
-                              {m.value}
-                            </p>
-                            <p className="mt-1 text-xs text-muted-foreground">{m.label}</p>
-                          </li>
-                        ))}
-                      </ul>
-                    ) : null}
-
-                    <div className="mt-8 flex flex-wrap items-center gap-3">
+                    <div className="flex flex-wrap items-center gap-3 md:justify-end">
                       <DSButton asChild variant="primary" size="md">
                         <Link to="/work/$slug" params={{ slug: project.slug }}>
                           دراسة الحالة
@@ -250,10 +213,10 @@ function Home() {
                         </Link>
                       </DSButton>
                       {project.liveDemo ? (
-                        <DSButton asChild variant="outline" size="md">
+                        <DSButton asChild variant="ghost" size="md">
                           <a href={project.liveDemo} target="_blank" rel="noreferrer">
                             <ExternalLink />
-                            المعاينة الحيّة
+                            معاينة حيّة
                           </a>
                         </DSButton>
                       ) : null}
