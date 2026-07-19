@@ -142,6 +142,5 @@ export function MobileNav() {
         ) : null}
       </AnimatePresence>, document.body)}
     </>
-    </>
   );
 }
