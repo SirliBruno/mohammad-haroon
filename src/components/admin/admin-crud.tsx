@@ -143,6 +143,28 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
     );
   }, [rows, search]);
 
+  const closeForm = () => {
+    if (busy) return;
+    if (window.confirm("تجاهل التغييرات غير المحفوظة؟")) {
+      setShowForm(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!showForm) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeForm();
+    };
+    window.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showForm, busy]);
+
   const openCreate = () => {
     setEditingId(null);
     setForm(emptyValues);
@@ -156,6 +178,7 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
     setShowForm(true);
     setMessage(null);
   };
+
 
   const handleDelete = async (row: Row) => {
     if (!window.confirm(`حذف ${entityName}؟ هذا الإجراء لا يمكن التراجع عنه.`)) return;
