@@ -515,7 +515,7 @@ export function HeroWorkspace() {
         <div className="absolute left-1/2 top-1/2 size-[720px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/8 blur-3xl" />
       </div>
 
-      <div className="relative mx-auto aspect-[5/4] w-full min-h-[520px] sm:min-h-[600px] md:min-h-[660px] lg:min-h-[700px]">
+      <div className="relative mx-auto aspect-[5/4] w-full min-h-[420px] sm:min-h-[560px] md:min-h-[660px] lg:min-h-[700px]">
         {/* -------------------- FIGMA (behind, top-right) -------------------- */}
         <FloatingLayer
           ctx={ctx}
