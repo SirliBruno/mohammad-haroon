@@ -617,6 +617,54 @@ export type Database = {
         }
         Relationships: []
       }
+      site_content: {
+        Row: {
+          created_at: string
+          description: string | null
+          group_name: string
+          id: string
+          image_url: string | null
+          key: string
+          kind: string
+          label: string | null
+          metadata: Json
+          sort_order: number
+          updated_at: string
+          value_ar: string | null
+          value_en: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          group_name?: string
+          id?: string
+          image_url?: string | null
+          key: string
+          kind?: string
+          label?: string | null
+          metadata?: Json
+          sort_order?: number
+          updated_at?: string
+          value_ar?: string | null
+          value_en?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          group_name?: string
+          id?: string
+          image_url?: string | null
+          key?: string
+          kind?: string
+          label?: string | null
+          metadata?: Json
+          sort_order?: number
+          updated_at?: string
+          value_ar?: string | null
+          value_en?: string | null
+        }
+        Relationships: []
+      }
       skills: {
         Row: {
           category: string | null
