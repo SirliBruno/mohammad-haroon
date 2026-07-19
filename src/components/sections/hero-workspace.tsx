@@ -25,7 +25,7 @@ import {
   useSpring,
   useTransform,
 } from "motion/react";
-import { ArrowUpRight, Figma } from "lucide-react";
+import { ArrowUpRight, Sparkles } from "lucide-react";
 import { BrowserFrame, PhoneFrame } from "@/components/mockups/devices";
 import {
   DashboardUI,
