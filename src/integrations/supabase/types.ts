@@ -185,6 +185,57 @@ export type Database = {
         }
         Relationships: []
       }
+      hero_projects: {
+        Row: {
+          accent: string
+          category: string | null
+          cover_url: string | null
+          created_at: string
+          created_by: string | null
+          host: string | null
+          id: string
+          is_active: boolean
+          mobile_url: string | null
+          sort_order: number
+          status: string
+          title: string
+          updated_at: string
+          year: number | null
+        }
+        Insert: {
+          accent?: string
+          category?: string | null
+          cover_url?: string | null
+          created_at?: string
+          created_by?: string | null
+          host?: string | null
+          id?: string
+          is_active?: boolean
+          mobile_url?: string | null
+          sort_order?: number
+          status?: string
+          title: string
+          updated_at?: string
+          year?: number | null
+        }
+        Update: {
+          accent?: string
+          category?: string | null
+          cover_url?: string | null
+          created_at?: string
+          created_by?: string | null
+          host?: string | null
+          id?: string
+          is_active?: boolean
+          mobile_url?: string | null
+          sort_order?: number
+          status?: string
+          title?: string
+          updated_at?: string
+          year?: number | null
+        }
+        Relationships: []
+      }
       ideas: {
         Row: {
           body: string | null
