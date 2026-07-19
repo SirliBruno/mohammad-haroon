@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "motion/react";
 import { Menu, X } from "lucide-react";
 import { primaryNav } from "@/config/nav";
 import { socials } from "@/config/socials";
+import { useHydrated } from "@/hooks/use-hydrated";
 
 export function MobileNav() {
   const [open, setOpen] = useState(false);
+  const hydrated = useHydrated();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   useEffect(() => {
@@ -44,6 +47,7 @@ export function MobileNav() {
         {open ? <X className="size-5" /> : <Menu className="size-5" />}
       </button>
 
+      {hydrated && createPortal(
       <AnimatePresence>
         {open ? (
           <motion.div
@@ -136,7 +140,7 @@ export function MobileNav() {
             </motion.aside>
           </motion.div>
         ) : null}
-      </AnimatePresence>
+      </AnimatePresence>, document.body)}
     </>
   );
 }
