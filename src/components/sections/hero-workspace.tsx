@@ -24,14 +24,13 @@ import {
   useSpring,
   useTransform,
 } from "motion/react";
-import { ExternalLink, Figma, Sparkles, TrendingUp } from "lucide-react";
-import { BrowserFrame, LaptopFrame, PhoneFrame, TabletFrame } from "@/components/mockups/devices";
+import { ExternalLink, Sparkles, TrendingUp } from "lucide-react";
+import { LaptopFrame, PhoneFrame } from "@/components/mockups/devices";
 import {
   DashboardUI,
   EditorUI,
   MobileAppUI,
   StoreUI,
-  TabletReadUI,
 } from "@/components/mockups/ui-samples";
 import { projects } from "@/data/projects";
 import { cn } from "@/lib/utils";
