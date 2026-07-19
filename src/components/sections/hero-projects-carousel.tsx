@@ -284,8 +284,9 @@ export function HeroProjectsCarousel() {
       const el = trackRef.current?.querySelector<HTMLElement>("[data-hero-card]");
       if (!el || !trackRef.current) return;
       const rect = el.getBoundingClientRect();
-      // gap-6 = 24px in Tailwind
-      setStep(rect.width + 24);
+      // Measure the actual gap from computed styles rather than hard-coding it.
+      const gap = parseFloat(getComputedStyle(trackRef.current).columnGap || "0") || 0;
+      setStep(rect.width + gap);
     };
     measure();
     window.addEventListener("resize", measure);
