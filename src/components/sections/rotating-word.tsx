@@ -34,12 +34,12 @@ export function RotatingWord() {
 
   return (
     <span
-      className="relative inline-flex items-baseline justify-center align-baseline overflow-hidden"
+      className="relative inline-flex items-center justify-center overflow-hidden align-middle"
       style={{
-        // Reserve enough width for the longest word ("مشروعك") to prevent layout shift.
-        minWidth: "9ch",
+        // Fixed width reserves space for the longest word so the sentence never reflows.
+        width: "clamp(140px, 22vw, 220px)",
         height: "1.15em",
-        verticalAlign: "baseline",
+        verticalAlign: "middle",
       }}
       aria-live="polite"
     >
@@ -50,7 +50,7 @@ export function RotatingWord() {
           animate={{ y: 0, opacity: 1, filter: "blur(0px)", color: current.color }}
           exit={{ y: "-15%", opacity: 0, filter: "blur(2px)" }}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="inline-block whitespace-nowrap"
+          className="absolute inset-0 inline-flex items-center justify-center whitespace-nowrap"
           style={{ willChange: "transform, opacity, filter" }}
         >
           {current.text}
