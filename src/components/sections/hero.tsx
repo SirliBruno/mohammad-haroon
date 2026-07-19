@@ -84,11 +84,11 @@ export function Hero() {
 
             <h1
               id="hero-heading"
-              className="mt-7 font-semibold tracking-tight text-foreground leading-[1.15] text-[1.75rem] sm:text-4xl md:text-5xl lg:text-[3.5rem]"
+              className="mt-7 font-semibold tracking-tight text-foreground leading-[1.2] text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-[4rem]"
             >
-              <span className="block whitespace-nowrap">أعـــــــــطِ الخبـــــز لخبّــــــــــازه</span>
+              <span className="block whitespace-nowrap">أعطِ الخبز لخبّازه</span>
               <span className="block whitespace-nowrap">
-                وأعــــطِ <RotatingWord /> لأهلهــــــــــا
+                وأعطِ <RotatingWord /> لأهلها
               </span>
             </h1>
 
