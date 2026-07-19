@@ -90,7 +90,7 @@ export function Hero() {
             </h1>
 
             <p className="mt-6 max-w-lg mx-auto lg:mx-0 text-base leading-relaxed text-muted-foreground md:text-lg">
-              مواقع ومتاجر ومنتجات SaaS مصمّمة بحِرَفية عالية — تجربة هادئة، أداء سريع، وتفاصيل مصقولة تظهر في كل نقرة.
+              أصمم وأطور مواقع وأنظمة رقمية تجمع بين التصميم الاحترافي، وسهولة الاستخدام، والأداء السريع. سواء كنت تطلق مشروع جديد أو تطور مشروع قائم، هدفي إني أبني لك منتج يخدمك ويعطي عملاءك تجربة تليق باسمك.
             </p>
 
             <div className="mt-10 flex flex-wrap items-center justify-center lg:justify-start gap-3">
