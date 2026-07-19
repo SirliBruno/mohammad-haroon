@@ -109,7 +109,7 @@ export function Hero() {
             </div>
 
             {/* Social links */}
-            <div className="mt-10 flex items-center gap-3">
+            <div className="mt-10 flex items-center justify-center lg:justify-start gap-3">
               <span className="text-xs text-muted-foreground">تواصل:</span>
               <div className="h-px flex-1 max-w-16 bg-border/60" />
               <ul className="flex items-center gap-2">
