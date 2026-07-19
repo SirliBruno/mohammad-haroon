@@ -185,7 +185,6 @@ function HeroProjectCard({
     ry.set(0);
   };
 
-  const status = statusMeta(project.status);
   const shortTitle = project.title.split("—")[0].trim();
 
   return (
@@ -194,7 +193,6 @@ function HeroProjectCard({
       onMouseMove={onMove}
       onMouseLeave={onLeave}
       onClick={onSelect}
-      // very slow ambient float — disabled under reduced motion
       animate={reduce ? undefined : { y: [0, -6, 0] }}
       transition={
         reduce
@@ -213,99 +211,60 @@ function HeroProjectCard({
         transformStyle: "preserve-3d",
       }}
       className={cn(
-        "group relative flex h-full w-full flex-col overflow-hidden rounded-3xl border border-border/60 bg-card/70 shadow-[0_20px_60px_-24px_rgb(9_9_11_/_0.25)] backdrop-blur-xl transition-[box-shadow,border-color,opacity,transform] duration-500",
-        "hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_30px_80px_-24px_color-mix(in_oklab,var(--primary)_35%,transparent)]",
-        !isActive && "opacity-70",
+        "group relative block h-full w-full overflow-hidden rounded-[28px] border border-border/50 bg-card/60 shadow-[0_30px_80px_-32px_rgb(9_9_11_/_0.30)] backdrop-blur-xl transition-[box-shadow,border-color,opacity,transform] duration-500",
+        "hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_40px_100px_-30px_color-mix(in_oklab,var(--primary)_35%,transparent)]",
+        !isActive && "opacity-60",
       )}
     >
-      {/* Soft glow ring on hover / active */}
+      {/* Soft glow ring */}
       <div
         aria-hidden
         className={cn(
-          "pointer-events-none absolute -inset-px rounded-3xl ring-1 transition-colors duration-500",
+          "pointer-events-none absolute -inset-px rounded-[28px] ring-1 transition-colors duration-500",
           isActive ? "ring-primary/25" : "ring-transparent",
           "group-hover:ring-primary/30",
         )}
       />
 
-      {/* Screenshot */}
-      <div className="relative aspect-[16/11] w-full shrink-0 overflow-hidden">
+      {/* Screenshot — dominates the card. Replace <ProjectPreview /> with
+          <img src={project.cover.src} alt={project.cover.alt} className="size-full object-cover" />
+          when a real screenshot exists. */}
+      <div className="relative aspect-[4/3] w-full overflow-hidden">
         <ProjectPreview project={project} index={index} />
-      </div>
 
-      {/* Meta */}
-      <div className="flex min-h-[9.5rem] flex-1 flex-col gap-3 border-t border-border/50 p-5">
-        <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0">
-            <h3 className="truncate text-base font-semibold text-foreground md:text-lg">
-              {shortTitle}
-            </h3>
-            <p className="mt-0.5 text-xs text-muted-foreground">{project.category}</p>
-          </div>
-          <span
-            className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border/60 bg-background/70 px-2 py-1 text-[11px] text-muted-foreground"
-            dir="rtl"
-          >
-            <span className={cn("size-1.5 rounded-full", status.dot)} />
-            {status.label}
-          </span>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-1.5" dir="ltr">
-          {project.stack.slice(0, 3).map((tech) => (
-            <span
-              key={tech}
-              className="rounded-md border border-border/50 bg-muted/40 px-1.5 py-0.5 text-[11px] font-medium text-foreground/75"
-            >
-              {tech}
-            </span>
-          ))}
-        </div>
-
-        <div className="mt-auto flex items-center justify-between gap-2 pt-1">
-          <Link
-            to="/work/$slug"
-            params={{ slug: project.slug }}
+        {/* Live-demo action — floats over the image so nothing steals room from it */}
+        {project.liveDemo ? (
+          <a
+            href={project.liveDemo}
+            target="_blank"
+            rel="noreferrer noopener"
             onClick={(e) => e.stopPropagation()}
-            className="story-link text-xs font-medium text-foreground/80 hover:text-primary"
+            aria-label={`عرض مباشر لـ ${shortTitle}`}
+            className="absolute right-4 top-4 grid size-9 place-items-center rounded-full border border-white/25 bg-background/70 text-foreground/90 opacity-0 backdrop-blur-md transition-opacity duration-300 group-hover:opacity-100 focus-visible:opacity-100"
           >
-            دراسة الحالة
-          </Link>
-          <div className="flex items-center gap-1.5">
-            <Link
-              to="/work/$slug"
-              params={{ slug: project.slug }}
-              onClick={(e) => e.stopPropagation()}
-              aria-label={`دراسة حالة ${shortTitle}`}
-              className="grid size-8 place-items-center rounded-full border border-border/60 bg-background/70 text-foreground/80 transition-colors hover:border-primary/40 hover:text-primary"
-            >
-              <FileText className="size-3.5" aria-hidden />
-            </Link>
-            {project.liveDemo ? (
-              <a
-                href={project.liveDemo}
-                target="_blank"
-                rel="noreferrer noopener"
-                onClick={(e) => e.stopPropagation()}
-                aria-label={`عرض مباشر لـ ${shortTitle}`}
-                className="grid size-8 place-items-center rounded-full border border-border/60 bg-background/70 text-foreground/80 transition-colors hover:border-primary/40 hover:text-primary"
-              >
-                <ExternalLink className="size-3.5" aria-hidden />
-              </a>
-            ) : (
-              <span
-                aria-hidden
-                className="grid size-8 place-items-center rounded-full border border-border/40 bg-background/40 text-muted-foreground/50"
-              >
-                <ArrowUpLeft className="size-3.5" />
-              </span>
-            )}
-          </div>
-        </div>
+            <ExternalLink className="size-4" aria-hidden />
+          </a>
+        ) : null}
       </div>
+
+      {/* Minimal caption — title + category, nothing else */}
+      <Link
+        to="/work/$slug"
+        params={{ slug: project.slug }}
+        onClick={(e) => e.stopPropagation()}
+        className="flex items-baseline justify-between gap-3 border-t border-border/40 px-5 py-4"
+      >
+        <h3 className="truncate text-base font-medium tracking-tight text-foreground md:text-lg">
+          {shortTitle}
+        </h3>
+        <span className="shrink-0 text-xs text-muted-foreground">
+          {project.category}
+        </span>
+      </Link>
     </motion.div>
   );
 }
+
 
 /* ------------------------------------------------------------------ */
 /* Carousel                                                            */
