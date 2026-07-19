@@ -385,37 +385,41 @@ export function HeroMobile() {
           </div>
         </motion.button>
 
-        {/* Focused chip at the nucleus */}
+        {/* Focused project — iPhone mockup with project image */}
         <AnimatePresence>
           {activeItem && (
             <motion.div
               key={activeItem.slug}
               className="pointer-events-none absolute left-1/2 top-1/2 z-40 -translate-x-1/2 -translate-y-1/2"
-              initial={{ opacity: 0, scale: 0.7, y: 4 }}
-              animate={{ opacity: 1, scale: 1.15, y: 0 }}
-              exit={{ opacity: 0, scale: 0.8, y: 4 }}
-              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+              initial={{ opacity: 0, scale: 0.6, y: 6 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.7, y: 6 }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             >
-              <div
-                dir="rtl"
-                className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-background/95 px-4 py-2 text-[13px] font-semibold tracking-tight text-foreground shadow-[0_20px_45px_-18px_rgba(0,0,0,0.45)] backdrop-blur-md"
-              >
-                <activeItem.Icon
-                  className="size-4 text-primary"
-                  aria-hidden
-                />
-                <span className="whitespace-nowrap">{activeItem.name}</span>
-                <span
-                  className={cn(
-                    "size-1.5 shrink-0 rounded-full",
-                    STATUS_COLOR[activeItem.status],
-                  )}
-                  aria-hidden
-                />
-              </div>
+              <PhoneFrame className="w-[150px] sm:w-[170px]">
+                {activeItem.image ? (
+                  <img
+                    src={activeItem.image}
+                    alt={activeItem.name}
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-linear-to-br from-primary/15 via-background to-background p-4 text-center">
+                    <activeItem.Icon className="size-8 text-primary" aria-hidden />
+                    <span className="text-[12px] font-semibold text-foreground">
+                      {activeItem.name}
+                    </span>
+                    <span className="text-[10px] text-muted-foreground">
+                      {activeItem.category}
+                    </span>
+                  </div>
+                )}
+              </PhoneFrame>
             </motion.div>
           )}
         </AnimatePresence>
+
 
         {/* Close chip */}
         <AnimatePresence>
