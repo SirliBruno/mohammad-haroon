@@ -86,19 +86,21 @@ export function Hero() {
 
             <h1
               id="hero-heading"
-              className="mt-7 font-semibold tracking-tight text-foreground leading-[1.15] text-[1.75rem] sm:text-4xl md:text-5xl lg:text-[3.5rem]"
+              className="mt-8 font-semibold tracking-tight text-foreground leading-[1.18] text-[1.75rem] sm:text-4xl md:text-5xl lg:text-[3.5rem]"
             >
               <span className="block whitespace-nowrap">أعـــــــــطِ الخبـــــز لخبّــــــــــازه</span>
-              <span className="block whitespace-nowrap mt-[5px]">
+              <span className="block whitespace-nowrap mt-[6px]">
                 وأعــــطِ <RotatingWord /> لأهلهــــــــــا
               </span>
             </h1>
 
-            <p className="mt-6 max-w-lg mx-auto lg:mx-0 text-base leading-relaxed text-muted-foreground md:text-lg">
-              أصمم وأطور مواقع وأنظمة رقمية تجمع بين التصميم الاحترافي، وسهولة الاستخدام، والأداء السريع. سواء كنت تطلق مشروع جديد أو تطور مشروع قائم، هدفي إني أبني لك منتج يخدمك ويعطي عملاءك تجربة تليق باسمك.
+            <p className="mt-8 max-w-md mx-auto lg:mx-0 text-base leading-[1.9] text-muted-foreground md:text-lg">
+              مواقع وأنظمة رقمية تجمع تصميمًا هادئًا بأداءٍ سريع.
+              <br />
+              نبنيها معك لتخدم عملك وتليق باسمك.
             </p>
 
-            <div className="mt-10 flex flex-wrap items-center justify-center lg:justify-start gap-3">
+            <div className="mt-12 flex flex-wrap items-center justify-center lg:justify-start gap-3">
               <DSButton asChild size="lg" variant="primary">
                 <Link to="/work">
                   استعرض الأعمال
@@ -114,7 +116,7 @@ export function Hero() {
             </div>
 
             {/* Social links */}
-            <div className="mt-10 flex items-center justify-center lg:justify-start gap-3">
+            <div className="mt-14 flex items-center justify-center lg:justify-start gap-3">
               <span className="text-xs text-muted-foreground">تواصل:</span>
               <div className="h-px flex-1 max-w-16 bg-border/60" />
               <ul className="flex items-center gap-2">
