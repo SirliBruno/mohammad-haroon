@@ -28,6 +28,7 @@ import {
   CTA,
 } from "@/components/ds";
 import { Input } from "@/components/ui/input";
+import { trackEvent } from "@/lib/analytics";
 import {
   Select,
   SelectContent,
@@ -167,6 +168,7 @@ function ContactPage() {
     setServerError(null);
     try {
       await submitInquiry({ data });
+      trackEvent("contact_submit", { type: data.type });
       setSubmitted(true);
       reset();
     } catch (err) {
@@ -238,6 +240,7 @@ function ContactPage() {
             ) : (
               <form
                 onSubmit={handleSubmit(onSubmit)}
+                onFocus={() => trackEvent("contact_start")}
                 noValidate
                 aria-labelledby="contact-form-heading"
                 className="space-y-6"

@@ -6,6 +6,7 @@ import { Container } from "@/components/layout/container";
 import { HeroWorkspace } from "@/components/sections/hero-workspace";
 import { RotatingWord } from "@/components/sections/rotating-word";
 import { socials } from "@/config/socials";
+import { trackEvent } from "@/lib/analytics";
 
 const socialIcon: Record<string, typeof Github> = {
   LinkedIn: Linkedin,
@@ -104,7 +105,7 @@ export function Hero() {
                 </Link>
               </DSButton>
               <DSButton asChild size="lg" variant="outline">
-                <Link to="/contact">
+                <Link to="/contact" onClick={() => trackEvent("cta_click", { source: "hero_contact" })}>
                   عندك فكرة ؟
                   <ArrowUpRight />
                 </Link>
