@@ -3,7 +3,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { ArrowLeft, ArrowUpRight, Github, Linkedin, Mail, Twitter } from "lucide-react";
 import { DSButton } from "@/components/ds";
 import { Container } from "@/components/layout/container";
-import { HeroProjectsCarousel } from "@/components/sections/hero-projects-carousel";
+import { HeroWorkspace } from "@/components/sections/hero-workspace";
 import { socials } from "@/config/socials";
 
 const socialIcon: Record<string, typeof Github> = {
@@ -141,7 +141,7 @@ export function Hero() {
             transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
             className="min-w-0"
           >
-            <HeroProjectsCarousel />
+            <HeroWorkspace />
           </motion.div>
         </div>
       </Container>
