@@ -354,18 +354,18 @@ function ProjectCard({ project, className }: { project: FeaturedProject; classNa
   return (
     <div
       className={cn(
-        "w-[124px] sm:w-[170px] md:w-[220px] rounded-xl border border-border/60 bg-background/85 p-3 sm:p-4 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.4)] backdrop-blur-xl",
+        "w-[104px] sm:w-[170px] md:w-[220px] rounded-lg border border-border/60 bg-background/85 p-2 sm:p-4 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.4)] backdrop-blur-xl sm:rounded-xl",
         className,
       )}
       dir="rtl"
     >
-      <div className="flex items-center justify-between">
-        <div className="text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+      <div className="flex items-center justify-between gap-1">
+        <div className="text-[8px] font-medium uppercase tracking-[0.14em] text-muted-foreground sm:text-[10px] sm:tracking-[0.18em]">
           مشروع مختار
         </div>
         <span
           className={cn(
-            "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[9px] font-medium",
+            "inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[8px] font-medium sm:gap-1 sm:px-2 sm:text-[9px]",
             isLive
               ? "bg-emerald-500/12 text-emerald-600"
               : "bg-amber-500/12 text-amber-600",
@@ -380,10 +380,10 @@ function ProjectCard({ project, className }: { project: FeaturedProject; classNa
           {project.status}
         </span>
       </div>
-      <div className="mt-3 text-base font-semibold tracking-tight text-foreground">
+      <div className="mt-2 text-xs font-semibold tracking-tight text-foreground sm:mt-3 sm:text-base">
         {project.name}
       </div>
-      <div className="mt-4 space-y-2 text-[11px]">
+      <div className="mt-2 space-y-1 text-[9px] sm:mt-4 sm:space-y-2 sm:text-[11px]">
         <div className="flex items-center justify-between">
           <span className="text-muted-foreground">التصنيف</span>
           <span className="text-foreground">{project.category}</span>
