@@ -1,0 +1,1 @@
+REVOKE EXECUTE ON FUNCTION public.tg_bootstrap_first_admin() FROM PUBLIC, anon, authenticated;
