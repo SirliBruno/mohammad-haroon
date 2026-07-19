@@ -102,7 +102,7 @@ export function Hero() {
               </DSButton>
               <DSButton asChild size="lg" variant="outline">
                 <Link to="/contact">
-                  ابدأ مشروعًا
+                  عندك فكرة ؟
                   <ArrowUpRight />
                 </Link>
               </DSButton>
