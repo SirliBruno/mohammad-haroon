@@ -202,6 +202,7 @@ export function HeroMobile() {
         description: fb.description,
         Icon: fb.Icon,
         status: fb.status,
+        image: r.mobile_url || r.cover_url || null,
       };
     });
   }, [dbHero]);
