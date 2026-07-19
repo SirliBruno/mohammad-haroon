@@ -142,7 +142,7 @@ function Home() {
         </Reveal>
 
         <div className="mt-24 space-y-32 md:mt-32 md:space-y-56">
-          {featured.map((project, i) => {
+          {featured.map((project) => {
             const MockupUI = featuredMockups[project.slug] ?? DashboardUI;
             return (
               <Reveal key={project.slug}>
