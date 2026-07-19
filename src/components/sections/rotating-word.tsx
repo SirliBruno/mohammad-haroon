@@ -3,7 +3,6 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 const WORDS = [
   { text: "فكرتـــك", color: "#6366F1" },
-  { text: "مشروعـــك", color: "#8B5CF6" },
   { text: "موقعــــك", color: "#3B82F6" },
   { text: "متجــــرك", color: "#06B6D4" },
   { text: "نظامـــــك", color: "#A855F7" },
