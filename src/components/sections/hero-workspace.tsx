@@ -274,19 +274,19 @@ function CodeWindow({ project, className }: { project: FeaturedProject; classNam
     <WindowShell className={cn("w-[170px] sm:w-[260px] md:w-[340px] bg-neutral-950", className)}>
       <div
         dir="ltr"
-        className="flex items-center gap-2 border-b border-white/5 bg-neutral-900 px-3 py-2"
+        className="flex items-center gap-1.5 border-b border-white/5 bg-neutral-900 px-2 py-1 sm:gap-2 sm:px-3 sm:py-2"
       >
-        <div className="flex gap-1.5">
-          <span className="size-2.5 rounded-full bg-red-400/70" />
-          <span className="size-2.5 rounded-full bg-amber-400/70" />
-          <span className="size-2.5 rounded-full bg-emerald-400/70" />
+        <div className="flex gap-1 sm:gap-1.5">
+          <span className="size-1.5 rounded-full bg-red-400/70 sm:size-2.5" />
+          <span className="size-1.5 rounded-full bg-amber-400/70 sm:size-2.5" />
+          <span className="size-1.5 rounded-full bg-emerald-400/70 sm:size-2.5" />
         </div>
-        <div className="mx-auto flex items-center gap-2 text-[10px] font-medium text-neutral-400">
-          <span className={cn("size-1.5 rounded-full", CODE_ACCENT[project.accent])}
+        <div className="mx-auto flex items-center gap-1 text-[8px] font-medium text-neutral-400 sm:gap-2 sm:text-[10px]">
+          <span className={cn("size-1 rounded-full sm:size-1.5", CODE_ACCENT[project.accent])}
             style={{ backgroundColor: "currentColor" }} />
           <span className="text-neutral-300">{project.name.toLowerCase()}.tsx</span>
         </div>
-        <div className="w-10" />
+        <div className="w-6 sm:w-10" />
       </div>
       <div dir="ltr" className="flex bg-neutral-950 font-mono text-[10px] leading-[1.65]">
         <div className="select-none border-r border-white/5 px-2 py-3 text-right text-neutral-600">
