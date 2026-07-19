@@ -13,7 +13,7 @@
  *
  * All motion respects prefers-reduced-motion.
  */
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactElement } from "react";
 import { Link } from "@tanstack/react-router";
 import {
   AnimatePresence,
