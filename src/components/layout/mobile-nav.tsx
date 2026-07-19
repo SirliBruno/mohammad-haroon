@@ -140,7 +140,8 @@ export function MobileNav() {
             </motion.aside>
           </motion.div>
         ) : null}
-      </AnimatePresence>
+      </AnimatePresence>, document.body)}
+    </>
     </>
   );
 }
