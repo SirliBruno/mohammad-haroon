@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
-import { Container } from "./container";
 import { MobileNav } from "./mobile-nav";
 import { Logo } from "@/components/brand/logo";
 import { AvailabilityBadge } from "@/components/brand/availability-badge";
