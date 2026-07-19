@@ -126,7 +126,7 @@ export function Hero() {
                         target={s.href.startsWith("http") ? "_blank" : undefined}
                         rel="noreferrer noopener"
                         aria-label={s.label}
-                        className="grid size-9 place-items-center rounded-full border border-border/60 bg-background/60 text-foreground/80 backdrop-blur-sm transition-colors hover:border-primary/40 hover:text-primary"
+                        className="grid size-11 sm:size-9 place-items-center rounded-full border border-border/60 bg-background/60 text-foreground/80 backdrop-blur-sm transition-colors hover:border-primary/40 hover:text-primary"
                       >
                         <Icon className="size-4" aria-hidden />
                       </a>
