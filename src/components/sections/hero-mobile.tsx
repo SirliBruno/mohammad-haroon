@@ -391,91 +391,34 @@ export function HeroMobile() {
             <motion.div
               key={activeItem.slug}
               className="pointer-events-none absolute left-1/2 top-1/2 z-40 -translate-x-1/2 -translate-y-1/2"
-              initial={{ opacity: 0, scale: 0.55, y: 10 }}
-              animate={{ opacity: 1, scale: 1, y: [0, -6, 0] }}
-              exit={{ opacity: 0, scale: 0.7, y: 8 }}
-              transition={{
-                opacity: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
-                scale: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
-                y: reduce
-                  ? { duration: 0.5 }
-                  : { duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.3 },
-              }}
+              initial={{ opacity: 0, scale: 0.6, y: 6 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.7, y: 6 }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             >
-              {/* Ambient halo */}
-              <div
-                aria-hidden
-                className="pointer-events-none absolute left-1/2 top-1/2 -z-10 size-[240px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/25 blur-3xl"
-              />
-              <div
-                aria-hidden
-                className="pointer-events-none absolute left-1/2 top-1/2 -z-10 size-[150px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/20 blur-2xl"
-              />
-              {/* Conic ring */}
-              <div
-                aria-hidden
-                className="pointer-events-none absolute left-1/2 top-1/2 -z-10 size-[200px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-70 [mask-image:radial-gradient(closest-side,transparent_62%,black_66%,transparent_80%)]"
-                style={{
-                  background:
-                    "conic-gradient(from 120deg, transparent, color-mix(in oklab, var(--color-primary) 55%, transparent), transparent 60%)",
-                }}
-              />
-
-              <motion.div
-                className="relative"
-                animate={reduce ? undefined : { rotate: [-1.2, 1.2, -1.2] }}
-                transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
-              >
-                <PhoneFrame className="w-[160px] sm:w-[180px]">
-                  {activeItem.image ? (
-                    <img
-                      src={activeItem.image}
-                      alt={activeItem.name}
-                      className="h-full w-full object-cover"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-linear-to-br from-primary/20 via-background to-background p-4 text-center">
-                      <activeItem.Icon className="size-9 text-primary" aria-hidden />
-                      <span className="text-[12px] font-semibold text-foreground">
-                        {activeItem.name}
-                      </span>
-                      <span className="text-[10px] text-muted-foreground">
-                        {activeItem.category}
-                      </span>
-                    </div>
-                  )}
-                </PhoneFrame>
-
-                {/* Sheen highlight over glass */}
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0 rounded-[2.5rem] bg-linear-to-tr from-white/0 via-white/10 to-white/0 mix-blend-overlay"
-                />
-
-                {/* Floating status pill */}
-                <motion.div
-                  dir="rtl"
-                  className="absolute -bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-border/70 bg-background/90 px-2.5 py-1 text-[10px] font-medium text-foreground shadow-[0_10px_24px_-12px_rgba(0,0,0,0.4)] backdrop-blur-md"
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3, duration: 0.5 }}
-                >
-                  <span className="inline-flex items-center gap-1.5">
-                    <span
-                      className={cn(
-                        "size-1.5 rounded-full",
-                        STATUS_COLOR[activeItem.status],
-                      )}
-                    />
-                    {activeItem.category}
-                  </span>
-                </motion.div>
-              </motion.div>
+              <PhoneFrame className="w-[150px] sm:w-[170px]">
+                {activeItem.image ? (
+                  <img
+                    src={activeItem.image}
+                    alt={activeItem.name}
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-linear-to-br from-primary/15 via-background to-background p-4 text-center">
+                    <activeItem.Icon className="size-8 text-primary" aria-hidden />
+                    <span className="text-[12px] font-semibold text-foreground">
+                      {activeItem.name}
+                    </span>
+                    <span className="text-[10px] text-muted-foreground">
+                      {activeItem.category}
+                    </span>
+                  </div>
+                )}
+              </PhoneFrame>
             </motion.div>
           )}
         </AnimatePresence>
-
 
 
         {/* Close chip */}
