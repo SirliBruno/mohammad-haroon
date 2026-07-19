@@ -9,6 +9,7 @@ import { useHydrated } from "@/hooks/use-hydrated";
 
 export function MobileNav() {
   const [open, setOpen] = useState(false);
+  const hydrated = useHydrated();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   useEffect(() => {
