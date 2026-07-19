@@ -25,6 +25,7 @@ import {
   type LucideProps,
 } from "lucide-react";
 import { listHeroProjectsPublic } from "@/lib/cms/hero.functions";
+import { PhoneFrame } from "@/components/mockups/devices";
 import { cn } from "@/lib/utils";
 import { site } from "@/config/site";
 
@@ -40,6 +41,8 @@ type Item = {
   description: string;
   Icon: ComponentType<LucideProps>;
   status: Status;
+  image?: string | null;
+
 };
 
 const FALLBACK: Item[] = [
@@ -199,6 +202,7 @@ export function HeroMobile() {
         description: fb.description,
         Icon: fb.Icon,
         status: fb.status,
+        image: r.mobile_url || r.cover_url || null,
       };
     });
   }, [dbHero]);
@@ -367,8 +371,8 @@ export function HeroMobile() {
           aria-label={active != null ? "إغلاق المشروع" : site.name}
           className="absolute left-1/2 top-1/2 z-30 -translate-x-1/2 -translate-y-1/2 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           animate={{
-            scale: active != null ? 0.78 : 1,
-            opacity: active != null ? 0.7 : 1,
+            scale: active != null ? 0.6 : 1,
+            opacity: active != null ? 0 : 1,
           }}
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
           disabled={active == null}
@@ -381,37 +385,41 @@ export function HeroMobile() {
           </div>
         </motion.button>
 
-        {/* Focused chip at the nucleus */}
+        {/* Focused project — iPhone mockup with project image */}
         <AnimatePresence>
           {activeItem && (
             <motion.div
               key={activeItem.slug}
               className="pointer-events-none absolute left-1/2 top-1/2 z-40 -translate-x-1/2 -translate-y-1/2"
-              initial={{ opacity: 0, scale: 0.7, y: 4 }}
-              animate={{ opacity: 1, scale: 1.15, y: 0 }}
-              exit={{ opacity: 0, scale: 0.8, y: 4 }}
-              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+              initial={{ opacity: 0, scale: 0.6, y: 6 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.7, y: 6 }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             >
-              <div
-                dir="rtl"
-                className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-background/95 px-4 py-2 text-[13px] font-semibold tracking-tight text-foreground shadow-[0_20px_45px_-18px_rgba(0,0,0,0.45)] backdrop-blur-md"
-              >
-                <activeItem.Icon
-                  className="size-4 text-primary"
-                  aria-hidden
-                />
-                <span className="whitespace-nowrap">{activeItem.name}</span>
-                <span
-                  className={cn(
-                    "size-1.5 shrink-0 rounded-full",
-                    STATUS_COLOR[activeItem.status],
-                  )}
-                  aria-hidden
-                />
-              </div>
+              <PhoneFrame className="w-[150px] sm:w-[170px]">
+                {activeItem.image ? (
+                  <img
+                    src={activeItem.image}
+                    alt={activeItem.name}
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-linear-to-br from-primary/15 via-background to-background p-4 text-center">
+                    <activeItem.Icon className="size-8 text-primary" aria-hidden />
+                    <span className="text-[12px] font-semibold text-foreground">
+                      {activeItem.name}
+                    </span>
+                    <span className="text-[10px] text-muted-foreground">
+                      {activeItem.category}
+                    </span>
+                  </div>
+                )}
+              </PhoneFrame>
             </motion.div>
           )}
         </AnimatePresence>
+
 
         {/* Close chip */}
         <AnimatePresence>
