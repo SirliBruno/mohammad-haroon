@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
-import { Container } from "./container";
 import { MobileNav } from "./mobile-nav";
 import { Logo } from "@/components/brand/logo";
 import { AvailabilityBadge } from "@/components/brand/availability-badge";
@@ -21,16 +20,16 @@ export function Nav() {
   }, []);
 
   return (
-    <header
-      className={cn(
-        "sticky top-0 z-40 transition-[background-color,border-color,backdrop-filter] duration-300",
-        scrolled
-          ? "border-b border-border/60 bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/70"
-          : "border-b border-transparent bg-transparent",
-      )}
-    >
-      <Container>
-        <div className="flex h-16 items-center justify-between gap-6">
+    <header className="sticky top-3 z-40 px-3 sm:top-4 sm:px-4">
+      <div
+        className={cn(
+          "mx-auto max-w-7xl rounded-full border transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300",
+          scrolled
+            ? "border-border/60 bg-background/80 shadow-lg shadow-black/5 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60"
+            : "border-border/40 bg-background/50 backdrop-blur-md supports-[backdrop-filter]:bg-background/40",
+        )}
+      >
+        <div className="flex h-14 items-center justify-between gap-6 px-4 sm:px-6">
           <div className="flex items-center gap-4">
             <Logo />
             <AvailabilityBadge />
@@ -85,7 +84,7 @@ export function Nav() {
             <MobileNav />
           </div>
         </div>
-      </Container>
+      </div>
     </header>
   );
 }
