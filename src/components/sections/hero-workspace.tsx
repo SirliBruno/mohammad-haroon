@@ -351,7 +351,7 @@ function ProjectCard({ project, className }: { project: FeaturedProject; classNa
   return (
     <div
       className={cn(
-        "w-[220px] rounded-xl border border-border/60 bg-background/85 p-4 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.4)] backdrop-blur-xl",
+        "w-[150px] sm:w-[180px] md:w-[220px] rounded-xl border border-border/60 bg-background/85 p-3 sm:p-4 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.4)] backdrop-blur-xl",
         className,
       )}
       dir="rtl"
