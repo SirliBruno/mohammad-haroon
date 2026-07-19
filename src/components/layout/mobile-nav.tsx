@@ -47,6 +47,7 @@ export function MobileNav() {
         {open ? <X className="size-5" /> : <Menu className="size-5" />}
       </button>
 
+      {hydrated && createPortal(
       <AnimatePresence>
         {open ? (
           <motion.div
