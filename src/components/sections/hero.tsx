@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowUpRight, Github, Linkedin, Mail, Twitter } from "lucide
 import { DSButton } from "@/components/ds";
 import { Container } from "@/components/layout/container";
 import { HeroWorkspace } from "@/components/sections/hero-workspace";
+import { RotatingWord } from "@/components/sections/rotating-word";
 import { socials } from "@/config/socials";
 
 const socialIcon: Record<string, typeof Github> = {
@@ -86,7 +87,9 @@ export function Hero() {
               className="mt-7 font-semibold tracking-tight text-foreground leading-[1.15] text-[1.75rem] sm:text-4xl md:text-5xl lg:text-[3.5rem]"
             >
               <span className="block whitespace-nowrap">أعطِ الخبز لخبّازه</span>
-              <span className="block whitespace-nowrap">وأعطِ الفكرة لأهلها</span>
+              <span className="block whitespace-nowrap">
+                وأعطِ <RotatingWord /> لأهلها
+              </span>
             </h1>
 
             <p className="mt-6 max-w-lg mx-auto lg:mx-0 text-base leading-relaxed text-muted-foreground md:text-lg">
