@@ -15,6 +15,8 @@
  */
 import { useEffect, useMemo, useRef, useState, type ReactElement } from "react";
 import { Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import {
   AnimatePresence,
   motion,
@@ -31,6 +33,7 @@ import {
   MobileAppUI,
   StoreUI,
 } from "@/components/mockups/ui-samples";
+import { listHeroProjectsPublic } from "@/lib/cms/hero.functions";
 import { cn } from "@/lib/utils";
 
 /* -------------------------------------------------------------------------- */
