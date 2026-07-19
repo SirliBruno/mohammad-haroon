@@ -455,14 +455,13 @@ export function HeroWorkspace() {
           </LaptopFrame>
         </motion.div>
 
-        {/* -------------------- OVERLAPPING DEVICES -------------------- */}
-        {/* iPhone — breaks the bottom-left corner. */}
+        {/* -------------------- SUPPORTING DEVICE: iPhone -------------------- */}
         <ScatterItem
           ctx={ctx}
           depth={0.05}
-          x="-2%"
-          y="58%"
-          rotate={-8}
+          x="-4%"
+          y="56%"
+          rotate={-6}
           floatY={9}
           duration={12}
           delay={0.3}
@@ -475,53 +474,15 @@ export function HeroWorkspace() {
           </div>
         </ScatterItem>
 
-        {/* Tablet — breaks the bottom-right corner. */}
-        <ScatterItem
-          ctx={ctx}
-          depth={0.04}
-          x="68%"
-          y="60%"
-          rotate={7}
-          floatY={9}
-          duration={13}
-          delay={0.6}
-          z={25}
-        >
-          <div className="drop-shadow-[0_30px_40px_rgba(0,0,0,0.35)]">
-            <TabletFrame className="w-[240px] sm:w-[280px] md:w-[300px]">
-              <TabletReadUI />
-            </TabletFrame>
-          </div>
-        </ScatterItem>
-
-        {/* Secondary browser window — tucked behind laptop top-right. */}
-        <ScatterItem
-          ctx={ctx}
-          depth={0.03}
-          x="62%"
-          y="-4%"
-          rotate={4}
-          floatY={7}
-          duration={14}
-          delay={0.2}
-          z={10}
-        >
-          <div className="w-[260px] opacity-95 sm:w-[300px]">
-            <BrowserFrame url="studio.figma.com" className="w-full">
-              <EditorUI />
-            </BrowserFrame>
-          </div>
-        </ScatterItem>
-
-        {/* -------------------- PRODUCT CARDS (glass panels) -------------------- */}
-        {/* Lighthouse — top-left, breaks upward slightly. */}
+        {/* -------------------- MINIMAL PRODUCT CARDS -------------------- */}
+        {/* Lighthouse — top-left. */}
         <ScatterItem
           ctx={ctx}
           depth={0.055}
-          x="-4%"
-          y="6%"
-          rotate={-3}
-          floatY={8}
+          x="-2%"
+          y="4%"
+          rotate={-2}
+          floatY={7}
           duration={11}
           delay={0.15}
           z={35}
@@ -529,13 +490,13 @@ export function HeroWorkspace() {
           <LighthouseCard />
         </ScatterItem>
 
-        {/* Analytics — right, mid-height, extends past right edge. */}
+        {/* Analytics — top-right. */}
         <ScatterItem
           ctx={ctx}
           depth={0.06}
-          x="82%"
-          y="26%"
-          rotate={4}
+          x="80%"
+          y="8%"
+          rotate={3}
           floatY={7}
           duration={10}
           delay={0.4}
@@ -544,102 +505,13 @@ export function HeroWorkspace() {
           <AnalyticsCard />
         </ScatterItem>
 
-        {/* Project status — left, mid-height. */}
-        <ScatterItem
-          ctx={ctx}
-          depth={0.05}
-          x="-6%"
-          y="36%"
-          rotate={-2}
-          floatY={8}
-          duration={12}
-          delay={0.55}
-          z={35}
-        >
-          <StatusCard
-            title="متجر Haven · v2"
-            stage="مرحلة التصميم · أسبوع 3"
-            progress={62}
-          />
-        </ScatterItem>
-
-        {/* Figma design window — extends past top-right. */}
-        <ScatterItem
-          ctx={ctx}
-          depth={0.05}
-          x="76%"
-          y="76%"
-          rotate={-4}
-          floatY={9}
-          duration={13}
-          delay={0.8}
-          z={40}
-        >
-          <FigmaCard />
-        </ScatterItem>
-
-        {/* -------------------- MICRO ELEMENTS -------------------- */}
-        {/* Sticky note — floating outside top-left. */}
-        <ScatterItem
-          ctx={ctx}
-          depth={0.045}
-          x="18%"
-          y="-2%"
-          rotate={-6}
-          floatY={5}
-          duration={9}
-          z={40}
-        >
-          <StickyNote tone="amber" className="w-[140px]">
-            <div className="font-semibold">Onboarding v2</div>
-            <div className="mt-0.5 text-[10px] opacity-75">3 خطوات · &lt; 45s</div>
-          </StickyNote>
-        </ScatterItem>
-
-        {/* Sticky note — bottom overhang. */}
-        <ScatterItem
-          ctx={ctx}
-          depth={0.05}
-          x="42%"
-          y="94%"
-          rotate={3}
-          floatY={5}
-          duration={10}
-          delay={0.4}
-          z={40}
-        >
-          <StickyNote tone="rose" className="w-[136px]">
-            <div className="font-semibold">Motion audit</div>
-            <div className="mt-0.5 text-[10px] opacity-75">مراجعة أخيرة</div>
-          </StickyNote>
-        </ScatterItem>
-
-        {/* Tech tag cluster — floats outside top-right. */}
-        <ScatterItem
-          ctx={ctx}
-          depth={0.055}
-          x="46%"
-          y="-4%"
-          rotate={-2}
-          floatY={4}
-          duration={9}
-          delay={0.3}
-          z={45}
-        >
-          <div className="flex flex-wrap items-center gap-1.5">
-            <Tag>Next.js 15</Tag>
-            <Tag>Motion</Tag>
-            <Tag>Supabase</Tag>
-          </div>
-        </ScatterItem>
-
-        {/* Featured badge — near the laptop. */}
+        {/* Small status badge — near the laptop. */}
         <ScatterItem
           ctx={ctx}
           depth={0.03}
-          x="26%"
-          y="16%"
-          rotate={-1}
+          x="38%"
+          y="92%"
+          rotate={0}
           floatY={3}
           duration={8}
           delay={0.5}
