@@ -138,14 +138,19 @@ export function Hero() {
             </div>
           </motion.div>
 
-          {/* Carousel (left side in RTL) */}
+          {/* Showcase — bespoke mobile layout, floating windows on desktop */}
           <motion.div
             initial={reduce ? false : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
             className="min-w-0"
           >
-            <HeroWorkspace />
+            <div className="lg:hidden">
+              <HeroMobile />
+            </div>
+            <div className="hidden lg:block">
+              <HeroWorkspace />
+            </div>
           </motion.div>
         </div>
       </Container>
