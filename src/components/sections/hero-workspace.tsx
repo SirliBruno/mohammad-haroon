@@ -199,18 +199,18 @@ function WindowTitleBar({
   return (
     <div
       dir="ltr"
-      className="flex items-center gap-2 border-b border-border/50 bg-muted/40 px-3 py-2"
+      className="flex items-center gap-1.5 border-b border-border/50 bg-muted/40 px-2 py-1 sm:gap-2 sm:px-3 sm:py-2"
     >
-      <div className="flex gap-1.5">
-        <span className="size-2.5 rounded-full bg-red-400/70" />
-        <span className="size-2.5 rounded-full bg-amber-400/70" />
-        <span className="size-2.5 rounded-full bg-emerald-400/70" />
+      <div className="flex gap-1 sm:gap-1.5">
+        <span className="size-1.5 rounded-full bg-red-400/70 sm:size-2.5" />
+        <span className="size-1.5 rounded-full bg-amber-400/70 sm:size-2.5" />
+        <span className="size-1.5 rounded-full bg-emerald-400/70 sm:size-2.5" />
       </div>
-      <div className="mx-auto flex items-center gap-1.5 text-[10px] font-medium text-muted-foreground">
+      <div className="mx-auto flex items-center gap-1 text-[8px] font-medium text-muted-foreground sm:gap-1.5 sm:text-[10px]">
         {icon}
         <span>{label}</span>
       </div>
-      <div className="w-10" />
+      <div className="w-6 sm:w-10" />
     </div>
   );
 }
