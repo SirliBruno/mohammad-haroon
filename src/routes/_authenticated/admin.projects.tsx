@@ -202,7 +202,7 @@ function AdminProjectsPage() {
         </div>
         <div className="flex gap-2">
           <Link
-            to="/_authenticated/admin/hero"
+            to="/admin/hero"
             className="rounded-md border border-border px-3 py-1.5 text-sm hover:bg-muted"
           >
             مشاريع الهيرو
