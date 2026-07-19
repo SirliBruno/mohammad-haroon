@@ -88,7 +88,7 @@ export function Hero() {
             >
               <span className="block whitespace-nowrap">أعـــــــــطِ الخبـــــز لخبّــــــــــازه</span>
               <span className="block whitespace-nowrap">
-                وأعــــطِ <RotatingWord /> لأهلهــــــــــا
+                وأعــــطِ <RotatingWord /> لأهلهــا
               </span>
             </h1>
 
