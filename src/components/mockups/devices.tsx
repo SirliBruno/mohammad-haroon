@@ -25,17 +25,17 @@ export function BrowserFrame({
     >
       <div
         dir="ltr"
-        className="flex items-center gap-2 border-b border-border/60 bg-muted/40 px-3 py-2"
+        className="flex items-center gap-1.5 border-b border-border/60 bg-muted/40 px-2 py-1 sm:gap-2 sm:px-3 sm:py-2"
       >
-        <div className="flex gap-1.5">
-          <span className="size-2.5 rounded-full bg-red-400/70" />
-          <span className="size-2.5 rounded-full bg-amber-400/70" />
-          <span className="size-2.5 rounded-full bg-emerald-400/70" />
+        <div className="flex gap-1 sm:gap-1.5">
+          <span className="size-1.5 rounded-full bg-red-400/70 sm:size-2.5" />
+          <span className="size-1.5 rounded-full bg-amber-400/70 sm:size-2.5" />
+          <span className="size-1.5 rounded-full bg-emerald-400/70 sm:size-2.5" />
         </div>
-        <div className="mx-auto flex h-5 max-w-[60%] flex-1 items-center justify-center rounded-md bg-background/70 px-2 text-[10px] text-muted-foreground">
+        <div className="mx-auto flex h-3.5 max-w-[60%] flex-1 items-center justify-center rounded bg-background/70 px-2 text-[8px] text-muted-foreground sm:h-5 sm:rounded-md sm:text-[10px]">
           {url}
         </div>
-        <div className="w-10" />
+        <div className="w-6 sm:w-10" />
       </div>
       <div className="aspect-[16/10] w-full bg-background">{children}</div>
     </div>
