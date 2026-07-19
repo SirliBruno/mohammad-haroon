@@ -1,18 +1,17 @@
 /**
- * HeroWorkspace — a premium, boundary-breaking product workspace.
+ * HeroWorkspace — "Floating Windows".
  *
- * Composition rules:
- *  - The FEATURED centerpiece is a MacBook mockup. Only the screen contents
- *    crossfade every ~7s. Replace <current.Screen /> with real <img /> once
- *    project screenshots exist (see FEATURED_SCREENS below).
- *  - Supporting devices (iPhone, Tablet, Studio browser) overlap the laptop
- *    at the corners and intentionally break the container boundary.
- *  - Floating "product cards" (Lighthouse, Analytics, Project Status, Figma,
- *    Tech Tags) sit on a scatter layer with subtle mouse-parallax and float.
- *  - Every element respects prefers-reduced-motion.
+ * Five deliberately-composed windows arranged as a designer/developer's
+ * workspace. Every 8s all four project-bound windows crossfade together
+ * to the next featured project.
  *
- * The canvas is `overflow-visible` so pieces at the edges deliberately extend
- * past the frame — Stripe/Framer/Linear style "living workspace" feel.
+ *   1. Browser         (dominant, showcases the website)
+ *   2. Figma           (top-right, peeks behind the browser)
+ *   3. VS Code         (bottom-left, peeks from behind)
+ *   4. iPhone preview  (overlaps browser bottom-right)
+ *   5. Project card    (small overview: name, status, category, date)
+ *
+ * Motion is intentionally quiet: soft mouse parallax + gentle float only.
  */
 import { useEffect, useMemo, useRef, useState, type ReactElement } from "react";
 import { Link } from "@tanstack/react-router";
@@ -24,64 +23,151 @@ import {
   useSpring,
   useTransform,
 } from "motion/react";
-import { ExternalLink, Sparkles, TrendingUp } from "lucide-react";
-import { LaptopFrame, PhoneFrame } from "@/components/mockups/devices";
+import { ArrowUpRight, Figma } from "lucide-react";
+import { BrowserFrame, PhoneFrame } from "@/components/mockups/devices";
 import {
   DashboardUI,
   EditorUI,
   MobileAppUI,
   StoreUI,
 } from "@/components/mockups/ui-samples";
-import { projects } from "@/data/projects";
 import { cn } from "@/lib/utils";
 
 /* -------------------------------------------------------------------------- */
-/* Featured centerpiece pool                                                  */
+/* Featured projects — the four synchronized crossfades                       */
 /* -------------------------------------------------------------------------- */
 
-type FeaturedScreen = {
+type FeaturedProject = {
   slug: string;
-  url: string;
-  title: string;
+  name: string;
+  host: string;
   category: string;
-  Screen: (p: { className?: string }) => ReactElement;
-  liveDemo?: string;
+  year: number;
+  status: "مباشر" | "قيد التطوير";
+  accent: string; // Tailwind color token used by Figma frame + code accents
+  Website: (p: { className?: string }) => ReactElement;
+  Mobile: (p: { className?: string }) => ReactElement;
+  code: string[]; // ~8 lines of realistic React
+  figma: {
+    title: string;
+    frames: string[]; // 4 frame labels
+  };
 };
 
-const FEATURED_SCREENS: FeaturedScreen[] = (() => {
-  const featured = projects.filter((p) => p.featured);
-  const pool = (featured.length ? featured : projects).slice(0, 5);
-  const uiPool: Array<FeaturedScreen["Screen"]> = [
-    DashboardUI,
-    StoreUI,
-    EditorUI,
-    DashboardUI,
-    StoreUI,
-  ];
-  return pool.map((p, i) => ({
-    slug: p.slug,
-    url: p.liveDemo ? safeHost(p.liveDemo) : `${p.slug}.app`,
-    title: p.title.split("—")[0].trim(),
-    category: p.category,
-    liveDemo: p.liveDemo,
-    Screen: uiPool[i % uiPool.length],
-  }));
-})();
-
-function safeHost(u: string) {
-  try {
-    return new URL(u).host;
-  } catch {
-    return u;
-  }
-}
+const FEATURED: FeaturedProject[] = [
+  {
+    slug: "northwind-analytics",
+    name: "Northwind",
+    host: "northwind.app",
+    category: "تصميم واجهات",
+    year: 2025,
+    status: "مباشر",
+    accent: "emerald",
+    Website: DashboardUI,
+    Mobile: MobileAppUI,
+    code: [
+      "export function Overview({ range }: Props) {",
+      "  const { data } = useMetrics(range);",
+      "",
+      "  return (",
+      "    <Card className=\"p-6\">",
+      "      <Header title=\"MRR\" delta={data.delta} />",
+      "      <TrendChart series={data.mrr} />",
+      "    </Card>",
+      "  );",
+      "}",
+    ],
+    figma: {
+      title: "Northwind · Reports v3",
+      frames: ["Overview", "Cohorts", "Empty", "Mobile"],
+    },
+  },
+  {
+    slug: "haven-storefront",
+    name: "Haven",
+    host: "haven.co",
+    category: "تجارة إلكترونية",
+    year: 2025,
+    status: "مباشر",
+    accent: "amber",
+    Website: StoreUI,
+    Mobile: MobileAppUI,
+    code: [
+      "export function ProductCard({ product }: Props) {",
+      "  return (",
+      "    <article className=\"group\">",
+      "      <Image src={product.cover} alt={product.name} />",
+      "      <h3 className=\"mt-3 text-sm\">{product.name}</h3>",
+      "      <p className=\"text-xs text-muted\">${product.price}</p>",
+      "    </article>",
+      "  );",
+      "}",
+    ],
+    figma: {
+      title: "Haven · Storefront v2",
+      frames: ["Home", "PDP", "Cart", "Checkout"],
+    },
+  },
+  {
+    slug: "atelier-cms",
+    name: "Atelier",
+    host: "atelier.studio",
+    category: "مواقع إلكترونية",
+    year: 2024,
+    status: "مباشر",
+    accent: "sky",
+    Website: EditorUI,
+    Mobile: MobileAppUI,
+    code: [
+      "export function Editor({ doc }: Props) {",
+      "  const [blocks, setBlocks] = useBlocks(doc);",
+      "",
+      "  return (",
+      "    <main className=\"mx-auto max-w-2xl\">",
+      "      <Toolbar onInsert={setBlocks} />",
+      "      <BlockList value={blocks} />",
+      "    </main>",
+      "  );",
+      "}",
+    ],
+    figma: {
+      title: "Atelier · Editor v1.4",
+      frames: ["Canvas", "Blocks", "Preview", "Publish"],
+    },
+  },
+  {
+    slug: "lumen-payments",
+    name: "Lumen",
+    host: "lumen.finance",
+    category: "مواقع إلكترونية",
+    year: 2024,
+    status: "قيد التطوير",
+    accent: "violet",
+    Website: DashboardUI,
+    Mobile: MobileAppUI,
+    code: [
+      "export async function createCharge(input: ChargeInput) {",
+      "  const session = await auth();",
+      "  return db.charge.create({",
+      "    data: {",
+      "      amount: input.amount,",
+      "      merchantId: session.merchantId,",
+      "    },",
+      "  });",
+      "}",
+    ],
+    figma: {
+      title: "Lumen · Console v0.9",
+      frames: ["Ledger", "Payouts", "API keys", "Logs"],
+    },
+  },
+];
 
 /* -------------------------------------------------------------------------- */
-/* Reusable floating "product cards"                                          */
+/* Window chrome primitives                                                    */
 /* -------------------------------------------------------------------------- */
 
-/** Glass-panel wrapper used by all floating cards. */
-function GlassPanel({
+function WindowShell({
   className,
   children,
 }: {
@@ -91,7 +177,7 @@ function GlassPanel({
   return (
     <div
       className={cn(
-        "rounded-2xl border border-border/50 bg-background/70 p-3.5 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.35)] backdrop-blur-xl",
+        "overflow-hidden rounded-xl border border-border/60 bg-card shadow-[0_30px_80px_-40px_rgba(0,0,0,0.45)] backdrop-blur-xl",
         className,
       )}
     >
@@ -100,105 +186,216 @@ function GlassPanel({
   );
 }
 
-/** Lighthouse-style performance score ring. */
-function LighthouseCard({ className }: { className?: string }) {
-  const scores = [
-    { label: "Performance", value: 99, tone: "text-emerald-500" },
-    { label: "Accessibility", value: 100, tone: "text-emerald-500" },
-    { label: "SEO", value: 98, tone: "text-emerald-500" },
-  ];
+function WindowTitleBar({
+  label,
+  icon,
+}: {
+  label: string;
+  icon?: React.ReactNode;
+}) {
   return (
-    <GlassPanel className={cn("w-[220px]", className)}>
-      <div dir="ltr" className="flex items-center justify-between">
-        <div className="text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-          Lighthouse
-        </div>
-        <Sparkles className="size-3 text-emerald-500" aria-hidden />
+    <div
+      dir="ltr"
+      className="flex items-center gap-2 border-b border-border/50 bg-muted/40 px-3 py-2"
+    >
+      <div className="flex gap-1.5">
+        <span className="size-2.5 rounded-full bg-red-400/70" />
+        <span className="size-2.5 rounded-full bg-amber-400/70" />
+        <span className="size-2.5 rounded-full bg-emerald-400/70" />
       </div>
-      <div dir="ltr" className="mt-3 flex items-center justify-between gap-2">
-        {scores.map((s) => {
-          const r = 16;
-          const c = 2 * Math.PI * r;
-          const dash = c * (s.value / 100);
-          return (
-            <div key={s.label} className="flex flex-col items-center gap-1">
-              <div className="relative size-10">
-                <svg viewBox="0 0 40 40" className="size-full -rotate-90">
-                  <circle
-                    cx="20"
-                    cy="20"
-                    r={r}
-                    fill="none"
-                    strokeWidth="3"
-                    className="stroke-muted"
-                  />
-                  <circle
-                    cx="20"
-                    cy="20"
-                    r={r}
-                    fill="none"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    strokeDasharray={`${dash} ${c}`}
-                    className={s.tone}
-                    stroke="currentColor"
-                  />
-                </svg>
-                <div className="absolute inset-0 grid place-items-center text-[10px] font-semibold tabular-nums">
-                  {s.value}
-                </div>
-              </div>
-              <div className="text-[8px] text-muted-foreground">{s.label}</div>
-            </div>
-          );
-        })}
+      <div className="mx-auto flex items-center gap-1.5 text-[10px] font-medium text-muted-foreground">
+        {icon}
+        <span>{label}</span>
       </div>
-    </GlassPanel>
+      <div className="w-10" />
+    </div>
   );
 }
-
-/** Analytics micro-widget — MRR spark. */
-function AnalyticsCard({ className }: { className?: string }) {
-  return (
-    <GlassPanel className={cn("w-[200px]", className)}>
-      <div dir="ltr" className="flex items-center justify-between">
-        <div>
-          <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-            MRR · Live
-          </div>
-          <div className="mt-1 text-lg font-semibold tracking-tight">$48,204</div>
-        </div>
-        <div className="flex items-center gap-1 rounded-full bg-emerald-500/10 px-1.5 py-0.5 text-[9px] font-medium text-emerald-600">
-          <TrendingUp className="size-2.5" aria-hidden /> 12.4%
-        </div>
-      </div>
-      <svg viewBox="0 0 200 46" className="mt-2 h-10 w-full" preserveAspectRatio="none">
-        <defs>
-          <linearGradient id="mrr-g" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="currentColor" stopOpacity="0.28" />
-            <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
-          </linearGradient>
-        </defs>
-        <path
-          d="M0 34 L20 30 L40 32 L60 22 L80 26 L100 16 L120 20 L140 10 L160 14 L180 6 L200 10 L200 46 L0 46 Z"
-          fill="url(#mrr-g)"
-          className="text-emerald-500"
-        />
-        <path
-          d="M0 34 L20 30 L40 32 L60 22 L80 26 L100 16 L120 20 L140 10 L160 14 L180 6 L200 10"
-          fill="none"
-          strokeWidth="1.6"
-          stroke="currentColor"
-          className="text-emerald-500"
-        />
-      </svg>
-    </GlassPanel>
-  );
-}
-
 
 /* -------------------------------------------------------------------------- */
-/* Parallax scatter item                                                       */
+/* Figma window                                                               */
+/* -------------------------------------------------------------------------- */
+
+const ACCENT_TINT: Record<string, string> = {
+  emerald: "from-emerald-200/60 via-emerald-100/30 to-transparent dark:from-emerald-900/40",
+  amber: "from-amber-200/60 via-amber-100/30 to-transparent dark:from-amber-900/40",
+  sky: "from-sky-200/60 via-sky-100/30 to-transparent dark:from-sky-900/40",
+  violet: "from-violet-200/60 via-violet-100/30 to-transparent dark:from-violet-900/40",
+};
+
+function FigmaWindow({ project, className }: { project: FeaturedProject; className?: string }) {
+  return (
+    <WindowShell className={cn("w-[320px]", className)}>
+      <WindowTitleBar
+        label={project.figma.title}
+        icon={<Figma className="size-3" aria-hidden />}
+      />
+      <div className="grid grid-cols-2 gap-2 bg-background/80 p-3">
+        {project.figma.frames.map((f, i) => (
+          <div key={f} className="space-y-1">
+            <div
+              className={cn(
+                "aspect-[4/3] rounded-md bg-linear-to-br",
+                i === 0
+                  ? ACCENT_TINT[project.accent]
+                  : "from-muted to-muted/40",
+                "ring-1 ring-inset ring-border/40",
+              )}
+            >
+              <div className="mx-2 mt-2 h-1 w-6 rounded-full bg-foreground/20" />
+              <div className="mx-2 mt-1.5 h-1 w-10 rounded-full bg-foreground/15" />
+            </div>
+            <div dir="ltr" className="text-[9px] text-muted-foreground">
+              {f}
+            </div>
+          </div>
+        ))}
+      </div>
+    </WindowShell>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* VS Code window                                                             */
+/* -------------------------------------------------------------------------- */
+
+const CODE_ACCENT: Record<string, string> = {
+  emerald: "text-emerald-500",
+  amber: "text-amber-500",
+  sky: "text-sky-500",
+  violet: "text-violet-500",
+};
+
+function CodeWindow({ project, className }: { project: FeaturedProject; className?: string }) {
+  return (
+    <WindowShell className={cn("w-[340px] bg-neutral-950", className)}>
+      <div
+        dir="ltr"
+        className="flex items-center gap-2 border-b border-white/5 bg-neutral-900 px-3 py-2"
+      >
+        <div className="flex gap-1.5">
+          <span className="size-2.5 rounded-full bg-red-400/70" />
+          <span className="size-2.5 rounded-full bg-amber-400/70" />
+          <span className="size-2.5 rounded-full bg-emerald-400/70" />
+        </div>
+        <div className="mx-auto flex items-center gap-2 text-[10px] font-medium text-neutral-400">
+          <span className={cn("size-1.5 rounded-full", CODE_ACCENT[project.accent])}
+            style={{ backgroundColor: "currentColor" }} />
+          <span className="text-neutral-300">{project.name.toLowerCase()}.tsx</span>
+        </div>
+        <div className="w-10" />
+      </div>
+      <div dir="ltr" className="flex bg-neutral-950 font-mono text-[10px] leading-[1.65]">
+        <div className="select-none border-r border-white/5 px-2 py-3 text-right text-neutral-600">
+          {project.code.map((_, i) => (
+            <div key={i}>{i + 1}</div>
+          ))}
+        </div>
+        <pre className="flex-1 overflow-hidden px-3 py-3 text-neutral-300">
+          {project.code.map((line, i) => (
+            <div key={i} className="whitespace-pre">
+              {colorize(line, project.accent)}
+            </div>
+          ))}
+        </pre>
+      </div>
+    </WindowShell>
+  );
+}
+
+/** Minimal, purpose-built syntax highlighter. */
+function colorize(line: string, accent: string): ReactElement {
+  const keyword = /\b(export|function|return|const|async|await|import|from)\b/g;
+  const jsxTag = /(<\/?[A-Za-z][A-Za-z0-9]*)/g;
+  const strings = /("[^"]*")/g;
+  const numbers = /\b(\d+)\b/g;
+
+  const tokens: Array<{ t: string; k: "kw" | "tag" | "str" | "num" | "txt" }> = [];
+  const src = line;
+  const pattern = new RegExp(
+    `${keyword.source}|${jsxTag.source}|${strings.source}|${numbers.source}`,
+    "g",
+  );
+  let last = 0;
+  let m: RegExpExecArray | null;
+  while ((m = pattern.exec(src))) {
+    if (m.index > last) tokens.push({ t: src.slice(last, m.index), k: "txt" });
+    if (m[1]) tokens.push({ t: m[0], k: "kw" });
+    else if (m[2]) tokens.push({ t: m[0], k: "tag" });
+    else if (m[3]) tokens.push({ t: m[0], k: "str" });
+    else tokens.push({ t: m[0], k: "num" });
+    last = m.index + m[0].length;
+  }
+  if (last < src.length) tokens.push({ t: src.slice(last), k: "txt" });
+
+  const kwClass = CODE_ACCENT[accent];
+  return (
+    <>
+      {tokens.map((tk, i) => {
+        if (tk.k === "kw") return <span key={i} className={kwClass}>{tk.t}</span>;
+        if (tk.k === "tag") return <span key={i} className="text-rose-400/80">{tk.t}</span>;
+        if (tk.k === "str") return <span key={i} className="text-amber-300/80">{tk.t}</span>;
+        if (tk.k === "num") return <span key={i} className="text-sky-300/80">{tk.t}</span>;
+        return <span key={i}>{tk.t}</span>;
+      })}
+    </>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Project overview card                                                       */
+/* -------------------------------------------------------------------------- */
+
+function ProjectCard({ project, className }: { project: FeaturedProject; className?: string }) {
+  const isLive = project.status === "مباشر";
+  return (
+    <div
+      className={cn(
+        "w-[220px] rounded-xl border border-border/60 bg-background/85 p-4 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.4)] backdrop-blur-xl",
+        className,
+      )}
+      dir="rtl"
+    >
+      <div className="flex items-center justify-between">
+        <div className="text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+          مشروع مختار
+        </div>
+        <span
+          className={cn(
+            "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[9px] font-medium",
+            isLive
+              ? "bg-emerald-500/12 text-emerald-600"
+              : "bg-amber-500/12 text-amber-600",
+          )}
+        >
+          <span
+            className={cn(
+              "size-1 rounded-full",
+              isLive ? "bg-emerald-500" : "bg-amber-500",
+            )}
+          />
+          {project.status}
+        </span>
+      </div>
+      <div className="mt-3 text-base font-semibold tracking-tight text-foreground">
+        {project.name}
+      </div>
+      <div className="mt-4 space-y-2 text-[11px]">
+        <div className="flex items-center justify-between">
+          <span className="text-muted-foreground">التصنيف</span>
+          <span className="text-foreground">{project.category}</span>
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="text-muted-foreground">سنة الإنجاز</span>
+          <span className="text-foreground" dir="ltr">{project.year}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Parallax primitive                                                          */
 /* -------------------------------------------------------------------------- */
 
 type ParallaxCtx = {
@@ -206,14 +403,14 @@ type ParallaxCtx = {
   my: ReturnType<typeof useMotionValue<number>>;
 };
 
-function ScatterItem({
+function FloatingLayer({
   ctx,
   depth,
   x,
   y,
   rotate = 0,
-  floatY = 8,
-  duration = 9,
+  floatY = 6,
+  duration = 12,
   delay = 0,
   z = 0,
   className,
@@ -260,22 +457,21 @@ function ScatterItem({
 export function HeroWorkspace() {
   const reduce = useReducedMotion();
   const canvasRef = useRef<HTMLDivElement>(null);
-
-  // ---- Featured crossfade ----
   const [active, setActive] = useState(0);
+
   useEffect(() => {
-    if (reduce || FEATURED_SCREENS.length <= 1) return;
+    if (reduce || FEATURED.length <= 1) return;
     const id = window.setInterval(() => {
-      setActive((i) => (i + 1) % FEATURED_SCREENS.length);
-    }, 7000);
+      setActive((i) => (i + 1) % FEATURED.length);
+    }, 8000);
     return () => window.clearInterval(id);
   }, [reduce]);
 
-  // ---- Mouse parallax ----
+  // Mouse parallax
   const rawX = useMotionValue(0);
   const rawY = useMotionValue(0);
-  const mx = useSpring(rawX, { stiffness: 55, damping: 20, mass: 0.7 });
-  const my = useSpring(rawY, { stiffness: 55, damping: 20, mass: 0.7 });
+  const mx = useSpring(rawX, { stiffness: 45, damping: 22, mass: 0.7 });
+  const my = useSpring(rawY, { stiffness: 45, damping: 22, mass: 0.7 });
   const ctx: ParallaxCtx = useMemo(() => ({ mx, my }), [mx, my]);
 
   const onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -289,11 +485,9 @@ export function HeroWorkspace() {
     rawY.set(0);
   };
 
-  const current = FEATURED_SCREENS[active] ?? FEATURED_SCREENS[0];
-
-  // Centerpiece tiny parallax (declared once, not per-render inside JSX)
-  const centerX = useTransform(mx, (v) => v * 0.012);
-  const centerY = useTransform(my, (v) => v * 0.012);
+  const current = FEATURED[active];
+  const centerX = useTransform(mx, (v) => v * 0.01);
+  const centerY = useTransform(my, (v) => v * 0.01);
 
   return (
     <div
@@ -301,129 +495,162 @@ export function HeroWorkspace() {
       onMouseMove={onMouseMove}
       onMouseLeave={onMouseLeave}
       dir="ltr"
-      // overflow-visible so elements can break the grid.
       className="relative isolate w-full select-none [perspective:1600px]"
       aria-label="مساحة عمل رقمية"
       role="img"
     >
-      {/* Ambient background: soft radial glow + fine grid, contained. */}
+      {/* Ambient background: soft grid + radial glow */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10 [mask-image:radial-gradient(70%_60%_at_50%_50%,black,transparent)]"
       >
         <div
-          className="absolute inset-0 opacity-40 dark:opacity-25"
+          className="absolute inset-0 opacity-30 dark:opacity-15"
           style={{
             backgroundImage:
               "linear-gradient(to right, var(--color-border) 1px, transparent 1px), linear-gradient(to bottom, var(--color-border) 1px, transparent 1px)",
             backgroundSize: "56px 56px",
           }}
         />
-        <div className="absolute left-1/2 top-1/2 size-[780px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/10 blur-3xl" />
-        <div className="absolute -bottom-24 -right-16 size-[420px] rounded-full bg-accent/12 blur-3xl" />
+        <div className="absolute left-1/2 top-1/2 size-[720px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/8 blur-3xl" />
       </div>
 
-      {/* Stage — sizes give the centerpiece dominance while allowing overflow. */}
-      <div className="relative mx-auto aspect-[5/4] w-full min-h-[520px] sm:min-h-[600px] md:min-h-[680px] lg:min-h-[720px]">
-        {/* -------------------- CENTERPIECE: MacBook -------------------- */}
-        <motion.div
-          className="pointer-events-auto absolute left-1/2 top-[46%] w-[92%] max-w-[720px] -translate-x-1/2 -translate-y-1/2"
-          style={{ x: centerX, y: centerY, zIndex: 20 }}
-          initial={reduce ? false : { opacity: 0, y: 24, scale: 0.97 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+      <div className="relative mx-auto aspect-[5/4] w-full min-h-[520px] sm:min-h-[600px] md:min-h-[660px] lg:min-h-[700px]">
+        {/* -------------------- FIGMA (behind, top-right) -------------------- */}
+        <FloatingLayer
+          ctx={ctx}
+          depth={0.03}
+          x="58%"
+          y="-2%"
+          rotate={3}
+          floatY={6}
+          duration={14}
+          delay={0.2}
+          z={10}
         >
-          {/* Ambient glow */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={current.slug + "-figma"}
+              initial={reduce ? { opacity: 1 } : { opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={reduce ? { opacity: 0 } : { opacity: 0 }}
+              transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <FigmaWindow project={current} />
+            </motion.div>
+          </AnimatePresence>
+        </FloatingLayer>
+
+        {/* -------------------- BROWSER (dominant centerpiece) ---------------- */}
+        <motion.div
+          className="pointer-events-auto absolute left-1/2 top-[44%] w-[88%] max-w-[640px] -translate-x-1/2 -translate-y-1/2"
+          style={{ x: centerX, y: centerY, zIndex: 20 }}
+          initial={reduce ? false : { opacity: 0, y: 18, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        >
           <div
             aria-hidden
-            className="pointer-events-none absolute -inset-10 -z-10 rounded-[3rem] bg-linear-to-br from-primary/20 via-accent/12 to-transparent blur-3xl"
+            className="pointer-events-none absolute -inset-10 -z-10 rounded-[3rem] bg-linear-to-br from-primary/12 via-accent/8 to-transparent blur-3xl"
           />
-          <LaptopFrame>
+          <BrowserFrame url={current.host} className="w-full">
             <AnimatePresence mode="wait">
               <motion.div
-                key={current.slug}
-                initial={reduce ? { opacity: 1 } : { opacity: 0, scale: 1.015 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.995 }}
+                key={current.slug + "-web"}
+                initial={reduce ? { opacity: 1 } : { opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={reduce ? { opacity: 0 } : { opacity: 0 }}
                 transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
                 className="size-full"
               >
-                <current.Screen />
+                <current.Website />
               </motion.div>
             </AnimatePresence>
-          </LaptopFrame>
+          </BrowserFrame>
         </motion.div>
 
-        {/* -------------------- SUPPORTING DEVICE: iPhone -------------------- */}
-        <ScatterItem
+        {/* -------------------- VS CODE (bottom-left, peeks) ------------------ */}
+        <FloatingLayer
+          ctx={ctx}
+          depth={0.04}
+          x="-4%"
+          y="52%"
+          rotate={-4}
+          floatY={7}
+          duration={13}
+          delay={0.4}
+          z={15}
+        >
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={current.slug + "-code"}
+              initial={reduce ? { opacity: 1 } : { opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={reduce ? { opacity: 0 } : { opacity: 0 }}
+              transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <CodeWindow project={current} />
+            </motion.div>
+          </AnimatePresence>
+        </FloatingLayer>
+
+        {/* -------------------- iPHONE (overlaps browser, bottom-right) ------- */}
+        <FloatingLayer
           ctx={ctx}
           depth={0.05}
-          x="-4%"
-          y="56%"
-          rotate={-6}
-          floatY={9}
+          x="66%"
+          y="54%"
+          rotate={5}
+          floatY={8}
           duration={12}
-          delay={0.3}
+          delay={0.6}
           z={30}
         >
-          <div className="drop-shadow-[0_30px_40px_rgba(0,0,0,0.35)]">
-            <PhoneFrame className="w-[150px] sm:w-[170px] md:w-[190px]">
-              <MobileAppUI />
+          <div className="drop-shadow-[0_30px_40px_rgba(0,0,0,0.3)]">
+            <PhoneFrame className="w-[160px] sm:w-[180px]">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={current.slug + "-mobile"}
+                  initial={reduce ? { opacity: 1 } : { opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={reduce ? { opacity: 0 } : { opacity: 0 }}
+                  transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
+                  className="size-full"
+                >
+                  <current.Mobile />
+                </motion.div>
+              </AnimatePresence>
             </PhoneFrame>
           </div>
-        </ScatterItem>
+        </FloatingLayer>
 
-        {/* -------------------- MINIMAL PRODUCT CARDS -------------------- */}
-        {/* Lighthouse — top-left. */}
-        <ScatterItem
+        {/* -------------------- PROJECT OVERVIEW CARD ------------------------- */}
+        <FloatingLayer
           ctx={ctx}
           depth={0.055}
           x="-2%"
           y="4%"
           rotate={-2}
-          floatY={7}
+          floatY={5}
           duration={11}
-          delay={0.15}
+          delay={0.3}
           z={35}
         >
-          <LighthouseCard />
-        </ScatterItem>
-
-        {/* Analytics — top-right. */}
-        <ScatterItem
-          ctx={ctx}
-          depth={0.06}
-          x="80%"
-          y="8%"
-          rotate={3}
-          floatY={7}
-          duration={10}
-          delay={0.4}
-          z={35}
-        >
-          <AnalyticsCard />
-        </ScatterItem>
-
-        {/* Small status badge — near the laptop. */}
-        <ScatterItem
-          ctx={ctx}
-          depth={0.03}
-          x="38%"
-          y="92%"
-          rotate={0}
-          floatY={3}
-          duration={8}
-          delay={0.5}
-          z={45}
-        >
-          <div className="flex items-center gap-2 rounded-full bg-primary/12 px-3 py-1 text-[10px] font-medium text-primary ring-1 ring-primary/25 backdrop-blur">
-            <span className="size-1.5 rounded-full bg-primary" />
-            المشروع المميّز
-          </div>
-        </ScatterItem>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={current.slug + "-card"}
+              initial={reduce ? { opacity: 1 } : { opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={reduce ? { opacity: 0 } : { opacity: 0, y: -6 }}
+              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <ProjectCard project={current} />
+            </motion.div>
+          </AnimatePresence>
+        </FloatingLayer>
       </div>
 
-      {/* -------------------- CAPTION + PROGRESS -------------------- */}
+      {/* -------------------- CAPTION + DOTS -------------------- */}
       <div
         dir="rtl"
         className="mt-6 flex items-baseline justify-between gap-4 px-1"
@@ -431,44 +658,32 @@ export function HeroWorkspace() {
         <div className="min-w-0">
           <AnimatePresence mode="wait">
             <motion.h3
-              key={current.slug}
+              key={current.slug + "-title"}
               initial={reduce ? false : { opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               exit={reduce ? undefined : { opacity: 0, y: -6 }}
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
               className="truncate text-sm font-medium tracking-tight text-foreground md:text-base"
             >
-              {current.title}
+              {current.name}
             </motion.h3>
           </AnimatePresence>
           <div className="text-xs text-muted-foreground">{current.category}</div>
         </div>
-        <div className="flex items-center gap-2">
-          {current.liveDemo ? (
-            <a
-              href={current.liveDemo}
-              target="_blank"
-              rel="noreferrer noopener"
-              aria-label={`عرض مباشر لـ ${current.title}`}
-              className="grid size-8 place-items-center rounded-full border border-border/60 bg-background/70 text-foreground/80 backdrop-blur-md transition-colors hover:border-primary/40 hover:text-primary"
-            >
-              <ExternalLink className="size-3.5" aria-hidden />
-            </a>
-          ) : null}
-          <Link
-            to="/work/$slug"
-            params={{ slug: current.slug }}
-            className="text-xs font-medium text-foreground/70 underline-offset-4 hover:text-primary hover:underline"
-          >
-            دراسة الحالة
-          </Link>
-        </div>
+        <Link
+          to="/work/$slug"
+          params={{ slug: current.slug }}
+          className="inline-flex items-center gap-1 text-xs font-medium text-foreground/70 underline-offset-4 hover:text-primary hover:underline"
+        >
+          دراسة الحالة
+          <ArrowUpRight className="size-3.5" aria-hidden />
+        </Link>
       </div>
 
       <div className="mt-3 flex items-center justify-center gap-1.5">
-        {FEATURED_SCREENS.map((s, i) => (
+        {FEATURED.map((p, i) => (
           <button
-            key={s.slug}
+            key={p.slug}
             type="button"
             onClick={() => setActive(i)}
             aria-label={`عرض المشروع ${i + 1}`}
@@ -483,7 +698,7 @@ export function HeroWorkspace() {
       </div>
 
       <div className="sr-only" aria-live="polite">
-        {current.title}
+        {current.name}
       </div>
     </div>
   );
