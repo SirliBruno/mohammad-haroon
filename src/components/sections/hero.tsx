@@ -16,25 +16,22 @@ const socialIcon: Record<string, typeof Github> = {
   "البريد الإلكتروني": Mail,
 };
 
-// Tiny drifting particles — pure decoration, disabled under reduced motion.
+// Minimal drifting particles — pure decoration, disabled under reduced motion.
 function Particles() {
   const dots = [
-    { top: "12%", left: "18%", d: 9 },
-    { top: "28%", left: "72%", d: 11 },
-    { top: "58%", left: "38%", d: 13 },
-    { top: "74%", left: "82%", d: 10 },
-    { top: "42%", left: "8%", d: 12 },
-    { top: "80%", left: "22%", d: 14 },
+    { top: "22%", left: "16%", d: 14 },
+    { top: "62%", left: "78%", d: 16 },
+    { top: "78%", left: "28%", d: 18 },
   ];
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
       {dots.map((p, i) => (
         <motion.span
           key={i}
-          className="absolute size-1 rounded-full bg-primary/40 shadow-[0_0_12px_rgba(37,99,235,0.5)]"
+          className="absolute size-1 rounded-full bg-primary/25"
           style={{ top: p.top, left: p.left }}
-          animate={{ y: [0, -14, 0], opacity: [0.25, 0.7, 0.25] }}
-          transition={{ duration: p.d, repeat: Infinity, ease: "easeInOut", delay: i * 0.6 }}
+          animate={{ y: [0, -10, 0], opacity: [0.15, 0.4, 0.15] }}
+          transition={{ duration: p.d, repeat: Infinity, ease: "easeInOut", delay: i * 1.2 }}
         />
       ))}
     </div>
