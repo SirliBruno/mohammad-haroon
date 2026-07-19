@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "motion/react";
 import { Menu, X } from "lucide-react";
 import { primaryNav } from "@/config/nav";
 import { socials } from "@/config/socials";
+import { useHydrated } from "@/hooks/use-hydrated";
 
 export function MobileNav() {
   const [open, setOpen] = useState(false);
