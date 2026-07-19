@@ -371,8 +371,8 @@ export function HeroMobile() {
           aria-label={active != null ? "إغلاق المشروع" : site.name}
           className="absolute left-1/2 top-1/2 z-30 -translate-x-1/2 -translate-y-1/2 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           animate={{
-            scale: active != null ? 0.78 : 1,
-            opacity: active != null ? 0.7 : 1,
+            scale: active != null ? 0.6 : 1,
+            opacity: active != null ? 0 : 1,
           }}
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
           disabled={active == null}
