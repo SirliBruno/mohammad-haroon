@@ -19,6 +19,7 @@ import { buildMeta } from "@/features/seo/build-meta";
 import { site } from "@/config/site";
 import { ScrollProgress } from "@/components/layout/scroll-progress";
 import { ScrollToTop } from "@/components/layout/scroll-to-top";
+import { AnalyticsTracker } from "@/components/analytics-tracker";
 
 const organizationJsonLd = {
   "@context": "https://schema.org",
@@ -174,6 +175,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="system">
         <div className="flex min-h-dvh flex-col">
+          <AnalyticsTracker />
           <ScrollProgress />
           <Nav />
           <main id="main" className="flex-1">
