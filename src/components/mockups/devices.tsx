@@ -25,17 +25,17 @@ export function BrowserFrame({
     >
       <div
         dir="ltr"
-        className="flex items-center gap-2 border-b border-border/60 bg-muted/40 px-3 py-2"
+        className="flex items-center gap-1.5 border-b border-border/60 bg-muted/40 px-2 py-1 sm:gap-2 sm:px-3 sm:py-2"
       >
-        <div className="flex gap-1.5">
-          <span className="size-2.5 rounded-full bg-red-400/70" />
-          <span className="size-2.5 rounded-full bg-amber-400/70" />
-          <span className="size-2.5 rounded-full bg-emerald-400/70" />
+        <div className="flex gap-1 sm:gap-1.5">
+          <span className="size-1.5 rounded-full bg-red-400/70 sm:size-2.5" />
+          <span className="size-1.5 rounded-full bg-amber-400/70 sm:size-2.5" />
+          <span className="size-1.5 rounded-full bg-emerald-400/70 sm:size-2.5" />
         </div>
-        <div className="mx-auto flex h-5 max-w-[60%] flex-1 items-center justify-center rounded-md bg-background/70 px-2 text-[10px] text-muted-foreground">
+        <div className="mx-auto flex h-3.5 max-w-[60%] flex-1 items-center justify-center rounded bg-background/70 px-2 text-[8px] text-muted-foreground sm:h-5 sm:rounded-md sm:text-[10px]">
           {url}
         </div>
-        <div className="w-10" />
+        <div className="w-6 sm:w-10" />
       </div>
       <div className="aspect-[16/10] w-full bg-background">{children}</div>
     </div>
@@ -84,12 +84,13 @@ export function PhoneFrame({
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-[2rem] border-[6px] border-neutral-900 bg-neutral-900 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.5)] dark:border-neutral-800",
+        "relative overflow-hidden rounded-[1.75rem] border-[4px] border-neutral-900 bg-neutral-900 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.5)] sm:rounded-[2.25rem] sm:border-[6px] dark:border-neutral-800",
         className,
       )}
     >
-      <div className="absolute left-1/2 top-1.5 z-10 h-4 w-16 -translate-x-1/2 rounded-full bg-neutral-900" />
-      <div className="aspect-[9/19] w-full overflow-hidden rounded-[1.5rem] bg-background">
+      {/* Dynamic Island */}
+      <div className="absolute left-1/2 top-1.5 z-10 h-3 w-10 -translate-x-1/2 rounded-full bg-black sm:top-2 sm:h-4 sm:w-16" />
+      <div className="aspect-[9/19.5] w-full overflow-hidden rounded-[1.35rem] bg-background sm:rounded-[1.7rem]">
         {children}
       </div>
     </div>

@@ -199,18 +199,18 @@ function WindowTitleBar({
   return (
     <div
       dir="ltr"
-      className="flex items-center gap-2 border-b border-border/50 bg-muted/40 px-3 py-2"
+      className="flex items-center gap-1.5 border-b border-border/50 bg-muted/40 px-2 py-1 sm:gap-2 sm:px-3 sm:py-2"
     >
-      <div className="flex gap-1.5">
-        <span className="size-2.5 rounded-full bg-red-400/70" />
-        <span className="size-2.5 rounded-full bg-amber-400/70" />
-        <span className="size-2.5 rounded-full bg-emerald-400/70" />
+      <div className="flex gap-1 sm:gap-1.5">
+        <span className="size-1.5 rounded-full bg-red-400/70 sm:size-2.5" />
+        <span className="size-1.5 rounded-full bg-amber-400/70 sm:size-2.5" />
+        <span className="size-1.5 rounded-full bg-emerald-400/70 sm:size-2.5" />
       </div>
-      <div className="mx-auto flex items-center gap-1.5 text-[10px] font-medium text-muted-foreground">
+      <div className="mx-auto flex items-center gap-1 text-[8px] font-medium text-muted-foreground sm:gap-1.5 sm:text-[10px]">
         {icon}
         <span>{label}</span>
       </div>
-      <div className="w-10" />
+      <div className="w-6 sm:w-10" />
     </div>
   );
 }
@@ -274,19 +274,19 @@ function CodeWindow({ project, className }: { project: FeaturedProject; classNam
     <WindowShell className={cn("w-[170px] sm:w-[260px] md:w-[340px] bg-neutral-950", className)}>
       <div
         dir="ltr"
-        className="flex items-center gap-2 border-b border-white/5 bg-neutral-900 px-3 py-2"
+        className="flex items-center gap-1.5 border-b border-white/5 bg-neutral-900 px-2 py-1 sm:gap-2 sm:px-3 sm:py-2"
       >
-        <div className="flex gap-1.5">
-          <span className="size-2.5 rounded-full bg-red-400/70" />
-          <span className="size-2.5 rounded-full bg-amber-400/70" />
-          <span className="size-2.5 rounded-full bg-emerald-400/70" />
+        <div className="flex gap-1 sm:gap-1.5">
+          <span className="size-1.5 rounded-full bg-red-400/70 sm:size-2.5" />
+          <span className="size-1.5 rounded-full bg-amber-400/70 sm:size-2.5" />
+          <span className="size-1.5 rounded-full bg-emerald-400/70 sm:size-2.5" />
         </div>
-        <div className="mx-auto flex items-center gap-2 text-[10px] font-medium text-neutral-400">
-          <span className={cn("size-1.5 rounded-full", CODE_ACCENT[project.accent])}
+        <div className="mx-auto flex items-center gap-1 text-[8px] font-medium text-neutral-400 sm:gap-2 sm:text-[10px]">
+          <span className={cn("size-1 rounded-full sm:size-1.5", CODE_ACCENT[project.accent])}
             style={{ backgroundColor: "currentColor" }} />
           <span className="text-neutral-300">{project.name.toLowerCase()}.tsx</span>
         </div>
-        <div className="w-10" />
+        <div className="w-6 sm:w-10" />
       </div>
       <div dir="ltr" className="flex bg-neutral-950 font-mono text-[10px] leading-[1.65]">
         <div className="select-none border-r border-white/5 px-2 py-3 text-right text-neutral-600">
@@ -354,18 +354,18 @@ function ProjectCard({ project, className }: { project: FeaturedProject; classNa
   return (
     <div
       className={cn(
-        "w-[124px] sm:w-[170px] md:w-[220px] rounded-xl border border-border/60 bg-background/85 p-3 sm:p-4 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.4)] backdrop-blur-xl",
+        "w-[104px] sm:w-[170px] md:w-[220px] rounded-lg border border-border/60 bg-background/85 p-2 sm:p-4 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.4)] backdrop-blur-xl sm:rounded-xl",
         className,
       )}
       dir="rtl"
     >
-      <div className="flex items-center justify-between">
-        <div className="text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+      <div className="flex items-center justify-between gap-1">
+        <div className="text-[8px] font-medium uppercase tracking-[0.14em] text-muted-foreground sm:text-[10px] sm:tracking-[0.18em]">
           مشروع مختار
         </div>
         <span
           className={cn(
-            "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[9px] font-medium",
+            "inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[8px] font-medium sm:gap-1 sm:px-2 sm:text-[9px]",
             isLive
               ? "bg-emerald-500/12 text-emerald-600"
               : "bg-amber-500/12 text-amber-600",
@@ -380,10 +380,10 @@ function ProjectCard({ project, className }: { project: FeaturedProject; classNa
           {project.status}
         </span>
       </div>
-      <div className="mt-3 text-base font-semibold tracking-tight text-foreground">
+      <div className="mt-2 text-xs font-semibold tracking-tight text-foreground sm:mt-3 sm:text-base">
         {project.name}
       </div>
-      <div className="mt-4 space-y-2 text-[11px]">
+      <div className="mt-2 space-y-1 text-[9px] sm:mt-4 sm:space-y-2 sm:text-[11px]">
         <div className="flex items-center justify-between">
           <span className="text-muted-foreground">التصنيف</span>
           <span className="text-foreground">{project.category}</span>
@@ -574,7 +574,7 @@ export function HeroWorkspace() {
         <div className="absolute left-1/2 top-1/2 size-[720px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/8 blur-3xl" />
       </div>
 
-      <div className="relative mx-auto aspect-[4/5] sm:aspect-[5/4] w-full min-h-[560px] sm:min-h-[600px] md:min-h-[680px] lg:min-h-[720px]">
+      <div className="relative mx-auto aspect-[4/5] sm:aspect-[5/4] w-full min-h-[440px] sm:min-h-[600px] md:min-h-[680px] lg:min-h-[720px]">
         {/* -------------------- FIGMA (behind, top-right) -------------------- */}
         <FloatingLayer
           ctx={ctx}
@@ -666,7 +666,7 @@ export function HeroWorkspace() {
           z={30}
         >
           <div className="drop-shadow-[0_30px_40px_rgba(0,0,0,0.3)]">
-            <PhoneFrame className="w-[110px] sm:w-[150px] md:w-[180px]">
+            <PhoneFrame className="w-[88px] sm:w-[150px] md:w-[180px]">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={current.slug + "-mobile"}
