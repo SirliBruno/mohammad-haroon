@@ -84,14 +84,21 @@ export function PhoneFrame({
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-[1.75rem] border-[4px] border-neutral-900 bg-neutral-900 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.5)] sm:rounded-[2.25rem] sm:border-[6px] dark:border-neutral-800",
+        "relative rounded-[2.25rem] border border-neutral-700/60 bg-neutral-900 p-[3px] shadow-[0_20px_50px_-20px_rgba(0,0,0,0.55)] sm:rounded-[2.75rem] sm:p-[4px] dark:border-neutral-800",
         className,
       )}
     >
-      {/* Dynamic Island */}
-      <div className="absolute left-1/2 top-1.5 z-10 h-3 w-10 -translate-x-1/2 rounded-full bg-black sm:top-2 sm:h-4 sm:w-16" />
-      <div className="aspect-[9/19.5] w-full overflow-hidden rounded-[1.35rem] bg-background sm:rounded-[1.7rem]">
-        {children}
+      {/* Outer bezel highlight */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 rounded-[inherit] ring-1 ring-inset ring-white/5"
+      />
+      <div className="relative overflow-hidden rounded-[2rem] bg-black sm:rounded-[2.5rem]">
+        {/* Dynamic Island */}
+        <div className="pointer-events-none absolute left-1/2 top-1.5 z-10 h-4 w-14 -translate-x-1/2 rounded-full bg-black shadow-[0_0_0_1px_rgba(255,255,255,0.04)] sm:top-2 sm:h-5 sm:w-20" />
+        <div className="aspect-[9/19.5] w-full overflow-hidden rounded-[2rem] bg-background sm:rounded-[2.5rem]">
+          {children}
+        </div>
       </div>
     </div>
   );
