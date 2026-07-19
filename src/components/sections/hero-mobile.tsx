@@ -16,7 +16,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ArrowUpRight, Sparkles } from "lucide-react";
-import { BrowserFrame, PhoneFrame } from "@/components/mockups/devices";
+import { BrowserFrame } from "@/components/mockups/devices";
 import {
   DashboardUI,
   EditorUI,
@@ -318,39 +318,6 @@ export function HeroMobile() {
         </motion.div>
       </AnimatePresence>
 
-      {/* -------- TERTIARY · Phone mockup -------- */}
-      <div className="mt-8 flex justify-center">
-        <motion.div
-          initial={reduce ? false : { opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <motion.div
-            animate={reduce ? undefined : { y: [0, -4, 0] }}
-            transition={
-              reduce
-                ? undefined
-                : { duration: 11, repeat: Infinity, ease: "easeInOut", delay: 0.6 }
-            }
-            className="opacity-95 drop-shadow-[0_18px_28px_rgba(0,0,0,0.28)]"
-          >
-            <PhoneFrame className="w-[128px]">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={current.slug + "-m-phone"}
-                  initial={reduce ? { opacity: 1 } : { opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-                  className="size-full"
-                >
-                  <current.Mobile />
-                </motion.div>
-              </AnimatePresence>
-            </PhoneFrame>
-          </motion.div>
-        </motion.div>
-      </div>
 
       <div className="sr-only" aria-live="polite">
         {current.name}
