@@ -41,6 +41,8 @@ type Item = {
   description: string;
   Icon: ComponentType<LucideProps>;
   status: Status;
+  image?: string | null;
+
 };
 
 const FALLBACK: Item[] = [
