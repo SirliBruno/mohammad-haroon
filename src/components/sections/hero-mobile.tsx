@@ -1,13 +1,12 @@
 /**
- * HeroMobile — bespoke mobile hero.
+ * HeroMobile — "Project Orbit"
  *
- * A calm, premium "orbit" composition:
- *  • Personal monogram (MH) as the still center of the brand.
- *  • Real project objects (browser, phone, dashboard tile, store tile)
- *    floating organically around it with independent slow drift.
- *  • Tap an object → it magnetically glides to center, becomes the focus;
- *    remaining objects step back (scale/opacity/blur).
- *  • Details panel below updates on selection with a smooth crossfade.
+ * Fixed personal monogram (MH) at the center of the stage.
+ * Around it, six miniature real UI objects float organically:
+ * landing browser, e-commerce browser, phone app, dashboard tile,
+ * POS terminal, and booking calendar. Each is a real interface, not
+ * an icon. Tap → the object glides to center and grows; the rest
+ * gently step back with blur/dim. Details panel below fades in sync.
  */
 import {
   useEffect,
@@ -27,35 +26,45 @@ import {
   MobileAppUI,
   StoreUI,
 } from "@/components/mockups/ui-samples";
+import { BookingUI, PosUI, RestaurantUI } from "@/components/mockups/ui-extras";
 import { listHeroProjectsPublic } from "@/lib/cms/hero.functions";
 import { cn } from "@/lib/utils";
 import { site } from "@/config/site";
 
 /* ---------------- Types & data ---------------- */
 
-type ObjectKind = "browser" | "phone" | "dashboard" | "store";
+type ObjectKind =
+  | "browser-landing"
+  | "browser-store"
+  | "phone"
+  | "dashboard"
+  | "pos"
+  | "booking";
 
 type Slot = {
-  /** Position around the monogram, in % of the stage box. */
+  /** Position around the monogram (% of the stage). */
   x: number;
   y: number;
   /** Base scale — sets visual depth. */
   scale: number;
-  /** Small idle rotation, degrees. */
+  /** Small idle rotation. */
   rot: number;
-  /** Object kind selects which mock chrome to render. */
+  /** Miniature interface kind. */
   kind: ObjectKind;
-  /** Floating cycle seconds (each object drifts independently). */
+  /** Independent floating cycle (seconds). */
   drift: number;
-  /** Vertical drift range in px. */
+  /** Vertical drift amplitude (px). */
   amp: number;
 };
 
+// Organic scatter — different angles / sizes / distances / depth.
 const SLOTS: Slot[] = [
-  { x: 14, y: 18, scale: 0.92, rot: -6, kind: "browser", drift: 11, amp: 6 },
-  { x: 74, y: 12, scale: 0.72, rot: 5, kind: "dashboard", drift: 13, amp: 5 },
-  { x: 78, y: 68, scale: 0.82, rot: -4, kind: "phone", drift: 12, amp: 7 },
-  { x: 10, y: 70, scale: 0.7, rot: 6, kind: "store", drift: 14, amp: 5 },
+  { x: 8,  y: 12, scale: 1.02, rot: -5, kind: "browser-landing", drift: 12, amp: 6 },
+  { x: 78, y: 8,  scale: 0.72, rot: 6,  kind: "dashboard",       drift: 14, amp: 5 },
+  { x: 86, y: 56, scale: 0.90, rot: -4, kind: "phone",           drift: 11, amp: 7 },
+  { x: 62, y: 82, scale: 0.68, rot: 5,  kind: "booking",         drift: 15, amp: 4 },
+  { x: 6,  y: 68, scale: 0.86, rot: 4,  kind: "browser-store",   drift: 13, amp: 6 },
+  { x: 30, y: 88, scale: 0.62, rot: -6, kind: "pos",             drift: 16, amp: 4 },
 ];
 
 type Item = {
@@ -63,59 +72,94 @@ type Item = {
   name: string;
   host: string;
   category: string;
-  tech: string;
+  tech: string[];
   description: string;
   Preview: ComponentType<{ className?: string }>;
 };
 
 const FALLBACK: Item[] = [
   {
-    slug: "northwind-analytics",
-    name: "Northwind",
-    host: "northwind.app",
-    category: "لوحة تحكم",
-    tech: "Next.js",
-    description: "لوحة تحليلات هادئة مبنية للسرعة ووضوح القرار.",
-    Preview: DashboardUI,
-  },
-  {
-    slug: "haven-storefront",
-    name: "Haven",
-    host: "haven.co",
-    category: "تجارة إلكترونية",
-    tech: "Shopify",
-    description: "متجر أنيق بتجربة شراء انسيابية وأداء عالٍ.",
-    Preview: StoreUI,
-  },
-  {
     slug: "atelier-cms",
     name: "Atelier",
     host: "atelier.studio",
     category: "موقع تعريفي",
-    tech: "React",
-    description: "موقع محرّر بلغة تصميم دافئة ومحتوى قابل للإدارة.",
+    tech: ["React", "TypeScript", "Framer"],
+    description: "موقع محرّر بلغة تصميم دافئة ومحتوى قابل للإدارة بالكامل.",
     Preview: EditorUI,
+  },
+  {
+    slug: "northwind-analytics",
+    name: "Northwind",
+    host: "northwind.app",
+    category: "لوحة تحليلات",
+    tech: ["Next.js", "PostgreSQL", "Chart.js"],
+    description: "لوحة تحليلات هادئة مبنية للسرعة ووضوح القرار.",
+    Preview: DashboardUI,
   },
   {
     slug: "lumen-payments",
     name: "Lumen",
     host: "lumen.finance",
     category: "تطبيق جوال",
-    tech: "TypeScript",
-    description: "تجربة دفع رقمية سلسة على الجوال.",
+    tech: ["React Native", "Stripe"],
+    description: "تجربة دفع رقمية سلسة على الجوال مع إشعارات حيّة.",
     Preview: MobileAppUI,
+  },
+  {
+    slug: "haven-storefront",
+    name: "Haven",
+    host: "haven.co",
+    category: "تجارة إلكترونية",
+    tech: ["Shopify", "Hydrogen"],
+    description: "متجر أنيق بتجربة شراء انسيابية وأداء عالٍ.",
+    Preview: StoreUI,
+  },
+  {
+    slug: "verano-pos",
+    name: "Verano POS",
+    host: "verano.app",
+    category: "نظام نقاط بيع",
+    tech: ["React", "Supabase"],
+    description: "نظام نقاط بيع للمقاهي بواجهة سريعة وسير عمل واضح.",
+    Preview: PosUI,
+  },
+  {
+    slug: "orbit-booking",
+    name: "Orbit",
+    host: "orbit.reserve",
+    category: "نظام حجوزات",
+    tech: ["Next.js", "Postgres"],
+    description: "نظام حجوزات مرن للاستوديوهات والصالونات مع تقويم حيّ.",
+    Preview: BookingUI,
   },
 ];
 
 /* ---------------- Object chrome ---------------- */
 
-function BrowserObj({ children }: { children: ReactNode }) {
+function BrowserObj({
+  children,
+  host,
+  width = 232,
+}: {
+  children: ReactNode;
+  host: string;
+  width?: number;
+}) {
   return (
-    <div className="w-[220px] overflow-hidden rounded-xl border border-border/60 bg-card shadow-[0_20px_50px_-25px_rgba(0,0,0,0.4)]">
-      <div dir="ltr" className="flex items-center gap-1 border-b border-border/60 bg-muted/50 px-2 py-1">
+    <div
+      style={{ width }}
+      className="overflow-hidden rounded-xl border border-border/60 bg-card shadow-[0_28px_60px_-30px_rgba(0,0,0,0.5)]"
+    >
+      <div
+        dir="ltr"
+        className="flex items-center gap-1.5 border-b border-border/60 bg-muted/60 px-2 py-1.5"
+      >
         <span className="size-1.5 rounded-full bg-red-400/70" />
         <span className="size-1.5 rounded-full bg-amber-400/70" />
         <span className="size-1.5 rounded-full bg-emerald-400/70" />
+        <span className="mx-auto rounded-md bg-background/70 px-2 py-[1px] text-[8px] tracking-tight text-muted-foreground">
+          {host}
+        </span>
       </div>
       <div className="aspect-[16/10] w-full bg-background">{children}</div>
     </div>
@@ -124,10 +168,10 @@ function BrowserObj({ children }: { children: ReactNode }) {
 
 function PhoneObj({ children }: { children: ReactNode }) {
   return (
-    <div className="w-[110px] rounded-[1.4rem] border border-neutral-800/70 bg-neutral-900 p-[3px] shadow-[0_18px_40px_-20px_rgba(0,0,0,0.55)] dark:border-neutral-700">
-      <div className="relative overflow-hidden rounded-[1.2rem] bg-black">
+    <div className="w-[118px] rounded-[1.5rem] border border-neutral-800/70 bg-neutral-900 p-[3px] shadow-[0_22px_45px_-22px_rgba(0,0,0,0.6)] dark:border-neutral-700">
+      <div className="relative overflow-hidden rounded-[1.3rem] bg-black">
         <div className="pointer-events-none absolute left-1/2 top-1 z-10 h-2.5 w-10 -translate-x-1/2 rounded-full bg-black" />
-        <div className="aspect-[9/19.5] w-full overflow-hidden rounded-[1.2rem] bg-background">
+        <div className="aspect-[9/19.5] w-full overflow-hidden rounded-[1.3rem] bg-background">
           {children}
         </div>
       </div>
@@ -135,27 +179,48 @@ function PhoneObj({ children }: { children: ReactNode }) {
   );
 }
 
-function TileObj({ children, label }: { children: ReactNode; label: string }) {
+function TileObj({
+  children,
+  label,
+  width = 160,
+  ratio = "4/3",
+}: {
+  children: ReactNode;
+  label: string;
+  width?: number;
+  ratio?: string;
+}) {
   return (
-    <div className="w-[150px] overflow-hidden rounded-2xl border border-border/60 bg-card shadow-[0_18px_40px_-22px_rgba(0,0,0,0.4)]">
-      <div className="flex items-center justify-between border-b border-border/60 bg-muted/40 px-2.5 py-1.5">
+    <div
+      style={{ width }}
+      className="overflow-hidden rounded-2xl border border-border/60 bg-card shadow-[0_22px_45px_-24px_rgba(0,0,0,0.45)]"
+    >
+      <div className="flex items-center justify-between border-b border-border/60 bg-muted/50 px-2.5 py-1.5">
         <span className="text-[9px] font-medium tracking-wide text-muted-foreground">
           {label}
         </span>
         <span className="size-1.5 rounded-full bg-emerald-500" />
       </div>
-      <div className="aspect-[4/3] w-full bg-background">{children}</div>
+      <div style={{ aspectRatio: ratio }} className="w-full bg-background">
+        {children}
+      </div>
     </div>
   );
 }
 
 function renderObject(kind: ObjectKind, item: Item) {
-  const { Preview } = item;
+  const { Preview, host } = item;
   switch (kind) {
-    case "browser":
+    case "browser-landing":
       return (
-        <BrowserObj>
+        <BrowserObj host={host} width={236}>
           <Preview className="size-full" />
+        </BrowserObj>
+      );
+    case "browser-store":
+      return (
+        <BrowserObj host={host} width={200}>
+          <StoreUI className="size-full" />
         </BrowserObj>
       );
     case "phone":
@@ -166,14 +231,20 @@ function renderObject(kind: ObjectKind, item: Item) {
       );
     case "dashboard":
       return (
-        <TileObj label="Dashboard">
+        <TileObj label="Analytics" width={158}>
           <DashboardUI className="size-full" />
         </TileObj>
       );
-    case "store":
+    case "pos":
       return (
-        <TileObj label="Store">
-          <StoreUI className="size-full" />
+        <TileObj label="POS" width={138} ratio="5/4">
+          <PosUI className="size-full" />
+        </TileObj>
+      );
+    case "booking":
+      return (
+        <TileObj label="Booking" width={132} ratio="1/1">
+          <BookingUI className="size-full" />
         </TileObj>
       );
   }
@@ -194,7 +265,7 @@ export function HeroMobile() {
 
   const projects: Item[] = useMemo(() => {
     if (!dbHero || dbHero.length === 0) return FALLBACK;
-    return dbHero.slice(0, 4).map((r, i): Item => {
+    return dbHero.slice(0, SLOTS.length).map((r, i): Item => {
       const fb = FALLBACK[i % FALLBACK.length];
       const Preview = (props: { className?: string }) =>
         r.cover_url ? (
@@ -218,7 +289,6 @@ export function HeroMobile() {
     });
   }, [dbHero]);
 
-  // Wrap slot count to project count (in case fewer than 4 projects exist).
   const slots = useMemo(
     () =>
       SLOTS.map((s, i) => ({
@@ -234,59 +304,67 @@ export function HeroMobile() {
 
   const current = projects[Math.min(active, projects.length - 1)];
 
+  // Ensure RestaurantUI stays available for future kinds without a dead import warning.
+  void RestaurantUI;
+
   return (
-    <div dir="rtl" className="relative w-full select-none" aria-label="عرض المشاريع">
+    <div
+      dir="rtl"
+      className="relative w-full select-none"
+      aria-label="مدار المشاريع"
+    >
       {/* ---------- Stage ---------- */}
-      <div className="relative mx-auto aspect-square w-full max-w-[420px]">
-        {/* Background: radial glow + subtle grid */}
+      <div className="relative mx-auto aspect-square w-full max-w-[460px]">
+        {/* Background: radial gradient + subtle grid + soft glow */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 [mask-image:radial-gradient(65%_65%_at_50%_50%,black,transparent)]"
+          className="pointer-events-none absolute inset-0 [mask-image:radial-gradient(70%_70%_at_50%_50%,black,transparent)]"
         >
           <div
-            className="absolute inset-0 opacity-[0.08]"
+            className="absolute inset-0 opacity-[0.07]"
             style={{
               backgroundImage:
                 "linear-gradient(to right, var(--color-border) 1px, transparent 1px), linear-gradient(to bottom, var(--color-border) 1px, transparent 1px)",
-              backgroundSize: "38px 38px",
+              backgroundSize: "42px 42px",
             }}
           />
-          <div className="absolute left-1/2 top-1/2 size-[280px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/12 blur-3xl" />
+          <div className="absolute left-1/2 top-1/2 size-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/10 blur-3xl" />
         </div>
 
-        {/* Tiny drifting particles */}
+        {/* Almost-invisible particles */}
         {!reduce && (
           <div aria-hidden className="pointer-events-none absolute inset-0">
             {[
-              { top: "18%", left: "48%", d: 12 },
-              { top: "58%", left: "22%", d: 14 },
-              { top: "72%", left: "72%", d: 16 },
+              { top: "22%", left: "44%", d: 13 },
+              { top: "60%", left: "20%", d: 15 },
+              { top: "74%", left: "70%", d: 17 },
+              { top: "36%", left: "82%", d: 14 },
             ].map((p, i) => (
               <motion.span
                 key={i}
-                className="absolute size-1 rounded-full bg-foreground/20"
+                className="absolute size-[3px] rounded-full bg-foreground/15"
                 style={{ top: p.top, left: p.left }}
-                animate={{ y: [0, -8, 0], opacity: [0.2, 0.5, 0.2] }}
+                animate={{ y: [0, -6, 0], opacity: [0.15, 0.35, 0.15] }}
                 transition={{
                   duration: p.d,
                   repeat: Infinity,
                   ease: "easeInOut",
-                  delay: i * 1.4,
+                  delay: i * 1.2,
                 }}
               />
             ))}
           </div>
         )}
 
-        {/* Monogram — the still center */}
+        {/* Monogram — fixed center */}
         <motion.div
           className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2"
-          animate={{ scale: reduce ? 1 : 0.86 }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          animate={{ scale: reduce ? 1 : 1 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         >
-          <div className="relative grid size-20 place-items-center rounded-full border border-border/70 bg-background/80 shadow-[0_20px_50px_-25px_rgba(0,0,0,0.45)] backdrop-blur-xl">
-            <div className="absolute inset-0 -z-10 rounded-full bg-primary/15 blur-2xl" />
-            <span className="text-lg font-bold tracking-tight text-foreground">
+          <div className="relative grid size-[76px] place-items-center rounded-full border border-border/70 bg-background/80 shadow-[0_22px_55px_-25px_rgba(0,0,0,0.5)] backdrop-blur-xl">
+            <div className="absolute inset-0 -z-10 rounded-full bg-primary/20 blur-2xl" />
+            <span className="text-[17px] font-bold tracking-tight text-foreground">
               MH
             </span>
           </div>
@@ -299,15 +377,14 @@ export function HeroMobile() {
         {slots.map((slot, i) => {
           const item = projects[slot.itemIndex];
           const isActive = slot.itemIndex === active;
-          const isDim = active !== slot.itemIndex;
-          // Outward push offset for non-active objects (in px).
+          const isDim = !isActive;
           const cx = 50;
           const cy = 50;
           const dx = slot.x - cx;
           const dy = slot.y - cy;
           const norm = Math.hypot(dx, dy) || 1;
-          const pushX = (dx / norm) * 6;
-          const pushY = (dy / norm) * 6;
+          const pushX = (dx / norm) * 8;
+          const pushY = (dy / norm) * 8;
 
           return (
             <motion.button
@@ -315,29 +392,30 @@ export function HeroMobile() {
               type="button"
               aria-label={`عرض ${item.name}`}
               onClick={() => setActive(slot.itemIndex)}
-              className="absolute z-10 origin-center touch-manipulation focus:outline-none"
-              style={{
-                left: `${slot.x}%`,
-                top: `${slot.y}%`,
-              }}
+              className="absolute z-10 origin-center touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-2xl"
+              style={{ left: `${slot.x}%`, top: `${slot.y}%` }}
               initial={reduce ? false : { opacity: 0, scale: 0.9 }}
               animate={{
-                x: isActive ? `calc(-50% + ${cx - slot.x}%)` : `calc(-50% + ${pushX}px)`,
-                y: isActive ? `calc(-50% + ${cy - slot.y}%)` : `calc(-50% + ${pushY}px)`,
-                scale: isActive ? 1.05 : slot.scale * 0.86,
+                x: isActive
+                  ? `calc(-50% + ${cx - slot.x}%)`
+                  : `calc(-50% + ${pushX}px)`,
+                y: isActive
+                  ? `calc(-50% + ${cy - slot.y}%)`
+                  : `calc(-50% + ${pushY}px)`,
+                scale: isActive ? 1.1 : slot.scale * 0.9,
                 rotate: isActive ? 0 : slot.rot,
-                opacity: isActive ? 1 : 0.5,
-                filter: isDim ? "blur(2px)" : "blur(0px)",
+                opacity: isActive ? 1 : 0.45,
+                filter: isDim ? "blur(2.5px)" : "blur(0px)",
                 zIndex: isActive ? 30 : 10,
               }}
               transition={{
                 type: "spring",
-                stiffness: 120,
+                stiffness: 110,
                 damping: 22,
-                mass: 0.7,
+                mass: 0.75,
               }}
             >
-              {/* Inner idle-float wrapper — independent slow drift */}
+              {/* Independent slow drift */}
               <motion.div
                 animate={
                   reduce || isActive
@@ -351,12 +429,12 @@ export function HeroMobile() {
                         duration: slot.drift,
                         repeat: Infinity,
                         ease: "easeInOut",
-                        delay: i * 0.6,
+                        delay: i * 0.7,
                       }
                 }
                 className={cn(
                   "transition-shadow",
-                  isActive && "drop-shadow-[0_25px_45px_rgba(0,0,0,0.35)]",
+                  isActive && "drop-shadow-[0_30px_50px_rgba(0,0,0,0.4)]",
                 )}
               >
                 {renderObject(slot.kind, item)}
@@ -367,7 +445,7 @@ export function HeroMobile() {
       </div>
 
       {/* ---------- Details panel ---------- */}
-      <div className="mt-6 min-h-[168px] px-1">
+      <div className="mt-8 min-h-[210px] px-1">
         <AnimatePresence mode="wait">
           <motion.div
             key={current.slug}
@@ -379,16 +457,24 @@ export function HeroMobile() {
             <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
               <span className="inline-block h-px w-6 bg-border" />
               <span>{current.category}</span>
-              <span aria-hidden>·</span>
-              <span dir="ltr">{current.tech}</span>
             </div>
-            <h3 className="mt-2 text-xl font-semibold tracking-tight text-foreground">
+            <h3 className="mt-2 text-2xl font-semibold tracking-tight text-foreground">
               {current.name}
             </h3>
-            <p className="mt-2 max-w-md text-[13.5px] leading-[1.85] text-muted-foreground">
+            <p className="mt-2.5 max-w-md text-[13.5px] leading-[1.9] text-muted-foreground">
               {current.description}
             </p>
-            <div className="mt-4 flex items-center gap-3">
+            <div dir="ltr" className="mt-3 flex flex-wrap gap-1.5">
+              {current.tech.map((t) => (
+                <span
+                  key={t}
+                  className="rounded-full border border-border/70 bg-background/60 px-2 py-0.5 text-[10.5px] font-medium text-muted-foreground"
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
+            <div className="mt-5 flex items-center gap-3">
               <Link
                 to="/work"
                 className="inline-flex items-center gap-1.5 rounded-full border border-border/70 bg-background/70 px-4 py-2 text-[12.5px] font-medium text-foreground backdrop-blur-md transition-colors hover:border-primary/40 hover:text-primary"
