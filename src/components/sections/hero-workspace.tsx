@@ -268,7 +268,7 @@ const CODE_ACCENT: Record<string, string> = {
 
 function CodeWindow({ project, className }: { project: FeaturedProject; className?: string }) {
   return (
-    <WindowShell className={cn("w-[220px] sm:w-[280px] md:w-[340px] bg-neutral-950", className)}>
+    <WindowShell className={cn("w-[170px] sm:w-[260px] md:w-[340px] bg-neutral-950", className)}>
       <div
         dir="ltr"
         className="flex items-center gap-2 border-b border-white/5 bg-neutral-900 px-3 py-2"
