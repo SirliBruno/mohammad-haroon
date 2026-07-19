@@ -83,11 +83,10 @@ export function Hero() {
 
             <h1
               id="hero-heading"
-              className="mt-7 text-[2.5rem] font-semibold tracking-tight text-foreground text-balance leading-[1.08] sm:text-5xl md:text-6xl lg:text-[4.25rem]"
+              className="mt-7 font-semibold tracking-tight text-foreground leading-[1.15] text-[1.75rem] sm:text-4xl md:text-5xl lg:text-[3.5rem]"
             >
-              أعطِ الخبز لخبّازه
-              <br />
-              وأعط الفكرة لأهلها
+              <span className="block whitespace-nowrap">أعطِ الخبز لخبّازه</span>
+              <span className="block whitespace-nowrap">وأعطِ الفكرة لأهلها</span>
             </h1>
 
             <p className="mt-6 max-w-lg text-base leading-relaxed text-muted-foreground md:text-lg">
