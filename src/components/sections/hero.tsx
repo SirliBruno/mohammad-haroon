@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowUpRight, Github, Linkedin, Mail, Twitter } from "lucide
 import { DSButton } from "@/components/ds";
 import { Container } from "@/components/layout/container";
 import { HeroWorkspace } from "@/components/sections/hero-workspace";
+import { HeroMobile } from "@/components/sections/hero-mobile";
 import { RotatingWord } from "@/components/sections/rotating-word";
 import { socials } from "@/config/socials";
 import { trackEvent } from "@/lib/analytics";
