@@ -16,7 +16,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ArrowUpRight, Sparkles } from "lucide-react";
-import { BrowserFrame, PhoneFrame } from "@/components/mockups/devices";
+import { BrowserFrame } from "@/components/mockups/devices";
 import {
   DashboardUI,
   EditorUI,
