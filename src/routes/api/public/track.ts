@@ -79,7 +79,7 @@ export const Route = createFileRoute("/api/public/track")({
             path,
             session_id: sessionId,
             referrer,
-            metadata,
+            metadata: metadata as never,
             ip_hash: ipHash,
             user_agent: userAgent,
           });

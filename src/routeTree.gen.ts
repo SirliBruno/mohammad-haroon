@@ -30,6 +30,7 @@ import { Route as WorkSlugRouteImport } from './routes/work.$slug'
 import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
+import { Route as ApiPublicTrackRouteImport } from './routes/api/public/track'
 import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
 import { Route as AuthenticatedAdminTestimonialsRouteImport } from './routes/_authenticated/admin.testimonials'
 import { Route as AuthenticatedAdminSkillsRouteImport } from './routes/_authenticated/admin.skills'
@@ -149,6 +150,11 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ApiPublicTrackRoute = ApiPublicTrackRouteImport.update({
+  id: '/api/public/track',
+  path: '/api/public/track',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicContactRoute = ApiPublicContactRouteImport.update({
   id: '/api/public/contact',
   path: '/api/public/contact',
@@ -263,6 +269,7 @@ export interface FileRoutesByFullPath {
   '/admin/skills': typeof AuthenticatedAdminSkillsRoute
   '/admin/testimonials': typeof AuthenticatedAdminTestimonialsRoute
   '/api/public/contact': typeof ApiPublicContactRoute
+  '/api/public/track': typeof ApiPublicTrackRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesByTo {
@@ -296,6 +303,7 @@ export interface FileRoutesByTo {
   '/admin/skills': typeof AuthenticatedAdminSkillsRoute
   '/admin/testimonials': typeof AuthenticatedAdminTestimonialsRoute
   '/api/public/contact': typeof ApiPublicContactRoute
+  '/api/public/track': typeof ApiPublicTrackRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesById {
@@ -334,6 +342,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/skills': typeof AuthenticatedAdminSkillsRoute
   '/_authenticated/admin/testimonials': typeof AuthenticatedAdminTestimonialsRoute
   '/api/public/contact': typeof ApiPublicContactRoute
+  '/api/public/track': typeof ApiPublicTrackRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRouteTypes {
@@ -372,6 +381,7 @@ export interface FileRouteTypes {
     | '/admin/skills'
     | '/admin/testimonials'
     | '/api/public/contact'
+    | '/api/public/track'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -405,6 +415,7 @@ export interface FileRouteTypes {
     | '/admin/skills'
     | '/admin/testimonials'
     | '/api/public/contact'
+    | '/api/public/track'
     | '/admin'
   id:
     | '__root__'
@@ -442,6 +453,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/skills'
     | '/_authenticated/admin/testimonials'
     | '/api/public/contact'
+    | '/api/public/track'
     | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
 }
@@ -461,6 +473,7 @@ export interface RootRouteChildren {
   UsesRoute: typeof UsesRoute
   WorkRoute: typeof WorkRouteWithChildren
   ApiPublicContactRoute: typeof ApiPublicContactRoute
+  ApiPublicTrackRoute: typeof ApiPublicTrackRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -611,6 +624,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/'
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/api/public/track': {
+      id: '/api/public/track'
+      path: '/api/public/track'
+      fullPath: '/api/public/track'
+      preLoaderRoute: typeof ApiPublicTrackRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/public/contact': {
       id: '/api/public/contact'
@@ -804,6 +824,7 @@ const rootRouteChildren: RootRouteChildren = {
   UsesRoute: UsesRoute,
   WorkRoute: WorkRouteWithChildren,
   ApiPublicContactRoute: ApiPublicContactRoute,
+  ApiPublicTrackRoute: ApiPublicTrackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
