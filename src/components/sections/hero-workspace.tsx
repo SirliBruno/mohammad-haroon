@@ -25,7 +25,7 @@ import {
   useSpring,
   useTransform,
 } from "motion/react";
-import { ArrowUpRight, Figma } from "lucide-react";
+import { ArrowUpRight, Sparkles } from "lucide-react";
 import { BrowserFrame, PhoneFrame } from "@/components/mockups/devices";
 import {
   DashboardUI,
@@ -46,6 +46,7 @@ type FeaturedProject = {
   host: string;
   category: string;
   year: number;
+  tech: string;
   status: "مباشر" | "قيد التطوير";
   accent: string; // Tailwind color token used by Figma frame + code accents
   Website: (p: { className?: string }) => ReactElement;
@@ -64,6 +65,7 @@ const FEATURED: FeaturedProject[] = [
     host: "northwind.app",
     category: "تصميم واجهات",
     year: 2025,
+    tech: "Next.js",
     status: "مباشر",
     accent: "emerald",
     Website: DashboardUI,
@@ -91,6 +93,7 @@ const FEATURED: FeaturedProject[] = [
     host: "haven.co",
     category: "تجارة إلكترونية",
     year: 2025,
+    tech: "Shopify",
     status: "مباشر",
     accent: "amber",
     Website: StoreUI,
@@ -117,6 +120,7 @@ const FEATURED: FeaturedProject[] = [
     host: "atelier.studio",
     category: "مواقع إلكترونية",
     year: 2024,
+    tech: "React",
     status: "مباشر",
     accent: "sky",
     Website: EditorUI,
@@ -144,6 +148,7 @@ const FEATURED: FeaturedProject[] = [
     host: "lumen.finance",
     category: "مواقع إلكترونية",
     year: 2024,
+    tech: "TypeScript",
     status: "قيد التطوير",
     accent: "violet",
     Website: DashboardUI,
@@ -216,47 +221,9 @@ function WindowTitleBar({
 }
 
 /* -------------------------------------------------------------------------- */
-/* Figma window                                                               */
+/* (Figma window removed — decorative surface that competed with the browser) */
 /* -------------------------------------------------------------------------- */
 
-const ACCENT_TINT: Record<string, string> = {
-  emerald: "from-emerald-200/60 via-emerald-100/30 to-transparent dark:from-emerald-900/40",
-  amber: "from-amber-200/60 via-amber-100/30 to-transparent dark:from-amber-900/40",
-  sky: "from-sky-200/60 via-sky-100/30 to-transparent dark:from-sky-900/40",
-  violet: "from-violet-200/60 via-violet-100/30 to-transparent dark:from-violet-900/40",
-};
-
-function FigmaWindow({ project, className }: { project: FeaturedProject; className?: string }) {
-  return (
-    <WindowShell className={cn("w-[150px] sm:w-[240px] md:w-[320px]", className)}>
-      <WindowTitleBar
-        label={project.figma.title}
-        icon={<Figma className="size-3" aria-hidden />}
-      />
-      <div className="grid grid-cols-2 gap-2 bg-background/80 p-3">
-        {project.figma.frames.map((f, i) => (
-          <div key={f} className="space-y-1">
-            <div
-              className={cn(
-                "aspect-[4/3] rounded-md bg-linear-to-br",
-                i === 0
-                  ? ACCENT_TINT[project.accent]
-                  : "from-muted to-muted/40",
-                "ring-1 ring-inset ring-border/40",
-              )}
-            >
-              <div className="mx-2 mt-2 h-1 w-6 rounded-full bg-foreground/20" />
-              <div className="mx-2 mt-1.5 h-1 w-10 rounded-full bg-foreground/15" />
-            </div>
-            <div dir="ltr" className="text-[9px] text-muted-foreground">
-              {f}
-            </div>
-          </div>
-        ))}
-      </div>
-    </WindowShell>
-  );
-}
 
 /* -------------------------------------------------------------------------- */
 /* VS Code window                                                             */
@@ -354,18 +321,19 @@ function ProjectCard({ project, className }: { project: FeaturedProject; classNa
   return (
     <div
       className={cn(
-        "w-[104px] sm:w-[170px] md:w-[220px] rounded-lg border border-border/60 bg-background/85 p-2 sm:p-4 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.4)] backdrop-blur-xl sm:rounded-xl",
+        "w-[132px] sm:w-[196px] md:w-[248px] rounded-xl border border-border/60 bg-background/92 p-3 sm:p-4 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.4)] backdrop-blur-xl",
         className,
       )}
       dir="rtl"
     >
       <div className="flex items-center justify-between gap-1">
-        <div className="text-[8px] font-medium uppercase tracking-[0.14em] text-muted-foreground sm:text-[10px] sm:tracking-[0.18em]">
-          مشروع مختار
-        </div>
+        <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-1.5 py-0.5 text-[9px] font-medium text-primary sm:px-2 sm:text-[10px]">
+          <Sparkles className="size-2.5 sm:size-3" aria-hidden />
+          مميّز
+        </span>
         <span
           className={cn(
-            "inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[8px] font-medium sm:gap-1 sm:px-2 sm:text-[9px]",
+            "inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[9px] font-medium sm:px-2 sm:text-[10px]",
             isLive
               ? "bg-emerald-500/12 text-emerald-600"
               : "bg-amber-500/12 text-amber-600",
@@ -380,16 +348,20 @@ function ProjectCard({ project, className }: { project: FeaturedProject; classNa
           {project.status}
         </span>
       </div>
-      <div className="mt-2 text-xs font-semibold tracking-tight text-foreground sm:mt-3 sm:text-base">
+      <div className="mt-3 text-[13px] font-semibold tracking-tight text-foreground sm:text-[17px]">
         {project.name}
       </div>
-      <div className="mt-2 space-y-1 text-[9px] sm:mt-4 sm:space-y-2 sm:text-[11px]">
+      <div className="mt-3 space-y-1.5 text-[10px] sm:mt-4 sm:space-y-2 sm:text-[11.5px]">
         <div className="flex items-center justify-between">
           <span className="text-muted-foreground">التصنيف</span>
           <span className="text-foreground">{project.category}</span>
         </div>
         <div className="flex items-center justify-between">
-          <span className="text-muted-foreground">سنة الإنجاز</span>
+          <span className="text-muted-foreground">التقنية</span>
+          <span className="text-foreground" dir="ltr">{project.tech}</span>
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="text-muted-foreground">السنة</span>
           <span className="text-foreground" dir="ltr">{project.year}</span>
         </div>
       </div>
@@ -505,6 +477,7 @@ export function HeroWorkspace() {
         category: r.category || fallback.category,
         year: r.year ?? fallback.year,
         status: (r.status as FeaturedProject["status"]) || "مباشر",
+        tech: fallback.tech,
         accent,
         Website: Cover,
         Mobile: Phone,
@@ -571,34 +544,11 @@ export function HeroWorkspace() {
             backgroundSize: "56px 56px",
           }}
         />
-        <div className="absolute left-1/2 top-1/2 size-[720px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/8 blur-3xl" />
+        <div className="absolute left-1/2 top-1/2 size-[560px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/6 blur-3xl" />
       </div>
 
       <div className="relative mx-auto aspect-[4/5] sm:aspect-[5/4] w-full min-h-[440px] sm:min-h-[600px] md:min-h-[680px] lg:min-h-[720px]">
-        {/* -------------------- FIGMA (behind, top-right) -------------------- */}
-        <FloatingLayer
-          ctx={ctx}
-          depth={0.03}
-          x="58%"
-          y="-2%"
-          rotate={3}
-          floatY={6}
-          duration={14}
-          delay={0.2}
-          z={10}
-        >
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={current.slug + "-figma"}
-              initial={reduce ? { opacity: 1 } : { opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={reduce ? { opacity: 0 } : { opacity: 0 }}
-              transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <FigmaWindow project={current} />
-            </motion.div>
-          </AnimatePresence>
-        </FloatingLayer>
+        {/* Figma window intentionally removed — the browser is the single focal point. */}
 
         {/* -------------------- BROWSER (dominant centerpiece) ---------------- */}
         <motion.div
@@ -647,6 +597,7 @@ export function HeroWorkspace() {
               animate={{ opacity: 1 }}
               exit={reduce ? { opacity: 0 } : { opacity: 0 }}
               transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
+              className="opacity-90 saturate-[.9]"
             >
               <CodeWindow project={current} />
             </motion.div>

@@ -16,25 +16,22 @@ const socialIcon: Record<string, typeof Github> = {
   "البريد الإلكتروني": Mail,
 };
 
-// Tiny drifting particles — pure decoration, disabled under reduced motion.
+// Minimal drifting particles — pure decoration, disabled under reduced motion.
 function Particles() {
   const dots = [
-    { top: "12%", left: "18%", d: 9 },
-    { top: "28%", left: "72%", d: 11 },
-    { top: "58%", left: "38%", d: 13 },
-    { top: "74%", left: "82%", d: 10 },
-    { top: "42%", left: "8%", d: 12 },
-    { top: "80%", left: "22%", d: 14 },
+    { top: "22%", left: "16%", d: 14 },
+    { top: "62%", left: "78%", d: 16 },
+    { top: "78%", left: "28%", d: 18 },
   ];
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
       {dots.map((p, i) => (
         <motion.span
           key={i}
-          className="absolute size-1 rounded-full bg-primary/40 shadow-[0_0_12px_rgba(37,99,235,0.5)]"
+          className="absolute size-1 rounded-full bg-primary/25"
           style={{ top: p.top, left: p.left }}
-          animate={{ y: [0, -14, 0], opacity: [0.25, 0.7, 0.25] }}
-          transition={{ duration: p.d, repeat: Infinity, ease: "easeInOut", delay: i * 0.6 }}
+          animate={{ y: [0, -10, 0], opacity: [0.15, 0.4, 0.15] }}
+          transition={{ duration: p.d, repeat: Infinity, ease: "easeInOut", delay: i * 1.2 }}
         />
       ))}
     </div>
@@ -86,19 +83,21 @@ export function Hero() {
 
             <h1
               id="hero-heading"
-              className="mt-7 font-semibold tracking-tight text-foreground leading-[1.15] text-[1.75rem] sm:text-4xl md:text-5xl lg:text-[3.5rem]"
+              className="mt-8 font-semibold tracking-tight text-foreground leading-[1.18] text-[1.75rem] sm:text-4xl md:text-5xl lg:text-[3.5rem]"
             >
               <span className="block whitespace-nowrap">أعـــــــــطِ الخبـــــز لخبّــــــــــازه</span>
-              <span className="block whitespace-nowrap mt-[5px]">
+              <span className="block whitespace-nowrap mt-[6px]">
                 وأعــــطِ <RotatingWord /> لأهلهــــــــــا
               </span>
             </h1>
 
-            <p className="mt-6 max-w-lg mx-auto lg:mx-0 text-base leading-relaxed text-muted-foreground md:text-lg">
-              أصمم وأطور مواقع وأنظمة رقمية تجمع بين التصميم الاحترافي، وسهولة الاستخدام، والأداء السريع. سواء كنت تطلق مشروع جديد أو تطور مشروع قائم، هدفي إني أبني لك منتج يخدمك ويعطي عملاءك تجربة تليق باسمك.
+            <p className="mt-8 max-w-md mx-auto lg:mx-0 text-base leading-[1.9] text-muted-foreground md:text-lg">
+              مواقع وأنظمة رقمية تجمع تصميمًا هادئًا بأداءٍ سريع.
+              <br />
+              نبنيها معك لتخدم عملك وتليق باسمك.
             </p>
 
-            <div className="mt-10 flex flex-wrap items-center justify-center lg:justify-start gap-3">
+            <div className="mt-12 flex flex-wrap items-center justify-center lg:justify-start gap-3">
               <DSButton asChild size="lg" variant="primary">
                 <Link to="/work">
                   استعرض الأعمال
@@ -114,7 +113,7 @@ export function Hero() {
             </div>
 
             {/* Social links */}
-            <div className="mt-10 flex items-center justify-center lg:justify-start gap-3">
+            <div className="mt-14 flex items-center justify-center lg:justify-start gap-3">
               <span className="text-xs text-muted-foreground">تواصل:</span>
               <div className="h-px flex-1 max-w-16 bg-border/60" />
               <ul className="flex items-center gap-2">
