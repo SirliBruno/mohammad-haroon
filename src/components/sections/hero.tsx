@@ -86,11 +86,15 @@ export function Hero() {
               id="hero-heading"
               className="mt-7 font-semibold tracking-tight text-foreground leading-[1.15] text-[1.75rem] sm:text-4xl md:text-5xl lg:text-[3.5rem]"
             >
-              <span className="block">أعـــــــــطِ الخبـــــز لخبّــــــــــازه</span>
-              <span className="block">
+              <span className="block lg:hidden">أعـــــــــطِ الخبـــــز لخبّــــــــــازه</span>
+              <span className="hidden lg:block">أعطِ الخبز لخبّازه</span>
+              <span className="block lg:hidden">
                 وأعــــطِ <br />
                 <RotatingWord /> <br />
                 لأهلهــا
+              </span>
+              <span className="hidden lg:block">
+                وأعطِ <RotatingWord /> لأهلها
               </span>
             </h1>
 
