@@ -19,6 +19,7 @@ const CARDS: { to: string; title: string; description: string; group: string }[]
   { to: "/admin/certificates", title: "الشهادات", description: "الشهادات المهنية والاعتمادات.", group: "السيرة" },
   { to: "/admin/skills", title: "المهارات", description: "المهارات مع المستوى والفئات.", group: "السيرة" },
   { to: "/admin/messages", title: "الرسائل الواردة", description: "رسائل من نموذج التواصل.", group: "التواصل" },
+  { to: "/admin/analytics", title: "قياس التحويل", description: "أحداث funnel من المشاهدات حتى إرسال التواصل.", group: "التواصل" },
   { to: "/admin/media", title: "مكتبة الوسائط", description: "إدارة الملفات والصور المرفوعة.", group: "التواصل" },
 ];
 
