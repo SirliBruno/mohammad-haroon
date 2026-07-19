@@ -9,15 +9,13 @@ import {
   type PanInfo,
 } from "motion/react";
 import {
-  ArrowUpLeft,
   ChevronLeft,
   ChevronRight,
   ExternalLink,
-  FileText,
+  type PanInfo,
 } from "lucide-react";
 import { projects } from "@/data/projects";
 import type { Project } from "@/features/projects/schema";
-import { statusMeta } from "@/lib/project-status";
 import { cn } from "@/lib/utils";
 
 /* ------------------------------------------------------------------ */
