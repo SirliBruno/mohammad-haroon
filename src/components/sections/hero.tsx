@@ -141,7 +141,7 @@ export function Hero() {
             transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
             className="min-w-0"
           >
-            <HeroProjectsCarousel />
+            <HeroWorkspace />
           </motion.div>
         </div>
       </Container>
