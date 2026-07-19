@@ -543,7 +543,7 @@ export function HeroWorkspace() {
 
         {/* -------------------- BROWSER (dominant centerpiece) ---------------- */}
         <motion.div
-          className="pointer-events-auto absolute left-1/2 top-[44%] w-[88%] max-w-[640px] -translate-x-1/2 -translate-y-1/2"
+          className="pointer-events-auto absolute left-1/2 top-[46%] w-[80%] sm:w-[86%] max-w-[640px] -translate-x-1/2 -translate-y-1/2"
           style={{ x: centerX, y: centerY, zIndex: 20 }}
           initial={reduce ? false : { opacity: 0, y: 18, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
