@@ -24,14 +24,13 @@ import {
   useSpring,
   useTransform,
 } from "motion/react";
-import { ExternalLink, Figma, Sparkles, TrendingUp } from "lucide-react";
-import { BrowserFrame, LaptopFrame, PhoneFrame, TabletFrame } from "@/components/mockups/devices";
+import { ExternalLink, Sparkles, TrendingUp } from "lucide-react";
+import { LaptopFrame, PhoneFrame } from "@/components/mockups/devices";
 import {
   DashboardUI,
   EditorUI,
   MobileAppUI,
   StoreUI,
-  TabletReadUI,
 } from "@/components/mockups/ui-samples";
 import { projects } from "@/data/projects";
 import { cn } from "@/lib/utils";
@@ -197,106 +196,6 @@ function AnalyticsCard({ className }: { className?: string }) {
   );
 }
 
-/** Project status card — timeline + progress. */
-function StatusCard({
-  title,
-  stage,
-  progress,
-  className,
-}: {
-  title: string;
-  stage: string;
-  progress: number;
-  className?: string;
-}) {
-  return (
-    <GlassPanel className={cn("w-[220px]", className)}>
-      <div dir="rtl" className="flex items-center justify-between">
-        <div className="text-[11px] font-medium text-foreground">{title}</div>
-        <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[9px] font-medium text-primary">
-          <span className="size-1 rounded-full bg-primary" /> نشِط
-        </span>
-      </div>
-      <div dir="rtl" className="mt-1 text-[10px] text-muted-foreground">
-        {stage}
-      </div>
-      <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-muted">
-        <motion.div
-          initial={{ width: 0 }}
-          animate={{ width: `${progress}%` }}
-          transition={{ duration: 1.4, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className="h-full rounded-full bg-linear-to-r from-primary to-accent"
-        />
-      </div>
-      <div dir="ltr" className="mt-2 flex justify-between text-[9px] text-muted-foreground">
-        <span>Discovery</span>
-        <span>Design</span>
-        <span>Ship</span>
-      </div>
-    </GlassPanel>
-  );
-}
-
-/** Figma window mini. */
-function FigmaCard({ className }: { className?: string }) {
-  return (
-    <GlassPanel className={cn("w-[210px] p-0 overflow-hidden", className)}>
-      <div
-        dir="ltr"
-        className="flex items-center gap-2 border-b border-border/50 bg-muted/40 px-3 py-2"
-      >
-        <Figma className="size-3 text-muted-foreground" aria-hidden />
-        <div className="text-[9px] font-medium tracking-wide text-muted-foreground">
-          Product · Design v3
-        </div>
-      </div>
-      <div className="grid grid-cols-6 gap-1 p-3">
-        <div className="col-span-4 aspect-video rounded-md bg-linear-to-br from-primary/25 via-primary/10 to-accent/20" />
-        <div className="col-span-2 aspect-video rounded-md bg-muted" />
-        <div className="col-span-2 aspect-video rounded-md bg-muted" />
-        <div className="col-span-2 aspect-video rounded-md bg-emerald-500/25" />
-        <div className="col-span-2 aspect-video rounded-md bg-muted" />
-      </div>
-    </GlassPanel>
-  );
-}
-
-/** Sticky note. */
-function StickyNote({
-  children,
-  tone = "amber",
-  className,
-}: {
-  children: React.ReactNode;
-  tone?: "amber" | "rose" | "sky";
-  className?: string;
-}) {
-  const toneMap = {
-    amber: "bg-amber-100/95 text-amber-950",
-    rose: "bg-rose-100/95 text-rose-950",
-    sky: "bg-sky-100/95 text-sky-950",
-  } as const;
-  return (
-    <div
-      className={cn(
-        "rounded-md px-3 py-2 text-[11px] leading-snug shadow-[0_14px_36px_-16px_rgba(0,0,0,0.4)]",
-        toneMap[tone],
-        className,
-      )}
-    >
-      {children}
-    </div>
-  );
-}
-
-/** Tech tag pill. */
-function Tag({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="inline-flex items-center rounded-full border border-border/60 bg-background/85 px-2.5 py-1 text-[10px] font-medium tracking-wide text-foreground/80 shadow-[0_8px_20px_-12px_rgba(0,0,0,0.3)] backdrop-blur-md">
-      {children}
-    </span>
-  );
-}
 
 /* -------------------------------------------------------------------------- */
 /* Parallax scatter item                                                       */
@@ -455,14 +354,13 @@ export function HeroWorkspace() {
           </LaptopFrame>
         </motion.div>
 
-        {/* -------------------- OVERLAPPING DEVICES -------------------- */}
-        {/* iPhone — breaks the bottom-left corner. */}
+        {/* -------------------- SUPPORTING DEVICE: iPhone -------------------- */}
         <ScatterItem
           ctx={ctx}
           depth={0.05}
-          x="-2%"
-          y="58%"
-          rotate={-8}
+          x="-4%"
+          y="56%"
+          rotate={-6}
           floatY={9}
           duration={12}
           delay={0.3}
@@ -475,53 +373,15 @@ export function HeroWorkspace() {
           </div>
         </ScatterItem>
 
-        {/* Tablet — breaks the bottom-right corner. */}
-        <ScatterItem
-          ctx={ctx}
-          depth={0.04}
-          x="68%"
-          y="60%"
-          rotate={7}
-          floatY={9}
-          duration={13}
-          delay={0.6}
-          z={25}
-        >
-          <div className="drop-shadow-[0_30px_40px_rgba(0,0,0,0.35)]">
-            <TabletFrame className="w-[240px] sm:w-[280px] md:w-[300px]">
-              <TabletReadUI />
-            </TabletFrame>
-          </div>
-        </ScatterItem>
-
-        {/* Secondary browser window — tucked behind laptop top-right. */}
-        <ScatterItem
-          ctx={ctx}
-          depth={0.03}
-          x="62%"
-          y="-4%"
-          rotate={4}
-          floatY={7}
-          duration={14}
-          delay={0.2}
-          z={10}
-        >
-          <div className="w-[260px] opacity-95 sm:w-[300px]">
-            <BrowserFrame url="studio.figma.com" className="w-full">
-              <EditorUI />
-            </BrowserFrame>
-          </div>
-        </ScatterItem>
-
-        {/* -------------------- PRODUCT CARDS (glass panels) -------------------- */}
-        {/* Lighthouse — top-left, breaks upward slightly. */}
+        {/* -------------------- MINIMAL PRODUCT CARDS -------------------- */}
+        {/* Lighthouse — top-left. */}
         <ScatterItem
           ctx={ctx}
           depth={0.055}
-          x="-4%"
-          y="6%"
-          rotate={-3}
-          floatY={8}
+          x="-2%"
+          y="4%"
+          rotate={-2}
+          floatY={7}
           duration={11}
           delay={0.15}
           z={35}
@@ -529,13 +389,13 @@ export function HeroWorkspace() {
           <LighthouseCard />
         </ScatterItem>
 
-        {/* Analytics — right, mid-height, extends past right edge. */}
+        {/* Analytics — top-right. */}
         <ScatterItem
           ctx={ctx}
           depth={0.06}
-          x="82%"
-          y="26%"
-          rotate={4}
+          x="80%"
+          y="8%"
+          rotate={3}
           floatY={7}
           duration={10}
           delay={0.4}
@@ -544,102 +404,13 @@ export function HeroWorkspace() {
           <AnalyticsCard />
         </ScatterItem>
 
-        {/* Project status — left, mid-height. */}
-        <ScatterItem
-          ctx={ctx}
-          depth={0.05}
-          x="-6%"
-          y="36%"
-          rotate={-2}
-          floatY={8}
-          duration={12}
-          delay={0.55}
-          z={35}
-        >
-          <StatusCard
-            title="متجر Haven · v2"
-            stage="مرحلة التصميم · أسبوع 3"
-            progress={62}
-          />
-        </ScatterItem>
-
-        {/* Figma design window — extends past top-right. */}
-        <ScatterItem
-          ctx={ctx}
-          depth={0.05}
-          x="76%"
-          y="76%"
-          rotate={-4}
-          floatY={9}
-          duration={13}
-          delay={0.8}
-          z={40}
-        >
-          <FigmaCard />
-        </ScatterItem>
-
-        {/* -------------------- MICRO ELEMENTS -------------------- */}
-        {/* Sticky note — floating outside top-left. */}
-        <ScatterItem
-          ctx={ctx}
-          depth={0.045}
-          x="18%"
-          y="-2%"
-          rotate={-6}
-          floatY={5}
-          duration={9}
-          z={40}
-        >
-          <StickyNote tone="amber" className="w-[140px]">
-            <div className="font-semibold">Onboarding v2</div>
-            <div className="mt-0.5 text-[10px] opacity-75">3 خطوات · &lt; 45s</div>
-          </StickyNote>
-        </ScatterItem>
-
-        {/* Sticky note — bottom overhang. */}
-        <ScatterItem
-          ctx={ctx}
-          depth={0.05}
-          x="42%"
-          y="94%"
-          rotate={3}
-          floatY={5}
-          duration={10}
-          delay={0.4}
-          z={40}
-        >
-          <StickyNote tone="rose" className="w-[136px]">
-            <div className="font-semibold">Motion audit</div>
-            <div className="mt-0.5 text-[10px] opacity-75">مراجعة أخيرة</div>
-          </StickyNote>
-        </ScatterItem>
-
-        {/* Tech tag cluster — floats outside top-right. */}
-        <ScatterItem
-          ctx={ctx}
-          depth={0.055}
-          x="46%"
-          y="-4%"
-          rotate={-2}
-          floatY={4}
-          duration={9}
-          delay={0.3}
-          z={45}
-        >
-          <div className="flex flex-wrap items-center gap-1.5">
-            <Tag>Next.js 15</Tag>
-            <Tag>Motion</Tag>
-            <Tag>Supabase</Tag>
-          </div>
-        </ScatterItem>
-
-        {/* Featured badge — near the laptop. */}
+        {/* Small status badge — near the laptop. */}
         <ScatterItem
           ctx={ctx}
           depth={0.03}
-          x="26%"
-          y="16%"
-          rotate={-1}
+          x="38%"
+          y="92%"
+          rotate={0}
           floatY={3}
           duration={8}
           delay={0.5}
