@@ -15,6 +15,8 @@
  */
 import { useEffect, useMemo, useRef, useState, type ReactElement } from "react";
 import { Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import {
   AnimatePresence,
   motion,
@@ -31,6 +33,7 @@ import {
   MobileAppUI,
   StoreUI,
 } from "@/components/mockups/ui-samples";
+import { listHeroProjectsPublic } from "@/lib/cms/hero.functions";
 import { cn } from "@/lib/utils";
 
 /* -------------------------------------------------------------------------- */
@@ -459,13 +462,69 @@ export function HeroWorkspace() {
   const canvasRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
 
+  const fetchHero = useServerFn(listHeroProjectsPublic);
+  const { data: dbHero } = useQuery({
+    queryKey: ["hero-projects-public"],
+    queryFn: () => fetchHero(),
+    staleTime: 60_000,
+  });
+
+  const projects: FeaturedProject[] = useMemo(() => {
+    if (!dbHero || dbHero.length === 0) return FEATURED;
+    return dbHero.map((r, i): FeaturedProject => {
+      const fallback = FEATURED[i % FEATURED.length];
+      const Cover = (props: { className?: string }) =>
+        r.cover_url ? (
+          <img
+            src={r.cover_url}
+            alt={r.title}
+            className={cn("size-full object-cover", props.className)}
+          />
+        ) : (
+          <fallback.Website {...props} />
+        );
+      const Phone = (props: { className?: string }) =>
+        r.mobile_url ? (
+          <img
+            src={r.mobile_url}
+            alt={r.title}
+            className={cn("size-full object-cover", props.className)}
+          />
+        ) : (
+          <fallback.Mobile {...props} />
+        );
+      const accent = (["emerald", "amber", "sky", "violet"] as const).includes(
+        r.accent as never,
+      )
+        ? (r.accent as FeaturedProject["accent"])
+        : "emerald";
+      return {
+        slug: r.id,
+        name: r.title,
+        host: r.host || fallback.host,
+        category: r.category || fallback.category,
+        year: r.year ?? fallback.year,
+        status: (r.status as FeaturedProject["status"]) || "مباشر",
+        accent,
+        Website: Cover,
+        Mobile: Phone,
+        code: fallback.code,
+        figma: { title: r.title, frames: fallback.figma.frames },
+      };
+    });
+  }, [dbHero]);
+
   useEffect(() => {
-    if (reduce || FEATURED.length <= 1) return;
+    if (reduce || projects.length <= 1) return;
     const id = window.setInterval(() => {
-      setActive((i) => (i + 1) % FEATURED.length);
+      setActive((i) => (i + 1) % projects.length);
     }, 8000);
     return () => window.clearInterval(id);
-  }, [reduce]);
+  }, [reduce, projects.length]);
+
+  useEffect(() => {
+    if (active >= projects.length) setActive(0);
+  }, [projects.length, active]);
 
   // Mouse parallax
   const rawX = useMotionValue(0);
@@ -485,7 +544,7 @@ export function HeroWorkspace() {
     rawY.set(0);
   };
 
-  const current = FEATURED[active];
+  const current = projects[Math.min(active, projects.length - 1)];
   const centerX = useTransform(mx, (v) => v * 0.01);
   const centerY = useTransform(my, (v) => v * 0.01);
 
@@ -671,17 +730,16 @@ export function HeroWorkspace() {
           <div className="text-xs text-muted-foreground">{current.category}</div>
         </div>
         <Link
-          to="/work/$slug"
-          params={{ slug: current.slug }}
+          to="/work"
           className="inline-flex items-center gap-1 text-xs font-medium text-foreground/70 underline-offset-4 hover:text-primary hover:underline"
         >
-          دراسة الحالة
+          استعرض الأعمال
           <ArrowUpRight className="size-3.5" aria-hidden />
         </Link>
       </div>
 
       <div className="mt-3 flex items-center justify-center gap-1.5">
-        {FEATURED.map((p, i) => (
+        {projects.map((p, i) => (
           <button
             key={p.slug}
             type="button"
