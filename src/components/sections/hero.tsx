@@ -65,7 +65,7 @@ export function Hero() {
       {!reduce && <Particles />}
 
       <Container>
-        <div className="grid items-center gap-14 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.35fr)] lg:gap-16 xl:gap-20">
+        <div className="grid items-center gap-16 sm:gap-20 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.35fr)] lg:gap-16 xl:gap-20">
           {/* Copy (right side in RTL) */}
           <motion.div
             initial={reduce ? false : { opacity: 0, y: 14 }}
