@@ -13,6 +13,7 @@ import { Route as WorkRouteImport } from './routes/work'
 import { Route as UsesRouteImport } from './routes/uses'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as IdeasRouteImport } from './routes/ideas'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -62,6 +63,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProductsRoute = ProductsRouteImport.update({
@@ -232,6 +238,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/ideas': typeof IdeasRoute
   '/products': typeof ProductsRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/uses': typeof UsesRoute
@@ -266,6 +273,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/ideas': typeof IdeasRoute
   '/products': typeof ProductsRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/uses': typeof UsesRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -301,6 +309,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/ideas': typeof IdeasRoute
   '/products': typeof ProductsRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/uses': typeof UsesRoute
@@ -338,6 +347,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/ideas'
     | '/products'
+    | '/reset-password'
     | '/services'
     | '/sitemap.xml'
     | '/uses'
@@ -372,6 +382,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/ideas'
     | '/products'
+    | '/reset-password'
     | '/sitemap.xml'
     | '/uses'
     | '/blog/$slug'
@@ -406,6 +417,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/ideas'
     | '/products'
+    | '/reset-password'
     | '/services'
     | '/sitemap.xml'
     | '/uses'
@@ -443,6 +455,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   IdeasRoute: typeof IdeasRoute
   ProductsRoute: typeof ProductsRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   ServicesRoute: typeof ServicesRouteWithChildren
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   UsesRoute: typeof UsesRoute
@@ -478,6 +491,13 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/products': {
@@ -778,6 +798,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   IdeasRoute: IdeasRoute,
   ProductsRoute: ProductsRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   ServicesRoute: ServicesRouteWithChildren,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   UsesRoute: UsesRoute,

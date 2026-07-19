@@ -143,6 +143,28 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
     );
   }, [rows, search]);
 
+  const closeForm = () => {
+    if (busy) return;
+    if (window.confirm("تجاهل التغييرات غير المحفوظة؟")) {
+      setShowForm(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!showForm) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeForm();
+    };
+    window.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showForm, busy]);
+
   const openCreate = () => {
     setEditingId(null);
     setForm(emptyValues);
@@ -156,6 +178,7 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
     setShowForm(true);
     setMessage(null);
   };
+
 
   const handleDelete = async (row: Row) => {
     if (!window.confirm(`حذف ${entityName}؟ هذا الإجراء لا يمكن التراجع عنه.`)) return;
@@ -289,19 +312,29 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
       </div>
 
       {showForm && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 backdrop-blur-sm p-4 overflow-y-auto">
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="admin-crud-title"
+          className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 backdrop-blur-sm p-4 overflow-y-auto"
+          onMouseDown={(e) => {
+            if (e.target === e.currentTarget) closeForm();
+          }}
+        >
           <div className="w-full max-w-3xl my-8 rounded-2xl border border-neutral-200 bg-white shadow-xl dark:border-neutral-800 dark:bg-neutral-900">
             <div className="flex items-center justify-between border-b border-neutral-200 px-6 py-4 dark:border-neutral-800">
-              <h2 className="text-lg font-semibold">
+              <h2 id="admin-crud-title" className="text-lg font-semibold">
                 {editingId ? `تعديل ${entityName}` : `إضافة ${entityName}`}
               </h2>
               <button
                 type="button"
-                onClick={() => setShowForm(false)}
+                onClick={closeForm}
+                aria-label="إغلاق"
                 className="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100"
               >
                 ✕
               </button>
+
             </div>
             <form onSubmit={handleSubmit} className="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
               {fields.map((field) => (
@@ -315,11 +348,12 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
               <div className="md:col-span-2 flex items-center justify-end gap-2 pt-4 border-t border-neutral-100 dark:border-neutral-800">
                 <button
                   type="button"
-                  onClick={() => setShowForm(false)}
+                  onClick={closeForm}
                   className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-800"
                 >
                   إلغاء
                 </button>
+
                 <button
                   type="submit"
                   disabled={busy}

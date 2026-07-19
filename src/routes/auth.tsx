@@ -11,11 +11,12 @@ export const Route = createFileRoute("/auth")({
 
 function AuthPage() {
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const [mode, setMode] = useState<"signin" | "forgot">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [info, setInfo] = useState<string | null>(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -27,19 +28,19 @@ function AuthPage() {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    setInfo(null);
     try {
-      if (mode === "signup") {
-        const { error: err } = await supabase.auth.signUp({
-          email,
-          password,
-          options: { emailRedirectTo: window.location.origin + "/admin/hero" },
+      if (mode === "forgot") {
+        const { error: err } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: window.location.origin + "/reset-password",
         });
         if (err) throw err;
+        setInfo("إذا كان البريد مسجّلاً لدينا، فستصلك رسالة لإعادة تعيين كلمة المرور.");
       } else {
         const { error: err } = await supabase.auth.signInWithPassword({ email, password });
         if (err) throw err;
+        navigate({ to: "/admin/hero" });
       }
-      navigate({ to: "/admin/hero" });
     } catch (err) {
       setError(err instanceof Error ? err.message : "حدث خطأ");
     } finally {
@@ -51,10 +52,12 @@ function AuthPage() {
     <Section>
       <div className="mx-auto w-full max-w-sm">
         <h1 className="text-2xl font-semibold tracking-tight">
-          {mode === "signin" ? "تسجيل الدخول" : "إنشاء حساب"}
+          {mode === "signin" ? "تسجيل الدخول" : "إعادة تعيين كلمة المرور"}
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          للوصول إلى لوحة إدارة مشاريع الهيرو.
+          {mode === "signin"
+            ? "للوصول إلى لوحة الإدارة."
+            : "أدخل بريدك الإلكتروني وسنرسل لك رابط الاسترجاع."}
         </p>
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <div>
@@ -63,37 +66,46 @@ function AuthPage() {
               type="email"
               required
               dir="ltr"
+              autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium">كلمة المرور</label>
-            <input
-              type="password"
-              required
-              minLength={6}
-              dir="ltr"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-            />
-          </div>
+          {mode === "signin" && (
+            <div>
+              <label className="block text-sm font-medium">كلمة المرور</label>
+              <input
+                type="password"
+                required
+                minLength={6}
+                dir="ltr"
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              />
+            </div>
+          )}
           {error && <p className="text-sm text-red-600">{error}</p>}
+          {info && <p className="text-sm text-emerald-600">{info}</p>}
           <button
             type="submit"
             disabled={loading}
             className="w-full rounded-md bg-foreground px-4 py-2 text-sm font-medium text-background hover:opacity-90 disabled:opacity-60"
           >
-            {loading ? "جارِ التنفيذ..." : mode === "signin" ? "دخول" : "تسجيل"}
+            {loading ? "جارِ التنفيذ..." : mode === "signin" ? "دخول" : "إرسال رابط الاسترجاع"}
           </button>
           <button
             type="button"
-            onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
+            onClick={() => {
+              setMode(mode === "signin" ? "forgot" : "signin");
+              setError(null);
+              setInfo(null);
+            }}
             className="w-full text-center text-sm text-muted-foreground hover:text-foreground"
           >
-            {mode === "signin" ? "ليس لديك حساب؟ إنشاء حساب" : "لديك حساب؟ تسجيل الدخول"}
+            {mode === "signin" ? "نسيت كلمة المرور؟" : "العودة إلى تسجيل الدخول"}
           </button>
         </form>
         <div className="mt-6 text-center text-xs text-muted-foreground">
