@@ -15,4 +15,5 @@ export const SEARCH_COLUMNS = {
   products: ["name", "tagline", "description"],
   media: ["filename", "alt", "caption"],
   messages: ["name", "email", "message"],
+  site_content: ["key", "group_name", "label", "value_ar", "value_en"],
 } as const;

@@ -261,4 +261,20 @@ export const messageUpdateSchema = z.object({
   status: messageStatus.optional(),
   notes: optionalText(),
 });
+
+// ----- Site content (key/value copy + images) -----
+export const siteContentKindSchema = z.enum(["text", "richtext", "image", "url", "json"]);
+export const siteContentInputSchema = z.object({
+  key: z.string().trim().min(1).max(200).regex(/^[a-z0-9_.-]+$/i, "Key must be alphanumeric, dot, dash or underscore"),
+  group_name: z.string().trim().min(1).max(80).default("general"),
+  label: optionalText(200),
+  description: optionalText(500),
+  kind: siteContentKindSchema.default("text"),
+  value_ar: optionalText(20_000),
+  value_en: optionalText(20_000),
+  image_url: optionalUrl,
+  metadata: jsonObject,
+  sort_order: z.number().int().default(0),
+});
+export type SiteContentInput = z.infer<typeof siteContentInputSchema>;
 export type MessageUpdateInput = z.infer<typeof messageUpdateSchema>;
