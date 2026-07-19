@@ -37,7 +37,7 @@ export function RotatingWord() {
       className="relative inline-flex items-baseline justify-center align-baseline overflow-hidden"
       style={{
         // Reserve enough width for the longest word ("مشروعك") to prevent layout shift.
-        minWidth: "5.5ch",
+        minWidth: "9ch",
         height: "1.15em",
         verticalAlign: "baseline",
       }}
