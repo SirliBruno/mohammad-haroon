@@ -29,6 +29,7 @@ import { Route as WorkSlugRouteImport } from './routes/work.$slug'
 import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
+import { Route as AuthenticatedAdminProjectsRouteImport } from './routes/_authenticated/admin.projects'
 import { Route as AuthenticatedAdminHeroRouteImport } from './routes/_authenticated/admin.hero'
 
 const WorkRoute = WorkRouteImport.update({
@@ -130,6 +131,12 @@ const ApiPublicContactRoute = ApiPublicContactRouteImport.update({
   path: '/api/public/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminProjectsRoute =
+  AuthenticatedAdminProjectsRouteImport.update({
+    id: '/admin/projects',
+    path: '/admin/projects',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminHeroRoute = AuthenticatedAdminHeroRouteImport.update({
   id: '/admin/hero',
   path: '/admin/hero',
@@ -156,6 +163,7 @@ export interface FileRoutesByFullPath {
   '/services/': typeof ServicesIndexRoute
   '/work/': typeof WorkIndexRoute
   '/admin/hero': typeof AuthenticatedAdminHeroRoute
+  '/admin/projects': typeof AuthenticatedAdminProjectsRoute
   '/api/public/contact': typeof ApiPublicContactRoute
 }
 export interface FileRoutesByTo {
@@ -175,6 +183,7 @@ export interface FileRoutesByTo {
   '/services': typeof ServicesIndexRoute
   '/work': typeof WorkIndexRoute
   '/admin/hero': typeof AuthenticatedAdminHeroRoute
+  '/admin/projects': typeof AuthenticatedAdminProjectsRoute
   '/api/public/contact': typeof ApiPublicContactRoute
 }
 export interface FileRoutesById {
@@ -199,6 +208,7 @@ export interface FileRoutesById {
   '/services/': typeof ServicesIndexRoute
   '/work/': typeof WorkIndexRoute
   '/_authenticated/admin/hero': typeof AuthenticatedAdminHeroRoute
+  '/_authenticated/admin/projects': typeof AuthenticatedAdminProjectsRoute
   '/api/public/contact': typeof ApiPublicContactRoute
 }
 export interface FileRouteTypes {
@@ -223,6 +233,7 @@ export interface FileRouteTypes {
     | '/services/'
     | '/work/'
     | '/admin/hero'
+    | '/admin/projects'
     | '/api/public/contact'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -242,6 +253,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/work'
     | '/admin/hero'
+    | '/admin/projects'
     | '/api/public/contact'
   id:
     | '__root__'
@@ -265,6 +277,7 @@ export interface FileRouteTypes {
     | '/services/'
     | '/work/'
     | '/_authenticated/admin/hero'
+    | '/_authenticated/admin/projects'
     | '/api/public/contact'
   fileRoutesById: FileRoutesById
 }
@@ -427,6 +440,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin/projects': {
+      id: '/_authenticated/admin/projects'
+      path: '/admin/projects'
+      fullPath: '/admin/projects'
+      preLoaderRoute: typeof AuthenticatedAdminProjectsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/hero': {
       id: '/_authenticated/admin/hero'
       path: '/admin/hero'
@@ -439,10 +459,12 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminHeroRoute: typeof AuthenticatedAdminHeroRoute
+  AuthenticatedAdminProjectsRoute: typeof AuthenticatedAdminProjectsRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminHeroRoute: AuthenticatedAdminHeroRoute,
+  AuthenticatedAdminProjectsRoute: AuthenticatedAdminProjectsRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
