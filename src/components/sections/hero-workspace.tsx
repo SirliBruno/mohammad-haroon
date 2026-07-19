@@ -730,17 +730,16 @@ export function HeroWorkspace() {
           <div className="text-xs text-muted-foreground">{current.category}</div>
         </div>
         <Link
-          to="/work/$slug"
-          params={{ slug: current.slug }}
+          to="/work"
           className="inline-flex items-center gap-1 text-xs font-medium text-foreground/70 underline-offset-4 hover:text-primary hover:underline"
         >
-          دراسة الحالة
+          استعرض الأعمال
           <ArrowUpRight className="size-3.5" aria-hidden />
         </Link>
       </div>
 
       <div className="mt-3 flex items-center justify-center gap-1.5">
-        {FEATURED.map((p, i) => (
+        {projects.map((p, i) => (
           <button
             key={p.slug}
             type="button"
