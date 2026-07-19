@@ -289,32 +289,6 @@ export function HeroMobile() {
               </dd>
             </div>
           </dl>
-
-          <div className="mt-5 flex items-center justify-between border-t border-border/50 pt-4">
-            <div className="flex items-center gap-1.5">
-              {projects.map((p, i) => (
-                <button
-                  key={p.slug}
-                  type="button"
-                  onClick={() => setActive(i)}
-                  aria-label={`عرض المشروع ${i + 1}`}
-                  className={cn(
-                    "h-1.5 rounded-full transition-[width,background-color] duration-500",
-                    i === active
-                      ? "w-6 bg-foreground/70"
-                      : "w-1.5 bg-muted-foreground/30",
-                  )}
-                />
-              ))}
-            </div>
-            <Link
-              to="/work"
-              className="inline-flex items-center gap-1 text-[12px] font-medium text-foreground/70 hover:text-primary"
-            >
-              كل الأعمال
-              <ArrowUpRight className="size-3.5" aria-hidden />
-            </Link>
-          </div>
         </motion.div>
       </AnimatePresence>
 
