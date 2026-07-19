@@ -25,9 +25,9 @@ function AuthPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  if (status === "authenticated") {
-    navigate({ to: "/admin", replace: true });
-  }
+  useEffect(() => {
+    if (status === "authenticated") navigate({ to: "/admin", replace: true });
+  }, [status, navigate]);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
