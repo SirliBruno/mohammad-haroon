@@ -31,31 +31,38 @@ export function RotatingWord() {
   }
 
   const current = WORDS[i];
+  // Longest word establishes the reserved width so surrounding words keep
+  // their natural spacing without layout shift when the word changes.
+  const longest = WORDS.reduce((a, b) => (b.text.length > a.text.length ? b : a));
 
   return (
     <span
-      className="relative inline-flex items-baseline justify-center align-baseline overflow-hidden"
-      style={{
-        // Reserve enough width for the longest word ("مشروعك") to prevent layout shift.
-        minWidth: "9ch",
-        height: "1.15em",
-        verticalAlign: "baseline",
-      }}
+      className="relative inline-grid align-baseline overflow-hidden"
+      style={{ verticalAlign: "baseline", lineHeight: "1.15" }}
       aria-live="polite"
     >
-      <AnimatePresence mode="popLayout" initial={false}>
-        <motion.span
-          key={current.text}
-          initial={{ y: "15%", opacity: 0, filter: "blur(2px)" }}
-          animate={{ y: 0, opacity: 1, filter: "blur(0px)", color: current.color }}
-          exit={{ y: "-15%", opacity: 0, filter: "blur(2px)" }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="inline-block whitespace-nowrap"
-          style={{ willChange: "transform, opacity, filter" }}
-        >
-          {current.text}
-        </motion.span>
-      </AnimatePresence>
+      {/* Invisible sizer — reserves exact width of the widest word. */}
+      <span
+        aria-hidden
+        className="invisible col-start-1 row-start-1 whitespace-nowrap"
+      >
+        {longest.text}
+      </span>
+      <span className="relative col-start-1 row-start-1 block">
+        <AnimatePresence mode="popLayout" initial={false}>
+          <motion.span
+            key={current.text}
+            initial={{ y: "15%", opacity: 0, filter: "blur(2px)" }}
+            animate={{ y: 0, opacity: 1, filter: "blur(0px)", color: current.color }}
+            exit={{ y: "-15%", opacity: 0, filter: "blur(2px)" }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute inset-0 whitespace-nowrap text-center"
+            style={{ willChange: "transform, opacity, filter" }}
+          >
+            {current.text}
+          </motion.span>
+        </AnimatePresence>
+      </span>
     </span>
   );
 }
