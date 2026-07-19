@@ -45,7 +45,7 @@ type FeaturedScreen = {
   url: string;
   title: string;
   category: string;
-  Screen: (p: { className?: string }) => JSX.Element;
+  Screen: (p: { className?: string }) => ReactElement;
   liveDemo?: string;
 };
 
