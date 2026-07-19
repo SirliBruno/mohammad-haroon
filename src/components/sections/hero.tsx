@@ -71,7 +71,7 @@ export function Hero() {
             initial={reduce ? false : { opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="min-w-0"
+            className="min-w-0 text-center lg:text-start"
           >
             <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/70 px-3 py-1 text-xs text-muted-foreground backdrop-blur-md">
               <span className="relative flex size-2">
@@ -89,11 +89,11 @@ export function Hero() {
               <span className="block whitespace-nowrap">وأعطِ الفكرة لأهلها</span>
             </h1>
 
-            <p className="mt-6 max-w-lg text-base leading-relaxed text-muted-foreground md:text-lg">
+            <p className="mt-6 max-w-lg mx-auto lg:mx-0 text-base leading-relaxed text-muted-foreground md:text-lg">
               مواقع ومتاجر ومنتجات SaaS مصمّمة بحِرَفية عالية — تجربة هادئة، أداء سريع، وتفاصيل مصقولة تظهر في كل نقرة.
             </p>
 
-            <div className="mt-10 flex flex-wrap items-center gap-3">
+            <div className="mt-10 flex flex-wrap items-center justify-center lg:justify-start gap-3">
               <DSButton asChild size="lg" variant="primary">
                 <Link to="/work">
                   استعرض الأعمال
