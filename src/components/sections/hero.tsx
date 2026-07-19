@@ -85,7 +85,9 @@ export function Hero() {
               id="hero-heading"
               className="mt-7 text-[2.5rem] font-semibold tracking-tight text-foreground text-balance leading-[1.08] sm:text-5xl md:text-6xl lg:text-[4.25rem]"
             >
-              أعطِ الخبز لخبّازه.
+              أعطِ الخبز لخبّازه
+              <br />
+              وأعط الفكرة لأهلها
             </h1>
 
             <p className="mt-6 max-w-lg text-base leading-relaxed text-muted-foreground md:text-lg">
