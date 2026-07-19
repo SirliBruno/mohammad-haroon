@@ -371,7 +371,7 @@ export function HeroProjectsCarousel() {
       >
         <motion.div
           ref={trackRef}
-          className="flex items-stretch gap-6 will-change-transform"
+          className="flex items-stretch gap-8 will-change-transform md:gap-10"
           style={{ x }}
           drag="x"
           dragElastic={0.12}
@@ -383,7 +383,7 @@ export function HeroProjectsCarousel() {
             <div
               key={p.slug}
               data-hero-card
-              className="w-[280px] shrink-0 sm:w-[320px] md:w-[340px] lg:w-[360px]"
+              className="w-[300px] shrink-0 sm:w-[380px] md:w-[440px] lg:w-[500px]"
               dir="rtl"
             >
               <HeroProjectCard
