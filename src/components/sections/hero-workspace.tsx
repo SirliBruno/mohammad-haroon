@@ -225,7 +225,7 @@ const ACCENT_TINT: Record<string, string> = {
 
 function FigmaWindow({ project, className }: { project: FeaturedProject; className?: string }) {
   return (
-    <WindowShell className={cn("w-[200px] sm:w-[260px] md:w-[320px]", className)}>
+    <WindowShell className={cn("w-[150px] sm:w-[240px] md:w-[320px]", className)}>
       <WindowTitleBar
         label={project.figma.title}
         icon={<Figma className="size-3" aria-hidden />}
@@ -268,7 +268,7 @@ const CODE_ACCENT: Record<string, string> = {
 
 function CodeWindow({ project, className }: { project: FeaturedProject; className?: string }) {
   return (
-    <WindowShell className={cn("w-[220px] sm:w-[280px] md:w-[340px] bg-neutral-950", className)}>
+    <WindowShell className={cn("w-[170px] sm:w-[260px] md:w-[340px] bg-neutral-950", className)}>
       <div
         dir="ltr"
         className="flex items-center gap-2 border-b border-white/5 bg-neutral-900 px-3 py-2"
@@ -351,7 +351,7 @@ function ProjectCard({ project, className }: { project: FeaturedProject; classNa
   return (
     <div
       className={cn(
-        "w-[150px] sm:w-[180px] md:w-[220px] rounded-xl border border-border/60 bg-background/85 p-3 sm:p-4 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.4)] backdrop-blur-xl",
+        "w-[124px] sm:w-[170px] md:w-[220px] rounded-xl border border-border/60 bg-background/85 p-3 sm:p-4 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.4)] backdrop-blur-xl",
         className,
       )}
       dir="rtl"
@@ -515,7 +515,7 @@ export function HeroWorkspace() {
         <div className="absolute left-1/2 top-1/2 size-[720px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/8 blur-3xl" />
       </div>
 
-      <div className="relative mx-auto aspect-[5/4] w-full min-h-[420px] sm:min-h-[560px] md:min-h-[660px] lg:min-h-[700px]">
+      <div className="relative mx-auto aspect-[4/5] sm:aspect-[5/4] w-full min-h-[560px] sm:min-h-[600px] md:min-h-[680px] lg:min-h-[720px]">
         {/* -------------------- FIGMA (behind, top-right) -------------------- */}
         <FloatingLayer
           ctx={ctx}
@@ -543,7 +543,7 @@ export function HeroWorkspace() {
 
         {/* -------------------- BROWSER (dominant centerpiece) ---------------- */}
         <motion.div
-          className="pointer-events-auto absolute left-1/2 top-[44%] w-[88%] max-w-[640px] -translate-x-1/2 -translate-y-1/2"
+          className="pointer-events-auto absolute left-1/2 top-[46%] w-[80%] sm:w-[86%] max-w-[640px] -translate-x-1/2 -translate-y-1/2"
           style={{ x: centerX, y: centerY, zIndex: 20 }}
           initial={reduce ? false : { opacity: 0, y: 18, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
