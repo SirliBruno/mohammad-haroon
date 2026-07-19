@@ -146,14 +146,8 @@ function Home() {
             const MockupUI = featuredMockups[project.slug] ?? DashboardUI;
             return (
               <Reveal key={project.slug}>
-                <article className="mx-auto max-w-6xl">
-                  {/* Eyebrow meta */}
-                  <div className="mb-8 flex items-center justify-between gap-4 text-xs tracking-[0.18em] text-muted-foreground md:mb-12">
-                    <span>
-                      {String(i + 1).padStart(2, "0")} — {project.client ?? "منتج ذاتي"}
-                    </span>
-                    <span>{project.year}</span>
-                  </div>
+                <article className="mx-auto max-w-7xl">
+
 
                   {/* Screenshot — the hero of the section */}
                   <Link
