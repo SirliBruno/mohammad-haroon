@@ -8,12 +8,7 @@ import {
   animate,
   type PanInfo,
 } from "motion/react";
-import {
-  ChevronLeft,
-  ChevronRight,
-  ExternalLink,
-  type PanInfo,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
 import { projects } from "@/data/projects";
 import type { Project } from "@/features/projects/schema";
 import { cn } from "@/lib/utils";
