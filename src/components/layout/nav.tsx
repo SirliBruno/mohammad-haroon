@@ -85,7 +85,7 @@ export function Nav() {
             <MobileNav />
           </div>
         </div>
-      </Container>
+      </div>
     </header>
   );
 }
