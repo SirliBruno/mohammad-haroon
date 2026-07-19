@@ -84,12 +84,13 @@ export function PhoneFrame({
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-[2rem] border-[6px] border-neutral-900 bg-neutral-900 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.5)] dark:border-neutral-800",
+        "relative overflow-hidden rounded-[1.75rem] border-[4px] border-neutral-900 bg-neutral-900 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.5)] sm:rounded-[2.25rem] sm:border-[6px] dark:border-neutral-800",
         className,
       )}
     >
-      <div className="absolute left-1/2 top-1.5 z-10 h-4 w-16 -translate-x-1/2 rounded-full bg-neutral-900" />
-      <div className="aspect-[9/19] w-full overflow-hidden rounded-[1.5rem] bg-background">
+      {/* Dynamic Island */}
+      <div className="absolute left-1/2 top-1.5 z-10 h-3 w-10 -translate-x-1/2 rounded-full bg-black sm:top-2 sm:h-4 sm:w-16" />
+      <div className="aspect-[9/19.5] w-full overflow-hidden rounded-[1.35rem] bg-background sm:rounded-[1.7rem]">
         {children}
       </div>
     </div>
