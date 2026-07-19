@@ -225,7 +225,7 @@ const ACCENT_TINT: Record<string, string> = {
 
 function FigmaWindow({ project, className }: { project: FeaturedProject; className?: string }) {
   return (
-    <WindowShell className={cn("w-[200px] sm:w-[260px] md:w-[320px]", className)}>
+    <WindowShell className={cn("w-[150px] sm:w-[240px] md:w-[320px]", className)}>
       <WindowTitleBar
         label={project.figma.title}
         icon={<Figma className="size-3" aria-hidden />}
