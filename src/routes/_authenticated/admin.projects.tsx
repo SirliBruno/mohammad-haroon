@@ -70,6 +70,7 @@ const slugify = (s: string) =>
 function AdminProjectsPage() {
   const navigate = useNavigate();
   const list = useServerFn(adminListProjects);
+  const getById = useServerFn(getAdminProjectById);
   const create = useServerFn(createProject);
   const update = useServerFn(updateProject);
   const remove = useServerFn(deleteProject);
