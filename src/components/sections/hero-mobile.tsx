@@ -33,6 +33,14 @@ import { site } from "@/config/site";
 
 type Status = "live" | "wip" | "idle";
 
+type ImageFormatUrls = { jpg: string; webp: string };
+type ImageVariants = {
+  original: string;
+  sm: ImageFormatUrls;
+  md: ImageFormatUrls;
+  lg: ImageFormatUrls;
+};
+
 type Item = {
   slug: string;
   name: string;
@@ -42,7 +50,7 @@ type Item = {
   Icon: ComponentType<LucideProps>;
   status: Status;
   image?: string | null;
-
+  variants?: ImageVariants | null;
 };
 
 const FALLBACK: Item[] = [
