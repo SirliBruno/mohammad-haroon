@@ -104,6 +104,47 @@ export function PhoneFrame({
   );
 }
 
+/* ---------------- Phone (Samsung Galaxy S25 Ultra) ---------------- */
+export function GalaxyS25UltraFrame({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn(
+        // S25 Ultra: boxier silhouette, sharper corners, thin uniform bezel, titanium frame
+        "relative rounded-[1.75rem] border border-neutral-700/70 bg-linear-to-b from-neutral-800 via-neutral-900 to-neutral-800 p-[3px] shadow-[0_20px_50px_-20px_rgba(0,0,0,0.6)] sm:rounded-[2rem] sm:p-[4px] dark:border-neutral-800",
+        className,
+      )}
+    >
+      {/* Titanium rail highlight */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 rounded-[inherit] ring-1 ring-inset ring-white/10"
+      />
+      {/* Side buttons hint (right side) */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-[2px] top-[26%] h-10 w-[2px] rounded-l bg-neutral-700"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-[2px] top-[38%] h-6 w-[2px] rounded-l bg-neutral-700"
+      />
+      <div className="relative overflow-hidden rounded-[1.55rem] bg-black sm:rounded-[1.8rem]">
+        {/* Centered punch-hole camera */}
+        <div className="pointer-events-none absolute left-1/2 top-1.5 z-10 size-2 -translate-x-1/2 rounded-full bg-black ring-1 ring-white/10 sm:top-2 sm:size-2.5" />
+        <div className="aspect-[9/19.5] w-full overflow-hidden rounded-[1.55rem] bg-background sm:rounded-[1.8rem]">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ---------------- Tablet (iPad-style) ---------------- */
 export function TabletFrame({
   children,
