@@ -25,7 +25,7 @@ import {
   type LucideProps,
 } from "lucide-react";
 import { listHeroProjectsPublic } from "@/lib/cms/hero.functions";
-import { PhoneFrame } from "@/components/mockups/devices";
+import { GalaxyS25UltraFrame } from "@/components/mockups/devices";
 import { cn } from "@/lib/utils";
 import { site } from "@/config/site";
 
@@ -396,7 +396,7 @@ export function HeroMobile() {
               exit={{ opacity: 0, scale: 0.7, y: 6 }}
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             >
-              <PhoneFrame className="w-[150px] sm:w-[170px]">
+              <GalaxyS25UltraFrame className="w-[150px] sm:w-[170px]">
                 {activeItem.image ? (
                   <img
                     src={activeItem.image}
@@ -415,7 +415,7 @@ export function HeroMobile() {
                     </span>
                   </div>
                 )}
-              </PhoneFrame>
+              </GalaxyS25UltraFrame>
             </motion.div>
           )}
         </AnimatePresence>
