@@ -70,8 +70,8 @@ function Page() {
           filename: file.name,
           mime_type: file.type,
           size_bytes: file.size,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } as any,
+          tags: [],
+        },
       });
     },
     onSuccess: () => {
