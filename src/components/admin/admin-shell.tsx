@@ -82,18 +82,27 @@ export function AdminShell({
                 </div>
                 {items.map((item) => {
                   const active = location.pathname === item.to;
+                  const badge = item.to === "/admin/messages" && newCount > 0 ? newCount : null;
                   return (
                     <Link
                       key={item.to}
                       to={item.to}
                       className={cn(
-                        "rounded-lg px-3 py-2 transition-colors",
+                        "flex items-center justify-between gap-2 rounded-lg px-3 py-2 transition-colors",
                         active
                           ? "bg-neutral-900 text-white dark:bg-white dark:text-neutral-900"
                           : "text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800",
                       )}
                     >
-                      {item.label}
+                      <span>{item.label}</span>
+                      {badge != null && (
+                        <span className={cn(
+                          "inline-flex min-w-[1.25rem] items-center justify-center rounded-full px-1.5 py-0.5 text-[10px] font-semibold",
+                          active ? "bg-white/20 text-current" : "bg-red-500 text-white",
+                        )}>
+                          {badge > 99 ? "99+" : badge}
+                        </span>
+                      )}
                     </Link>
                   );
                 })}
