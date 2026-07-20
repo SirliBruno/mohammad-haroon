@@ -97,6 +97,64 @@
     from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: translateY(0); }
   }
+  @keyframes aurora-a {
+    0%   { transform: translate3d(0,0,0) scale(1); }
+    100% { transform: translate3d(6vmax,4vmax,0) scale(1.15); }
+  }
+  @keyframes aurora-b {
+    0%   { transform: translate3d(0,0,0) scale(1.1); }
+    100% { transform: translate3d(-5vmax,-3vmax,0) scale(1); }
+  }
+}
+
+/* ============ Signature premium surfaces ============ */
+
+@utility card-premium {
+  position: relative;
+  isolation: isolate;
+  border-radius: var(--radius-xl);
+  background: color-mix(in oklab, var(--color-card) 92%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-border) 80%, transparent);
+  transition: transform var(--duration-base) var(--ease-out-quart),
+              border-color var(--duration-base) var(--ease-out-quart),
+              box-shadow var(--duration-base) var(--ease-out-quart);
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg,
+      color-mix(in oklab, var(--color-primary) 55%, transparent),
+      transparent 45%,
+      color-mix(in oklab, var(--color-accent) 55%, transparent));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    opacity: 0;
+    transition: opacity var(--duration-base) var(--ease-out-quart);
+    pointer-events: none;
+    z-index: 1;
+  }
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 40px -20px color-mix(in oklab, var(--color-primary) 30%, transparent),
+                0 8px 20px -8px color-mix(in oklab, var(--color-foreground) 12%, transparent);
+  }
+  &:hover::before { opacity: 1; }
+}
+
+@utility btn-glow {
+  position: relative;
+  transition: transform var(--duration-fast) var(--ease-out-quart),
+              box-shadow var(--duration-base) var(--ease-out-quart);
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow:
+      0 0 0 1px color-mix(in oklab, var(--color-primary) 30%, transparent),
+      0 12px 32px -12px color-mix(in oklab, var(--color-primary) 55%, transparent);
+  }
+  &:active { transform: translateY(0); }
 }
 
 
