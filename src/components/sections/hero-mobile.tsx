@@ -396,7 +396,7 @@ export function HeroMobile() {
               exit={{ opacity: 0, scale: 0.7, y: 6 }}
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             >
-              <PhoneFrame className="w-[150px] sm:w-[170px]">
+              <GalaxyS25UltraFrame className="w-[150px] sm:w-[170px]">
                 {activeItem.image ? (
                   <img
                     src={activeItem.image}
