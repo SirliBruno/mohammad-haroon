@@ -175,7 +175,8 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="system">
-        <div className="flex min-h-dvh flex-col">
+        <div className="relative flex min-h-dvh flex-col">
+          <AuroraBackground />
           <AnalyticsTracker />
           <ScrollProgress />
           <Nav />
