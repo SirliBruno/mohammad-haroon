@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
+import { useMutation, useQuery, useQueryClient, keepPreviousData } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { ImageInput } from "./image-input";
 import { cn } from "@/lib/utils";
@@ -69,28 +70,32 @@ export type ListColumn<Row> = {
 };
 
 export type AdminCrudProps<Row extends { id: string }> = {
-  entityName: string; // e.g. "شهادة"
-  entityNamePlural: string; // e.g. "الشهادات"
+  entityName: string;
+  entityNamePlural: string;
+  /** Stable identifier for TanStack Query cache. Defaults to entityName. */
+  queryKey?: string;
   fields: FieldDef[];
   columns: ListColumn<Row>[];
   emptyValues: Record<string, unknown>;
-  listFn: (arg: { data: Record<string, unknown> }) => Promise<Row[] | { rows: Row[] } | unknown>;
+  listFn: (arg: { data: Record<string, unknown> }) => Promise<Row[] | { rows: Row[]; count?: number } | unknown>;
   createFn: (arg: { data: Record<string, unknown> }) => Promise<Row | unknown>;
   updateFn: (arg: { data: { id: string; patch: Record<string, unknown> } }) => Promise<Row | unknown>;
   deleteFn: (arg: { data: { id: string } }) => Promise<unknown>;
   toForm?: (row: Row) => Record<string, unknown>;
   fromForm?: (form: Record<string, unknown>) => Record<string, unknown>;
   searchable?: boolean;
+  /** Rows per page. Default 25. */
+  pageSize?: number;
 };
 
-function coerceRowsList(res: unknown): unknown[] {
-  if (Array.isArray(res)) return res;
+function coerceListResult<Row>(res: unknown): { rows: Row[]; count: number | null } {
+  if (Array.isArray(res)) return { rows: res as Row[], count: null };
   if (res && typeof res === "object" && "rows" in res) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const rows = (res as any).rows;
-    return Array.isArray(rows) ? rows : [];
+    const r = res as any;
+    return { rows: Array.isArray(r.rows) ? r.rows : [], count: typeof r.count === "number" ? r.count : null };
   }
-  return [];
+  return { rows: [], count: null };
 }
 
 export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>) {
@@ -103,46 +108,103 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
     toForm,
     fromForm,
     searchable = true,
+    pageSize = 25,
   } = props;
+
+  const qc = useQueryClient();
+  const cacheKey = props.queryKey ?? entityName;
 
   const list = useServerFn(props.listFn as never) as unknown as (arg: { data: Record<string, unknown> }) => Promise<unknown>;
   const create = useServerFn(props.createFn as never) as unknown as (arg: { data: Record<string, unknown> }) => Promise<unknown>;
   const update = useServerFn(props.updateFn as never) as unknown as (arg: { data: { id: string; patch: Record<string, unknown> } }) => Promise<unknown>;
   const remove = useServerFn(props.deleteFn as never) as unknown as (arg: { data: { id: string } }) => Promise<unknown>;
 
-  const [rows, setRows] = useState<Row[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(0);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<Record<string, unknown>>(emptyValues);
-  const [busy, setBusy] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState<Row | null>(null);
 
-  const searchRef = useRef(search);
-  searchRef.current = search;
-
-  const refresh = async (overrideSearch?: string) => {
-    setLoading(true);
-    try {
-      const s = overrideSearch ?? searchRef.current;
-      const res = await list({ data: { limit: 200, offset: 0, ...(s ? { search: s } : {}) } });
-      setRows(coerceRowsList(res) as Row[]);
-    } catch (e) {
-      toast.error(e instanceof Error ? e.message : "فشل التحميل");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Initial load + debounced server-side search whenever `search` changes.
+  // Debounce search input → committed search
   useEffect(() => {
     const t = setTimeout(() => {
-      void refresh(search);
+      setSearch(searchInput);
+      setPage(0);
     }, 300);
     return () => clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search]);
+  }, [searchInput]);
+
+  const listQuery = useQuery({
+    queryKey: ["admin-crud", cacheKey, { search, page, pageSize }],
+    queryFn: async () => {
+      const res = await list({
+        data: { limit: pageSize, offset: page * pageSize, ...(search ? { search } : {}) },
+      });
+      return coerceListResult<Row>(res);
+    },
+    placeholderData: keepPreviousData,
+    staleTime: 15_000,
+  });
+
+  const rows = listQuery.data?.rows ?? [];
+  const count = listQuery.data?.count ?? null;
+  const totalPages = count != null ? Math.max(1, Math.ceil(count / pageSize)) : null;
+  const loading = listQuery.isLoading;
+  const refetching = listQuery.isFetching && !listQuery.isLoading;
+
+  const invalidateList = () =>
+    qc.invalidateQueries({ queryKey: ["admin-crud", cacheKey] });
+
+  const createMut = useMutation({
+    mutationFn: (payload: Record<string, unknown>) => create({ data: payload }),
+    onSuccess: () => {
+      toast.success("تمت الإضافة");
+      setShowForm(false);
+      void invalidateList();
+    },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "فشل الحفظ"),
+  });
+
+  const updateMut = useMutation({
+    mutationFn: (vars: { id: string; patch: Record<string, unknown> }) =>
+      update({ data: vars }),
+    onSuccess: () => {
+      toast.success("تم الحفظ");
+      setShowForm(false);
+      void invalidateList();
+    },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "فشل الحفظ"),
+  });
+
+  const deleteMut = useMutation({
+    mutationFn: (id: string) => remove({ data: { id } }),
+    onSuccess: () => {
+      toast.success("تم الحذف");
+      setConfirmDelete(null);
+      void invalidateList();
+    },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "فشل الحذف"),
+  });
+
+  const busy = createMut.isPending || updateMut.isPending || deleteMut.isPending;
+
+  // Surface fetch errors as toasts (once per error object)
+  useEffect(() => {
+    if (listQuery.error) {
+      toast.error(listQuery.error instanceof Error ? listQuery.error.message : "فشل التحميل");
+    }
+  }, [listQuery.error]);
+
+  const rangeLabel = useMemo(() => {
+    if (count == null) return `${rows.length} عنصر`;
+    if (count === 0) return "لا توجد نتائج";
+    const from = page * pageSize + 1;
+    const to = Math.min((page + 1) * pageSize, count);
+    return `${from}–${to} من ${count}`;
+  }, [count, page, pageSize, rows.length]);
+
 
 
   const closeForm = () => {
@@ -180,43 +242,21 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
   };
 
 
-  const performDelete = async () => {
+  const performDelete = () => {
     if (!confirmDelete) return;
-    const row = confirmDelete;
-    setBusy(true);
-    try {
-      await remove({ data: { id: row.id } });
-      setConfirmDelete(null);
-      await refresh();
-      toast.success("تم الحذف");
-    } catch (e) {
-      toast.error(e instanceof Error ? e.message : "فشل الحذف");
-    } finally {
-      setBusy(false);
-    }
+    deleteMut.mutate(confirmDelete.id);
   };
 
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setBusy(true);
-    try {
-      const payload = fromForm ? fromForm(form) : sanitizeForm(form, fields);
-      if (editingId) {
-        await update({ data: { id: editingId, patch: payload } });
-        toast.success("تم الحفظ");
-      } else {
-        await create({ data: payload });
-        toast.success("تمت الإضافة");
-      }
-      setShowForm(false);
-      await refresh();
-    } catch (e) {
-      toast.error(e instanceof Error ? e.message : "فشل الحفظ");
-    } finally {
-      setBusy(false);
+    const payload = fromForm ? fromForm(form) : sanitizeForm(form, fields);
+    if (editingId) {
+      updateMut.mutate({ id: editingId, patch: payload });
+    } else {
+      createMut.mutate(payload);
     }
   };
+
 
   return (
     <div className="flex flex-col gap-4">
@@ -225,20 +265,21 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
           {searchable && (
             <input
               type="search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
               placeholder="بحث…"
               className="rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm dark:border-neutral-700 dark:bg-neutral-900"
             />
           )}
           <button
             type="button"
-            onClick={() => void refresh()}
-            className="rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:bg-neutral-800"
+            onClick={() => void listQuery.refetch()}
+            disabled={refetching}
+            className="rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm hover:bg-neutral-50 disabled:opacity-60 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:bg-neutral-800"
           >
-            تحديث
+            {refetching ? "…" : "تحديث"}
           </button>
-          <span className="text-xs text-neutral-500">{rows.length} عنصر</span>
+          <span className="text-xs text-neutral-500">{rangeLabel}</span>
         </div>
         <button
           type="button"
@@ -248,9 +289,6 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
           + إضافة {entityName}
         </button>
       </div>
-
-
-
 
       <div className="rounded-2xl border border-neutral-200 bg-white overflow-hidden dark:border-neutral-800 dark:bg-neutral-900">
         <div className="overflow-x-auto">
@@ -301,7 +339,33 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
             </tbody>
           </table>
         </div>
+        {totalPages && totalPages > 1 && (
+          <div className="flex items-center justify-between border-t border-neutral-100 px-4 py-3 text-xs dark:border-neutral-800">
+            <div className="text-neutral-500">
+              صفحة {page + 1} من {totalPages}
+            </div>
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={() => setPage((p) => Math.max(0, p - 1))}
+                disabled={page === 0 || refetching}
+                className="rounded-md border border-neutral-300 bg-white px-2.5 py-1 disabled:opacity-40 dark:border-neutral-700 dark:bg-neutral-900"
+              >
+                السابق
+              </button>
+              <button
+                type="button"
+                onClick={() => setPage((p) => (totalPages ? Math.min(totalPages - 1, p + 1) : p + 1))}
+                disabled={page + 1 >= totalPages || refetching}
+                className="rounded-md border border-neutral-300 bg-white px-2.5 py-1 disabled:opacity-40 dark:border-neutral-700 dark:bg-neutral-900"
+              >
+                التالي
+              </button>
+            </div>
+          </div>
+        )}
       </div>
+
 
       {showForm && (
         <div
