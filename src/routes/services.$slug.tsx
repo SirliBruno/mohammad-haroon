@@ -92,7 +92,12 @@ function ServiceIllustration({ service }: { service: Service }) {
 }
 
 function ServiceDetail() {
-  const { service } = Route.useLoaderData() as { service: Service };
+  const params = Route.useParams();
+  const { data: dbRow } = useSuspenseQuery(serviceBySlugOptions(params.slug));
+  const service = resolveService(params.slug, dbRow);
+  if (!service) throw notFound();
+
+
 
   return (
     <>
