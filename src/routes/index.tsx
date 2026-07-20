@@ -124,7 +124,7 @@ function Home() {
       <Hero />
 
       {/* ================= FEATURED PROJECTS ================= */}
-      <Section id="work" className="border-t border-border/60" size="lg">
+      <Section id="work" divider size="lg">
         <Reveal>
           <SectionTitle
             eyebrow="أعمال مختارة"
@@ -225,7 +225,7 @@ function Home() {
       </Section>
 
       {/* ================= SERVICES ================= */}
-      <Section id="services" className="border-t border-border/60">
+      <Section id="services" divider tone="muted">
         <Reveal>
           <SectionTitle
             eyebrow="الخدمات"
@@ -283,7 +283,7 @@ function Home() {
       </Section>
 
       {/* ================= HOW I WORK ================= */}
-      <Section id="process" className="border-t border-border/60" size="lg">
+      <Section id="process" divider size="lg">
         <Reveal>
           <SectionTitle
             eyebrow="طريقة العمل"
@@ -311,7 +311,7 @@ function Home() {
       </Section>
 
       {/* ================= EXPERIENCE ================= */}
-      <Section id="experience" className="border-t border-border/60">
+      <Section id="experience" divider tone="muted">
         <Reveal>
           <SectionTitle
             eyebrow="المسيرة"
@@ -335,7 +335,7 @@ function Home() {
       </Section>
 
       {/* ================= CERTIFICATES ================= */}
-      <Section id="certificates" className="border-t border-border/60">
+      <Section id="certificates" divider>
         <Reveal>
           <SectionTitle
             eyebrow="الشهادات"
@@ -353,7 +353,7 @@ function Home() {
       </Section>
 
       {/* ================= TESTIMONIALS ================= */}
-      <Section id="testimonials" className="border-t border-border/60">
+      <Section id="testimonials" divider tone="muted">
         <Reveal>
           <SectionTitle
             eyebrow="شهادات"
