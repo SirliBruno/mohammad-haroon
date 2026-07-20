@@ -265,20 +265,21 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
           {searchable && (
             <input
               type="search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
               placeholder="بحث…"
               className="rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm dark:border-neutral-700 dark:bg-neutral-900"
             />
           )}
           <button
             type="button"
-            onClick={() => void refresh()}
-            className="rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:bg-neutral-800"
+            onClick={() => void listQuery.refetch()}
+            disabled={refetching}
+            className="rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm hover:bg-neutral-50 disabled:opacity-60 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:bg-neutral-800"
           >
-            تحديث
+            {refetching ? "…" : "تحديث"}
           </button>
-          <span className="text-xs text-neutral-500">{rows.length} عنصر</span>
+          <span className="text-xs text-neutral-500">{rangeLabel}</span>
         </div>
         <button
           type="button"
@@ -288,9 +289,6 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
           + إضافة {entityName}
         </button>
       </div>
-
-
-
 
       <div className="rounded-2xl border border-neutral-200 bg-white overflow-hidden dark:border-neutral-800 dark:bg-neutral-900">
         <div className="overflow-x-auto">
@@ -341,7 +339,33 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
             </tbody>
           </table>
         </div>
+        {totalPages && totalPages > 1 && (
+          <div className="flex items-center justify-between border-t border-neutral-100 px-4 py-3 text-xs dark:border-neutral-800">
+            <div className="text-neutral-500">
+              صفحة {page + 1} من {totalPages}
+            </div>
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={() => setPage((p) => Math.max(0, p - 1))}
+                disabled={page === 0 || refetching}
+                className="rounded-md border border-neutral-300 bg-white px-2.5 py-1 disabled:opacity-40 dark:border-neutral-700 dark:bg-neutral-900"
+              >
+                السابق
+              </button>
+              <button
+                type="button"
+                onClick={() => setPage((p) => (totalPages ? Math.min(totalPages - 1, p + 1) : p + 1))}
+                disabled={page + 1 >= totalPages || refetching}
+                className="rounded-md border border-neutral-300 bg-white px-2.5 py-1 disabled:opacity-40 dark:border-neutral-700 dark:bg-neutral-900"
+              >
+                التالي
+              </button>
+            </div>
+          </div>
+        )}
       </div>
+
 
       {showForm && (
         <div
