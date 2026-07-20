@@ -73,7 +73,8 @@ export async function generateImageVariants(
           width: spec.width,
           resize: "cover",
           quality: 78,
-          format: "webp",
+          // storage-js types only list "origin"; the server accepts "webp".
+          format: "webp" as unknown as "origin",
         },
       }),
     ]);
