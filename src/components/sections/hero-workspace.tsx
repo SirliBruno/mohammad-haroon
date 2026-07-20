@@ -617,7 +617,7 @@ export function HeroWorkspace() {
           z={30}
         >
           <div className="drop-shadow-[0_30px_40px_rgba(0,0,0,0.3)]">
-            <PhoneFrame className="w-[88px] sm:w-[150px] md:w-[180px]">
+            <GalaxyS25UltraFrame className="w-[88px] sm:w-[150px] md:w-[180px]">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={current.slug + "-mobile"}
