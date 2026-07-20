@@ -242,43 +242,21 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
   };
 
 
-  const performDelete = async () => {
+  const performDelete = () => {
     if (!confirmDelete) return;
-    const row = confirmDelete;
-    setBusy(true);
-    try {
-      await remove({ data: { id: row.id } });
-      setConfirmDelete(null);
-      await refresh();
-      toast.success("تم الحذف");
-    } catch (e) {
-      toast.error(e instanceof Error ? e.message : "فشل الحذف");
-    } finally {
-      setBusy(false);
-    }
+    deleteMut.mutate(confirmDelete.id);
   };
 
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setBusy(true);
-    try {
-      const payload = fromForm ? fromForm(form) : sanitizeForm(form, fields);
-      if (editingId) {
-        await update({ data: { id: editingId, patch: payload } });
-        toast.success("تم الحفظ");
-      } else {
-        await create({ data: payload });
-        toast.success("تمت الإضافة");
-      }
-      setShowForm(false);
-      await refresh();
-    } catch (e) {
-      toast.error(e instanceof Error ? e.message : "فشل الحفظ");
-    } finally {
-      setBusy(false);
+    const payload = fromForm ? fromForm(form) : sanitizeForm(form, fields);
+    if (editingId) {
+      updateMut.mutate({ id: editingId, patch: payload });
+    } else {
+      createMut.mutate(payload);
     }
   };
+
 
   return (
     <div className="flex flex-col gap-4">
