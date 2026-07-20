@@ -415,7 +415,7 @@ export function HeroMobile() {
                     </span>
                   </div>
                 )}
-              </PhoneFrame>
+              </GalaxyS25UltraFrame>
             </motion.div>
           )}
         </AnimatePresence>
