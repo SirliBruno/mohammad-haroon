@@ -21,6 +21,8 @@ const NAV: NavItem[] = [
   { to: "/admin/skills", label: "المهارات", group: "السيرة" },
   { to: "/admin/messages", label: "الرسائل الواردة", group: "التواصل" },
   { to: "/admin/media", label: "مكتبة الوسائط", group: "التواصل" },
+  { to: "/admin/analytics", label: "التحليلات", group: "المراقبة" },
+  { to: "/admin/audit", label: "سجل التدقيق", group: "المراقبة" },
 ];
 
 export function AdminShell({
