@@ -25,7 +25,7 @@ import {
   type LucideProps,
 } from "lucide-react";
 import { listHeroProjectsPublic } from "@/lib/cms/hero.functions";
-import { PhoneFrame } from "@/components/mockups/devices";
+import { GalaxyS25UltraFrame } from "@/components/mockups/devices";
 import { cn } from "@/lib/utils";
 import { site } from "@/config/site";
 
