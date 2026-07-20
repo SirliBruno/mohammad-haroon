@@ -1,5 +1,6 @@
 import { Link, createFileRoute, notFound } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Check, Clock, Mail, Sparkles } from "lucide-react";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { buildMeta } from "@/features/seo/build-meta";
 import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
@@ -11,49 +12,64 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { services } from "@/data/services";
+import { services as staticServices } from "@/data/services";
 import type { Service } from "@/features/services/schema";
 import { site } from "@/config/site";
+import { serviceBySlugOptions } from "@/features/cms/queries";
+import { dbRowToService } from "@/lib/service-adapter";
+
+function resolveService(slug: string, dbRow: unknown): Service | null {
+  if (dbRow && typeof dbRow === "object") {
+    return dbRowToService(dbRow as Parameters<typeof dbRowToService>[0]);
+  }
+  return staticServices.find((s) => s.slug === slug) ?? null;
+}
 
 export const Route = createFileRoute("/services/$slug")({
-  loader: ({ params }) => {
-    const service = services.find((s) => s.slug === params.slug);
-    if (!service) throw notFound();
-    return { service };
+  loader: async ({ context, params }) => {
+    await context.queryClient.ensureQueryData(serviceBySlugOptions(params.slug));
+    const hasStatic = staticServices.some((s) => s.slug === params.slug);
+    const cached = context.queryClient.getQueryData(
+      serviceBySlugOptions(params.slug).queryKey,
+    );
+    if (!cached && !hasStatic) throw notFound();
   },
-  head: ({ params, loaderData }) => {
-    if (!loaderData) {
-      return {
-        meta: buildMeta({
-          title: "الخدمة غير موجودة",
-          path: `/services/${params.slug}`,
-          noindex: true,
-        }),
-      };
-    }
-    const { service } = loaderData;
+  head: ({ params }) => {
+    const staticMatch = staticServices.find((s) => s.slug === params.slug);
+    const title = staticMatch?.title ?? "الخدمة";
+    const description = staticMatch?.summary;
     return {
       meta: buildMeta({
-        title: service.title,
-        description: service.summary,
-        path: `/services/${service.slug}`,
+        title,
+        description,
+        path: `/services/${params.slug}`,
       }),
-      links: [{ rel: "canonical", href: `/services/${service.slug}` }],
-      scripts: [
-        {
-          type: "application/ld+json",
-          children: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Service",
-            name: service.title,
-            description: service.summary,
-            provider: { "@type": "Person", name: site.name },
-            areaServed: "Global",
-          }),
-        },
-      ],
+      links: [{ rel: "canonical", href: `/services/${params.slug}` }],
+      scripts: staticMatch
+        ? [
+            {
+              type: "application/ld+json",
+              children: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "Service",
+                name: staticMatch.title,
+                description: staticMatch.summary,
+                provider: { "@type": "Person", name: site.name },
+                areaServed: "Global",
+              }),
+            },
+          ]
+        : undefined,
     };
   },
+  errorComponent: ({ error }) => (
+    <Section>
+      <div className="mx-auto max-w-md text-center">
+        <h1 className="text-2xl font-semibold tracking-tight">تعذّر تحميل الخدمة</h1>
+        <p className="mt-2 text-sm text-muted-foreground">{error.message}</p>
+      </div>
+    </Section>
+  ),
   notFoundComponent: ServiceNotFound,
   component: ServiceDetail,
 });
