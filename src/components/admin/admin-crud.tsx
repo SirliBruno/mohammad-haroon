@@ -118,10 +118,14 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<{ kind: "ok" | "err"; text: string } | null>(null);
 
-  const refresh = async () => {
+  const searchRef = useRef(search);
+  searchRef.current = search;
+
+  const refresh = async (overrideSearch?: string) => {
     setLoading(true);
     try {
-      const res = await list({ data: { limit: 200, offset: 0, ...(search ? { search } : {}) } });
+      const s = overrideSearch ?? searchRef.current;
+      const res = await list({ data: { limit: 200, offset: 0, ...(s ? { search: s } : {}) } });
       setRows(coerceRowsList(res) as Row[]);
     } catch (e) {
       setMessage({ kind: "err", text: e instanceof Error ? e.message : "فشل التحميل" });
@@ -130,18 +134,15 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
     }
   };
 
+  // Initial load + debounced server-side search whenever `search` changes.
   useEffect(() => {
-    void refresh();
+    const t = setTimeout(() => {
+      void refresh(search);
+    }, 300);
+    return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [search]);
 
-  const filtered = useMemo(() => {
-    if (!search) return rows;
-    const term = search.toLowerCase();
-    return rows.filter((r) =>
-      JSON.stringify(r).toLowerCase().includes(term),
-    );
-  }, [rows, search]);
 
   const closeForm = () => {
     if (busy) return;
