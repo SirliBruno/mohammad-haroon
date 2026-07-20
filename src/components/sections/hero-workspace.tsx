@@ -454,15 +454,15 @@ export function HeroWorkspace() {
             {cv && (
               <source
                 type="image/webp"
-                srcSet={`${cv.md.webp} 900w, ${cv.lg.webp} 1600w`}
-                sizes="(min-width: 1024px) 900px, 100vw"
+                srcSet={`${cv.sm.webp} 720w, ${cv.md.webp} 1280w, ${cv.lg.webp} 1920w`}
+                sizes="(min-width: 1024px) 1100px, 100vw"
               />
             )}
             {cv && (
               <source
                 type="image/jpeg"
-                srcSet={`${cv.md.jpg} 900w, ${cv.lg.jpg} 1600w`}
-                sizes="(min-width: 1024px) 900px, 100vw"
+                srcSet={`${cv.sm.jpg} 720w, ${cv.md.jpg} 1280w, ${cv.lg.jpg} 1920w`}
+                sizes="(min-width: 1024px) 1100px, 100vw"
               />
             )}
             <img
@@ -482,15 +482,15 @@ export function HeroWorkspace() {
             {mv && (
               <source
                 type="image/webp"
-                srcSet={`${mv.sm.webp} 480w, ${mv.md.webp} 900w`}
-                sizes="220px"
+                srcSet={`${mv.sm.webp} 720w, ${mv.md.webp} 1280w`}
+                sizes="(min-width: 1024px) 320px, 260px"
               />
             )}
             {mv && (
               <source
                 type="image/jpeg"
-                srcSet={`${mv.sm.jpg} 480w, ${mv.md.jpg} 900w`}
-                sizes="220px"
+                srcSet={`${mv.sm.jpg} 720w, ${mv.md.jpg} 1280w`}
+                sizes="(min-width: 1024px) 320px, 260px"
               />
             )}
             <img

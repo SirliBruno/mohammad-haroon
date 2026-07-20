@@ -15,9 +15,9 @@ export type ImageVariants = {
 };
 
 const VARIANT_SPECS = [
-  { key: "sm", width: 480 },
-  { key: "md", width: 900 },
-  { key: "lg", width: 1600 },
+  { key: "sm", width: 720 },
+  { key: "md", width: 1280 },
+  { key: "lg", width: 1920 },
 ] as const;
 
 const TEN_YEARS = 60 * 60 * 24 * 365 * 10;
@@ -63,16 +63,16 @@ export async function generateImageVariants(
       bucketApi.createSignedUrl(parsed.path, TEN_YEARS, {
         transform: {
           width: spec.width,
-          resize: "cover",
-          quality: 82,
+          resize: "contain",
+          quality: 95,
           format: "origin",
         },
       }),
       bucketApi.createSignedUrl(parsed.path, TEN_YEARS, {
         transform: {
           width: spec.width,
-          resize: "cover",
-          quality: 78,
+          resize: "contain",
+          quality: 92,
           // storage-js types only list "origin"; the server accepts "webp".
           format: "webp" as unknown as "origin",
         },
