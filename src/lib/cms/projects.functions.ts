@@ -39,6 +39,16 @@ export const adminListProjects = createServerFn({ method: "POST" })
     return listRows(context.supabase, "projects", data, [...SEARCH_COLUMNS.projects]);
   });
 
+/** Fetch a single project by id with ALL columns (admin edit form). */
+export const getAdminProjectById = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => idSchema.parse(d))
+  .handler(async ({ data, context }) => {
+    const { getRowById, requireAdmin } = await import("@/features/cms/repository.server");
+    await requireAdmin(context.supabase, context.userId);
+    return getRowById(context.supabase, "projects", data.id);
+  });
+
 export const createProject = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => projectInputSchema.parse(d))

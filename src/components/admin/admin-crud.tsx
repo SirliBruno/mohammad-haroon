@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { ImageInput } from "./image-input";
 import { cn } from "@/lib/utils";
@@ -118,10 +118,14 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<{ kind: "ok" | "err"; text: string } | null>(null);
 
-  const refresh = async () => {
+  const searchRef = useRef(search);
+  searchRef.current = search;
+
+  const refresh = async (overrideSearch?: string) => {
     setLoading(true);
     try {
-      const res = await list({ data: { limit: 200, offset: 0, ...(search ? { search } : {}) } });
+      const s = overrideSearch ?? searchRef.current;
+      const res = await list({ data: { limit: 200, offset: 0, ...(s ? { search: s } : {}) } });
       setRows(coerceRowsList(res) as Row[]);
     } catch (e) {
       setMessage({ kind: "err", text: e instanceof Error ? e.message : "فشل التحميل" });
@@ -130,18 +134,15 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
     }
   };
 
+  // Initial load + debounced server-side search whenever `search` changes.
   useEffect(() => {
-    void refresh();
+    const t = setTimeout(() => {
+      void refresh(search);
+    }, 300);
+    return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [search]);
 
-  const filtered = useMemo(() => {
-    if (!search) return rows;
-    const term = search.toLowerCase();
-    return rows.filter((r) =>
-      JSON.stringify(r).toLowerCase().includes(term),
-    );
-  }, [rows, search]);
 
   const closeForm = () => {
     if (busy) return;
@@ -236,7 +237,7 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
           >
             تحديث
           </button>
-          <span className="text-xs text-neutral-500">{filtered.length} عنصر</span>
+          <span className="text-xs text-neutral-500">{rows.length} عنصر</span>
         </div>
         <button
           type="button"
@@ -276,10 +277,10 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
             <tbody>
               {loading ? (
                 <tr><td colSpan={columns.length + 1} className="px-4 py-8 text-center text-neutral-500">جارِ التحميل…</td></tr>
-              ) : filtered.length === 0 ? (
+              ) : rows.length === 0 ? (
                 <tr><td colSpan={columns.length + 1} className="px-4 py-8 text-center text-neutral-500">لا توجد {entityNamePlural} بعد.</td></tr>
               ) : (
-                filtered.map((row) => (
+                rows.map((row) => (
                   <tr key={row.id} className="border-t border-neutral-100 dark:border-neutral-800 hover:bg-neutral-50/50 dark:hover:bg-neutral-800/30">
                     {columns.map((col, i) => (
                       <td key={i} className={cn("px-4 py-3 align-top", col.className)}>

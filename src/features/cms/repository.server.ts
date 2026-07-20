@@ -58,6 +58,25 @@ export async function requireAdmin(supabase: Db, userId: string): Promise<void> 
 // Generic list / get / mutate helpers
 // ============================================================
 
+/**
+ * Convert a raw PostgREST error into a user-facing message. Full details go
+ * to server logs; only safe, generic text is returned to the client so we
+ * don't leak table names, column names, or SQL fragments.
+ */
+type PgErrorShape = { message?: string; code?: string; details?: string; hint?: string };
+function mapDbError(op: string, table: string, error: PgErrorShape): Error {
+  console.error(`[cms] ${op} ${table} failed:`, error);
+  const code = error?.code ?? "";
+  // Postgres SQLSTATE codes: https://www.postgresql.org/docs/current/errcodes-appendix.html
+  if (code === "23505") return new Error("القيمة موجودة مسبقًا (تعارض في المعرّف).");
+  if (code === "23502") return new Error("حقل مطلوب مفقود.");
+  if (code === "23503") return new Error("مرجع غير صالح.");
+  if (code === "23514") return new Error("قيمة غير مقبولة.");
+  if (code === "42501" || code === "PGRST301") return new Error("لا تملك صلاحية تنفيذ هذه العملية.");
+  return new Error("تعذّر تنفيذ العملية. حاول مرة أخرى.");
+}
+
+
 export type ListOptions = ListParamsInput & {
   /** Only used with the public client — reads default to published only. */
   onlyPublished?: boolean;
@@ -101,7 +120,7 @@ export async function listRows<T extends TableName>(
   query = query.range(offset, offset + limit - 1);
 
   const { data, error, count } = await query;
-  if (error) throw new Error(`[${table}] list failed: ${error.message}`);
+  if (error) throw mapDbError("list", table, error);
 
   return {
     rows: (data ?? []) as Database["public"]["Tables"][T]["Row"][],
@@ -121,7 +140,7 @@ export async function getRowById<T extends TableName>(
     .select("*")
     .eq("id", id)
     .maybeSingle();
-  if (error) throw new Error(`[${table}] get failed: ${error.message}`);
+  if (error) throw mapDbError("get", table, error);
   return (data ?? null) as Database["public"]["Tables"][T]["Row"] | null;
 }
 
@@ -135,7 +154,7 @@ export async function getRowBySlug<T extends TableName>(
   let q: any = (supabase.from(table) as any).select("*").eq("slug", slug);
   if (onlyPublished) q = q.eq("content_status", "published");
   const { data, error } = await q.maybeSingle();
-  if (error) throw new Error(`[${table}] get by slug failed: ${error.message}`);
+  if (error) throw mapDbError("getBySlug", table, error);
   return (data ?? null) as Database["public"]["Tables"][T]["Row"] | null;
 }
 
@@ -149,7 +168,7 @@ export async function createRow<T extends TableName>(
     .insert(values)
     .select("*")
     .single();
-  if (error) throw new Error(`[${table}] create failed: ${error.message}`);
+  if (error) throw mapDbError("create", table, error);
   return data as Database["public"]["Tables"][T]["Row"];
 }
 
@@ -165,13 +184,13 @@ export async function updateRow<T extends TableName>(
     .eq("id", id)
     .select("*")
     .single();
-  if (error) throw new Error(`[${table}] update failed: ${error.message}`);
+  if (error) throw mapDbError("update", table, error);
   return data as Database["public"]["Tables"][T]["Row"];
 }
 
 export async function deleteRow<T extends TableName>(supabase: Db, table: T, id: string) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from(table) as any).delete().eq("id", id);
-  if (error) throw new Error(`[${table}] delete failed: ${error.message}`);
+  if (error) throw mapDbError("delete", table, error);
   return { id, deleted: true as const };
 }

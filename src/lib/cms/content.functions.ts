@@ -22,8 +22,7 @@ export const listSiteContent = createServerFn({ method: "POST" })
     const { getPublicServerClient } = await import("@/features/cms/repository.server");
     const client = getPublicServerClient();
     let q = client
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .from("site_content" as any)
+      .from("site_content")
       .select("*")
       .order("group_name", { ascending: true })
       .order("sort_order", { ascending: true })
@@ -46,8 +45,7 @@ export const getSiteContentByKey = createServerFn({ method: "POST" })
     const { getPublicServerClient } = await import("@/features/cms/repository.server");
     const client = getPublicServerClient();
     const { data: row, error } = await client
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .from("site_content" as any)
+      .from("site_content")
       .select("*")
       .eq("key", data.key)
       .maybeSingle();
@@ -62,8 +60,7 @@ export const upsertSiteContent = createServerFn({ method: "POST" })
     const { requireAdmin } = await import("@/features/cms/repository.server");
     await requireAdmin(context.supabase, context.userId);
     const { data: row, error } = await context.supabase
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .from("site_content" as any)
+      .from("site_content")
       .upsert(data, { onConflict: "key" })
       .select("*")
       .single();
@@ -80,8 +77,7 @@ export const updateSiteContent = createServerFn({ method: "POST" })
     const { requireAdmin } = await import("@/features/cms/repository.server");
     await requireAdmin(context.supabase, context.userId);
     const { data: row, error } = await context.supabase
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .from("site_content" as any)
+      .from("site_content")
       .update(data.patch)
       .eq("id", data.id)
       .select("*")
@@ -97,8 +93,7 @@ export const deleteSiteContent = createServerFn({ method: "POST" })
     const { requireAdmin } = await import("@/features/cms/repository.server");
     await requireAdmin(context.supabase, context.userId);
     const { error } = await context.supabase
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .from("site_content" as any)
+      .from("site_content")
       .delete()
       .eq("id", data.id);
     if (error) throw new Error(error.message);
