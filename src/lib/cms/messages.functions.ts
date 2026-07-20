@@ -32,28 +32,42 @@ function callerIp(): string {
   }
 }
 
-/** Public submit — anon-safe. RLS enforces the length/email check. */
+/** Public submit — anon-safe. Rate-limited by IP hash. */
 export const submitMessage = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => messageSubmitSchema.parse(d))
   .handler(async ({ data }) => {
     const { getPublicServerClient, createRow } = await import(
       "@/features/cms/repository.server"
     );
-    const client = getPublicServerClient();
 
     // Rate-limit: max 3 messages from the same IP in the last 10 minutes.
+    // Anon can't SELECT messages (admin-only RLS), so we use the admin client
+    // for the count only — the insert stays through the public/anon path so
+    // RLS input validation still applies.
     const ipHash = await sha256Hex(callerIp());
     const tenMinAgo = new Date(Date.now() - 10 * 60 * 1000).toISOString();
-    const { count } = await client
-      .from("messages")
-      .select("id", { count: "exact", head: true })
-      .eq("ip_hash", ipHash)
-      .gte("created_at", tenMinAgo);
-    if ((count ?? 0) >= 3) {
-      throw new Error("لقد أرسلت رسائل كثيرة مؤخرًا. حاول بعد قليل.");
+    try {
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { count } = await supabaseAdmin
+        .from("messages")
+        .select("id", { count: "exact", head: true })
+        .eq("ip_hash", ipHash)
+        .gte("created_at", tenMinAgo);
+      if ((count ?? 0) >= 3) {
+        throw new Error("لقد أرسلت رسائل كثيرة مؤخرًا. حاول بعد قليل.");
+      }
+    } catch (e) {
+      // If the admin client is unavailable, fail open on the throttle rather
+      // than blocking legitimate messages — the honey-pot + min-time still apply.
+      if (e instanceof Error && e.message.startsWith("لقد أرسلت")) throw e;
+      console.warn("[submitMessage] rate-limit check skipped:", e);
     }
 
-    await createRow(client, "messages", { ...data, ip_hash: ipHash, status: "new" });
+    await createRow(getPublicServerClient(), "messages", {
+      ...data,
+      ip_hash: ipHash,
+      status: "new",
+    });
     return { ok: true as const };
   });
 
