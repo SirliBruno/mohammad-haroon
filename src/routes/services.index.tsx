@@ -1,11 +1,12 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { ArrowLeft, Mail } from "lucide-react";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { buildMeta } from "@/features/seo/build-meta";
 import { PageHeader } from "@/components/layout/page-header";
 import { Section } from "@/components/layout/section";
 import { SectionTitle } from "@/components/layout/section-title";
 import { DSButton, Grid, ServiceCard, CTA } from "@/components/ds";
-import { services, serviceProcess, serviceFaq } from "@/data/services";
+import { services as staticServices, serviceProcess, serviceFaq } from "@/data/services";
 import { site } from "@/config/site";
 import {
   Accordion,
@@ -13,8 +14,15 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { serviceListOptions } from "@/features/cms/queries";
+import { dbRowToService } from "@/lib/service-adapter";
+import type { Service } from "@/features/services/schema";
+
+const listParams = { limit: 50, orderBy: "sort_order", ascending: true } as const;
 
 export const Route = createFileRoute("/services/")({
+  loader: ({ context }) =>
+    context.queryClient.ensureQueryData(serviceListOptions(listParams)),
   head: () => ({
     meta: buildMeta({
       title: "الخدمات",
@@ -24,16 +32,23 @@ export const Route = createFileRoute("/services/")({
     }),
     links: [{ rel: "canonical", href: "/services" }],
   }),
+  errorComponent: () => (
+    <PageHeader eyebrow="الخدمات" title="تعذّر تحميل الخدمات" description="حاول تحديث الصفحة." />
+  ),
   component: ServicesIndex,
 });
 
 function ServicesIndex() {
+  const { data } = useSuspenseQuery(serviceListOptions(listParams));
+  const fromDb: Service[] = (data?.rows ?? []).map(dbRowToService);
+  const services = fromDb.length > 0 ? fromDb : staticServices;
+
   return (
     <>
       <PageHeader
         eyebrow="الخدمات"
         title="تصميم وتطوير احترافي متكامل"
-        description="سبع خدمات متخصّصة تُغطّي دورة حياة المنتج الرقمي بأكملها — من صفحة مقصودة واحدة إلى متجر إلكتروني كامل، وكلّ ما بينهما."
+        description="خدمات متخصّصة تُغطّي دورة حياة المنتج الرقمي بأكملها — من صفحة مقصودة واحدة إلى متجر إلكتروني كامل، وكلّ ما بينهما."
       />
 
       <Section>
