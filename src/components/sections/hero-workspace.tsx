@@ -460,7 +460,10 @@ export function HeroWorkspace() {
           <img
             src={r.mobile_url}
             alt={r.title}
-            className={cn("size-full object-cover", props.className)}
+            className={cn(
+              "size-full bg-linear-to-br from-muted/40 to-background object-contain p-1",
+              props.className,
+            )}
           />
         ) : (
           <fallback.Mobile {...props} />
