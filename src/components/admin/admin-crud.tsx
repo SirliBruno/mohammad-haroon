@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
+import { useMutation, useQuery, useQueryClient, keepPreviousData } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { ImageInput } from "./image-input";
 import { cn } from "@/lib/utils";
@@ -69,28 +70,32 @@ export type ListColumn<Row> = {
 };
 
 export type AdminCrudProps<Row extends { id: string }> = {
-  entityName: string; // e.g. "شهادة"
-  entityNamePlural: string; // e.g. "الشهادات"
+  entityName: string;
+  entityNamePlural: string;
+  /** Stable identifier for TanStack Query cache. Defaults to entityName. */
+  queryKey?: string;
   fields: FieldDef[];
   columns: ListColumn<Row>[];
   emptyValues: Record<string, unknown>;
-  listFn: (arg: { data: Record<string, unknown> }) => Promise<Row[] | { rows: Row[] } | unknown>;
+  listFn: (arg: { data: Record<string, unknown> }) => Promise<Row[] | { rows: Row[]; count?: number } | unknown>;
   createFn: (arg: { data: Record<string, unknown> }) => Promise<Row | unknown>;
   updateFn: (arg: { data: { id: string; patch: Record<string, unknown> } }) => Promise<Row | unknown>;
   deleteFn: (arg: { data: { id: string } }) => Promise<unknown>;
   toForm?: (row: Row) => Record<string, unknown>;
   fromForm?: (form: Record<string, unknown>) => Record<string, unknown>;
   searchable?: boolean;
+  /** Rows per page. Default 25. */
+  pageSize?: number;
 };
 
-function coerceRowsList(res: unknown): unknown[] {
-  if (Array.isArray(res)) return res;
+function coerceListResult<Row>(res: unknown): { rows: Row[]; count: number | null } {
+  if (Array.isArray(res)) return { rows: res as Row[], count: null };
   if (res && typeof res === "object" && "rows" in res) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const rows = (res as any).rows;
-    return Array.isArray(rows) ? rows : [];
+    const r = res as any;
+    return { rows: Array.isArray(r.rows) ? r.rows : [], count: typeof r.count === "number" ? r.count : null };
   }
-  return [];
+  return { rows: [], count: null };
 }
 
 export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>) {
@@ -103,46 +108,103 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
     toForm,
     fromForm,
     searchable = true,
+    pageSize = 25,
   } = props;
+
+  const qc = useQueryClient();
+  const cacheKey = props.queryKey ?? entityName;
 
   const list = useServerFn(props.listFn as never) as unknown as (arg: { data: Record<string, unknown> }) => Promise<unknown>;
   const create = useServerFn(props.createFn as never) as unknown as (arg: { data: Record<string, unknown> }) => Promise<unknown>;
   const update = useServerFn(props.updateFn as never) as unknown as (arg: { data: { id: string; patch: Record<string, unknown> } }) => Promise<unknown>;
   const remove = useServerFn(props.deleteFn as never) as unknown as (arg: { data: { id: string } }) => Promise<unknown>;
 
-  const [rows, setRows] = useState<Row[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(0);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<Record<string, unknown>>(emptyValues);
-  const [busy, setBusy] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState<Row | null>(null);
 
-  const searchRef = useRef(search);
-  searchRef.current = search;
-
-  const refresh = async (overrideSearch?: string) => {
-    setLoading(true);
-    try {
-      const s = overrideSearch ?? searchRef.current;
-      const res = await list({ data: { limit: 200, offset: 0, ...(s ? { search: s } : {}) } });
-      setRows(coerceRowsList(res) as Row[]);
-    } catch (e) {
-      toast.error(e instanceof Error ? e.message : "فشل التحميل");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Initial load + debounced server-side search whenever `search` changes.
+  // Debounce search input → committed search
   useEffect(() => {
     const t = setTimeout(() => {
-      void refresh(search);
+      setSearch(searchInput);
+      setPage(0);
     }, 300);
     return () => clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search]);
+  }, [searchInput]);
+
+  const listQuery = useQuery({
+    queryKey: ["admin-crud", cacheKey, { search, page, pageSize }],
+    queryFn: async () => {
+      const res = await list({
+        data: { limit: pageSize, offset: page * pageSize, ...(search ? { search } : {}) },
+      });
+      return coerceListResult<Row>(res);
+    },
+    placeholderData: keepPreviousData,
+    staleTime: 15_000,
+  });
+
+  const rows = listQuery.data?.rows ?? [];
+  const count = listQuery.data?.count ?? null;
+  const totalPages = count != null ? Math.max(1, Math.ceil(count / pageSize)) : null;
+  const loading = listQuery.isLoading;
+  const refetching = listQuery.isFetching && !listQuery.isLoading;
+
+  const invalidateList = () =>
+    qc.invalidateQueries({ queryKey: ["admin-crud", cacheKey] });
+
+  const createMut = useMutation({
+    mutationFn: (payload: Record<string, unknown>) => create({ data: payload }),
+    onSuccess: () => {
+      toast.success("تمت الإضافة");
+      setShowForm(false);
+      void invalidateList();
+    },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "فشل الحفظ"),
+  });
+
+  const updateMut = useMutation({
+    mutationFn: (vars: { id: string; patch: Record<string, unknown> }) =>
+      update({ data: vars }),
+    onSuccess: () => {
+      toast.success("تم الحفظ");
+      setShowForm(false);
+      void invalidateList();
+    },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "فشل الحفظ"),
+  });
+
+  const deleteMut = useMutation({
+    mutationFn: (id: string) => remove({ data: { id } }),
+    onSuccess: () => {
+      toast.success("تم الحذف");
+      setConfirmDelete(null);
+      void invalidateList();
+    },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "فشل الحذف"),
+  });
+
+  const busy = createMut.isPending || updateMut.isPending || deleteMut.isPending;
+
+  // Surface fetch errors as toasts (once per error object)
+  useEffect(() => {
+    if (listQuery.error) {
+      toast.error(listQuery.error instanceof Error ? listQuery.error.message : "فشل التحميل");
+    }
+  }, [listQuery.error]);
+
+  const rangeLabel = useMemo(() => {
+    if (count == null) return `${rows.length} عنصر`;
+    if (count === 0) return "لا توجد نتائج";
+    const from = page * pageSize + 1;
+    const to = Math.min((page + 1) * pageSize, count);
+    return `${from}–${to} من ${count}`;
+  }, [count, page, pageSize, rows.length]);
+
 
 
   const closeForm = () => {
