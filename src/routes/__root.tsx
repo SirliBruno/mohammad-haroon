@@ -184,6 +184,13 @@ function RootComponent() {
           </main>
           <Footer />
           <ScrollToTop />
+          <Toaster
+            position="top-center"
+            dir={site.direction}
+            richColors
+            closeButton
+            toastOptions={{ className: "font-sans" }}
+          />
         </div>
       </ThemeProvider>
     </QueryClientProvider>
