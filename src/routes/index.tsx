@@ -353,7 +353,7 @@ function Home() {
       </Section>
 
       {/* ================= TESTIMONIALS ================= */}
-      <Section id="testimonials" className="border-t border-border/60">
+      <Section id="testimonials" divider tone="muted">
         <Reveal>
           <SectionTitle
             eyebrow="شهادات"
