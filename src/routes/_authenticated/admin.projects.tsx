@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Section } from "@/components/layout/section";
 import {
   adminListProjects,
+  getAdminProjectById,
   createProject,
   updateProject,
   deleteProject,
