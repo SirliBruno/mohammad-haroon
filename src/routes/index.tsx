@@ -283,7 +283,7 @@ function Home() {
       </Section>
 
       {/* ================= HOW I WORK ================= */}
-      <Section id="process" className="border-t border-border/60" size="lg">
+      <Section id="process" divider size="lg">
         <Reveal>
           <SectionTitle
             eyebrow="طريقة العمل"
