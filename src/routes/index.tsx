@@ -124,7 +124,7 @@ function Home() {
       <Hero />
 
       {/* ================= FEATURED PROJECTS ================= */}
-      <Section id="work" className="border-t border-border/60" size="lg">
+      <Section id="work" divider size="lg">
         <Reveal>
           <SectionTitle
             eyebrow="أعمال مختارة"
