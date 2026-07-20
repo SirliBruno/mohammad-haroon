@@ -409,12 +409,29 @@ export function HeroMobile() {
             >
               <PhoneFrame className="w-[150px] sm:w-[170px]">
                 {activeItem.image ? (
-                  <img
-                    src={activeItem.image}
-                    alt={activeItem.name}
-                    className="h-full w-full object-cover"
-                    loading="lazy"
-                  />
+                  <picture>
+                    {activeItem.variants && (
+                      <source
+                        type="image/webp"
+                        srcSet={`${activeItem.variants.sm.webp} 480w, ${activeItem.variants.md.webp} 900w`}
+                        sizes="(min-width: 640px) 170px, 150px"
+                      />
+                    )}
+                    {activeItem.variants && (
+                      <source
+                        type="image/jpeg"
+                        srcSet={`${activeItem.variants.sm.jpg} 480w, ${activeItem.variants.md.jpg} 900w`}
+                        sizes="(min-width: 640px) 170px, 150px"
+                      />
+                    )}
+                    <img
+                      src={activeItem.variants?.md.jpg ?? activeItem.image}
+                      alt={activeItem.name}
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </picture>
                 ) : (
                   <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-linear-to-br from-primary/15 via-background to-background p-4 text-center">
                     <activeItem.Icon className="size-8 text-primary" aria-hidden />
