@@ -70,9 +70,14 @@ export const createHeroProject = createServerFn({ method: "POST" })
       _role: "admin",
     });
     if (!isAdmin) throw new Error("Forbidden");
+    const { generateImageVariants } = await import("./image-variants.server");
+    const [cover_variants, mobile_variants] = await Promise.all([
+      generateImageVariants(data.cover_url),
+      generateImageVariants(data.mobile_url),
+    ]);
     const { data: row, error } = await context.supabase
       .from("hero_projects")
-      .insert({ ...data, created_by: context.userId })
+      .insert({ ...data, cover_variants, mobile_variants, created_by: context.userId })
       .select()
       .single();
     if (error) throw error;
