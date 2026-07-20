@@ -26,7 +26,7 @@ import {
   useTransform,
 } from "motion/react";
 import { ArrowUpRight, Sparkles } from "lucide-react";
-import { BrowserFrame, PhoneFrame } from "@/components/mockups/devices";
+import { BrowserFrame, GalaxyS25UltraFrame } from "@/components/mockups/devices";
 import {
   DashboardUI,
   EditorUI,
@@ -617,7 +617,7 @@ export function HeroWorkspace() {
           z={30}
         >
           <div className="drop-shadow-[0_30px_40px_rgba(0,0,0,0.3)]">
-            <PhoneFrame className="w-[88px] sm:w-[150px] md:w-[180px]">
+            <GalaxyS25UltraFrame className="w-[88px] sm:w-[150px] md:w-[180px]">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={current.slug + "-mobile"}
@@ -630,7 +630,7 @@ export function HeroWorkspace() {
                   <current.Mobile />
                 </motion.div>
               </AnimatePresence>
-            </PhoneFrame>
+            </GalaxyS25UltraFrame>
           </div>
         </FloatingLayer>
 
