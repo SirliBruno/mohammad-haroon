@@ -1,14 +1,20 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { ArrowUpRight, Search, X, Sparkles, ChevronRight, ChevronLeft } from "lucide-react";
 import { buildMeta } from "@/features/seo/build-meta";
 import { PageHeader } from "@/components/layout/page-header";
 import { Section } from "@/components/layout/section";
 import { Grid, EmptyState, DSButton, DSCard } from "@/components/ds";
-import { projects } from "@/data/projects";
 import { projectCategories, type Project, type ProjectCategory } from "@/features/projects/schema";
 import { cn } from "@/lib/utils";
 import { statusMeta } from "@/lib/project-status";
+import { toProject } from "@/lib/project-adapter";
+import {
+  listPublicProjects,
+  getProjectFacets,
+} from "@/lib/cms/projects-public.functions";
 
 const PAGE_SIZE = 6;
 const CATEGORY_FILTERS = ["الكل", ...projectCategories] as const;
@@ -28,40 +34,46 @@ export const Route = createFileRoute("/work/")({
 });
 
 function WorkIndex() {
+  const listFn = useServerFn(listPublicProjects);
+  const facetsFn = useServerFn(getProjectFacets);
+
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<CategoryFilter>("الكل");
   const [page, setPage] = useState(1);
 
-  const featured = useMemo(() => projects.filter((p) => p.featured), []);
+  const facetsQ = useQuery({
+    queryKey: ["work", "facets"],
+    queryFn: () => facetsFn(),
+    staleTime: 60_000,
+  });
 
-  const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    return projects.filter((p) => {
-      if (category !== "الكل" && p.category !== category) return false;
-      if (!q) return true;
-      const hay = [
-        p.title,
-        p.summary,
-        p.client ?? "",
-        p.category,
-        ...p.tags,
-        ...p.stack,
-      ]
-        .join(" ")
-        .toLowerCase();
-      return hay.includes(q);
-    });
-  }, [query, category]);
+  const featuredQ = useQuery({
+    queryKey: ["work", "featured"],
+    queryFn: () => listFn({ data: { featured: true, limit: 3 } }),
+    staleTime: 60_000,
+  });
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const listQ = useQuery({
+    queryKey: ["work", "list", { query, category, page }],
+    queryFn: () =>
+      listFn({
+        data: {
+          limit: PAGE_SIZE,
+          offset: (page - 1) * PAGE_SIZE,
+          search: query.trim() || undefined,
+          category: category === "الكل" ? undefined : category,
+        },
+      }),
+    placeholderData: keepPreviousData,
+  });
+
+  const featured = (featuredQ.data?.rows ?? []).map(toProject);
+  const paginated = (listQ.data?.rows ?? []).map(toProject);
+  const total = listQ.data?.count ?? 0;
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
   const safePage = Math.min(page, totalPages);
-  const paginated = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
-
-  const categoryCounts = useMemo(() => {
-    const map = new Map<string, number>();
-    for (const p of projects) map.set(p.category, (map.get(p.category) ?? 0) + 1);
-    return map;
-  }, []);
+  const categoryCounts = facetsQ.data?.counts ?? {};
+  const grandTotal = facetsQ.data?.total ?? 0;
 
   function updateQuery(v: string) {
     setQuery(v);
@@ -141,7 +153,7 @@ function WorkIndex() {
           >
             {CATEGORY_FILTERS.map((c) => {
               const active = category === c;
-              const count = c === "الكل" ? projects.length : categoryCounts.get(c) ?? 0;
+              const count = c === "الكل" ? grandTotal : categoryCounts[c] ?? 0;
               return (
                 <button
                   key={c}
@@ -173,17 +185,19 @@ function WorkIndex() {
           </div>
 
           <p className="text-xs text-muted-foreground" aria-live="polite">
-            {filtered.length === 0
-              ? "لا توجد مشاريع تُطابق الفلترة."
-              : `يظهر ${(safePage - 1) * PAGE_SIZE + 1}–${Math.min(
-                  safePage * PAGE_SIZE,
-                  filtered.length,
-                )} من أصل ${filtered.length}`}
+            {listQ.isLoading
+              ? "جارِ التحميل…"
+              : total === 0
+                ? "لا توجد مشاريع تُطابق الفلترة."
+                : `يظهر ${(safePage - 1) * PAGE_SIZE + 1}–${Math.min(
+                    safePage * PAGE_SIZE,
+                    total,
+                  )} من أصل ${total}`}
           </p>
         </div>
 
         <div className="mt-8">
-          {filtered.length === 0 ? (
+          {!listQ.isLoading && total === 0 ? (
             <EmptyState
               title="لا نتائج مُطابقة"
               description="جرّب كلمة بحث أخرى، أو أعد ضبط الفلترة."
@@ -297,7 +311,6 @@ function PremiumProjectCard({
         params={{ slug: project.slug }}
         className="block focus-visible:outline-none"
       >
-        {/* Cover */}
         <div className="relative aspect-[16/10] overflow-hidden bg-muted">
           {project.cover?.src ? (
             <img
@@ -330,13 +343,11 @@ function PremiumProjectCard({
             </div>
           )}
 
-          {/* Overlay gradient on hover */}
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0 bg-linear-to-t from-background/60 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
           />
 
-          {/* Top-left: category */}
           <div className="absolute left-4 top-4 flex items-center gap-2">
             <span className="rounded-full border border-border/60 bg-background/80 px-2.5 py-1 text-[10px] font-medium tracking-wider text-foreground backdrop-blur">
               {project.category}
@@ -348,7 +359,6 @@ function PremiumProjectCard({
             ) : null}
           </div>
 
-          {/* Top-right: status */}
           <div className="absolute right-4 top-4">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/80 px-2.5 py-1 text-[10px] font-medium text-foreground backdrop-blur">
               <span className={cn("size-1.5 rounded-full", status.dot)} aria-hidden />
@@ -356,13 +366,11 @@ function PremiumProjectCard({
             </span>
           </div>
 
-          {/* Arrow */}
           <div className="absolute bottom-4 right-4 grid size-10 place-items-center rounded-full border border-border/60 bg-background/90 text-foreground opacity-0 backdrop-blur transition-[opacity,transform] duration-300 ease-out group-hover:opacity-100 motion-safe:translate-y-2 motion-safe:group-hover:translate-y-0">
             <ArrowUpRight className="size-4" />
           </div>
         </div>
 
-        {/* Body */}
         <div className="p-6">
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <span className="tabular-nums">{project.year}</span>

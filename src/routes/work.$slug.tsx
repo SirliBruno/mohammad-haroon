@@ -22,17 +22,35 @@ import { Section } from "@/components/layout/section";
 import { SectionTitle } from "@/components/layout/section-title";
 import { Reveal } from "@/components/motion/reveal";
 import { DSButton, Grid, TagGroup } from "@/components/ds";
-import { projects } from "@/data/projects";
 import type { Project } from "@/features/projects/schema";
 import { site } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { statusMeta } from "@/lib/project-status";
+import { toProject } from "@/lib/project-adapter";
+import {
+  getPublicProjectBySlug,
+  listPublicProjects,
+} from "@/lib/cms/projects-public.functions";
 
 export const Route = createFileRoute("/work/$slug")({
-  loader: ({ params }) => {
-    const project = projects.find((p) => p.slug === params.slug);
-    if (!project) throw notFound();
-    return { project };
+  loader: async ({ params }) => {
+    const row = await getPublicProjectBySlug({ data: { slug: params.slug } });
+    if (!row) throw notFound();
+    const project = toProject(row);
+    const [relatedRes, siblingsRes] = await Promise.all([
+      listPublicProjects({ data: { category: project.category, limit: 4 } }),
+      listPublicProjects({ data: { limit: 12 } }),
+    ]);
+    const related = relatedRes.rows
+      .filter((r) => r.slug !== project.slug)
+      .slice(0, 3)
+      .map(toProject);
+    const siblings = siblingsRes.rows.map(toProject);
+    const currentIndex = siblings.findIndex((p) => p.slug === project.slug);
+    const next = siblings.length
+      ? siblings[(currentIndex + 1) % siblings.length] ?? null
+      : null;
+    return { project, related, next };
   },
   head: ({ params, loaderData }) => {
     if (!loaderData) {
@@ -77,14 +95,13 @@ export const Route = createFileRoute("/work/$slug")({
 
 
 function CaseStudy() {
-  const { project } = Route.useLoaderData() as { project: Project };
+  const { project, related, next } = Route.useLoaderData() as {
+    project: Project;
+    related: Project[];
+    next: Project | null;
+  };
   const status = statusMeta(project.status);
-  const currentIndex = projects.findIndex((p) => p.slug === project.slug);
-  const next = projects[(currentIndex + 1) % projects.length] ?? null;
 
-  const related = projects
-    .filter((p) => p.slug !== project.slug && p.category === project.category)
-    .slice(0, 3);
 
   return (
     <>

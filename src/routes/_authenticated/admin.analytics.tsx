@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { AdminShell } from "@/components/admin/admin-shell";
-import { getFunnelSummary, type FunnelSummary } from "@/lib/cms/analytics.functions";
+import { getFunnelSummary } from "@/lib/cms/analytics.functions";
 
 export const Route = createFileRoute("/_authenticated/admin/analytics")({
   component: Page,
@@ -35,28 +36,14 @@ function Card({ label, value, hint }: { label: string; value: string | number; h
 function Page() {
   const fetchSummary = useServerFn(getFunnelSummary);
   const [days, setDays] = useState(30);
-  const [data, setData] = useState<FunnelSummary | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    let cancelled = false;
-    setLoading(true);
-    setError(null);
-    fetchSummary({ data: { days } })
-      .then((res) => {
-        if (!cancelled) setData(res);
-      })
-      .catch((e) => {
-        if (!cancelled) setError(e?.message ?? "تعذّر تحميل البيانات");
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [days, fetchSummary]);
+  const q = useQuery({
+    queryKey: ["admin", "analytics", { days }],
+    queryFn: () => fetchSummary({ data: { days } }),
+    staleTime: 30_000,
+  });
+
+  const data = q.data;
 
   return (
     <AdminShell
@@ -79,13 +66,14 @@ function Page() {
         ))}
       </div>
 
-      {loading ? (
+      {q.isLoading ? (
         <p className="text-sm text-neutral-500">جارٍ التحميل…</p>
-      ) : error ? (
-        <p className="text-sm text-red-600">{error}</p>
+      ) : q.isError ? (
+        <p className="text-sm text-red-600">
+          {q.error instanceof Error ? q.error.message : "تعذّر تحميل البيانات"}
+        </p>
       ) : !data ? null : (
         <div className="flex flex-col gap-8">
-          {/* Funnel steps */}
           <section>
             <h3 className="mb-3 text-xs uppercase tracking-wider text-neutral-500">
               مسار التحويل (جلسات فريدة)
@@ -99,7 +87,6 @@ function Page() {
             </div>
           </section>
 
-          {/* Conversion rates */}
           <section>
             <h3 className="mb-3 text-xs uppercase tracking-wider text-neutral-500">
               معدلات التحويل
@@ -109,11 +96,14 @@ function Page() {
               <Card label="المشاريع ← تفاصيل مشروع" value={`${data.conversions.workToProject}%`} />
               <Card label="مشروع ← التواصل" value={`${data.conversions.projectToContact}%`} />
               <Card label="تواصل ← إرسال" value={`${data.conversions.contactToSubmit}%`} />
-              <Card label="التحويل الكلي" value={`${data.conversions.overall}%`} hint="من الرئيسية حتى الإرسال" />
+              <Card
+                label="التحويل الكلي"
+                value={`${data.conversions.overall}%`}
+                hint="من الرئيسية حتى الإرسال"
+              />
             </div>
           </section>
 
-          {/* Event totals */}
           <section>
             <h3 className="mb-3 text-xs uppercase tracking-wider text-neutral-500">
               إجمالي الأحداث
@@ -131,10 +121,15 @@ function Page() {
                   {Object.entries(data.totals)
                     .sort((a, b) => b[1] - a[1])
                     .map(([ev, count]) => (
-                      <tr key={ev} className="border-t border-neutral-200 dark:border-neutral-800">
+                      <tr
+                        key={ev}
+                        className="border-t border-neutral-200 dark:border-neutral-800"
+                      >
                         <td className="px-4 py-2">{EVENT_LABEL[ev] ?? ev}</td>
                         <td className="px-4 py-2 tabular-nums">{count}</td>
-                        <td className="px-4 py-2 tabular-nums">{data.uniqueSessions[ev] ?? 0}</td>
+                        <td className="px-4 py-2 tabular-nums">
+                          {data.uniqueSessions[ev] ?? 0}
+                        </td>
                       </tr>
                     ))}
                   {Object.keys(data.totals).length === 0 ? (
@@ -149,7 +144,6 @@ function Page() {
             </div>
           </section>
 
-          {/* Top paths */}
           {data.topPaths.length > 0 ? (
             <section>
               <h3 className="mb-3 text-xs uppercase tracking-wider text-neutral-500">
@@ -159,8 +153,13 @@ function Page() {
                 <table className="w-full text-sm">
                   <tbody>
                     {data.topPaths.map((p) => (
-                      <tr key={p.path} className="border-t border-neutral-200 first:border-t-0 dark:border-neutral-800">
-                        <td className="px-4 py-2 font-mono text-xs" dir="ltr">{p.path}</td>
+                      <tr
+                        key={p.path}
+                        className="border-t border-neutral-200 first:border-t-0 dark:border-neutral-800"
+                      >
+                        <td className="px-4 py-2 font-mono text-xs" dir="ltr">
+                          {p.path}
+                        </td>
                         <td className="px-4 py-2 text-end tabular-nums">{p.views}</td>
                       </tr>
                     ))}
