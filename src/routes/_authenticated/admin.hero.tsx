@@ -51,6 +51,7 @@ function AdminHeroPage() {
   const update = useServerFn(updateHeroProject);
   const remove = useServerFn(deleteHeroProject);
   const sign = useServerFn(signHeroMediaPath);
+  const backfill = useServerFn(backfillHeroVariants);
 
   const [rows, setRows] = useState<HeroRow[]>([]);
   const [loading, setLoading] = useState(true);
