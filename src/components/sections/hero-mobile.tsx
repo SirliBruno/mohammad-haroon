@@ -413,15 +413,15 @@ export function HeroMobile() {
                     {activeItem.variants && (
                       <source
                         type="image/webp"
-                        srcSet={`${activeItem.variants.sm.webp} 480w, ${activeItem.variants.md.webp} 900w`}
-                        sizes="(min-width: 640px) 170px, 150px"
+                        srcSet={`${activeItem.variants.sm.webp} 720w, ${activeItem.variants.md.webp} 1280w`}
+                        sizes="(min-width: 640px) 340px, 300px"
                       />
                     )}
                     {activeItem.variants && (
                       <source
                         type="image/jpeg"
-                        srcSet={`${activeItem.variants.sm.jpg} 480w, ${activeItem.variants.md.jpg} 900w`}
-                        sizes="(min-width: 640px) 170px, 150px"
+                        srcSet={`${activeItem.variants.sm.jpg} 720w, ${activeItem.variants.md.jpg} 1280w`}
+                        sizes="(min-width: 640px) 340px, 300px"
                       />
                     )}
                     <img
