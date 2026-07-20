@@ -42,6 +42,15 @@ export function AdminShell({
   const location = useLocation();
   const navigate = useNavigate();
 
+  const countFn = useServerFn(countNewMessages);
+  const newMessages = useQuery({
+    queryKey: ["admin", "messages", "new-count"],
+    queryFn: () => countFn(),
+    refetchInterval: 60_000,
+    staleTime: 30_000,
+  });
+  const newCount = newMessages.data?.count ?? 0;
+
   const groups = NAV.reduce<Record<string, NavItem[]>>((acc, item) => {
     const g = item.group ?? "عام";
     if (!acc[g]) acc[g] = [];
