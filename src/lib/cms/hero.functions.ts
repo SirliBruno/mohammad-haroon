@@ -35,7 +35,7 @@ export const listHeroProjectsPublic = createServerFn({ method: "GET" }).handler(
     });
     const { data, error } = await client
       .from("hero_projects")
-      .select("id, title, host, category, year, status, accent, cover_url, mobile_url, sort_order")
+      .select("id, title, host, category, year, status, accent, cover_url, mobile_url, cover_variants, mobile_variants, sort_order")
       .eq("is_active", true)
       .order("sort_order", { ascending: true })
       .order("created_at", { ascending: true });
