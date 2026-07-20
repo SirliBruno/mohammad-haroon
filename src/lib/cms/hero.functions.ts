@@ -47,11 +47,8 @@ export const listHeroProjectsPublic = createServerFn({ method: "GET" }).handler(
 export const adminListHeroProjects = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    const { data: isAdmin } = await context.supabase.rpc("has_role", {
-      _user_id: context.userId,
-      _role: "admin",
-    });
-    if (!isAdmin) throw new Error("Forbidden");
+    const { requireAdmin } = await import("@/features/cms/repository.server");
+    await requireAdmin(context.supabase, context.userId);
     const { data, error } = await context.supabase
       .from("hero_projects")
       .select("*")
@@ -65,11 +62,8 @@ export const createHeroProject = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => heroInputSchema.parse(d))
   .handler(async ({ data, context }) => {
-    const { data: isAdmin } = await context.supabase.rpc("has_role", {
-      _user_id: context.userId,
-      _role: "admin",
-    });
-    if (!isAdmin) throw new Error("Forbidden");
+    const { requireAdmin } = await import("@/features/cms/repository.server");
+    await requireAdmin(context.supabase, context.userId);
     const { data: row, error } = await context.supabase
       .from("hero_projects")
       .insert({ ...data, created_by: context.userId })
@@ -85,11 +79,8 @@ export const updateHeroProject = createServerFn({ method: "POST" })
     z.object({ id: z.string().uuid(), patch: heroInputSchema.partial() }).parse(d),
   )
   .handler(async ({ data, context }) => {
-    const { data: isAdmin } = await context.supabase.rpc("has_role", {
-      _user_id: context.userId,
-      _role: "admin",
-    });
-    if (!isAdmin) throw new Error("Forbidden");
+    const { requireAdmin } = await import("@/features/cms/repository.server");
+    await requireAdmin(context.supabase, context.userId);
     const { data: row, error } = await context.supabase
       .from("hero_projects")
       .update(data.patch)
@@ -104,11 +95,8 @@ export const deleteHeroProject = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
-    const { data: isAdmin } = await context.supabase.rpc("has_role", {
-      _user_id: context.userId,
-      _role: "admin",
-    });
-    if (!isAdmin) throw new Error("Forbidden");
+    const { requireAdmin } = await import("@/features/cms/repository.server");
+    await requireAdmin(context.supabase, context.userId);
     const { error } = await context.supabase
       .from("hero_projects")
       .delete()
@@ -117,18 +105,37 @@ export const deleteHeroProject = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
-/** Sign a long-lived URL for a stored object (10 years). */
+/**
+ * Path validator: restrict signed URL creation to safe object paths inside
+ * the `media` bucket. Prevents an admin token from signing arbitrary paths
+ * (which could expose the full bucket via URL enumeration).
+ *
+ * Allowed shapes:
+ *   hero/<file>            legacy flat layout
+ *   hero/<uuid>/<file>     per-project media
+ *   projects/<uuid>/<file> project gallery
+ *   uploads/<file>         generic admin uploads
+ * Rejected: leading `/`, `..`, `\`, absolute URLs, empty segments.
+ */
+const ALLOWED_PREFIXES = ["hero/", "projects/", "uploads/", "media/"] as const;
+const safeMediaPath = z
+  .string()
+  .min(1)
+  .max(500)
+  .refine((p) => !p.startsWith("/") && !p.includes("..") && !p.includes("\\") && !p.includes("://"), {
+    message: "Invalid path",
+  })
+  .refine((p) => ALLOWED_PREFIXES.some((prefix) => p.startsWith(prefix)), {
+    message: "Path must be under an allowed prefix",
+  });
+
+/** Sign a long-lived URL for a stored object (10 years). Admin only. */
 export const signHeroMediaPath = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
-    z.object({ path: z.string().min(1).max(500) }).parse(d),
-  )
+  .inputValidator((d: unknown) => z.object({ path: safeMediaPath }).parse(d))
   .handler(async ({ data, context }) => {
-    const { data: isAdmin } = await context.supabase.rpc("has_role", {
-      _user_id: context.userId,
-      _role: "admin",
-    });
-    if (!isAdmin) throw new Error("Forbidden");
+    const { requireAdmin } = await import("@/features/cms/repository.server");
+    await requireAdmin(context.supabase, context.userId);
     const { data: signed, error } = await context.supabase.storage
       .from("media")
       .createSignedUrl(data.path, 60 * 60 * 24 * 365 * 10); // 10 years
