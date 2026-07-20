@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
+import { useMutation, useQuery, useQueryClient, keepPreviousData } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { AdminShell } from "@/components/admin/admin-shell";
 import { listMessages, updateMessage, deleteMessage } from "@/lib/cms/messages.functions";
 import { cn } from "@/lib/utils";
@@ -10,6 +12,8 @@ export const Route = createFileRoute("/_authenticated/admin/messages")({
   head: () => ({ meta: [{ title: "الرسائل الواردة" }] }),
 });
 
+type Status = "new" | "read" | "replied" | "archived" | "spam";
+
 type Msg = {
   id: string;
   name: string;
@@ -17,12 +21,12 @@ type Msg = {
   inquiry_type: string | null;
   budget: string | null;
   message: string;
-  status: "new" | "read" | "replied" | "archived" | "spam";
+  status: Status;
   notes: string | null;
   created_at: string;
 };
 
-const STATUS_LABEL: Record<Msg["status"], string> = {
+const STATUS_LABEL: Record<Status, string> = {
   new: "جديد",
   read: "مقروء",
   replied: "تم الرد",
@@ -30,57 +34,70 @@ const STATUS_LABEL: Record<Msg["status"], string> = {
   spam: "غير مرغوب",
 };
 
+const QK = ["admin", "messages"] as const;
+
 function Page() {
   const list = useServerFn(listMessages);
   const update = useServerFn(updateMessage);
   const remove = useServerFn(deleteMessage);
+  const qc = useQueryClient();
 
-  const [rows, setRows] = useState<Msg[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [selected, setSelected] = useState<Msg | null>(null);
-  const [statusFilter, setStatusFilter] = useState<Msg["status"] | "all">("all");
+  const [statusFilter, setStatusFilter] = useState<Status | "all">("all");
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [notes, setNotes] = useState("");
 
-  const refresh = async () => {
-    setLoading(true);
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const res: any = await list({ data: { limit: 200, offset: 0 } });
-      setRows((res?.rows ?? []) as Msg[]);
-    } finally { setLoading(false); }
+  const query = useQuery({
+    queryKey: QK,
+    queryFn: async () => {
+      const res = (await list({ data: { limit: 200, offset: 0 } })) as {
+        rows: Msg[];
+        total?: number;
+      };
+      return res.rows ?? [];
+    },
+    placeholderData: keepPreviousData,
+    staleTime: 15_000,
+  });
+
+  const rows: Msg[] = query.data ?? [];
+  const selected = selectedId ? rows.find((r) => r.id === selectedId) ?? null : null;
+
+  useEffect(() => {
+    setNotes(selected?.notes ?? "");
+  }, [selected?.id, selected?.notes]);
+
+  const updateMut = useMutation({
+    mutationFn: (patch: { id: string; status?: Status; notes?: string | null }) =>
+      update({ data: patch }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: QK }),
+    onError: (e: unknown) => toast.error(e instanceof Error ? e.message : "تعذّر الحفظ"),
+  });
+
+  const deleteMut = useMutation({
+    mutationFn: (id: string) => remove({ data: { id } }),
+    onSuccess: (_r, id) => {
+      qc.invalidateQueries({ queryKey: QK });
+      if (selectedId === id) setSelectedId(null);
+      toast.success("تم الحذف");
+    },
+    onError: (e: unknown) => toast.error(e instanceof Error ? e.message : "تعذّر الحذف"),
+  });
+
+  const openMessage = (m: Msg) => {
+    setSelectedId(m.id);
+    if (m.status === "new") updateMut.mutate({ id: m.id, status: "read" });
   };
 
-  useEffect(() => { void refresh(); }, []);
+  const setStatus = (id: string, status: Status) => updateMut.mutate({ id, status });
 
-  const open = async (m: Msg) => {
-    setSelected(m);
-    setNotes(m.notes ?? "");
-    if (m.status === "new") {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await update({ data: { id: m.id, status: "read" } as any });
-      void refresh();
-    }
-  };
-
-  const setStatus = async (id: string, status: Msg["status"]) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await update({ data: { id, status } as any });
-    await refresh();
-    if (selected?.id === id) setSelected((s) => (s ? { ...s, status } : s));
-  };
-
-  const saveNotes = async () => {
+  const saveNotes = () => {
     if (!selected) return;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await update({ data: { id: selected.id, notes } as any });
-    await refresh();
+    updateMut.mutate({ id: selected.id, notes });
   };
 
-  const del = async (m: Msg) => {
+  const del = (m: Msg) => {
     if (!confirm("حذف الرسالة؟")) return;
-    await remove({ data: { id: m.id } });
-    if (selected?.id === m.id) setSelected(null);
-    await refresh();
+    deleteMut.mutate(m.id);
   };
 
   const filtered = statusFilter === "all" ? rows : rows.filter((r) => r.status === statusFilter);
@@ -92,8 +109,10 @@ function Page() {
   return (
     <AdminShell title="الرسائل الواردة" description="رسائل نموذج التواصل.">
       <div className="flex flex-wrap gap-2 mb-4">
-        <button onClick={() => setStatusFilter("all")} className={pill(statusFilter === "all")}>الكل ({rows.length})</button>
-        {(["new","read","replied","archived","spam"] as Msg["status"][]).map((s) => (
+        <button onClick={() => setStatusFilter("all")} className={pill(statusFilter === "all")}>
+          الكل ({rows.length})
+        </button>
+        {(["new", "read", "replied", "archived", "spam"] as Status[]).map((s) => (
           <button key={s} onClick={() => setStatusFilter(s)} className={pill(statusFilter === s)}>
             {STATUS_LABEL[s]} ({counts[s] ?? 0})
           </button>
@@ -103,28 +122,38 @@ function Page() {
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-4">
         <div className="rounded-2xl border border-neutral-200 bg-white overflow-hidden dark:border-neutral-800 dark:bg-neutral-900">
           <div className="max-h-[70vh] overflow-y-auto divide-y divide-neutral-100 dark:divide-neutral-800">
-            {loading ? (
+            {query.isLoading ? (
               <div className="p-6 text-center text-neutral-500">جارِ التحميل…</div>
+            ) : query.isError ? (
+              <div className="p-6 text-center text-red-600">تعذّر تحميل الرسائل.</div>
             ) : filtered.length === 0 ? (
               <div className="p-6 text-center text-neutral-500">لا رسائل.</div>
-            ) : filtered.map((m) => (
-              <button
-                key={m.id}
-                onClick={() => open(m)}
-                className={cn(
-                  "w-full text-start p-4 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors",
-                  selected?.id === m.id && "bg-neutral-100 dark:bg-neutral-800",
-                )}
-              >
-                <div className="flex items-center justify-between gap-2">
-                  <div className="font-medium">{m.name}</div>
-                  {m.status === "new" && <span className="h-2 w-2 rounded-full bg-blue-500" />}
-                </div>
-                <div className="text-xs text-neutral-500 mt-0.5" dir="ltr">{m.email}</div>
-                <div className="text-xs text-neutral-600 dark:text-neutral-400 mt-1 line-clamp-2">{m.message}</div>
-                <div className="text-[11px] text-neutral-400 mt-1">{new Date(m.created_at).toLocaleString("ar")}</div>
-              </button>
-            ))}
+            ) : (
+              filtered.map((m) => (
+                <button
+                  key={m.id}
+                  onClick={() => openMessage(m)}
+                  className={cn(
+                    "w-full text-start p-4 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors",
+                    selectedId === m.id && "bg-neutral-100 dark:bg-neutral-800",
+                  )}
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="font-medium">{m.name}</div>
+                    {m.status === "new" && <span className="h-2 w-2 rounded-full bg-blue-500" />}
+                  </div>
+                  <div className="text-xs text-neutral-500 mt-0.5" dir="ltr">
+                    {m.email}
+                  </div>
+                  <div className="text-xs text-neutral-600 dark:text-neutral-400 mt-1 line-clamp-2">
+                    {m.message}
+                  </div>
+                  <div className="text-[11px] text-neutral-400 mt-1">
+                    {new Date(m.created_at).toLocaleString("ar")}
+                  </div>
+                </button>
+              ))
+            )}
           </div>
         </div>
 
@@ -136,19 +165,42 @@ function Page() {
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <h3 className="text-lg font-semibold">{selected.name}</h3>
-                  <a href={`mailto:${selected.email}`} className="text-sm text-blue-600 hover:underline" dir="ltr">{selected.email}</a>
+                  <a
+                    href={`mailto:${selected.email}`}
+                    className="text-sm text-blue-600 hover:underline"
+                    dir="ltr"
+                  >
+                    {selected.email}
+                  </a>
                 </div>
                 <div className="flex gap-1">
-                  {(["read","replied","archived","spam"] as Msg["status"][]).map((s) => (
-                    <button key={s} onClick={() => void setStatus(selected.id, s)} className={cn(pill(selected.status === s), "text-xs")}>
+                  {(["read", "replied", "archived", "spam"] as Status[]).map((s) => (
+                    <button
+                      key={s}
+                      onClick={() => setStatus(selected.id, s)}
+                      disabled={updateMut.isPending}
+                      className={cn(pill(selected.status === s), "text-xs")}
+                    >
                       {STATUS_LABEL[s]}
                     </button>
                   ))}
                 </div>
               </div>
               <div className="flex gap-4 text-xs text-neutral-500">
-                {selected.inquiry_type && <div>النوع: <span className="text-neutral-800 dark:text-neutral-200">{selected.inquiry_type}</span></div>}
-                {selected.budget && <div>الميزانية: <span className="text-neutral-800 dark:text-neutral-200">{selected.budget}</span></div>}
+                {selected.inquiry_type && (
+                  <div>
+                    النوع:{" "}
+                    <span className="text-neutral-800 dark:text-neutral-200">
+                      {selected.inquiry_type}
+                    </span>
+                  </div>
+                )}
+                {selected.budget && (
+                  <div>
+                    الميزانية:{" "}
+                    <span className="text-neutral-800 dark:text-neutral-200">{selected.budget}</span>
+                  </div>
+                )}
               </div>
               <div className="rounded-lg bg-neutral-50 border border-neutral-200 p-4 text-sm whitespace-pre-wrap leading-relaxed dark:bg-neutral-800 dark:border-neutral-700">
                 {selected.message}
@@ -161,10 +213,22 @@ function Page() {
                   rows={4}
                   className="mt-1 w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-900"
                 />
-                <button onClick={() => void saveNotes()} className="mt-2 rounded-md bg-neutral-900 px-3 py-1.5 text-xs text-white dark:bg-white dark:text-neutral-900">حفظ الملاحظات</button>
+                <button
+                  onClick={saveNotes}
+                  disabled={updateMut.isPending}
+                  className="mt-2 rounded-md bg-neutral-900 px-3 py-1.5 text-xs text-white dark:bg-white dark:text-neutral-900 disabled:opacity-50"
+                >
+                  {updateMut.isPending ? "جارِ الحفظ…" : "حفظ الملاحظات"}
+                </button>
               </div>
               <div className="flex justify-end pt-2 border-t border-neutral-100 dark:border-neutral-800">
-                <button onClick={() => void del(selected)} className="rounded-md border border-red-200 bg-red-50 px-3 py-1.5 text-xs text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-300">حذف الرسالة</button>
+                <button
+                  onClick={() => del(selected)}
+                  disabled={deleteMut.isPending}
+                  className="rounded-md border border-red-200 bg-red-50 px-3 py-1.5 text-xs text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-300 disabled:opacity-50"
+                >
+                  حذف الرسالة
+                </button>
               </div>
             </div>
           )}
