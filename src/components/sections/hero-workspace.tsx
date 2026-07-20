@@ -445,62 +445,23 @@ export function HeroWorkspace() {
     if (!dbHero || dbHero.length === 0) return FEATURED;
     return dbHero.map((r, i): FeaturedProject => {
       const fallback = FEATURED[i % FEATURED.length];
-      type V = { original: string; sm: { jpg: string; webp: string }; md: { jpg: string; webp: string }; lg: { jpg: string; webp: string } };
-      const cv = (r.cover_variants ?? null) as V | null;
-      const mv = (r.mobile_variants ?? null) as V | null;
       const Cover = (props: { className?: string }) =>
         r.cover_url ? (
-          <picture>
-            {cv && (
-              <source
-                type="image/webp"
-                srcSet={`${cv.sm.webp} 720w, ${cv.md.webp} 1280w, ${cv.lg.webp} 1920w`}
-                sizes="(min-width: 1024px) 1100px, 100vw"
-              />
-            )}
-            {cv && (
-              <source
-                type="image/jpeg"
-                srcSet={`${cv.sm.jpg} 720w, ${cv.md.jpg} 1280w, ${cv.lg.jpg} 1920w`}
-                sizes="(min-width: 1024px) 1100px, 100vw"
-              />
-            )}
-            <img
-              src={cv?.lg.jpg ?? r.cover_url}
-              alt={r.title}
-              className={cn("size-full object-cover", props.className)}
-              loading="lazy"
-              decoding="async"
-            />
-          </picture>
+          <img
+            src={r.cover_url}
+            alt={r.title}
+            className={cn("size-full object-cover", props.className)}
+          />
         ) : (
           <fallback.Website {...props} />
         );
       const Phone = (props: { className?: string }) =>
         r.mobile_url ? (
-          <picture>
-            {mv && (
-              <source
-                type="image/webp"
-                srcSet={`${mv.sm.webp} 720w, ${mv.md.webp} 1280w`}
-                sizes="(min-width: 1024px) 320px, 260px"
-              />
-            )}
-            {mv && (
-              <source
-                type="image/jpeg"
-                srcSet={`${mv.sm.jpg} 720w, ${mv.md.jpg} 1280w`}
-                sizes="(min-width: 1024px) 320px, 260px"
-              />
-            )}
-            <img
-              src={mv?.md.jpg ?? r.mobile_url}
-              alt={r.title}
-              className={cn("size-full object-cover", props.className)}
-              loading="lazy"
-              decoding="async"
-            />
-          </picture>
+          <img
+            src={r.mobile_url}
+            alt={r.title}
+            className={cn("size-full object-cover", props.className)}
+          />
         ) : (
           <fallback.Mobile {...props} />
         );
