@@ -126,6 +126,7 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<Record<string, unknown>>(emptyValues);
   const [confirmDelete, setConfirmDelete] = useState<Row | null>(null);
+  const [confirmDiscard, setConfirmDiscard] = useState(false);
 
   // Debounce search input → committed search
   useEffect(() => {
