@@ -401,10 +401,9 @@ export function HeroMobile() {
                   <img
                     src={activeItem.image}
                     alt={activeItem.name}
-                    className="h-full w-full bg-linear-to-br from-muted/40 to-background object-contain p-1"
+                    className="h-full w-full object-cover"
                     loading="lazy"
                   />
-
                 ) : (
                   <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-linear-to-br from-primary/15 via-background to-background p-4 text-center">
                     <activeItem.Icon className="size-8 text-primary" aria-hidden />
