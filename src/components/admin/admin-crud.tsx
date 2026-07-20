@@ -287,7 +287,7 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
                           تعديل
                         </button>
                         <button
-                          onClick={() => void handleDelete(row)}
+                          onClick={() => setConfirmDelete(row)}
                           disabled={busy}
                           className="rounded-md border border-red-200 bg-red-50 px-2 py-1 text-xs text-red-700 hover:bg-red-100 dark:border-red-900 dark:bg-red-950 dark:text-red-300"
                         >
