@@ -109,9 +109,25 @@ function SectionHeading({
 }
 
 
+const CAREER_LIST_PARAMS = { limit: 100 } as const;
+const CAREER_EXP_PARAMS = { limit: 100, orderBy: "started_on", ascending: false } as const;
+const CAREER_SKILL_PARAMS = { limit: 200, orderBy: "sort_order", ascending: true } as const;
+
 function CareerPage() {
   const linkedin = socials.find((s) => s.label.toLowerCase() === "linkedin");
   const emailContact = socials.find((s) => s.label === "البريد الإلكتروني");
+
+  const { data: expData } = useSuspenseQuery(experienceListOptions(CAREER_EXP_PARAMS));
+  const { data: certData } = useSuspenseQuery(certificateListOptions(CAREER_LIST_PARAMS));
+  const { data: skillData } = useSuspenseQuery(skillListOptions(CAREER_SKILL_PARAMS));
+
+  const expRows = (expData?.rows ?? []).map(dbRowToExperience);
+  const certRows = (certData?.rows ?? []).map(dbRowToCertificate);
+  const skillRowsDb = dbRowsToSkillGroups(skillData?.rows ?? []);
+
+  const experience = expRows.length > 0 ? expRows : staticExperience;
+  const certificates = certRows.length > 0 ? certRows : staticCertificates;
+  const skillGroups = skillRowsDb.length > 0 ? skillRowsDb : staticSkillGroups;
 
   return (
     <>
