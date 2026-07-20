@@ -63,16 +63,16 @@ export async function generateImageVariants(
       bucketApi.createSignedUrl(parsed.path, TEN_YEARS, {
         transform: {
           width: spec.width,
-          resize: "cover",
-          quality: 82,
+          resize: "contain",
+          quality: 95,
           format: "origin",
         },
       }),
       bucketApi.createSignedUrl(parsed.path, TEN_YEARS, {
         transform: {
           width: spec.width,
-          resize: "cover",
-          quality: 78,
+          resize: "contain",
+          quality: 92,
           // storage-js types only list "origin"; the server accepts "webp".
           format: "webp" as unknown as "origin",
         },
