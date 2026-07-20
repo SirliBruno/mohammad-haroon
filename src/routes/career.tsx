@@ -73,11 +73,11 @@ export const Route = createFileRoute("/career")({
             "@type": "EducationalOrganization",
             name: e.school,
           })),
-          worksFor: experience.slice(0, 3).map((e) => ({
+          worksFor: staticExperience.slice(0, 3).map((e) => ({
             "@type": "Organization",
             name: e.company,
           })),
-          hasCredential: certificates.map((c) => ({
+          hasCredential: staticCertificates.map((c) => ({
             "@type": "EducationalOccupationalCredential",
             name: c.name,
             credentialCategory: "certificate",
