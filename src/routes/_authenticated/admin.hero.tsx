@@ -9,6 +9,7 @@ import {
   updateHeroProject,
   deleteHeroProject,
   signHeroMediaPath,
+  backfillHeroVariants,
 } from "@/lib/cms/hero.functions";
 
 export const Route = createFileRoute("/_authenticated/admin/hero")({
