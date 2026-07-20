@@ -126,6 +126,7 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<Record<string, unknown>>(emptyValues);
   const [confirmDelete, setConfirmDelete] = useState<Row | null>(null);
+  const [confirmDiscard, setConfirmDiscard] = useState(false);
 
   // Debounce search input → committed search
   useEffect(() => {
@@ -209,9 +210,12 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
 
   const closeForm = () => {
     if (busy) return;
-    if (window.confirm("تجاهل التغييرات غير المحفوظة؟")) {
-      setShowForm(false);
-    }
+    setConfirmDiscard(true);
+  };
+
+  const doDiscard = () => {
+    setConfirmDiscard(false);
+    setShowForm(false);
   };
 
   useEffect(() => {
@@ -453,6 +457,40 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
                 className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50"
               >
                 {busy ? "جارِ الحذف…" : "حذف نهائي"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {confirmDiscard && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+          onMouseDown={(e) => {
+            if (e.target === e.currentTarget) setConfirmDiscard(false);
+          }}
+        >
+          <div className="w-full max-w-sm rounded-2xl border border-neutral-200 bg-white p-6 shadow-xl dark:border-neutral-800 dark:bg-neutral-900">
+            <h3 className="text-base font-semibold">تجاهل التغييرات؟</h3>
+            <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
+              لديك تغييرات لم تُحفظ بعد. هل تريد الخروج وتجاهلها؟
+            </p>
+            <div className="mt-6 flex items-center justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setConfirmDiscard(false)}
+                className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-800"
+              >
+                متابعة التعديل
+              </button>
+              <button
+                type="button"
+                onClick={doDiscard}
+                className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
+              >
+                تجاهل
               </button>
             </div>
           </div>

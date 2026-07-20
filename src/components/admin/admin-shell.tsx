@@ -2,6 +2,9 @@ import type { ReactNode } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
+import { useQuery } from "@tanstack/react-query";
+import { countNewMessages } from "@/lib/cms/messages.functions";
 import { cn } from "@/lib/utils";
 
 type NavItem = { to: string; label: string; group?: string };
@@ -39,6 +42,15 @@ export function AdminShell({
   const location = useLocation();
   const navigate = useNavigate();
 
+  const countFn = useServerFn(countNewMessages);
+  const newMessages = useQuery({
+    queryKey: ["admin", "messages", "new-count"],
+    queryFn: () => countFn(),
+    refetchInterval: 60_000,
+    staleTime: 30_000,
+  });
+  const newCount = newMessages.data?.count ?? 0;
+
   const groups = NAV.reduce<Record<string, NavItem[]>>((acc, item) => {
     const g = item.group ?? "عام";
     if (!acc[g]) acc[g] = [];
@@ -70,18 +82,27 @@ export function AdminShell({
                 </div>
                 {items.map((item) => {
                   const active = location.pathname === item.to;
+                  const badge = item.to === "/admin/messages" && newCount > 0 ? newCount : null;
                   return (
                     <Link
                       key={item.to}
                       to={item.to}
                       className={cn(
-                        "rounded-lg px-3 py-2 transition-colors",
+                        "flex items-center justify-between gap-2 rounded-lg px-3 py-2 transition-colors",
                         active
                           ? "bg-neutral-900 text-white dark:bg-white dark:text-neutral-900"
                           : "text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800",
                       )}
                     >
-                      {item.label}
+                      <span>{item.label}</span>
+                      {badge != null && (
+                        <span className={cn(
+                          "inline-flex min-w-[1.25rem] items-center justify-center rounded-full px-1.5 py-0.5 text-[10px] font-semibold",
+                          active ? "bg-white/20 text-current" : "bg-red-500 text-white",
+                        )}>
+                          {badge > 99 ? "99+" : badge}
+                        </span>
+                      )}
                     </Link>
                   );
                 })}
@@ -101,15 +122,23 @@ export function AdminShell({
           <details className="lg:hidden rounded-xl border border-neutral-200 bg-white p-3 dark:border-neutral-800 dark:bg-neutral-900">
             <summary className="cursor-pointer text-sm font-medium">القائمة</summary>
             <div className="mt-3 grid grid-cols-2 gap-1">
-              {NAV.map((item) => (
-                <Link
-                  key={item.to}
-                  to={item.to}
-                  className="rounded-md px-2 py-1.5 text-xs text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800"
-                >
-                  {item.label}
-                </Link>
-              ))}
+              {NAV.map((item) => {
+                const badge = item.to === "/admin/messages" && newCount > 0 ? newCount : null;
+                return (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    className="flex items-center justify-between gap-1 rounded-md px-2 py-1.5 text-xs text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800"
+                  >
+                    <span>{item.label}</span>
+                    {badge != null && (
+                      <span className="inline-flex min-w-[1rem] items-center justify-center rounded-full bg-red-500 px-1 py-0.5 text-[9px] font-semibold text-white">
+                        {badge > 99 ? "99+" : badge}
+                      </span>
+                    )}
+                  </Link>
+                );
+              })}
             </div>
           </details>
 
