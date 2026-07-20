@@ -15,6 +15,23 @@ const heroInputSchema = z.object({
   sort_order: z.number().int().default(0),
 });
 
+/**
+ * Local error mapper — mirrors `mapDbError` from repository.server but stays
+ * usable inside this .functions.ts file without importing the server-only
+ * module at module scope.
+ */
+function throwSafe(op: string, table: string, error: { message?: string; code?: string }): never {
+  console.error(`[cms] ${op} ${table} failed:`, error);
+  const code = error?.code ?? "";
+  if (code === "23505") throw new Error("القيمة موجودة مسبقًا (تعارض في المعرّف).");
+  if (code === "23502") throw new Error("حقل مطلوب مفقود.");
+  if (code === "23503") throw new Error("مرجع غير صالح.");
+  if (code === "23514") throw new Error("قيمة غير مقبولة.");
+  if (code === "42501" || code === "PGRST301")
+    throw new Error("لا تملك صلاحية تنفيذ هذه العملية.");
+  throw new Error("تعذّر تنفيذ العملية. حاول مرة أخرى.");
+}
+
 export const listHeroProjectsPublic = createServerFn({ method: "GET" }).handler(
   async () => {
     const { createClient } = await import("@supabase/supabase-js");
@@ -39,7 +56,7 @@ export const listHeroProjectsPublic = createServerFn({ method: "GET" }).handler(
       .eq("is_active", true)
       .order("sort_order", { ascending: true })
       .order("created_at", { ascending: true });
-    if (error) throw error;
+    if (error) throwSafe("listPublic", "hero_projects", error);
     return data ?? [];
   },
 );
@@ -53,8 +70,9 @@ export const adminListHeroProjects = createServerFn({ method: "POST" })
       .from("hero_projects")
       .select("*")
       .order("sort_order", { ascending: true })
-      .order("created_at", { ascending: true });
-    if (error) throw error;
+      .order("created_at", { ascending: true })
+      .limit(200);
+    if (error) throwSafe("adminList", "hero_projects", error);
     return data ?? [];
   });
 
@@ -69,7 +87,7 @@ export const createHeroProject = createServerFn({ method: "POST" })
       .insert({ ...data, created_by: context.userId })
       .select()
       .single();
-    if (error) throw error;
+    if (error) throwSafe("create", "hero_projects", error);
     return row;
   });
 
@@ -87,7 +105,7 @@ export const updateHeroProject = createServerFn({ method: "POST" })
       .eq("id", data.id)
       .select()
       .single();
-    if (error) throw error;
+    if (error) throwSafe("update", "hero_projects", error);
     return row;
   });
 
@@ -101,7 +119,7 @@ export const deleteHeroProject = createServerFn({ method: "POST" })
       .from("hero_projects")
       .delete()
       .eq("id", data.id);
-    if (error) throw error;
+    if (error) throwSafe("delete", "hero_projects", error);
     return { ok: true };
   });
 
@@ -115,9 +133,17 @@ export const deleteHeroProject = createServerFn({ method: "POST" })
  *   hero/<uuid>/<file>     per-project media
  *   projects/<uuid>/<file> project gallery
  *   uploads/<file>         generic admin uploads
+ *   library/<uuid>.<ext>   media library uploads
+ *   media/<file>           misc media
  * Rejected: leading `/`, `..`, `\`, absolute URLs, empty segments.
  */
-const ALLOWED_PREFIXES = ["hero/", "projects/", "uploads/", "media/"] as const;
+const ALLOWED_PREFIXES = [
+  "hero/",
+  "projects/",
+  "uploads/",
+  "media/",
+  "library/",
+] as const;
 const safeMediaPath = z
   .string()
   .min(1)
@@ -139,6 +165,7 @@ export const signHeroMediaPath = createServerFn({ method: "POST" })
     const { data: signed, error } = await context.supabase.storage
       .from("media")
       .createSignedUrl(data.path, 60 * 60 * 24 * 365 * 10); // 10 years
-    if (error) throw error;
+    if (error) throwSafe("sign", "storage.media", error);
     return { url: signed.signedUrl };
   });
+
