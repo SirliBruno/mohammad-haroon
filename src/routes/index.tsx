@@ -225,7 +225,7 @@ function Home() {
       </Section>
 
       {/* ================= SERVICES ================= */}
-      <Section id="services" className="border-t border-border/60">
+      <Section id="services" divider tone="muted">
         <Reveal>
           <SectionTitle
             eyebrow="الخدمات"
