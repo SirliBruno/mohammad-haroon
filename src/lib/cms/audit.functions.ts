@@ -14,7 +14,7 @@ export type AuditLogRow = {
   row_id: string | null;
   action: "INSERT" | "UPDATE" | "DELETE";
   actor_id: string | null;
-  diff: unknown;
+  diff: Record<string, unknown> | null;
   created_at: string;
 };
 
