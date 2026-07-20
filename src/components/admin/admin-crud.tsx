@@ -249,18 +249,8 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
         </button>
       </div>
 
-      {message && (
-        <div
-          className={cn(
-            "rounded-md border px-3 py-2 text-sm",
-            message.kind === "ok"
-              ? "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-200"
-              : "border-red-200 bg-red-50 text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-200",
-          )}
-        >
-          {message.text}
-        </div>
-      )}
+
+
 
       <div className="rounded-2xl border border-neutral-200 bg-white overflow-hidden dark:border-neutral-800 dark:bg-neutral-900">
         <div className="overflow-x-auto">
