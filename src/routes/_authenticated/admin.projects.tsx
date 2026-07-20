@@ -38,6 +38,7 @@ const slugify = (s: string) =>
     .replace(/-+/g, "-");
 
 const fields: FieldDef[] = [
+  // ——— أساسيات ———
   { name: "title", label: "العنوان", type: "text", required: true },
   {
     name: "slug",
@@ -47,13 +48,7 @@ const fields: FieldDef[] = [
     help: "يُشتق تلقائيًا من العنوان إذا تُرك فارغًا.",
   },
   { name: "category", label: "التصنيف", type: "text" },
-  {
-    name: "year",
-    label: "السنة",
-    type: "number",
-    min: 1970,
-    max: 2100,
-  },
+  { name: "year", label: "السنة", type: "number", min: 1970, max: 2100 },
   {
     name: "status",
     label: "حالة المشروع",
@@ -77,13 +72,12 @@ const fields: FieldDef[] = [
   },
   { name: "sort_order", label: "ترتيب الظهور", type: "number" },
   { name: "featured", label: "عرض ضمن المميّزة", type: "boolean" },
-  {
-    name: "summary",
-    label: "الملخّص",
-    type: "textarea",
-    colSpan: 2,
-    rows: 3,
-  },
+
+  // ——— معلومات موجزة ———
+  { name: "summary", label: "الملخّص", type: "textarea", colSpan: 2, rows: 3 },
+  { name: "role", label: "دوري في المشروع", type: "text" },
+  { name: "client", label: "العميل", type: "text" },
+  { name: "timeline", label: "المدة الزمنية", type: "text" },
   { name: "live_url", label: "الرابط المباشر", type: "url", dir: "ltr" },
   { name: "github_url", label: "رابط GitHub", type: "url", dir: "ltr" },
   {
@@ -93,6 +87,114 @@ const fields: FieldDef[] = [
     folder: "projects",
     colSpan: 2,
     help: "المقاس المثالي 1600×1000 (نسبة 16:10).",
+  },
+  {
+    name: "tags",
+    label: "الوسوم",
+    type: "tags",
+    colSpan: 2,
+    help: "اضغط Enter لإضافة وسم.",
+  },
+  {
+    name: "technologies",
+    label: "التقنيات المستخدمة",
+    type: "tags",
+    colSpan: 2,
+    help: "مثال: React, TypeScript, Tailwind.",
+  },
+
+  // ——— أقسام تفاصيل المشروع (اختياري) ———
+  {
+    name: "description",
+    label: "نظرة عامة موسّعة",
+    type: "textarea",
+    colSpan: 2,
+    rows: 5,
+    help: "وصف تفصيلي يظهر في صفحة تفاصيل المشروع.",
+  },
+  {
+    name: "problem",
+    label: "المشكلة",
+    type: "textarea",
+    colSpan: 2,
+    rows: 4,
+    help: "ما التحدي الذي كان يواجه العميل؟",
+  },
+  {
+    name: "goals",
+    label: "الأهداف",
+    type: "tags",
+    colSpan: 2,
+    help: "أضف هدفًا في كل سطر (Enter للفصل).",
+  },
+  {
+    name: "research",
+    label: "البحث والاكتشاف",
+    type: "textarea",
+    colSpan: 2,
+    rows: 4,
+  },
+  {
+    name: "solution",
+    label: "الحل",
+    type: "textarea",
+    colSpan: 2,
+    rows: 4,
+  },
+  {
+    name: "design_process",
+    label: "مسار التصميم",
+    type: "textarea",
+    colSpan: 2,
+    rows: 4,
+    help: "يمكن كتابته كنص عادي أو JSON لمصفوفة {title, description}.",
+  },
+  {
+    name: "development",
+    label: "التطوير والتنفيذ",
+    type: "textarea",
+    colSpan: 2,
+    rows: 4,
+  },
+  {
+    name: "lessons",
+    label: "الدروس المستفادة",
+    type: "tags",
+    colSpan: 2,
+  },
+
+  // ——— بيانات مهيكلة (JSON) ———
+  {
+    name: "metrics",
+    label: "المؤشرات (Metrics)",
+    type: "json",
+    colSpan: 2,
+    rows: 6,
+    help: 'مصفوفة مثل: [{"label":"زمن أول رؤية","value":"-93%"}]',
+  },
+  {
+    name: "results",
+    label: "النتائج",
+    type: "json",
+    colSpan: 2,
+    rows: 6,
+    help: 'مصفوفة مثل: [{"label":"NPS","value":"72"}]',
+  },
+  {
+    name: "gallery",
+    label: "معرض الصور",
+    type: "json",
+    colSpan: 2,
+    rows: 6,
+    help: 'مصفوفة مثل: [{"src":"https://...","alt":"وصف"}]',
+  },
+  {
+    name: "testimonial",
+    label: "شهادة العميل",
+    type: "json",
+    colSpan: 2,
+    rows: 5,
+    help: 'كائن مثل: {"quote":"...","author":"...","role":"..."}',
   },
 ];
 
@@ -109,6 +211,23 @@ const emptyValues: Record<string, unknown> = {
   cover_url: "",
   live_url: "",
   github_url: "",
+  role: "",
+  client: "",
+  timeline: "",
+  tags: [],
+  technologies: [],
+  description: "",
+  problem: "",
+  goals: [],
+  research: "",
+  solution: "",
+  design_process: "",
+  development: "",
+  lessons: [],
+  metrics: [],
+  results: [],
+  gallery: [],
+  testimonial: null,
 };
 
 const columns: ListColumn<Row>[] = [
@@ -193,6 +312,14 @@ const columns: ListColumn<Row>[] = [
   },
 ];
 
+const asStringArray = (v: unknown): string[] =>
+  Array.isArray(v) ? v.map((x) => String(x)).filter(Boolean) : [];
+
+const asJsonOrNull = (v: unknown, fallback: unknown = null): unknown => {
+  if (v === "" || v === undefined) return fallback;
+  return v ?? fallback;
+};
+
 function AdminProjectsPage() {
   return (
     <AdminShell
@@ -216,6 +343,7 @@ function AdminProjectsPage() {
             slug,
             title,
             summary: (form.summary as string) || null,
+            description: (form.description as string) || null,
             category: (form.category as string) || null,
             year: (form.year as number | null) ?? null,
             status: form.status,
@@ -225,6 +353,22 @@ function AdminProjectsPage() {
             cover_url: (form.cover_url as string) || null,
             live_url: (form.live_url as string) || null,
             github_url: (form.github_url as string) || null,
+            role: (form.role as string) || null,
+            client: (form.client as string) || null,
+            timeline: (form.timeline as string) || null,
+            tags: asStringArray(form.tags),
+            technologies: asStringArray(form.technologies),
+            problem: (form.problem as string) || null,
+            goals: asStringArray(form.goals),
+            research: (form.research as string) || null,
+            solution: (form.solution as string) || null,
+            design_process: (form.design_process as string) || null,
+            development: (form.development as string) || null,
+            lessons: asStringArray(form.lessons),
+            metrics: (asJsonOrNull(form.metrics, []) as unknown[]) ?? [],
+            results: (asJsonOrNull(form.results, []) as unknown[]) ?? [],
+            gallery: (asJsonOrNull(form.gallery, []) as unknown[]) ?? [],
+            testimonial: asJsonOrNull(form.testimonial, null),
           };
         }}
       />
