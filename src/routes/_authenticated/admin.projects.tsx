@@ -1,11 +1,8 @@
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useServerFn } from "@tanstack/react-start";
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { Section } from "@/components/layout/section";
+import { createFileRoute } from "@tanstack/react-router";
+import { AdminShell } from "@/components/admin/admin-shell";
+import { AdminCrud, type FieldDef, type ListColumn } from "@/components/admin/admin-crud";
 import {
   adminListProjects,
-  getAdminProjectById,
   createProject,
   updateProject,
   deleteProject,
@@ -20,6 +17,7 @@ type Row = {
   id: string;
   slug: string;
   title: string;
+  summary: string | null;
   category: string | null;
   year: number | null;
   content_status: "draft" | "published" | "archived";
@@ -27,24 +25,78 @@ type Row = {
   featured: boolean;
   sort_order: number;
   cover_url: string | null;
+  live_url: string | null;
+  github_url: string | null;
 };
 
-type FormState = {
-  slug: string;
-  title: string;
-  summary: string;
-  category: string;
-  year: number | null;
-  status: Row["status"];
-  content_status: Row["content_status"];
-  featured: boolean;
-  sort_order: number;
-  cover_url: string;
-  live_url: string;
-  github_url: string;
-};
+const slugify = (s: string) =>
+  s
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
 
-const EMPTY: FormState = {
+const fields: FieldDef[] = [
+  { name: "title", label: "العنوان", type: "text", required: true },
+  {
+    name: "slug",
+    label: "المعرّف (slug)",
+    type: "text",
+    dir: "ltr",
+    help: "يُشتق تلقائيًا من العنوان إذا تُرك فارغًا.",
+  },
+  { name: "category", label: "التصنيف", type: "text" },
+  {
+    name: "year",
+    label: "السنة",
+    type: "number",
+    min: 1970,
+    max: 2100,
+  },
+  {
+    name: "status",
+    label: "حالة المشروع",
+    type: "select",
+    options: [
+      { value: "live", label: "مباشر" },
+      { value: "in_progress", label: "قيد التنفيذ" },
+      { value: "concept", label: "تصوّر" },
+      { value: "archived", label: "مؤرشف" },
+    ],
+  },
+  {
+    name: "content_status",
+    label: "حالة النشر",
+    type: "select",
+    options: [
+      { value: "published", label: "منشور" },
+      { value: "draft", label: "مسودة" },
+      { value: "archived", label: "مؤرشف" },
+    ],
+  },
+  { name: "sort_order", label: "ترتيب الظهور", type: "number" },
+  { name: "featured", label: "عرض ضمن المميّزة", type: "boolean" },
+  {
+    name: "summary",
+    label: "الملخّص",
+    type: "textarea",
+    colSpan: 2,
+    rows: 3,
+  },
+  { name: "live_url", label: "الرابط المباشر", type: "url", dir: "ltr" },
+  { name: "github_url", label: "رابط GitHub", type: "url", dir: "ltr" },
+  {
+    name: "cover_url",
+    label: "صورة الغلاف",
+    type: "image",
+    folder: "projects",
+    colSpan: 2,
+    help: "المقاس المثالي 1600×1000 (نسبة 16:10).",
+  },
+];
+
+const emptyValues: Record<string, unknown> = {
   slug: "",
   title: "",
   summary: "",
@@ -59,420 +111,123 @@ const EMPTY: FormState = {
   github_url: "",
 };
 
-const slugify = (s: string) =>
-  s
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-");
-
-function AdminProjectsPage() {
-  const navigate = useNavigate();
-  const list = useServerFn(adminListProjects);
-  const getById = useServerFn(getAdminProjectById);
-  const create = useServerFn(createProject);
-  const update = useServerFn(updateProject);
-  const remove = useServerFn(deleteProject);
-
-  const [rows, setRows] = useState<Row[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [form, setForm] = useState<FormState>(EMPTY);
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [busy, setBusy] = useState(false);
-  const [msg, setMsg] = useState<string | null>(null);
-
-  const refresh = async () => {
-    setLoading(true);
-    try {
-      const data = (await list({ data: { limit: 200, offset: 0, ascending: true, orderBy: "sort_order" } })) as {
-        rows: Row[];
-      } | Row[];
-      setRows(Array.isArray(data) ? data : data.rows ?? []);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    refresh();
-  }, []);
-
-  const handleUpload = async (file: File) => {
-    setBusy(true);
-    setMsg(null);
-    try {
-      const ext = file.name.split(".").pop() ?? "png";
-      const path = `projects/${crypto.randomUUID()}.${ext}`;
-      const { error } = await supabase.storage
-        .from("media")
-        .upload(path, file, { contentType: file.type, upsert: false });
-      if (error) throw error;
-      const { data } = await supabase.storage
-        .from("media")
-        .createSignedUrl(path, 60 * 60 * 24 * 365 * 10);
-      if (data?.signedUrl) setForm((f) => ({ ...f, cover_url: data.signedUrl }));
-      setMsg("تم رفع الصورة");
-    } catch (e) {
-      setMsg(e instanceof Error ? e.message : "فشل الرفع");
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setBusy(true);
-    setMsg(null);
-    try {
-      const payload = {
-        slug: form.slug || slugify(form.title),
-        title: form.title,
-        summary: form.summary || null,
-        category: form.category || null,
-        year: form.year || null,
-        status: form.status,
-        content_status: form.content_status,
-        featured: form.featured,
-        sort_order: form.sort_order,
-        cover_url: form.cover_url || null,
-        live_url: form.live_url || null,
-        github_url: form.github_url || null,
-      };
-      if (editingId) {
-        await update({ data: { id: editingId, patch: payload } });
-      } else {
-        await create({ data: payload });
-      }
-      setForm(EMPTY);
-      setEditingId(null);
-      await refresh();
-      setMsg("تم الحفظ");
-    } catch (e) {
-      setMsg(e instanceof Error ? e.message : "فشل الحفظ");
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  const handleEdit = async (r: Row) => {
-    setBusy(true);
-    setMsg(null);
-    try {
-      // Fetch full row (list view omits summary/live_url/github_url) so we
-      // don't silently overwrite them with empty strings on save.
-      const full = (await getById({ data: { id: r.id } })) as
-        | (Row & {
-            summary: string | null;
-            live_url: string | null;
-            github_url: string | null;
-          })
-        | null;
-      if (!full) {
-        setMsg("تعذّر تحميل بيانات المشروع");
-        return;
-      }
-      setEditingId(r.id);
-      setForm({
-        slug: full.slug,
-        title: full.title,
-        summary: full.summary ?? "",
-        category: full.category ?? "",
-        year: full.year,
-        status: full.status,
-        content_status: full.content_status,
-        featured: full.featured,
-        sort_order: full.sort_order,
-        cover_url: full.cover_url ?? "",
-        live_url: full.live_url ?? "",
-        github_url: full.github_url ?? "",
-      });
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    } catch (e) {
-      setMsg(e instanceof Error ? e.message : "فشل تحميل المشروع");
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  const handleDelete = async (id: string) => {
-    if (!confirm("حذف هذا المشروع؟")) return;
-    await remove({ data: { id } });
-    await refresh();
-  };
-
-  const bumpOrder = async (r: Row, delta: number) => {
-    await update({ data: { id: r.id, patch: { sort_order: r.sort_order + delta } } });
-    await refresh();
-  };
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    navigate({ to: "/auth" });
-  };
-
-  const set = <K extends keyof FormState>(k: K, v: FormState[K]) =>
-    setForm((f) => ({ ...f, [k]: v }));
-
-  return (
-    <Section>
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-3xl font-semibold tracking-tight">إدارة المشاريع</h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            أضف وعدّل واحذف مشاريعك، وتحكّم بترتيب ظهورها.
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <Link
-            to="/admin/hero"
-            className="rounded-md border border-border px-3 py-1.5 text-sm hover:bg-muted"
-          >
-            مشاريع الهيرو
-          </Link>
-          <button
-            onClick={handleLogout}
-            className="rounded-md border border-border px-3 py-1.5 text-sm hover:bg-muted"
-          >
-            خروج
-          </button>
+const columns: ListColumn<Row>[] = [
+  {
+    header: "الصورة",
+    className: "w-24",
+    render: (r) =>
+      r.cover_url ? (
+        <img
+          src={r.cover_url}
+          alt=""
+          className="h-12 w-20 rounded border border-neutral-200 object-cover dark:border-neutral-800"
+        />
+      ) : (
+        <div className="h-12 w-20 rounded border border-neutral-200 bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-800" />
+      ),
+  },
+  {
+    header: "العنوان",
+    render: (r) => (
+      <div className="min-w-0">
+        <div className="font-medium truncate">{r.title}</div>
+        <div className="text-[11px] text-neutral-500 truncate" dir="ltr">
+          /{r.slug}
         </div>
       </div>
-
-      {msg && (
-        <div className="mt-4 rounded-md border border-border bg-muted/40 px-4 py-2 text-sm">
-          {msg}
-        </div>
-      )}
-
-      <form
-        onSubmit={handleSubmit}
-        className="mt-8 grid gap-4 rounded-lg border border-border bg-card p-6 md:grid-cols-2"
-      >
-        <Field label="العنوان">
-          <input
-            required
-            value={form.title}
-            onChange={(e) => set("title", e.target.value)}
-            className={inputCls}
-          />
-        </Field>
-        <Field label="المعرّف (slug)">
-          <input
-            dir="ltr"
-            placeholder="auto"
-            value={form.slug}
-            onChange={(e) => set("slug", slugify(e.target.value))}
-            className={inputCls}
-          />
-        </Field>
-        <Field label="التصنيف">
-          <input
-            value={form.category}
-            onChange={(e) => set("category", e.target.value)}
-            className={inputCls}
-          />
-        </Field>
-        <Field label="السنة">
-          <input
-            type="number"
-            value={form.year ?? ""}
-            onChange={(e) => set("year", Number(e.target.value) || null)}
-            className={inputCls}
-          />
-        </Field>
-        <Field label="حالة المشروع">
-          <select
-            value={form.status}
-            onChange={(e) => set("status", e.target.value as Row["status"])}
-            className={inputCls}
-          >
-            <option value="live">مباشر</option>
-            <option value="in_progress">قيد التنفيذ</option>
-            <option value="concept">تصوّر</option>
-            <option value="archived">مؤرشف</option>
-          </select>
-        </Field>
-        <Field label="حالة النشر">
-          <select
-            value={form.content_status}
-            onChange={(e) =>
-              set("content_status", e.target.value as Row["content_status"])
-            }
-            className={inputCls}
-          >
-            <option value="published">منشور</option>
-            <option value="draft">مسودة</option>
-            <option value="archived">مؤرشف</option>
-          </select>
-        </Field>
-        <Field label="ترتيب الظهور">
-          <input
-            type="number"
-            value={form.sort_order}
-            onChange={(e) => set("sort_order", Number(e.target.value))}
-            className={inputCls}
-          />
-        </Field>
-        <Field label="مميّز">
-          <label className="mt-2 flex items-center gap-2 text-sm">
-            <input
-              type="checkbox"
-              checked={form.featured}
-              onChange={(e) => set("featured", e.target.checked)}
-            />
-            <span>عرض ضمن المشاريع المميزة</span>
-          </label>
-        </Field>
-        <Field label="ملخّص" className="md:col-span-2">
-          <textarea
-            rows={3}
-            value={form.summary}
-            onChange={(e) => set("summary", e.target.value)}
-            className={inputCls}
-          />
-        </Field>
-        <Field label="رابط مباشر">
-          <input
-            dir="ltr"
-            value={form.live_url}
-            onChange={(e) => set("live_url", e.target.value)}
-            className={inputCls}
-          />
-        </Field>
-        <Field label="رابط GitHub">
-          <input
-            dir="ltr"
-            value={form.github_url}
-            onChange={(e) => set("github_url", e.target.value)}
-            className={inputCls}
-          />
-        </Field>
-        <Field label="صورة الغلاف" className="md:col-span-2">
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => e.target.files?.[0] && handleUpload(e.target.files[0])}
-            className="text-sm"
-          />
-          {form.cover_url && (
-            <img
-              src={form.cover_url}
-              alt=""
-              className="mt-2 h-28 w-auto rounded border border-border object-cover"
-            />
-          )}
-        </Field>
-
-        <div className="flex gap-2 md:col-span-2">
-          <button
-            type="submit"
-            disabled={busy}
-            className="rounded-md bg-foreground px-4 py-2 text-sm font-medium text-background hover:opacity-90 disabled:opacity-60"
-          >
-            {editingId ? "تحديث" : "إضافة"}
-          </button>
-          {editingId && (
-            <button
-              type="button"
-              onClick={() => {
-                setEditingId(null);
-                setForm(EMPTY);
-              }}
-              className="rounded-md border border-border px-4 py-2 text-sm"
-            >
-              إلغاء
-            </button>
-          )}
-        </div>
-      </form>
-
-      <div className="mt-10">
-        <h2 className="text-xl font-semibold">كل المشاريع</h2>
-        {loading ? (
-          <p className="mt-4 text-sm text-muted-foreground">جارِ التحميل...</p>
-        ) : rows.length === 0 ? (
-          <p className="mt-4 text-sm text-muted-foreground">لا توجد مشاريع بعد.</p>
-        ) : (
-          <ul className="mt-4 divide-y divide-border rounded-lg border border-border">
-            {rows.map((r) => (
-              <li key={r.id} className="flex flex-wrap items-center gap-4 p-4">
-                {r.cover_url ? (
-                  <img
-                    src={r.cover_url}
-                    alt=""
-                    className="h-14 w-20 rounded border border-border object-cover"
-                  />
-                ) : (
-                  <div className="h-14 w-20 rounded border border-border bg-muted" />
-                )}
-                <div className="min-w-0 flex-1">
-                  <div className="font-medium">
-                    {r.title}
-                    {r.featured && (
-                      <span className="ms-2 rounded-full bg-amber-500/10 px-2 py-0.5 text-[10px] text-amber-600">
-                        مميّز
-                      </span>
-                    )}
-                  </div>
-                  <div className="text-xs text-muted-foreground">
-                    {r.category || "—"} · {r.year || "—"} · {r.status} ·{" "}
-                    {r.content_status} · ترتيب {r.sort_order}
-                  </div>
-                </div>
-                <div className="flex items-center gap-1">
-                  <button
-                    onClick={() => bumpOrder(r, -1)}
-                    title="أعلى"
-                    className="rounded-md border border-border px-2 py-1 text-xs hover:bg-muted"
-                  >
-                    ↑
-                  </button>
-                  <button
-                    onClick={() => bumpOrder(r, 1)}
-                    title="أسفل"
-                    className="rounded-md border border-border px-2 py-1 text-xs hover:bg-muted"
-                  >
-                    ↓
-                  </button>
-                </div>
-                <button
-                  onClick={() => handleEdit(r)}
-                  className="rounded-md border border-border px-3 py-1 text-xs hover:bg-muted"
-                >
-                  تعديل
-                </button>
-                <button
-                  onClick={() => handleDelete(r.id)}
-                  className="rounded-md border border-border px-3 py-1 text-xs text-red-600 hover:bg-red-50"
-                >
-                  حذف
-                </button>
-              </li>
-            ))}
-          </ul>
+    ),
+  },
+  {
+    header: "التصنيف",
+    render: (r) => (
+      <span className="text-xs text-neutral-600 dark:text-neutral-400">
+        {r.category ?? "—"}
+      </span>
+    ),
+  },
+  {
+    header: "السنة",
+    className: "w-16",
+    render: (r) => (
+      <span className="text-xs text-neutral-600 dark:text-neutral-400">
+        {r.year ?? "—"}
+      </span>
+    ),
+  },
+  {
+    header: "الحالة",
+    className: "w-32",
+    render: (r) => (
+      <div className="flex flex-col gap-1 text-[11px]">
+        <span
+          className={
+            r.content_status === "published"
+              ? "inline-flex w-fit rounded-full bg-emerald-500/10 px-2 py-0.5 text-emerald-700 dark:text-emerald-300"
+              : r.content_status === "draft"
+                ? "inline-flex w-fit rounded-full bg-amber-500/10 px-2 py-0.5 text-amber-700 dark:text-amber-300"
+                : "inline-flex w-fit rounded-full bg-neutral-500/10 px-2 py-0.5 text-neutral-600 dark:text-neutral-400"
+          }
+        >
+          {r.content_status === "published"
+            ? "منشور"
+            : r.content_status === "draft"
+              ? "مسودة"
+              : "مؤرشف"}
+        </span>
+        {r.featured && (
+          <span className="inline-flex w-fit rounded-full bg-amber-500/10 px-2 py-0.5 text-amber-700 dark:text-amber-300">
+            مميّز
+          </span>
         )}
       </div>
-    </Section>
-  );
-}
+    ),
+  },
+  {
+    header: "ترتيب",
+    className: "w-14",
+    render: (r) => (
+      <span className="text-xs tabular-nums text-neutral-600 dark:text-neutral-400">
+        {r.sort_order}
+      </span>
+    ),
+  },
+];
 
-const inputCls =
-  "mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring";
-
-function Field({
-  label,
-  children,
-  className,
-}: {
-  label: string;
-  children: React.ReactNode;
-  className?: string;
-}) {
+function AdminProjectsPage() {
   return (
-    <div className={className}>
-      <label className="block text-sm font-medium">{label}</label>
-      {children}
-    </div>
+    <AdminShell
+      title="إدارة المشاريع"
+      description="أضف وعدّل واحذف مشاريعك، وتحكّم بترتيب ظهورها في صفحة الأعمال."
+    >
+      <AdminCrud<Row>
+        entityName="مشروع"
+        entityNamePlural="مشاريع"
+        fields={fields}
+        columns={columns}
+        emptyValues={emptyValues}
+        listFn={adminListProjects as never}
+        createFn={createProject as never}
+        updateFn={updateProject as never}
+        deleteFn={deleteProject as never}
+        fromForm={(form) => {
+          const title = String(form.title ?? "").trim();
+          const slug = String(form.slug ?? "").trim() || slugify(title);
+          return {
+            slug,
+            title,
+            summary: (form.summary as string) || null,
+            category: (form.category as string) || null,
+            year: (form.year as number | null) ?? null,
+            status: form.status,
+            content_status: form.content_status,
+            featured: Boolean(form.featured),
+            sort_order: Number(form.sort_order ?? 0),
+            cover_url: (form.cover_url as string) || null,
+            live_url: (form.live_url as string) || null,
+            github_url: (form.github_url as string) || null,
+          };
+        }}
+      />
+    </AdminShell>
   );
 }

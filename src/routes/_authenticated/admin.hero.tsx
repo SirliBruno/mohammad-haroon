@@ -1,14 +1,11 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useServerFn } from "@tanstack/react-start";
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { Section } from "@/components/layout/section";
+import { createFileRoute } from "@tanstack/react-router";
+import { AdminShell } from "@/components/admin/admin-shell";
+import { AdminCrud, type FieldDef, type ListColumn } from "@/components/admin/admin-crud";
 import {
   adminListHeroProjects,
   createHeroProject,
   updateHeroProject,
   deleteHeroProject,
-  signHeroMediaPath,
 } from "@/lib/cms/hero.functions";
 
 export const Route = createFileRoute("/_authenticated/admin/hero")({
@@ -16,7 +13,7 @@ export const Route = createFileRoute("/_authenticated/admin/hero")({
   head: () => ({ meta: [{ title: "إدارة مشاريع الهيرو" }] }),
 });
 
-type HeroRow = {
+type Row = {
   id: string;
   title: string;
   host: string | null;
@@ -30,7 +27,52 @@ type HeroRow = {
   sort_order: number;
 };
 
-const EMPTY: Omit<HeroRow, "id"> = {
+const fields: FieldDef[] = [
+  { name: "title", label: "العنوان", type: "text", required: true },
+  { name: "host", label: "النطاق (host)", type: "text", dir: "ltr" },
+  { name: "category", label: "التصنيف", type: "text" },
+  { name: "year", label: "السنة", type: "number", min: 1970, max: 2100 },
+  {
+    name: "status",
+    label: "الحالة",
+    type: "select",
+    options: [
+      { value: "مباشر", label: "مباشر" },
+      { value: "قيد التطوير", label: "قيد التطوير" },
+    ],
+  },
+  {
+    name: "accent",
+    label: "لون التمييز",
+    type: "select",
+    options: [
+      { value: "emerald", label: "أخضر" },
+      { value: "amber", label: "كهرماني" },
+      { value: "sky", label: "سماوي" },
+      { value: "violet", label: "بنفسجي" },
+    ],
+  },
+  { name: "sort_order", label: "ترتيب الظهور", type: "number" },
+  { name: "is_active", label: "ظاهر في الهيرو", type: "boolean" },
+  {
+    name: "cover_url",
+    label: "صورة المتصفح (Desktop)",
+    type: "image",
+    folder: "hero",
+    colSpan: 2,
+    help: "المقاس المثالي 1600×1000 (نسبة 16:10).",
+  },
+  {
+    name: "mobile_url",
+    label: "صورة الجوال (S25 Ultra)",
+    type: "image",
+    folder: "hero",
+    colSpan: 2,
+    help: "المقاس المثالي 1170×2532 (نسبة 9:19.5).",
+  },
+];
+
+const emptyValues: Record<string, unknown> = {
   title: "",
   host: "",
   category: "",
@@ -43,237 +85,104 @@ const EMPTY: Omit<HeroRow, "id"> = {
   sort_order: 0,
 };
 
-function AdminHeroPage() {
-  const navigate = useNavigate();
-  const list = useServerFn(adminListHeroProjects);
-  const create = useServerFn(createHeroProject);
-  const update = useServerFn(updateHeroProject);
-  const remove = useServerFn(deleteHeroProject);
-  const sign = useServerFn(signHeroMediaPath);
-
-  const [rows, setRows] = useState<HeroRow[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [form, setForm] = useState<Omit<HeroRow, "id">>(EMPTY);
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [busy, setBusy] = useState(false);
-  const [msg, setMsg] = useState<string | null>(null);
-
-  const refresh = async () => {
-    setLoading(true);
-    try {
-      const data = (await list()) as HeroRow[];
-      setRows(data);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    refresh();
-  }, []);
-
-  const handleUpload = async (
-    file: File,
-    field: "cover_url" | "mobile_url",
-  ) => {
-    setBusy(true);
-    setMsg(null);
-    try {
-      const ext = file.name.split(".").pop() ?? "png";
-      const path = `hero/${crypto.randomUUID()}.${ext}`;
-      const { error } = await supabase.storage
-        .from("media")
-        .upload(path, file, { contentType: file.type, upsert: false });
-      if (error) throw error;
-      const { url } = (await sign({ data: { path } })) as { url: string };
-      setForm((f) => ({ ...f, [field]: url }));
-      setMsg("تم رفع الصورة");
-    } catch (e) {
-      setMsg(e instanceof Error ? e.message : "فشل الرفع");
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setBusy(true);
-    setMsg(null);
-    try {
-      const payload = {
-        ...form,
-        host: form.host || null,
-        category: form.category || null,
-        cover_url: form.cover_url || null,
-        mobile_url: form.mobile_url || null,
-        year: form.year || null,
-      };
-      if (editingId) {
-        await update({ data: { id: editingId, patch: payload } });
-      } else {
-        await create({ data: payload });
-      }
-      setForm(EMPTY);
-      setEditingId(null);
-      await refresh();
-      setMsg("تم الحفظ");
-    } catch (e) {
-      setMsg(e instanceof Error ? e.message : "فشل الحفظ");
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  const handleEdit = (r: HeroRow) => {
-    setEditingId(r.id);
-    setForm({
-      title: r.title,
-      host: r.host,
-      category: r.category,
-      year: r.year,
-      status: r.status,
-      accent: r.accent,
-      cover_url: r.cover_url,
-      mobile_url: r.mobile_url,
-      is_active: r.is_active,
-      sort_order: r.sort_order,
-    });
-  };
-
-  const handleDelete = async (id: string) => {
-    if (!confirm("حذف هذا المشروع؟")) return;
-    await remove({ data: { id } });
-    await refresh();
-  };
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    navigate({ to: "/auth" });
-  };
-
-  const set = <K extends keyof typeof form>(k: K, v: (typeof form)[K]) =>
-    setForm((f) => ({ ...f, [k]: v }));
-
-  return (
-    <Section>
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-semibold tracking-tight">إدارة مشاريع الهيرو</h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            الصور والعناوين هنا تظهر تلقائيًا داخل نوافذ الهيرو في الصفحة الرئيسية.
-          </p>
-        </div>
-        <button
-          onClick={handleLogout}
-          className="rounded-md border border-border px-3 py-1.5 text-sm hover:bg-muted"
-        >
-          خروج
-        </button>
-      </div>
-
-      {msg && (
-        <div className="mt-4 rounded-md border border-border bg-muted/40 px-4 py-2 text-sm">
-          {msg}
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit} className="mt-8 grid gap-4 rounded-lg border border-border bg-card p-6 md:grid-cols-2">
-        <Field label="العنوان">
-          <input required value={form.title} onChange={(e) => set("title", e.target.value)} className={inputCls} />
-        </Field>
-        <Field label="النطاق (host)">
-          <input dir="ltr" value={form.host ?? ""} onChange={(e) => set("host", e.target.value)} className={inputCls} />
-        </Field>
-        <Field label="التصنيف">
-          <input value={form.category ?? ""} onChange={(e) => set("category", e.target.value)} className={inputCls} />
-        </Field>
-        <Field label="السنة">
-          <input type="number" value={form.year ?? ""} onChange={(e) => set("year", Number(e.target.value) || null)} className={inputCls} />
-        </Field>
-        <Field label="الحالة">
-          <select value={form.status} onChange={(e) => set("status", e.target.value as HeroRow["status"])} className={inputCls}>
-            <option value="مباشر">مباشر</option>
-            <option value="قيد التطوير">قيد التطوير</option>
-          </select>
-        </Field>
-        <Field label="اللون">
-          <select value={form.accent} onChange={(e) => set("accent", e.target.value as HeroRow["accent"])} className={inputCls}>
-            <option value="emerald">أخضر</option>
-            <option value="amber">كهرماني</option>
-            <option value="sky">سماوي</option>
-            <option value="violet">بنفسجي</option>
-          </select>
-        </Field>
-        <Field label="ترتيب">
-          <input type="number" value={form.sort_order} onChange={(e) => set("sort_order", Number(e.target.value))} className={inputCls} />
-        </Field>
-        <Field label="مفعّل">
-          <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" checked={form.is_active} onChange={(e) => set("is_active", e.target.checked)} />
-            <span>ظاهر في الهيرو</span>
-          </label>
-        </Field>
-
-        <Field label="صورة المتصفح (Desktop)">
-          <input type="file" accept="image/*" onChange={(e) => e.target.files?.[0] && handleUpload(e.target.files[0], "cover_url")} className="text-sm" />
-          {form.cover_url && <img src={form.cover_url} alt="" className="mt-2 h-24 w-auto rounded border border-border object-cover" />}
-        </Field>
-        <Field label="صورة الجوال (iPhone)">
-          <input type="file" accept="image/*" onChange={(e) => e.target.files?.[0] && handleUpload(e.target.files[0], "mobile_url")} className="text-sm" />
-          {form.mobile_url && <img src={form.mobile_url} alt="" className="mt-2 h-24 w-auto rounded border border-border object-cover" />}
-        </Field>
-
-        <div className="md:col-span-2 flex gap-2">
-          <button type="submit" disabled={busy} className="rounded-md bg-foreground px-4 py-2 text-sm font-medium text-background hover:opacity-90 disabled:opacity-60">
-            {editingId ? "تحديث" : "إضافة"}
-          </button>
-          {editingId && (
-            <button type="button" onClick={() => { setEditingId(null); setForm(EMPTY); }} className="rounded-md border border-border px-4 py-2 text-sm">
-              إلغاء
-            </button>
-          )}
-        </div>
-      </form>
-
-      <div className="mt-10">
-        <h2 className="text-xl font-semibold">المشاريع الحالية</h2>
-        {loading ? (
-          <p className="mt-4 text-sm text-muted-foreground">جارِ التحميل...</p>
-        ) : rows.length === 0 ? (
-          <p className="mt-4 text-sm text-muted-foreground">لا توجد مشاريع بعد.</p>
-        ) : (
-          <ul className="mt-4 divide-y divide-border rounded-lg border border-border">
-            {rows.map((r) => (
-              <li key={r.id} className="flex items-center gap-4 p-4">
-                {r.cover_url ? (
-                  <img src={r.cover_url} alt="" className="h-14 w-20 rounded border border-border object-cover" />
-                ) : (
-                  <div className="h-14 w-20 rounded border border-border bg-muted" />
-                )}
-                <div className="flex-1">
-                  <div className="font-medium">{r.title}</div>
-                  <div className="text-xs text-muted-foreground">
-                    {r.category} · {r.year} · {r.status} {!r.is_active && "· مخفي"}
-                  </div>
-                </div>
-                <button onClick={() => handleEdit(r)} className="rounded-md border border-border px-3 py-1 text-xs hover:bg-muted">تعديل</button>
-                <button onClick={() => handleDelete(r.id)} className="rounded-md border border-border px-3 py-1 text-xs text-red-600 hover:bg-red-50">حذف</button>
-              </li>
-            ))}
-          </ul>
+const columns: ListColumn<Row>[] = [
+  {
+    header: "الغلاف",
+    className: "w-24",
+    render: (r) =>
+      r.cover_url ? (
+        <img
+          src={r.cover_url}
+          alt=""
+          className="h-12 w-20 rounded border border-neutral-200 object-cover dark:border-neutral-800"
+        />
+      ) : (
+        <div className="h-12 w-20 rounded border border-neutral-200 bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-800" />
+      ),
+  },
+  {
+    header: "العنوان",
+    render: (r) => (
+      <div className="min-w-0">
+        <div className="font-medium truncate">{r.title}</div>
+        {r.host && (
+          <div className="text-[11px] text-neutral-500 truncate" dir="ltr">
+            {r.host}
+          </div>
         )}
       </div>
-    </Section>
-  );
-}
+    ),
+  },
+  {
+    header: "التصنيف",
+    render: (r) => (
+      <span className="text-xs text-neutral-600 dark:text-neutral-400">
+        {r.category ?? "—"} · {r.year ?? "—"}
+      </span>
+    ),
+  },
+  {
+    header: "الحالة",
+    className: "w-28",
+    render: (r) => (
+      <div className="flex flex-col gap-1 text-[11px]">
+        <span
+          className={
+            r.status === "مباشر"
+              ? "inline-flex w-fit rounded-full bg-emerald-500/10 px-2 py-0.5 text-emerald-700 dark:text-emerald-300"
+              : "inline-flex w-fit rounded-full bg-amber-500/10 px-2 py-0.5 text-amber-700 dark:text-amber-300"
+          }
+        >
+          {r.status}
+        </span>
+        {!r.is_active && (
+          <span className="inline-flex w-fit rounded-full bg-neutral-500/10 px-2 py-0.5 text-neutral-600 dark:text-neutral-400">
+            مخفي
+          </span>
+        )}
+      </div>
+    ),
+  },
+  {
+    header: "ترتيب",
+    className: "w-14",
+    render: (r) => (
+      <span className="text-xs tabular-nums text-neutral-600 dark:text-neutral-400">
+        {r.sort_order}
+      </span>
+    ),
+  },
+];
 
-const inputCls = "mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring";
-
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+function AdminHeroPage() {
   return (
-    <div>
-      <label className="block text-sm font-medium">{label}</label>
-      {children}
-    </div>
+    <AdminShell
+      title="إدارة مشاريع الهيرو"
+      description="الصور والعناوين هنا تظهر تلقائيًا داخل نوافذ الهيرو في الصفحة الرئيسية."
+    >
+      <AdminCrud<Row>
+        entityName="مشروع هيرو"
+        entityNamePlural="مشاريع هيرو"
+        fields={fields}
+        columns={columns}
+        emptyValues={emptyValues}
+        listFn={adminListHeroProjects as never}
+        createFn={createHeroProject as never}
+        updateFn={updateHeroProject as never}
+        deleteFn={deleteHeroProject as never}
+        fromForm={(form) => ({
+          title: String(form.title ?? "").trim(),
+          host: (form.host as string) || null,
+          category: (form.category as string) || null,
+          year: (form.year as number | null) ?? null,
+          status: form.status,
+          accent: form.accent,
+          cover_url: (form.cover_url as string) || null,
+          mobile_url: (form.mobile_url as string) || null,
+          is_active: Boolean(form.is_active),
+          sort_order: Number(form.sort_order ?? 0),
+        })}
+      />
+    </AdminShell>
   );
 }
