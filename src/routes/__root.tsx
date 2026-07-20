@@ -20,6 +20,7 @@ import { site } from "@/config/site";
 import { ScrollProgress } from "@/components/layout/scroll-progress";
 import { ScrollToTop } from "@/components/layout/scroll-to-top";
 import { AnalyticsTracker } from "@/components/analytics-tracker";
+import { Toaster } from "sonner";
 
 const organizationJsonLd = {
   "@context": "https://schema.org",
