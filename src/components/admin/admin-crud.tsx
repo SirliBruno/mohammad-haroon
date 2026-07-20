@@ -200,20 +200,19 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setBusy(true);
-    setMessage(null);
     try {
       const payload = fromForm ? fromForm(form) : sanitizeForm(form, fields);
       if (editingId) {
         await update({ data: { id: editingId, patch: payload } });
-        setMessage({ kind: "ok", text: "تم الحفظ" });
+        toast.success("تم الحفظ");
       } else {
         await create({ data: payload });
-        setMessage({ kind: "ok", text: "تمت الإضافة" });
+        toast.success("تمت الإضافة");
       }
       setShowForm(false);
       await refresh();
     } catch (e) {
-      setMessage({ kind: "err", text: e instanceof Error ? e.message : "فشل الحفظ" });
+      toast.error(e instanceof Error ? e.message : "فشل الحفظ");
     } finally {
       setBusy(false);
     }
