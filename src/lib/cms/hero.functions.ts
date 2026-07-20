@@ -95,14 +95,52 @@ export const updateHeroProject = createServerFn({ method: "POST" })
       _role: "admin",
     });
     if (!isAdmin) throw new Error("Forbidden");
+    const patch: Record<string, unknown> = { ...data.patch };
+    if ("cover_url" in data.patch) {
+      const { generateImageVariants } = await import("./image-variants.server");
+      patch.cover_variants = await generateImageVariants(data.patch.cover_url ?? null);
+    }
+    if ("mobile_url" in data.patch) {
+      const { generateImageVariants } = await import("./image-variants.server");
+      patch.mobile_variants = await generateImageVariants(data.patch.mobile_url ?? null);
+    }
     const { data: row, error } = await context.supabase
       .from("hero_projects")
-      .update(data.patch)
+      .update(patch)
       .eq("id", data.id)
       .select()
       .single();
     if (error) throw error;
     return row;
+  });
+
+/** Re-generate variants for every hero project. Useful after enabling image transforms or backfilling. */
+export const backfillHeroVariants = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data: isAdmin } = await context.supabase.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
+    if (!isAdmin) throw new Error("Forbidden");
+    const { data: rows, error } = await context.supabase
+      .from("hero_projects")
+      .select("id, cover_url, mobile_url");
+    if (error) throw error;
+    const { generateImageVariants } = await import("./image-variants.server");
+    let updated = 0;
+    for (const r of rows ?? []) {
+      const [cover_variants, mobile_variants] = await Promise.all([
+        generateImageVariants(r.cover_url),
+        generateImageVariants(r.mobile_url),
+      ]);
+      const { error: upErr } = await context.supabase
+        .from("hero_projects")
+        .update({ cover_variants, mobile_variants })
+        .eq("id", r.id);
+      if (!upErr) updated++;
+    }
+    return { updated, total: rows?.length ?? 0 };
   });
 
 export const deleteHeroProject = createServerFn({ method: "POST" })
