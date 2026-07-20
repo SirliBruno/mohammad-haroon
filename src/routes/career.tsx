@@ -47,7 +47,19 @@ import {
   dbRowsToSkillGroups,
 } from "@/lib/career-adapter";
 
+const CAREER_LOADER_EXP = { limit: 100, orderBy: "started_on", ascending: false } as const;
+const CAREER_LOADER_CERT = { limit: 100 } as const;
+const CAREER_LOADER_SKILL = { limit: 200, orderBy: "sort_order", ascending: true } as const;
+
 export const Route = createFileRoute("/career")({
+  loader: ({ context }) => {
+    void context.queryClient.ensureQueryData(experienceListOptions(CAREER_LOADER_EXP));
+    void context.queryClient.ensureQueryData(certificateListOptions(CAREER_LOADER_CERT));
+    void context.queryClient.ensureQueryData(skillListOptions(CAREER_LOADER_SKILL));
+  },
+  errorComponent: () => (
+    <PageHeader eyebrow="المسيرة" title="تعذّر تحميل المسيرة" description="حاول تحديث الصفحة." />
+  ),
   head: () => ({
     meta: buildMeta({
       title: "المسيرة — الخبرة والتعليم والشهادات",
