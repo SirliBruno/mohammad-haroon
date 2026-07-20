@@ -27,14 +27,25 @@ import { site } from "@/config/site";
 import { socials } from "@/config/socials";
 import {
   awards,
-  certificates,
+  certificates as staticCertificates,
   education,
-  experience,
+  experience as staticExperience,
   languages,
   resumeMeta,
-  skillGroups,
+  skillGroups as staticSkillGroups,
   type ExperienceItem,
 } from "@/data/career";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import {
+  experienceListOptions,
+  certificateListOptions,
+  skillListOptions,
+} from "@/features/cms/queries";
+import {
+  dbRowToExperience,
+  dbRowToCertificate,
+  dbRowsToSkillGroups,
+} from "@/lib/career-adapter";
 
 export const Route = createFileRoute("/career")({
   head: () => ({
