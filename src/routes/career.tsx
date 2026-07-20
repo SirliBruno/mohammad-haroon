@@ -27,16 +27,39 @@ import { site } from "@/config/site";
 import { socials } from "@/config/socials";
 import {
   awards,
-  certificates,
+  certificates as staticCertificates,
   education,
-  experience,
+  experience as staticExperience,
   languages,
   resumeMeta,
-  skillGroups,
+  skillGroups as staticSkillGroups,
   type ExperienceItem,
 } from "@/data/career";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import {
+  experienceListOptions,
+  certificateListOptions,
+  skillListOptions,
+} from "@/features/cms/queries";
+import {
+  dbRowToExperience,
+  dbRowToCertificate,
+  dbRowsToSkillGroups,
+} from "@/lib/career-adapter";
+
+const CAREER_LOADER_EXP = { limit: 100, orderBy: "started_on", ascending: false } as const;
+const CAREER_LOADER_CERT = { limit: 100 } as const;
+const CAREER_LOADER_SKILL = { limit: 200, orderBy: "sort_order", ascending: true } as const;
 
 export const Route = createFileRoute("/career")({
+  loader: ({ context }) => {
+    void context.queryClient.ensureQueryData(experienceListOptions(CAREER_LOADER_EXP));
+    void context.queryClient.ensureQueryData(certificateListOptions(CAREER_LOADER_CERT));
+    void context.queryClient.ensureQueryData(skillListOptions(CAREER_LOADER_SKILL));
+  },
+  errorComponent: () => (
+    <PageHeader eyebrow="المسيرة" title="تعذّر تحميل المسيرة" description="حاول تحديث الصفحة." />
+  ),
   head: () => ({
     meta: buildMeta({
       title: "المسيرة — الخبرة والتعليم والشهادات",
@@ -62,11 +85,11 @@ export const Route = createFileRoute("/career")({
             "@type": "EducationalOrganization",
             name: e.school,
           })),
-          worksFor: experience.slice(0, 3).map((e) => ({
+          worksFor: staticExperience.slice(0, 3).map((e) => ({
             "@type": "Organization",
             name: e.company,
           })),
-          hasCredential: certificates.map((c) => ({
+          hasCredential: staticCertificates.map((c) => ({
             "@type": "EducationalOccupationalCredential",
             name: c.name,
             credentialCategory: "certificate",
@@ -98,9 +121,25 @@ function SectionHeading({
 }
 
 
+const CAREER_LIST_PARAMS = { limit: 100 } as const;
+const CAREER_EXP_PARAMS = { limit: 100, orderBy: "started_on", ascending: false } as const;
+const CAREER_SKILL_PARAMS = { limit: 200, orderBy: "sort_order", ascending: true } as const;
+
 function CareerPage() {
   const linkedin = socials.find((s) => s.label.toLowerCase() === "linkedin");
   const emailContact = socials.find((s) => s.label === "البريد الإلكتروني");
+
+  const { data: expData } = useSuspenseQuery(experienceListOptions(CAREER_EXP_PARAMS));
+  const { data: certData } = useSuspenseQuery(certificateListOptions(CAREER_LIST_PARAMS));
+  const { data: skillData } = useSuspenseQuery(skillListOptions(CAREER_SKILL_PARAMS));
+
+  const expRows = (expData?.rows ?? []).map(dbRowToExperience);
+  const certRows = (certData?.rows ?? []).map(dbRowToCertificate);
+  const skillRowsDb = dbRowsToSkillGroups(skillData?.rows ?? []);
+
+  const experience = expRows.length > 0 ? expRows : staticExperience;
+  const certificates = certRows.length > 0 ? certRows : staticCertificates;
+  const skillGroups = skillRowsDb.length > 0 ? skillRowsDb : staticSkillGroups;
 
   return (
     <>
