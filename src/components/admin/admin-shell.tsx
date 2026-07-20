@@ -122,15 +122,23 @@ export function AdminShell({
           <details className="lg:hidden rounded-xl border border-neutral-200 bg-white p-3 dark:border-neutral-800 dark:bg-neutral-900">
             <summary className="cursor-pointer text-sm font-medium">القائمة</summary>
             <div className="mt-3 grid grid-cols-2 gap-1">
-              {NAV.map((item) => (
-                <Link
-                  key={item.to}
-                  to={item.to}
-                  className="rounded-md px-2 py-1.5 text-xs text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800"
-                >
-                  {item.label}
-                </Link>
-              ))}
+              {NAV.map((item) => {
+                const badge = item.to === "/admin/messages" && newCount > 0 ? newCount : null;
+                return (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    className="flex items-center justify-between gap-1 rounded-md px-2 py-1.5 text-xs text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800"
+                  >
+                    <span>{item.label}</span>
+                    {badge != null && (
+                      <span className="inline-flex min-w-[1rem] items-center justify-center rounded-full bg-red-500 px-1 py-0.5 text-[9px] font-semibold text-white">
+                        {badge > 99 ? "99+" : badge}
+                      </span>
+                    )}
+                  </Link>
+                );
+              })}
             </div>
           </details>
 
