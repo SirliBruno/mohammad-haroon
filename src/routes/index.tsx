@@ -335,7 +335,7 @@ function Home() {
       </Section>
 
       {/* ================= CERTIFICATES ================= */}
-      <Section id="certificates" className="border-t border-border/60">
+      <Section id="certificates" divider>
         <Reveal>
           <SectionTitle
             eyebrow="الشهادات"
