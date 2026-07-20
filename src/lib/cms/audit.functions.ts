@@ -8,13 +8,21 @@ const listSchema = z.object({
   table: z.string().optional(),
 });
 
+export type AuditJson =
+  | string
+  | number
+  | boolean
+  | null
+  | AuditJson[]
+  | { [key: string]: AuditJson };
+
 export type AuditLogRow = {
   id: string;
   table_name: string;
   row_id: string | null;
   action: "INSERT" | "UPDATE" | "DELETE";
   actor_id: string | null;
-  diff: Record<string, unknown> | null;
+  diff: AuditJson | null;
   created_at: string;
 };
 
