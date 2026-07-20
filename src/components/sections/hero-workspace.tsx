@@ -630,7 +630,7 @@ export function HeroWorkspace() {
                   <current.Mobile />
                 </motion.div>
               </AnimatePresence>
-            </PhoneFrame>
+            </GalaxyS25UltraFrame>
           </div>
         </FloatingLayer>
 
