@@ -237,7 +237,7 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
           >
             تحديث
           </button>
-          <span className="text-xs text-neutral-500">{filtered.length} عنصر</span>
+          <span className="text-xs text-neutral-500">{rows.length} عنصر</span>
         </div>
         <button
           type="button"
@@ -277,10 +277,10 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
             <tbody>
               {loading ? (
                 <tr><td colSpan={columns.length + 1} className="px-4 py-8 text-center text-neutral-500">جارِ التحميل…</td></tr>
-              ) : filtered.length === 0 ? (
+              ) : rows.length === 0 ? (
                 <tr><td colSpan={columns.length + 1} className="px-4 py-8 text-center text-neutral-500">لا توجد {entityNamePlural} بعد.</td></tr>
               ) : (
-                filtered.map((row) => (
+                rows.map((row) => (
                   <tr key={row.id} className="border-t border-neutral-100 dark:border-neutral-800 hover:bg-neutral-50/50 dark:hover:bg-neutral-800/30">
                     {columns.map((col, i) => (
                       <td key={i} className={cn("px-4 py-3 align-top", col.className)}>
