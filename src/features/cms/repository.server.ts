@@ -58,6 +58,25 @@ export async function requireAdmin(supabase: Db, userId: string): Promise<void> 
 // Generic list / get / mutate helpers
 // ============================================================
 
+/**
+ * Convert a raw PostgREST error into a user-facing message. Full details go
+ * to server logs; only safe, generic text is returned to the client so we
+ * don't leak table names, column names, or SQL fragments.
+ */
+type PgErrorShape = { message?: string; code?: string; details?: string; hint?: string };
+function mapDbError(op: string, table: string, error: PgErrorShape): Error {
+  console.error(`[cms] ${op} ${table} failed:`, error);
+  const code = error?.code ?? "";
+  // Postgres SQLSTATE codes: https://www.postgresql.org/docs/current/errcodes-appendix.html
+  if (code === "23505") return new Error("القيمة موجودة مسبقًا (تعارض في المعرّف).");
+  if (code === "23502") return new Error("حقل مطلوب مفقود.");
+  if (code === "23503") return new Error("مرجع غير صالح.");
+  if (code === "23514") return new Error("قيمة غير مقبولة.");
+  if (code === "42501" || code === "PGRST301") return new Error("لا تملك صلاحية تنفيذ هذه العملية.");
+  return new Error("تعذّر تنفيذ العملية. حاول مرة أخرى.");
+}
+
+
 export type ListOptions = ListParamsInput & {
   /** Only used with the public client — reads default to published only. */
   onlyPublished?: boolean;
