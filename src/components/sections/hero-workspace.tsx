@@ -26,7 +26,7 @@ import {
   useTransform,
 } from "motion/react";
 import { ArrowUpRight, Sparkles } from "lucide-react";
-import { BrowserFrame, PhoneFrame } from "@/components/mockups/devices";
+import { BrowserFrame, GalaxyS25UltraFrame } from "@/components/mockups/devices";
 import {
   DashboardUI,
   EditorUI,
