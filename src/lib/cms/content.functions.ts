@@ -35,7 +35,7 @@ export const listSiteContent = createServerFn({ method: "POST" })
       );
     }
     const { data: rows, error } = await q;
-    if (error) throw new Error(error.message);
+    if (error) { console.error("[cms] site_content op failed:", error); throw new Error("تعذّر تنفيذ العملية."); }
     return rows ?? [];
   });
 
@@ -49,7 +49,7 @@ export const getSiteContentByKey = createServerFn({ method: "POST" })
       .select("*")
       .eq("key", data.key)
       .maybeSingle();
-    if (error) throw new Error(error.message);
+    if (error) { console.error("[cms] site_content op failed:", error); throw new Error("تعذّر تنفيذ العملية."); }
     return row;
   });
 
@@ -64,7 +64,7 @@ export const upsertSiteContent = createServerFn({ method: "POST" })
       .upsert(data, { onConflict: "key" })
       .select("*")
       .single();
-    if (error) throw new Error(error.message);
+    if (error) { console.error("[cms] site_content op failed:", error); throw new Error("تعذّر تنفيذ العملية."); }
     return row;
   });
 
@@ -82,7 +82,7 @@ export const updateSiteContent = createServerFn({ method: "POST" })
       .eq("id", data.id)
       .select("*")
       .single();
-    if (error) throw new Error(error.message);
+    if (error) { console.error("[cms] site_content op failed:", error); throw new Error("تعذّر تنفيذ العملية."); }
     return row;
   });
 
@@ -96,6 +96,6 @@ export const deleteSiteContent = createServerFn({ method: "POST" })
       .from("site_content")
       .delete()
       .eq("id", data.id);
-    if (error) throw new Error(error.message);
+    if (error) { console.error("[cms] site_content op failed:", error); throw new Error("تعذّر تنفيذ العملية."); }
     return { ok: true as const };
   });

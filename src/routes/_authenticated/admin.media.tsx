@@ -70,8 +70,8 @@ function Page() {
           filename: file.name,
           mime_type: file.type,
           size_bytes: file.size,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } as any,
+          tags: [],
+        },
       });
     },
     onSuccess: () => {
@@ -99,8 +99,7 @@ function Page() {
     mutationFn: async (row: MediaRow) => {
       await update({
         data: { id: row.id, patch: { alt: row.alt, caption: row.caption } },
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } as any);
+      });
     },
     onSuccess: () => {
       toast.success("تم الحفظ.");
