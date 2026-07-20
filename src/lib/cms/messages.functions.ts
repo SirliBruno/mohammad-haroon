@@ -99,3 +99,17 @@ export const deleteMessage = createServerFn({ method: "POST" })
     await requireAdmin(context.supabase, context.userId);
     return deleteRow(context.supabase, "messages", data.id);
   });
+
+/** Admin — عدد الرسائل الجديدة (لشارة القائمة الجانبية). */
+export const countNewMessages = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { requireAdmin } = await import("@/features/cms/repository.server");
+    await requireAdmin(context.supabase, context.userId);
+    const { count, error } = await context.supabase
+      .from("messages")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "new");
+    if (error) return { count: 0 };
+    return { count: count ?? 0 };
+  });
