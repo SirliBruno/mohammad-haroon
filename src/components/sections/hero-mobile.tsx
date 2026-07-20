@@ -202,6 +202,8 @@ export function HeroMobile() {
     if (!dbHero || dbHero.length === 0) return FALLBACK;
     return dbHero.slice(0, FALLBACK.length).map((r, i): Item => {
       const fb = FALLBACK[i % FALLBACK.length];
+      const mv = (r.mobile_variants ?? null) as ImageVariants | null;
+      const cv = (r.cover_variants ?? null) as ImageVariants | null;
       return {
         slug: r.id,
         name: r.title,
@@ -211,6 +213,7 @@ export function HeroMobile() {
         Icon: fb.Icon,
         status: fb.status,
         image: r.mobile_url || r.cover_url || null,
+        variants: mv ?? cv,
       };
     });
   }, [dbHero]);
