@@ -33,6 +33,14 @@ import { site } from "@/config/site";
 
 type Status = "live" | "wip" | "idle";
 
+type ImageFormatUrls = { jpg: string; webp: string };
+type ImageVariants = {
+  original: string;
+  sm: ImageFormatUrls;
+  md: ImageFormatUrls;
+  lg: ImageFormatUrls;
+};
+
 type Item = {
   slug: string;
   name: string;
@@ -42,7 +50,7 @@ type Item = {
   Icon: ComponentType<LucideProps>;
   status: Status;
   image?: string | null;
-
+  variants?: ImageVariants | null;
 };
 
 const FALLBACK: Item[] = [
@@ -194,6 +202,8 @@ export function HeroMobile() {
     if (!dbHero || dbHero.length === 0) return FALLBACK;
     return dbHero.slice(0, FALLBACK.length).map((r, i): Item => {
       const fb = FALLBACK[i % FALLBACK.length];
+      const mv = (r.mobile_variants ?? null) as ImageVariants | null;
+      const cv = (r.cover_variants ?? null) as ImageVariants | null;
       return {
         slug: r.id,
         name: r.title,
@@ -203,6 +213,7 @@ export function HeroMobile() {
         Icon: fb.Icon,
         status: fb.status,
         image: r.mobile_url || r.cover_url || null,
+        variants: mv ?? cv,
       };
     });
   }, [dbHero]);
@@ -398,12 +409,29 @@ export function HeroMobile() {
             >
               <PhoneFrame className="w-[150px] sm:w-[170px]">
                 {activeItem.image ? (
-                  <img
-                    src={activeItem.image}
-                    alt={activeItem.name}
-                    className="h-full w-full object-cover"
-                    loading="lazy"
-                  />
+                  <picture>
+                    {activeItem.variants && (
+                      <source
+                        type="image/webp"
+                        srcSet={`${activeItem.variants.sm.webp} 480w, ${activeItem.variants.md.webp} 900w`}
+                        sizes="(min-width: 640px) 170px, 150px"
+                      />
+                    )}
+                    {activeItem.variants && (
+                      <source
+                        type="image/jpeg"
+                        srcSet={`${activeItem.variants.sm.jpg} 480w, ${activeItem.variants.md.jpg} 900w`}
+                        sizes="(min-width: 640px) 170px, 150px"
+                      />
+                    )}
+                    <img
+                      src={activeItem.variants?.md.jpg ?? activeItem.image}
+                      alt={activeItem.name}
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </picture>
                 ) : (
                   <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-linear-to-br from-primary/15 via-background to-background p-4 text-center">
                     <activeItem.Icon className="size-8 text-primary" aria-hidden />

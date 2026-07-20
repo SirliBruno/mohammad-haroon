@@ -226,12 +226,14 @@ export type Database = {
           accent: string
           category: string | null
           cover_url: string | null
+          cover_variants: Json | null
           created_at: string
           created_by: string | null
           host: string | null
           id: string
           is_active: boolean
           mobile_url: string | null
+          mobile_variants: Json | null
           sort_order: number
           status: string
           title: string
@@ -242,12 +244,14 @@ export type Database = {
           accent?: string
           category?: string | null
           cover_url?: string | null
+          cover_variants?: Json | null
           created_at?: string
           created_by?: string | null
           host?: string | null
           id?: string
           is_active?: boolean
           mobile_url?: string | null
+          mobile_variants?: Json | null
           sort_order?: number
           status?: string
           title: string
@@ -258,12 +262,14 @@ export type Database = {
           accent?: string
           category?: string | null
           cover_url?: string | null
+          cover_variants?: Json | null
           created_at?: string
           created_by?: string | null
           host?: string | null
           id?: string
           is_active?: boolean
           mobile_url?: string | null
+          mobile_variants?: Json | null
           sort_order?: number
           status?: string
           title?: string

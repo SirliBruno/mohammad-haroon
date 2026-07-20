@@ -35,7 +35,7 @@ export const listHeroProjectsPublic = createServerFn({ method: "GET" }).handler(
     });
     const { data, error } = await client
       .from("hero_projects")
-      .select("id, title, host, category, year, status, accent, cover_url, mobile_url, sort_order")
+      .select("id, title, host, category, year, status, accent, cover_url, mobile_url, cover_variants, mobile_variants, sort_order")
       .eq("is_active", true)
       .order("sort_order", { ascending: true })
       .order("created_at", { ascending: true });
@@ -70,9 +70,14 @@ export const createHeroProject = createServerFn({ method: "POST" })
       _role: "admin",
     });
     if (!isAdmin) throw new Error("Forbidden");
+    const { generateImageVariants } = await import("./image-variants.server");
+    const [cover_variants, mobile_variants] = await Promise.all([
+      generateImageVariants(data.cover_url),
+      generateImageVariants(data.mobile_url),
+    ]);
     const { data: row, error } = await context.supabase
       .from("hero_projects")
-      .insert({ ...data, created_by: context.userId })
+      .insert({ ...data, cover_variants, mobile_variants, created_by: context.userId })
       .select()
       .single();
     if (error) throw error;
@@ -90,14 +95,52 @@ export const updateHeroProject = createServerFn({ method: "POST" })
       _role: "admin",
     });
     if (!isAdmin) throw new Error("Forbidden");
+    const patch: Record<string, unknown> = { ...data.patch };
+    if ("cover_url" in data.patch) {
+      const { generateImageVariants } = await import("./image-variants.server");
+      patch.cover_variants = await generateImageVariants(data.patch.cover_url ?? null);
+    }
+    if ("mobile_url" in data.patch) {
+      const { generateImageVariants } = await import("./image-variants.server");
+      patch.mobile_variants = await generateImageVariants(data.patch.mobile_url ?? null);
+    }
     const { data: row, error } = await context.supabase
       .from("hero_projects")
-      .update(data.patch)
+      .update(patch as never)
       .eq("id", data.id)
       .select()
       .single();
     if (error) throw error;
     return row;
+  });
+
+/** Re-generate variants for every hero project. Useful after enabling image transforms or backfilling. */
+export const backfillHeroVariants = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data: isAdmin } = await context.supabase.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
+    if (!isAdmin) throw new Error("Forbidden");
+    const { data: rows, error } = await context.supabase
+      .from("hero_projects")
+      .select("id, cover_url, mobile_url");
+    if (error) throw error;
+    const { generateImageVariants } = await import("./image-variants.server");
+    let updated = 0;
+    for (const r of rows ?? []) {
+      const [cover_variants, mobile_variants] = await Promise.all([
+        generateImageVariants(r.cover_url),
+        generateImageVariants(r.mobile_url),
+      ]);
+      const { error: upErr } = await context.supabase
+        .from("hero_projects")
+        .update({ cover_variants, mobile_variants })
+        .eq("id", r.id);
+      if (!upErr) updated++;
+    }
+    return { updated, total: rows?.length ?? 0 };
   });
 
 export const deleteHeroProject = createServerFn({ method: "POST" })

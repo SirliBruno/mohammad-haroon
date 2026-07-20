@@ -9,6 +9,7 @@ import {
   updateHeroProject,
   deleteHeroProject,
   signHeroMediaPath,
+  backfillHeroVariants,
 } from "@/lib/cms/hero.functions";
 
 export const Route = createFileRoute("/_authenticated/admin/hero")({
@@ -50,6 +51,7 @@ function AdminHeroPage() {
   const update = useServerFn(updateHeroProject);
   const remove = useServerFn(deleteHeroProject);
   const sign = useServerFn(signHeroMediaPath);
+  const backfill = useServerFn(backfillHeroVariants);
 
   const [rows, setRows] = useState<HeroRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -163,12 +165,31 @@ function AdminHeroPage() {
             الصور والعناوين هنا تظهر تلقائيًا داخل نوافذ الهيرو في الصفحة الرئيسية.
           </p>
         </div>
-        <button
-          onClick={handleLogout}
-          className="rounded-md border border-border px-3 py-1.5 text-sm hover:bg-muted"
-        >
-          خروج
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={async () => {
+              setBusy(true);
+              try {
+                const r = (await backfill()) as { updated: number; total: number };
+                setMsg(`تم توليد نسخ محسّنة لـ ${r.updated}/${r.total} مشروع`);
+              } catch (e) {
+                setMsg(e instanceof Error ? e.message : "فشل التحسين");
+              } finally {
+                setBusy(false);
+              }
+            }}
+            disabled={busy}
+            className="rounded-md border border-border px-3 py-1.5 text-sm hover:bg-muted disabled:opacity-60"
+          >
+            توليد نسخ الصور المحسّنة
+          </button>
+          <button
+            onClick={handleLogout}
+            className="rounded-md border border-border px-3 py-1.5 text-sm hover:bg-muted"
+          >
+            خروج
+          </button>
+        </div>
       </div>
 
       {msg && (
