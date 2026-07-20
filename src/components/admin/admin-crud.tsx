@@ -210,9 +210,12 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
 
   const closeForm = () => {
     if (busy) return;
-    if (window.confirm("تجاهل التغييرات غير المحفوظة؟")) {
-      setShowForm(false);
-    }
+    setConfirmDiscard(true);
+  };
+
+  const doDiscard = () => {
+    setConfirmDiscard(false);
+    setShowForm(false);
   };
 
   useEffect(() => {
