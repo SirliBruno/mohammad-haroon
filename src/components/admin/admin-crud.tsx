@@ -117,7 +117,7 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<Record<string, unknown>>(emptyValues);
   const [busy, setBusy] = useState(false);
-  const [message, setMessage] = useState<{ kind: "ok" | "err"; text: string } | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<Row | null>(null);
 
   const searchRef = useRef(search);
   searchRef.current = search;
@@ -129,7 +129,7 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
       const res = await list({ data: { limit: 200, offset: 0, ...(s ? { search: s } : {}) } });
       setRows(coerceRowsList(res) as Row[]);
     } catch (e) {
-      setMessage({ kind: "err", text: e instanceof Error ? e.message : "فشل التحميل" });
+      toast.error(e instanceof Error ? e.message : "فشل التحميل");
     } finally {
       setLoading(false);
     }
@@ -171,30 +171,31 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
     setEditingId(null);
     setForm(emptyValues);
     setShowForm(true);
-    setMessage(null);
   };
 
   const openEdit = (row: Row) => {
     setEditingId(row.id);
     setForm(toForm ? toForm(row) : (row as unknown as Record<string, unknown>));
     setShowForm(true);
-    setMessage(null);
   };
 
 
-  const handleDelete = async (row: Row) => {
-    if (!window.confirm(`حذف ${entityName}؟ هذا الإجراء لا يمكن التراجع عنه.`)) return;
+  const performDelete = async () => {
+    if (!confirmDelete) return;
+    const row = confirmDelete;
     setBusy(true);
     try {
       await remove({ data: { id: row.id } });
+      setConfirmDelete(null);
       await refresh();
-      setMessage({ kind: "ok", text: "تم الحذف" });
+      toast.success("تم الحذف");
     } catch (e) {
-      setMessage({ kind: "err", text: e instanceof Error ? e.message : "فشل الحذف" });
+      toast.error(e instanceof Error ? e.message : "فشل الحذف");
     } finally {
       setBusy(false);
     }
   };
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
