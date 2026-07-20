@@ -155,23 +155,44 @@ function AdminProjectsPage() {
     }
   };
 
-  const handleEdit = (r: Row) => {
-    setEditingId(r.id);
-    setForm({
-      slug: r.slug,
-      title: r.title,
-      summary: "",
-      category: r.category ?? "",
-      year: r.year,
-      status: r.status,
-      content_status: r.content_status,
-      featured: r.featured,
-      sort_order: r.sort_order,
-      cover_url: r.cover_url ?? "",
-      live_url: "",
-      github_url: "",
-    });
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  const handleEdit = async (r: Row) => {
+    setBusy(true);
+    setMsg(null);
+    try {
+      // Fetch full row (list view omits summary/live_url/github_url) so we
+      // don't silently overwrite them with empty strings on save.
+      const full = (await getById({ data: { id: r.id } })) as
+        | (Row & {
+            summary: string | null;
+            live_url: string | null;
+            github_url: string | null;
+          })
+        | null;
+      if (!full) {
+        setMsg("تعذّر تحميل بيانات المشروع");
+        return;
+      }
+      setEditingId(r.id);
+      setForm({
+        slug: full.slug,
+        title: full.title,
+        summary: full.summary ?? "",
+        category: full.category ?? "",
+        year: full.year,
+        status: full.status,
+        content_status: full.content_status,
+        featured: full.featured,
+        sort_order: full.sort_order,
+        cover_url: full.cover_url ?? "",
+        live_url: full.live_url ?? "",
+        github_url: full.github_url ?? "",
+      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (e) {
+      setMsg(e instanceof Error ? e.message : "فشل تحميل المشروع");
+    } finally {
+      setBusy(false);
+    }
   };
 
   const handleDelete = async (id: string) => {
