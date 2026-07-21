@@ -396,6 +396,7 @@ function AdminProjectsPage() {
               form.testimonial && typeof form.testimonial === "object" && !Array.isArray(form.testimonial)
                 ? (form.testimonial as Record<string, unknown>)
                 : null,
+            section_order: asStringArray(form.section_order),
           };
         }}
       />
