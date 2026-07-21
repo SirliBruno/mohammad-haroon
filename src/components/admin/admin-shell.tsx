@@ -12,6 +12,7 @@ type NavItem = { to: string; label: string; group?: string };
 const NAV: NavItem[] = [
   { to: "/admin", label: "الرئيسية", group: "عام" },
   { to: "/admin/content", label: "نصوص وصور الموقع", group: "المحتوى العام" },
+  { to: "/admin/home", label: "الصفحة الرئيسية", group: "الصفحة الرئيسية" },
   { to: "/admin/hero", label: "قسم الهيرو", group: "الصفحة الرئيسية" },
   { to: "/admin/projects", label: "المشاريع", group: "الأعمال" },
   { to: "/admin/services", label: "الخدمات", group: "الأعمال" },
