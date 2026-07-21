@@ -20,11 +20,15 @@ import {
   type TimelineItem,
 } from "@/components/ds";
 import { site } from "@/config/site";
-import { projects } from "@/data/projects";
+import { projects as staticProjects } from "@/data/projects";
 import { testimonials } from "@/data/testimonials";
 import { BrowserFrame } from "@/components/mockups/devices";
 import { DashboardUI, StoreUI, EditorUI } from "@/components/mockups/ui-samples";
 import { useHomeContent, getHomeText, getHomeList } from "@/lib/cms/home-content";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { listPublicProjects } from "@/lib/cms/projects-public.functions";
+import { toProject } from "@/lib/project-adapter";
 
 /* ---------------- Home-only data ---------------- */
 
@@ -117,7 +121,16 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
-  const featured = projects.filter((p) => p.featured).slice(0, 3);
+  const listFn = useServerFn(listPublicProjects);
+  const featuredQ = useQuery({
+    queryKey: ["home", "featured"],
+    queryFn: () => listFn({ data: { featured: true, limit: 3 } }),
+    staleTime: 60_000,
+  });
+  const cmsFeatured = (featuredQ.data?.rows ?? []).map(toProject);
+  const featured = cmsFeatured.length
+    ? cmsFeatured
+    : staticProjects.filter((p) => p.featured).slice(0, 3);
   const featuredTestimonials = testimonials.slice(0, 3);
   const { data: homeRows } = useHomeContent();
   const t = (k: string, fb: string) => getHomeText(homeRows, k, fb);
