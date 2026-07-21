@@ -163,38 +163,47 @@ const fields: FieldDef[] = [
     colSpan: 2,
   },
 
-  // ——— بيانات مهيكلة (JSON) ———
+  // ——— بيانات مهيكلة ———
   {
     name: "metrics",
     label: "المؤشرات (Metrics)",
-    type: "json",
+    type: "structured",
     colSpan: 2,
-    rows: 6,
-    help: 'مصفوفة مثل: [{"label":"زمن أول رؤية","value":"-93%"}]',
+    addLabel: "+ إضافة مؤشر",
+    schema: [
+      { name: "label", label: "التسمية", placeholder: "مثال: زمن أول رؤية" },
+      { name: "value", label: "القيمة", placeholder: "مثال: -93%" },
+    ],
   },
   {
     name: "results",
     label: "النتائج",
-    type: "json",
+    type: "structured",
     colSpan: 2,
-    rows: 6,
-    help: 'مصفوفة مثل: [{"label":"NPS","value":"72"}]',
+    addLabel: "+ إضافة نتيجة",
+    schema: [
+      { name: "label", label: "التسمية", placeholder: "مثال: NPS" },
+      { name: "value", label: "القيمة", placeholder: "مثال: 72" },
+    ],
   },
   {
     name: "gallery",
     label: "معرض الصور",
-    type: "json",
+    type: "gallery",
+    folder: "projects/gallery",
     colSpan: 2,
-    rows: 6,
-    help: 'مصفوفة مثل: [{"src":"https://...","alt":"وصف"}]',
+    help: "ارفع صورًا متعددة، وأضف نصًا بديلًا لكل صورة.",
   },
   {
     name: "testimonial",
     label: "شهادة العميل",
-    type: "json",
+    type: "object",
     colSpan: 2,
-    rows: 5,
-    help: 'كائن مثل: {"quote":"...","author":"...","role":"..."}',
+    schema: [
+      { name: "quote", label: "الاقتباس", type: "textarea", placeholder: "نص الشهادة…" },
+      { name: "author", label: "الاسم", placeholder: "اسم العميل" },
+      { name: "role", label: "المسمى", placeholder: "الرئيس التنفيذي، شركة …" },
+    ],
   },
 ];
 
