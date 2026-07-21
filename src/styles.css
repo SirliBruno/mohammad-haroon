@@ -318,6 +318,31 @@
   animation: shimmer 1.6s linear infinite;
 }
 
+/* Marquee (Infinite Photo Gallery) --------------------------------- */
+/* Track holds items duplicated once; translating -50% loops seamlessly. */
+@keyframes marquee-x {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+.marquee-track {
+  animation-name: marquee-x;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+.marquee-mask:hover .marquee-track,
+.marquee-mask:focus-within .marquee-track,
+.marquee-row:hover .marquee-track {
+  animation-play-state: paused;
+}
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+          mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-row { overflow-x: auto; }
+  .marquee-track { animation: none !important; transform: none !important; }
+}
 
 /* Accessibility: honor prefers-reduced-motion globally. */
 @media (prefers-reduced-motion: reduce) {
