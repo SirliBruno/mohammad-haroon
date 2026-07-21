@@ -8,6 +8,7 @@ import { HeroMobile } from "@/components/sections/hero-mobile";
 import { RotatingWord } from "@/components/sections/rotating-word";
 import { socials } from "@/config/socials";
 import { trackEvent } from "@/lib/analytics";
+import { useHomeContent, getHomeText } from "@/lib/cms/home-content";
 
 const socialIcon: Record<string, typeof Github> = {
   LinkedIn: Linkedin,
@@ -40,6 +41,17 @@ function Particles() {
 
 export function Hero() {
   const reduce = useReducedMotion();
+  const { data: homeRows } = useHomeContent();
+  const badge = getHomeText(homeRows, "home.hero.badge", "متاح لمشاريع جديدة");
+  const heroDesc = getHomeText(
+    homeRows,
+    "home.hero.description",
+    "مواقع وأنظمة رقمية تجمع تصميمًا هادئًا بأداءٍ سريع.\nنبنيها معك لتخدم عملك وتليق باسمك.",
+  );
+  const ctaPrimaryLabel = getHomeText(homeRows, "home.hero.cta_primary_label", "استعرض الأعمال");
+  const ctaSecondaryLabel = getHomeText(homeRows, "home.hero.cta_secondary_label", "عندك فكرة ؟");
+  const heroDescLines = heroDesc.split("\n");
+
 
   return (
     <section
@@ -78,7 +90,7 @@ export function Hero() {
                 <span className="absolute inset-0 animate-ping rounded-full bg-emerald-500/60" />
                 <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
               </span>
-              <span>متاح لمشاريع جديدة</span>
+              <span>{badge}</span>
             </div>
 
             <h1
@@ -92,21 +104,24 @@ export function Hero() {
             </h1>
 
             <p className="mt-8 max-w-md mx-auto lg:mx-0 text-base leading-[1.9] text-muted-foreground md:text-lg">
-              مواقع وأنظمة رقمية تجمع تصميمًا هادئًا بأداءٍ سريع.
-              <br />
-              نبنيها معك لتخدم عملك وتليق باسمك.
+              {heroDescLines.map((line, i) => (
+                <span key={i}>
+                  {line}
+                  {i < heroDescLines.length - 1 ? <br /> : null}
+                </span>
+              ))}
             </p>
 
             <div className="mt-12 flex flex-wrap items-center justify-center lg:justify-start gap-3">
               <DSButton asChild size="lg" variant="primary">
                 <Link to="/work">
-                  استعرض الأعمال
+                  {ctaPrimaryLabel}
                   <ArrowLeft />
                 </Link>
               </DSButton>
               <DSButton asChild size="lg" variant="outline">
                 <Link to="/contact" onClick={() => trackEvent("cta_click", { source: "hero_contact" })}>
-                  عندك فكرة ؟
+                  {ctaSecondaryLabel}
                   <ArrowUpRight />
                 </Link>
               </DSButton>

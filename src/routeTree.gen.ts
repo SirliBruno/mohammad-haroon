@@ -40,6 +40,7 @@ import { Route as AuthenticatedAdminProductsRouteImport } from './routes/_authen
 import { Route as AuthenticatedAdminMessagesRouteImport } from './routes/_authenticated/admin.messages'
 import { Route as AuthenticatedAdminMediaRouteImport } from './routes/_authenticated/admin.media'
 import { Route as AuthenticatedAdminIdeasRouteImport } from './routes/_authenticated/admin.ideas'
+import { Route as AuthenticatedAdminHomeRouteImport } from './routes/_authenticated/admin.home'
 import { Route as AuthenticatedAdminHeroRouteImport } from './routes/_authenticated/admin.hero'
 import { Route as AuthenticatedAdminExperiencesRouteImport } from './routes/_authenticated/admin.experiences'
 import { Route as AuthenticatedAdminContentRouteImport } from './routes/_authenticated/admin.content'
@@ -208,6 +209,11 @@ const AuthenticatedAdminIdeasRoute = AuthenticatedAdminIdeasRouteImport.update({
   path: '/admin/ideas',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedAdminHomeRoute = AuthenticatedAdminHomeRouteImport.update({
+  id: '/admin/home',
+  path: '/admin/home',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAdminHeroRoute = AuthenticatedAdminHeroRouteImport.update({
   id: '/admin/hero',
   path: '/admin/hero',
@@ -275,6 +281,7 @@ export interface FileRoutesByFullPath {
   '/admin/content': typeof AuthenticatedAdminContentRoute
   '/admin/experiences': typeof AuthenticatedAdminExperiencesRoute
   '/admin/hero': typeof AuthenticatedAdminHeroRoute
+  '/admin/home': typeof AuthenticatedAdminHomeRoute
   '/admin/ideas': typeof AuthenticatedAdminIdeasRoute
   '/admin/media': typeof AuthenticatedAdminMediaRoute
   '/admin/messages': typeof AuthenticatedAdminMessagesRoute
@@ -311,6 +318,7 @@ export interface FileRoutesByTo {
   '/admin/content': typeof AuthenticatedAdminContentRoute
   '/admin/experiences': typeof AuthenticatedAdminExperiencesRoute
   '/admin/hero': typeof AuthenticatedAdminHeroRoute
+  '/admin/home': typeof AuthenticatedAdminHomeRoute
   '/admin/ideas': typeof AuthenticatedAdminIdeasRoute
   '/admin/media': typeof AuthenticatedAdminMediaRoute
   '/admin/messages': typeof AuthenticatedAdminMessagesRoute
@@ -352,6 +360,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/content': typeof AuthenticatedAdminContentRoute
   '/_authenticated/admin/experiences': typeof AuthenticatedAdminExperiencesRoute
   '/_authenticated/admin/hero': typeof AuthenticatedAdminHeroRoute
+  '/_authenticated/admin/home': typeof AuthenticatedAdminHomeRoute
   '/_authenticated/admin/ideas': typeof AuthenticatedAdminIdeasRoute
   '/_authenticated/admin/media': typeof AuthenticatedAdminMediaRoute
   '/_authenticated/admin/messages': typeof AuthenticatedAdminMessagesRoute
@@ -393,6 +402,7 @@ export interface FileRouteTypes {
     | '/admin/content'
     | '/admin/experiences'
     | '/admin/hero'
+    | '/admin/home'
     | '/admin/ideas'
     | '/admin/media'
     | '/admin/messages'
@@ -429,6 +439,7 @@ export interface FileRouteTypes {
     | '/admin/content'
     | '/admin/experiences'
     | '/admin/hero'
+    | '/admin/home'
     | '/admin/ideas'
     | '/admin/media'
     | '/admin/messages'
@@ -469,6 +480,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/content'
     | '/_authenticated/admin/experiences'
     | '/_authenticated/admin/hero'
+    | '/_authenticated/admin/home'
     | '/_authenticated/admin/ideas'
     | '/_authenticated/admin/media'
     | '/_authenticated/admin/messages'
@@ -720,6 +732,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIdeasRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/home': {
+      id: '/_authenticated/admin/home'
+      path: '/admin/home'
+      fullPath: '/admin/home'
+      preLoaderRoute: typeof AuthenticatedAdminHomeRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/hero': {
       id: '/_authenticated/admin/hero'
       path: '/admin/hero'
@@ -780,6 +799,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminContentRoute: typeof AuthenticatedAdminContentRoute
   AuthenticatedAdminExperiencesRoute: typeof AuthenticatedAdminExperiencesRoute
   AuthenticatedAdminHeroRoute: typeof AuthenticatedAdminHeroRoute
+  AuthenticatedAdminHomeRoute: typeof AuthenticatedAdminHomeRoute
   AuthenticatedAdminIdeasRoute: typeof AuthenticatedAdminIdeasRoute
   AuthenticatedAdminMediaRoute: typeof AuthenticatedAdminMediaRoute
   AuthenticatedAdminMessagesRoute: typeof AuthenticatedAdminMessagesRoute
@@ -799,6 +819,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminContentRoute: AuthenticatedAdminContentRoute,
   AuthenticatedAdminExperiencesRoute: AuthenticatedAdminExperiencesRoute,
   AuthenticatedAdminHeroRoute: AuthenticatedAdminHeroRoute,
+  AuthenticatedAdminHomeRoute: AuthenticatedAdminHomeRoute,
   AuthenticatedAdminIdeasRoute: AuthenticatedAdminIdeasRoute,
   AuthenticatedAdminMediaRoute: AuthenticatedAdminMediaRoute,
   AuthenticatedAdminMessagesRoute: AuthenticatedAdminMessagesRoute,
