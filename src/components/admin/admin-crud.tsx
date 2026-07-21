@@ -764,6 +764,10 @@ function sanitizeForm(form: Record<string, unknown>, fields: FieldDef[]): Record
       out[field.name] = v === "" || v === null || v === undefined ? null : Number(v);
     } else if (field.type === "tags") {
       out[field.name] = Array.isArray(v) ? v : [];
+    } else if (field.type === "gallery" || field.type === "structured") {
+      out[field.name] = Array.isArray(v) ? v : [];
+    } else if (field.type === "object") {
+      out[field.name] = v && typeof v === "object" && !Array.isArray(v) ? v : null;
     } else if (field.type === "image" || field.type === "url") {
       const s = typeof v === "string" ? v.trim() : "";
       out[field.name] = s || null;
