@@ -1,79 +1,73 @@
-
 ## الهدف
 
-إنشاء صفحة أدمن واحدة `/admin/home` تجمع جميع أقسام الصفحة الرئيسية في تبويبات، مع القدرة على تعديل النصوص والأزرار والعناصر لكل قسم مباشرة، دون الحاجة لفتح صفحات إدارة متفرقة.
+تحسين صفحة إدارة المشاريع لتصبح سهلة الاستخدام (بدون كتابة JSON يدويًا)، وإضافة رافع صور حقيقي لأي مكان يعرض صورة أو معرض صور.
 
-## أقسام الصفحة الرئيسية الحالية
+## المشاكل الحالية في `/admin/projects`
 
-بعد فحص `src/routes/index.tsx`، الأقسام هي:
+1. حقل "معرض الصور" يطلب من المستخدم كتابة JSON يدويًا مثل `[{"src":"...","alt":"..."}]` — غير قابل للاستخدام.
+2. حقل "المؤشرات" و"النتائج" و"شهادة العميل" و"مسار التصميم" كلها JSON خام.
+3. عند حفظ حقل JSON فارغ، الخادم يرفض القيمة أحيانًا بسبب اختلاف نوع (string vs array) — تم إصلاح جزء منه، سنكمله.
+4. لا توجد معاينة للصور المرفوعة داخل المعرض.
+5. صفحات أخرى فيها نفس المشكلة: `/admin/products` (gallery)، `/admin/services` (benefits/features/workflow/faq)، `/admin/content` (metadata) — لكن التركيز على الصور.
 
-1. **Hero** — العنوان الدوّار، الوصف، أزرار CTA، والكلمات الأربع المتحرّكة (فكرتك/موقعك/متجرك/نظامك) + مشاريع الهيرو (تُدار مسبقًا في `/admin/hero`).
-2. **Featured Projects** — الترويسة (eyebrow, title, description) — البطاقات نفسها تأتي من جدول `projects`.
-3. **Services** — الترويسة + قائمة الخدمات الأربع الظاهرة في الهوم (`homeServices` حالياً hardcoded).
-4. **How I Work** — الترويسة + مراحل العمل الست (`workflow` hardcoded حالياً).
-5. **Experience** — الترويسة فقط (البيانات من `experiences`).
-6. **Certificates** — الترويسة + قائمة الشهادات الأربع الظاهرة في الهوم (`certificates` hardcoded حالياً).
-7. **Testimonials** — الترويسة (البيانات من `testimonials`).
-8. **Final CTA** — العنوان، الوصف، ونصوص/روابط الأزرار.
+## الخطة
 
-## الاستراتيجية
+### 1) مكوّنات جديدة قابلة لإعادة الاستخدام
 
-الاستفادة من جدول `site_content` الموجود (key/value متعدد اللغات مع image_url وmetadata JSON) بدل إنشاء جداول جديدة — كلّ حقل قابل للتحرير يصبح صفًا بمفتاح ثابت مثل `home.hero.headline` أو `home.workflow` (JSON للقوائم).
+- `GalleryInput`: يعرض شبكة صور، زر "إضافة صورة" يفتح رافع الصور نفسه المستخدم في `ImageInput`، مع حقل نص بديل (alt) لكل صورة، وإعادة ترتيب بالسحب/أزرار (أعلى/أسفل)، وحذف. يُخرج مصفوفة `{src, alt}`.
+- `StructuredListInput`: محرر مصفوفة من كائنات بحقول محددة (مثال: `label/value` للمؤشرات والنتائج، `title/description` لمسار التصميم، `question/answer` للأسئلة الشائعة). صفوف قابلة للإضافة/الحذف/إعادة الترتيب.
+- `ObjectInput`: محرر كائن واحد بحقول محددة (شهادة العميل: `quote`, `author`, `role`).
 
-### الواجهة: `/admin/home`
+### 2) توسيع نظام الحقول في `AdminCrud`
 
-- Tabs عمودي/أفقي بالأقسام الثمانية.
-- كل تبويب يعرض نموذجًا مخصّصًا (وليس CRUD جدولي) — الحقول جاهزة ومسمّاة بالعربي.
-- زر "حفظ" لكل قسم يقوم بـ `upsert` على مفاتيح ذلك القسم دفعة واحدة.
-- روابط سريعة للأقسام المدارة في صفحات مستقلة (مشاريع الهيرو، المشاريع، الخدمات، الشهادات، التوصيات) لتفادي التكرار.
+إضافة أنواع جديدة إلى `FieldDef`:
+- `gallery` — يستخدم `GalleryInput`.
+- `structured` — يأخذ `schema: { name, label, type }[]` ويستخدم `StructuredListInput`.
+- `object` — نفس الفكرة لكائن مفرد.
 
-### مفاتيح `site_content` المقترحة
+كل هذه الأنواع تُخزّن كـ مصفوفة/كائن جافاسكربت في الحالة، ولا حاجة لتحويل JSON نصي — يحل مشكلة "Expected array, received string" جذريًا.
 
-```text
-home.hero.headline_prefix   → "أعطِ الخبز لخبّازه وأعطِ"
-home.hero.headline_suffix   → "لأهلها"
-home.hero.rotating_words    → JSON: [{word, color}, ...]
-home.hero.description       → نص
-home.hero.cta_primary       → JSON: {label, href}
-home.hero.cta_secondary     → JSON: {label, href}
+### 3) تحديث `/admin/projects`
 
-home.work.eyebrow / title / description
-home.services.eyebrow / title / description
-home.services.items         → JSON: [{slug, title, outcome, tags[]}]
-home.process.eyebrow / title / description
-home.process.steps          → JSON: [{step, title, description}]
-home.experience.eyebrow / title / description
-home.certificates.eyebrow / title / description
-home.certificates.items     → JSON: [{title, issuer, issuedAt}]
-home.testimonials.eyebrow / title
-home.cta.eyebrow / title / description / primary / secondary
-```
+استبدال الحقول التالية:
+- `gallery` → `gallery` (رافع صور مرئي).
+- `metrics` → `structured` بمخطط `{ label, value }`.
+- `results` → `structured` بمخطط `{ label, value }`.
+- `design_process` → يبقى نصًا حرًا (textarea)، مع خيار `structured` بمخطط `{ title, description }` إذا رغب المستخدم.
+- `testimonial` → `object` بمخطط `{ quote, author, role }`.
 
-### تعديل الواجهة الأمامية
+الحقول الأخرى (title, slug, summary, tags, technologies, cover_url, ...) تبقى كما هي.
 
-- إنشاء hook `useHomeContent()` يجلب كل مفاتيح `home.*` مرة واحدة عبر `listSiteContent({ group_name: "home" })` مع TanStack Query.
-- تعديل `src/routes/index.tsx` ليستخدم القيم من CMS مع fallback ثابت للقيم الحالية (نفس نمط Services/Career).
+### 4) تعميم رافع الصور على باقي الصفحات
 
-### الملفات الجديدة
+- `/admin/products`: `gallery` → `GalleryInput`.
+- (اختياري في نفس الجولة) `/admin/services`: `benefits/features/workflow/faq` → `StructuredListInput`، لأنها JSON خام حاليًا.
 
-- `src/routes/_authenticated/admin.home.tsx` — الصفحة بتبويبات.
-- `src/components/admin/home/*` — نموذج لكل قسم (`HeroForm`, `ServicesForm`, `ProcessForm`, ...).
-- `src/lib/cms/home-content.ts` — helpers: `useHomeContent`, `saveHomeSection`, ومفاتيح ثابتة.
-- Migration بذور (seed) لإدخال المفاتيح الافتراضية بالقيم الحالية من `index.tsx` حتى لا تظهر الصفحة فارغة.
+### 5) تحسينات صغيرة أخرى في صفحة المشاريع
 
-### تحديث الشريط الجانبي
+- توسيع حد حقل "الملخص" و"العميل" و"المدة" في مخطط Zod حسب الحاجة (بدون كسر التوافق).
+- عرض صورة الغلاف كصورة مصغّرة في جدول القائمة.
+- التأكد من تطبيع كل الحقول الاختيارية (null بدل سلسلة فارغة) قبل الإرسال.
 
-إضافة رابط "الصفحة الرئيسية" في `AdminSidebar` قبل باقي روابط المحتوى.
+## التفاصيل التقنية
 
-## الأمان
+- كل الصور تُرفع إلى نفس دلو التخزين الخاص (`media`) عبر `signHeroMediaPath`، مع مجلد `projects/gallery`.
+- `GalleryInput` يخزّن `{src: string; alt: string}[]` — متوافق مع مخطط `mediaSchema` الموجود في `src/features/projects/schema.ts` ومع `jsonArray` في `src/features/cms/schemas.ts`.
+- عند التحرير، لو كانت البيانات القديمة سلاسل روابط فقط، نطبّعها إلى `{src, alt: ""}`.
+- في `AdminCrud.sanitizeForm`: الأنواع الجديدة تُمرّر كما هي بدون `JSON.parse`.
 
-- كل الكتابات تمر عبر `upsertSiteContent` الموجودة (تتطلب `requireSupabaseAuth` + `requireAdmin`).
-- القراءة العامة عبر `listSiteContent` (متاحة لأنّ المحتوى غير حسّاس).
-- لا حاجة لتعديلات RLS — الجدول مضبوط مسبقًا.
+## ملفات ستُعدَّل أو تُنشأ
+
+- جديد: `src/components/admin/gallery-input.tsx`
+- جديد: `src/components/admin/structured-list-input.tsx`
+- جديد: `src/components/admin/object-input.tsx`
+- تعديل: `src/components/admin/admin-crud.tsx` (أنواع حقول جديدة + معالجة الحفظ)
+- تعديل: `src/routes/_authenticated/admin.projects.tsx`
+- تعديل: `src/routes/_authenticated/admin.products.tsx`
+- تعديل (اختياري): `src/routes/_authenticated/admin.services.tsx`
 
 ## خارج النطاق
 
-- لا تغييرات على تصميم `/` نفسه.
-- بيانات المشاريع والشهادات والتوصيات تبقى في جداولها المستقلة — هنا نُدير فقط "الترويسات" و"القوائم القصيرة الظاهرة في الهوم".
-
-هل أبدأ التنفيذ؟
+- تغيير قاعدة البيانات أو مخطط الجداول.
+- إعادة تصميم الواجهة العامة (`/work`, `/work/$slug`).
+- رفع فيديو أو ملفات غير الصور.

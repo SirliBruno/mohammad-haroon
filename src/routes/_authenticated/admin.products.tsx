@@ -25,7 +25,7 @@ const FIELDS: FieldDef[] = [
   { name: "currency", label: "العملة", type: "text", help: "USD أو SAR", dir: "ltr" },
   { name: "external_url", label: "رابط خارجي", type: "url", dir: "ltr", colSpan: 2 },
   { name: "tags", label: "الوسوم", type: "tags", colSpan: 2 },
-  { name: "gallery", label: "معرض الصور (JSON)", type: "json", colSpan: 2, help: '["url1","url2"] أو [{"url":"...","alt":"..."}]' },
+  { name: "gallery", label: "معرض الصور", type: "gallery", folder: "products/gallery", colSpan: 2, help: "ارفع صورًا متعددة مع نص بديل لكل صورة." },
   { name: "featured", label: "مميّز", type: "boolean" },
   { name: "content_status", label: "الحالة", type: "select", options: STATUS },
   { name: "sort_order", label: "الترتيب", type: "number" },

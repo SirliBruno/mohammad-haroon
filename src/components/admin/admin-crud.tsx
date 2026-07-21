@@ -3,6 +3,9 @@ import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient, keepPreviousData } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { ImageInput } from "./image-input";
+import { GalleryInput } from "./gallery-input";
+import { StructuredListInput, type StructuredFieldSchema } from "./structured-list-input";
+import { ObjectInput } from "./object-input";
 import { cn } from "@/lib/utils";
 
 export type FieldDef =
@@ -51,6 +54,31 @@ export type FieldDef =
       label: string;
       type: "image";
       folder?: string;
+      help?: string;
+      colSpan?: 1 | 2;
+    }
+  | {
+      name: string;
+      label: string;
+      type: "gallery";
+      folder?: string;
+      help?: string;
+      colSpan?: 1 | 2;
+    }
+  | {
+      name: string;
+      label: string;
+      type: "structured";
+      schema: StructuredFieldSchema[];
+      addLabel?: string;
+      help?: string;
+      colSpan?: 1 | 2;
+    }
+  | {
+      name: string;
+      label: string;
+      type: "object";
+      schema: StructuredFieldSchema[];
       help?: string;
       colSpan?: 1 | 2;
     }
@@ -656,6 +684,49 @@ function FieldRenderer({
     );
   }
 
+  if (field.type === "gallery") {
+    return (
+      <div className={cn("flex flex-col gap-2", colSpan)}>
+        {labelEl}
+        <GalleryInput
+          value={value}
+          onChange={(items) => onChange(items)}
+          folder={field.folder ?? "gallery"}
+        />
+        {helpEl}
+      </div>
+    );
+  }
+
+  if (field.type === "structured") {
+    return (
+      <div className={cn("flex flex-col gap-2", colSpan)}>
+        {labelEl}
+        <StructuredListInput
+          value={value}
+          onChange={(items) => onChange(items)}
+          schema={field.schema}
+          addLabel={field.addLabel}
+        />
+        {helpEl}
+      </div>
+    );
+  }
+
+  if (field.type === "object") {
+    return (
+      <div className={cn("flex flex-col gap-2", colSpan)}>
+        {labelEl}
+        <ObjectInput
+          value={value}
+          onChange={(v) => onChange(v)}
+          schema={field.schema}
+        />
+        {helpEl}
+      </div>
+    );
+  }
+
   // text/url/date/datetime
   let displayVal = (value as string) ?? "";
   if (field.type === "date" && displayVal) displayVal = displayVal.slice(0, 10);
@@ -693,6 +764,10 @@ function sanitizeForm(form: Record<string, unknown>, fields: FieldDef[]): Record
       out[field.name] = v === "" || v === null || v === undefined ? null : Number(v);
     } else if (field.type === "tags") {
       out[field.name] = Array.isArray(v) ? v : [];
+    } else if (field.type === "gallery" || field.type === "structured") {
+      out[field.name] = Array.isArray(v) ? v : [];
+    } else if (field.type === "object") {
+      out[field.name] = v && typeof v === "object" && !Array.isArray(v) ? v : null;
     } else if (field.type === "image" || field.type === "url") {
       const s = typeof v === "string" ? v.trim() : "";
       out[field.name] = s || null;

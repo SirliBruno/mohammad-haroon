@@ -163,38 +163,47 @@ const fields: FieldDef[] = [
     colSpan: 2,
   },
 
-  // ——— بيانات مهيكلة (JSON) ———
+  // ——— بيانات مهيكلة ———
   {
     name: "metrics",
     label: "المؤشرات (Metrics)",
-    type: "json",
+    type: "structured",
     colSpan: 2,
-    rows: 6,
-    help: 'مصفوفة مثل: [{"label":"زمن أول رؤية","value":"-93%"}]',
+    addLabel: "+ إضافة مؤشر",
+    schema: [
+      { name: "label", label: "التسمية", placeholder: "مثال: زمن أول رؤية" },
+      { name: "value", label: "القيمة", placeholder: "مثال: -93%" },
+    ],
   },
   {
     name: "results",
     label: "النتائج",
-    type: "json",
+    type: "structured",
     colSpan: 2,
-    rows: 6,
-    help: 'مصفوفة مثل: [{"label":"NPS","value":"72"}]',
+    addLabel: "+ إضافة نتيجة",
+    schema: [
+      { name: "label", label: "التسمية", placeholder: "مثال: NPS" },
+      { name: "value", label: "القيمة", placeholder: "مثال: 72" },
+    ],
   },
   {
     name: "gallery",
     label: "معرض الصور",
-    type: "json",
+    type: "gallery",
+    folder: "projects/gallery",
     colSpan: 2,
-    rows: 6,
-    help: 'مصفوفة مثل: [{"src":"https://...","alt":"وصف"}]',
+    help: "ارفع صورًا متعددة، وأضف نصًا بديلًا لكل صورة.",
   },
   {
     name: "testimonial",
     label: "شهادة العميل",
-    type: "json",
+    type: "object",
     colSpan: 2,
-    rows: 5,
-    help: 'كائن مثل: {"quote":"...","author":"...","role":"..."}',
+    schema: [
+      { name: "quote", label: "الاقتباس", type: "textarea", placeholder: "نص الشهادة…" },
+      { name: "author", label: "الاسم", placeholder: "اسم العميل" },
+      { name: "role", label: "المسمى", placeholder: "الرئيس التنفيذي، شركة …" },
+    ],
   },
 ];
 
@@ -315,19 +324,6 @@ const columns: ListColumn<Row>[] = [
 const asStringArray = (v: unknown): string[] =>
   Array.isArray(v) ? v.map((x) => String(x)).filter(Boolean) : [];
 
-const asJsonOrNull = (v: unknown, fallback: unknown = null): unknown => {
-  if (v === undefined || v === null) return fallback;
-  if (typeof v === "string") {
-    const s = v.trim();
-    if (!s) return fallback;
-    try {
-      return JSON.parse(s);
-    } catch {
-      throw new Error("تنسيق JSON غير صالح — تأكد من صحة الأقواس وعلامات الاقتباس.");
-    }
-  }
-  return v ?? fallback;
-};
 
 function AdminProjectsPage() {
   return (
@@ -374,10 +370,13 @@ function AdminProjectsPage() {
             design_process: (form.design_process as string) || null,
             development: (form.development as string) || null,
             lessons: asStringArray(form.lessons),
-            metrics: (asJsonOrNull(form.metrics, []) as unknown[]) ?? [],
-            results: (asJsonOrNull(form.results, []) as unknown[]) ?? [],
-            gallery: (asJsonOrNull(form.gallery, []) as unknown[]) ?? [],
-            testimonial: asJsonOrNull(form.testimonial, null),
+            metrics: Array.isArray(form.metrics) ? (form.metrics as unknown[]) : [],
+            results: Array.isArray(form.results) ? (form.results as unknown[]) : [],
+            gallery: Array.isArray(form.gallery) ? (form.gallery as unknown[]) : [],
+            testimonial:
+              form.testimonial && typeof form.testimonial === "object" && !Array.isArray(form.testimonial)
+                ? (form.testimonial as Record<string, unknown>)
+                : null,
           };
         }}
       />
