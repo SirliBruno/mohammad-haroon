@@ -24,6 +24,7 @@ import { projects } from "@/data/projects";
 import { testimonials } from "@/data/testimonials";
 import { BrowserFrame } from "@/components/mockups/devices";
 import { DashboardUI, StoreUI, EditorUI } from "@/components/mockups/ui-samples";
+import { useHomeContent, getHomeText, getHomeList } from "@/lib/cms/home-content";
 
 /* ---------------- Home-only data ---------------- */
 
@@ -118,6 +119,23 @@ export const Route = createFileRoute("/")({
 function Home() {
   const featured = projects.filter((p) => p.featured).slice(0, 3);
   const featuredTestimonials = testimonials.slice(0, 3);
+  const { data: homeRows } = useHomeContent();
+  const t = (k: string, fb: string) => getHomeText(homeRows, k, fb);
+  const homeServicesLive = getHomeList<(typeof homeServices)[number]>(
+    homeRows,
+    "home.services.items",
+    homeServices,
+  );
+  const workflowLive = getHomeList<(typeof workflow)[number]>(
+    homeRows,
+    "home.process.steps",
+    workflow,
+  );
+  const certsLive = getHomeList<Certificate>(
+    homeRows,
+    "home.certificates.items",
+    certificates,
+  );
 
   return (
     <>
