@@ -1,0 +1,1 @@
+ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS section_order text[] NOT NULL DEFAULT ARRAY[]::text[];

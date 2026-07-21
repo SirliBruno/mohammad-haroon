@@ -530,6 +530,7 @@ export type Database = {
           research: string | null
           results: Json
           role: string | null
+          section_order: string[]
           slug: string
           solution: string | null
           sort_order: number
@@ -566,6 +567,7 @@ export type Database = {
           research?: string | null
           results?: Json
           role?: string | null
+          section_order?: string[]
           slug: string
           solution?: string | null
           sort_order?: number
@@ -602,6 +604,7 @@ export type Database = {
           research?: string | null
           results?: Json
           role?: string | null
+          section_order?: string[]
           slug?: string
           solution?: string | null
           sort_order?: number

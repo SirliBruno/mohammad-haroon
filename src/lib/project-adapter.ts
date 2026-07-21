@@ -130,6 +130,7 @@ export function toProject(row: Row): Project {
     development: row.development ?? undefined,
     lessons: row.lessons && row.lessons.length ? row.lessons : undefined,
     highlights: row.highlights && row.highlights.length ? row.highlights : undefined,
+    sectionOrder: Array.isArray(row.section_order) && row.section_order.length ? row.section_order : undefined,
     testimonial: mapTestimonial(row.testimonial),
     featured: Boolean(row.featured),
     status: mapStatus(row.status),

@@ -89,6 +89,14 @@ export type FieldDef =
       help?: string;
       rows?: number;
       colSpan?: 1 | 2;
+    }
+  | {
+      name: string;
+      label: string;
+      type: "sortable";
+      items: { value: string; label: string }[];
+      help?: string;
+      colSpan?: 1 | 2;
     };
 
 export type ListColumn<Row> = {
@@ -788,6 +796,76 @@ function FieldRenderer({
           onChange={(v) => onChange(v)}
           schema={field.schema}
         />
+        {helpEl}
+      </div>
+    );
+  }
+
+  if (field.type === "sortable") {
+    const stored = Array.isArray(value) ? (value as string[]) : [];
+    const known = new Set(field.items.map((i) => i.value));
+    const validStored = stored.filter((v) => known.has(v));
+    const missing = field.items.map((i) => i.value).filter((v) => !validStored.includes(v));
+    const order = [...validStored, ...missing];
+    const move = (idx: number, dir: -1 | 1) => {
+      const target = idx + dir;
+      if (target < 0 || target >= order.length) return;
+      const next = [...order];
+      [next[idx], next[target]] = [next[target], next[idx]];
+      onChange(next);
+    };
+    const reset = () => onChange(field.items.map((i) => i.value));
+    return (
+      <div className={cn("flex flex-col gap-2", colSpan)}>
+        <div className="flex items-center justify-between">
+          {labelEl}
+          <button
+            type="button"
+            onClick={reset}
+            className="text-[11px] text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
+          >
+            إعادة الترتيب الافتراضي
+          </button>
+        </div>
+        <ol className="flex flex-col gap-1.5 rounded-md border border-neutral-200 bg-white p-2 dark:border-neutral-800 dark:bg-neutral-900">
+          {order.map((key, i) => {
+            const item = field.items.find((it) => it.value === key);
+            if (!item) return null;
+            return (
+              <li
+                key={key}
+                className="flex items-center justify-between gap-3 rounded-md bg-neutral-50 px-3 py-2 text-sm dark:bg-neutral-800/50"
+              >
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className="text-[11px] tabular-nums text-neutral-500 w-5" dir="ltr">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="truncate">{item.label}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => move(i, -1)}
+                    disabled={i === 0}
+                    className="rounded border border-neutral-200 px-2 py-0.5 text-xs disabled:opacity-40 hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-800"
+                    aria-label="نقل لأعلى"
+                  >
+                    ↑
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => move(i, 1)}
+                    disabled={i === order.length - 1}
+                    className="rounded border border-neutral-200 px-2 py-0.5 text-xs disabled:opacity-40 hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-800"
+                    aria-label="نقل لأسفل"
+                  >
+                    ↓
+                  </button>
+                </div>
+              </li>
+            );
+          })}
+        </ol>
         {helpEl}
       </div>
     );
