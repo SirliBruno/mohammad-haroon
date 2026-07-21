@@ -383,12 +383,19 @@ function AdminProjectsPage() {
             design_process: (form.design_process as string) || null,
             development: (form.development as string) || null,
             lessons: asStringArray(form.lessons),
-            metrics: (asJsonOrNull(form.metrics, []) as unknown[]) ?? [],
-            results: (asJsonOrNull(form.results, []) as unknown[]) ?? [],
-            gallery: (asJsonOrNull(form.gallery, []) as unknown[]) ?? [],
-            testimonial: asJsonOrNull(form.testimonial, null),
+            metrics: Array.isArray(form.metrics) ? (form.metrics as unknown[]) : [],
+            results: Array.isArray(form.results) ? (form.results as unknown[]) : [],
+            gallery: Array.isArray(form.gallery) ? (form.gallery as unknown[]) : [],
+            testimonial:
+              form.testimonial && typeof form.testimonial === "object" && !Array.isArray(form.testimonial)
+                ? (form.testimonial as Record<string, unknown>)
+                : null,
           };
         }}
+      />
+    </AdminShell>
+  );
+}
       />
     </AdminShell>
   );
