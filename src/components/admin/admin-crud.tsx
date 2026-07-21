@@ -89,6 +89,14 @@ export type FieldDef =
       help?: string;
       rows?: number;
       colSpan?: 1 | 2;
+    }
+  | {
+      name: string;
+      label: string;
+      type: "sortable";
+      items: { value: string; label: string }[];
+      help?: string;
+      colSpan?: 1 | 2;
     };
 
 export type ListColumn<Row> = {
