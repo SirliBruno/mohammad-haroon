@@ -357,10 +357,6 @@ function ProjectCard({ project, className }: { project: FeaturedProject; classNa
           <span className="text-foreground">{project.category}</span>
         </div>
         <div className="flex items-center justify-between">
-          <span className="text-muted-foreground">التقنية</span>
-          <span className="text-foreground" dir="ltr">{project.tech}</span>
-        </div>
-        <div className="flex items-center justify-between">
           <span className="text-muted-foreground">السنة</span>
           <span className="text-foreground" dir="ltr">{project.year}</span>
         </div>
