@@ -213,6 +213,14 @@ const fields: FieldDef[] = [
       { name: "role", label: "المسمى", placeholder: "الرئيس التنفيذي، شركة …" },
     ],
   },
+  {
+    name: "section_order",
+    label: "ترتيب الأقسام في صفحة المشروع",
+    type: "sortable",
+    colSpan: 2,
+    items: PROJECT_SECTION_OPTIONS,
+    help: "أعِد ترتيب الأقسام حسب رغبتك. تظهر فقط الأقسام التي أضفت لها محتوى.",
+  },
 ];
 
 const emptyValues: Record<string, unknown> = {
@@ -246,6 +254,7 @@ const emptyValues: Record<string, unknown> = {
   results: [],
   gallery: [],
   testimonial: null,
+  section_order: [...PROJECT_SECTION_KEYS],
 };
 
 const columns: ListColumn<Row>[] = [
