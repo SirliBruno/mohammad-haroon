@@ -70,7 +70,7 @@ export const projectInputSchema = z.object({
   technologies: stringArray(),
   cover_url: optionalUrl,
   gallery: jsonArray,
-  role: optionalText(120),
+  role: optionalText(500),
   client: optionalText(120),
   timeline: optionalText(120),
   year: z.number().int().min(1970).max(2100).optional().nullable(),
