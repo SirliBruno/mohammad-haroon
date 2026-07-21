@@ -3,6 +3,9 @@ import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient, keepPreviousData } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { ImageInput } from "./image-input";
+import { GalleryInput } from "./gallery-input";
+import { StructuredListInput, type StructuredFieldSchema } from "./structured-list-input";
+import { ObjectInput } from "./object-input";
 import { cn } from "@/lib/utils";
 
 export type FieldDef =
