@@ -362,6 +362,168 @@ function RelatedCard({ project }: { project: Project }) {
   );
 }
 
+function SectionByKey({ sectionKey, project }: { sectionKey: ProjectSectionKey; project: Project }) {
+  switch (sectionKey) {
+    case "problem":
+      return project.problem ? (
+        <Reveal>
+          <SectionHeading eyebrow="المشكلة" title="ما الذي كان يستدعي التغيير" />
+          <p className="mt-6 max-w-2xl text-base leading-relaxed text-foreground/85">{project.problem}</p>
+        </Reveal>
+      ) : null;
+    case "goals":
+      return project.goals && project.goals.length ? (
+        <Reveal>
+          <SectionHeading eyebrow="الأهداف" title="ما سعينا لتحقيقه" />
+          <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+            {project.goals.map((g) => (
+              <li key={g} className="flex items-start gap-3 rounded-xl border border-border/60 bg-card p-5">
+                <span className="mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-primary/10 text-primary">
+                  <Target className="size-3.5" aria-hidden />
+                </span>
+                <span className="text-sm text-foreground/85">{g}</span>
+              </li>
+            ))}
+          </ul>
+        </Reveal>
+      ) : null;
+    case "research":
+      return project.research ? (
+        <Reveal>
+          <SectionHeading eyebrow="البحث" title="ما تعلّمناه أولًا" />
+          <p className="mt-6 max-w-2xl text-base leading-relaxed text-foreground/85">{project.research}</p>
+        </Reveal>
+      ) : null;
+    case "solution":
+      return project.solution ? (
+        <Reveal>
+          <SectionHeading eyebrow="الحل" title="كيف تعاملنا مع المشكلة" />
+          <p className="mt-6 max-w-2xl text-base leading-relaxed text-foreground/85">{project.solution}</p>
+        </Reveal>
+      ) : null;
+    case "designProcess":
+      return project.designProcess && project.designProcess.length ? (
+        <Reveal>
+          <SectionHeading eyebrow="عملية التصميم" title="من الفكرة حتى الإطلاق" />
+          <ol className="mt-8 grid gap-4 sm:grid-cols-2">
+            {project.designProcess.map((step, i) => (
+              <li key={step.title} className="rounded-xl border border-border/60 bg-card p-6">
+                <p className="text-xs font-medium tracking-widest text-muted-foreground" dir="ltr">
+                  {String(i + 1).padStart(2, "0")}
+                </p>
+                <h3 className="mt-3 text-base font-semibold tracking-tight">{step.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{step.description}</p>
+              </li>
+            ))}
+          </ol>
+        </Reveal>
+      ) : null;
+    case "development":
+      return project.development ? (
+        <Reveal>
+          <SectionHeading eyebrow="التطوير" title="كيف تم البناء" />
+          <p className="mt-6 max-w-2xl text-base leading-relaxed text-foreground/85">{project.development}</p>
+        </Reveal>
+      ) : null;
+    case "stack":
+      return project.stack.length ? (
+        <Reveal>
+          <SectionHeading eyebrow="التقنيات" title="ما يُشغّل المشروع" />
+          <ul className="mt-6 flex flex-wrap gap-2">
+            {project.stack.map((s) => (
+              <li key={s} className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-card px-3 py-1.5 text-xs font-medium text-foreground/85">
+                <Layers className="size-3 text-primary" aria-hidden />
+                {s}
+              </li>
+            ))}
+          </ul>
+        </Reveal>
+      ) : null;
+    case "gallery":
+      return project.gallery.length ? (
+        <Reveal>
+          <SectionHeading eyebrow="المعرض" title="شاشات مختارة" />
+          <div className="mt-8">
+            <Grid cols={{ base: 1, md: 2 }} gap="md">
+              {project.gallery.map((g, i) => (
+                <div key={i} className="aspect-[4/3] overflow-hidden rounded-xl border border-border/60 bg-card transition-transform duration-500 hover:scale-[1.01]">
+                  <img src={g.src} alt={g.alt} className="size-full object-cover" loading="lazy" />
+                </div>
+              ))}
+            </Grid>
+          </div>
+        </Reveal>
+      ) : null;
+    case "metrics":
+      return project.metrics?.length ? (
+        <Reveal>
+          <SectionHeading eyebrow="النتائج" title="ما تحقّق فعلًا، بالأرقام" />
+          <dl className="mt-8 grid gap-4 sm:grid-cols-3">
+            {project.metrics.map((m) => (
+              <div key={m.label} className="rounded-xl border border-border/60 bg-card p-6">
+                <dt className="text-xs tracking-wider text-muted-foreground">{m.label}</dt>
+                <dd className="mt-2 text-3xl font-semibold tracking-tight text-foreground">{m.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </Reveal>
+      ) : null;
+    case "highlights":
+      return project.highlights && project.highlights.length ? (
+        <Reveal>
+          <SectionHeading eyebrow="أبرز المميزات" title="ما يميّز هذا المشروع" />
+          <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+            {project.highlights.map((h) => (
+              <li key={h} className="flex items-start gap-3 rounded-lg border border-border/60 bg-card p-4">
+                <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-primary/10 text-primary">
+                  <Check className="size-3" aria-hidden />
+                </span>
+                <span className="text-sm text-foreground/85">{h}</span>
+              </li>
+            ))}
+          </ul>
+        </Reveal>
+      ) : null;
+    case "lessons":
+      return project.lessons && project.lessons.length ? (
+        <Reveal>
+          <SectionHeading eyebrow="الدروس المستفادة" title="نقاط للمرة القادمة" />
+          <ul className="mt-6 space-y-3">
+            {project.lessons.map((l) => (
+              <li key={l} className="flex items-start gap-3 rounded-lg border border-border/60 bg-card p-4">
+                <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-primary/10 text-primary">
+                  <Check className="size-3" aria-hidden />
+                </span>
+                <span className="text-sm text-foreground/85">{l}</span>
+              </li>
+            ))}
+          </ul>
+        </Reveal>
+      ) : null;
+    case "testimonial":
+      return project.testimonial ? (
+        <Reveal>
+          <SectionHeading eyebrow="رأي العميل" title="بكلماتهم" />
+          <figure className="mt-6 rounded-2xl border border-border/60 bg-card p-8 md:p-10">
+            <Quote className="size-6 text-primary" aria-hidden />
+            <blockquote className="mt-4 text-lg leading-relaxed text-foreground/90 md:text-xl">
+              «{project.testimonial.quote}»
+            </blockquote>
+            <figcaption className="mt-6 text-sm">
+              <span className="font-medium text-foreground">{project.testimonial.author}</span>
+              {project.testimonial.role ? (
+                <span className="text-muted-foreground"> — {project.testimonial.role}</span>
+              ) : null}
+            </figcaption>
+          </figure>
+        </Reveal>
+      ) : null;
+    default:
+      return null;
+  }
+}
+
+
 function ProjectNotFound() {
   const { slug } = Route.useParams();
   return (
