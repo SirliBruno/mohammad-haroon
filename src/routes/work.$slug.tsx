@@ -22,6 +22,7 @@ import { Section } from "@/components/layout/section";
 import { SectionTitle } from "@/components/layout/section-title";
 import { Reveal } from "@/components/motion/reveal";
 import { DSButton, Grid, TagGroup } from "@/components/ds";
+import { MarqueeGallery } from "@/components/ds/marquee-gallery";
 import type { Project } from "@/features/projects/schema";
 import { site } from "@/config/site";
 import { cn } from "@/lib/utils";
