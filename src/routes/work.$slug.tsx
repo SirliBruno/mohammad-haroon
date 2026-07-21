@@ -444,13 +444,7 @@ function SectionByKey({ sectionKey, project }: { sectionKey: ProjectSectionKey; 
         <Reveal>
           <SectionHeading eyebrow="المعرض" title="شاشات مختارة" />
           <div className="mt-8">
-            <Grid cols={{ base: 1, md: 2 }} gap="md">
-              {project.gallery.map((g, i) => (
-                <div key={i} className="aspect-[4/3] overflow-hidden rounded-xl border border-border/60 bg-card transition-transform duration-500 hover:scale-[1.01]">
-                  <img src={g.src} alt={g.alt} className="size-full object-cover" loading="lazy" />
-                </div>
-              ))}
-            </Grid>
+            <MarqueeGallery items={project.gallery} />
           </div>
         </Reveal>
       ) : null;
