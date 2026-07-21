@@ -115,13 +115,13 @@ export function Hero() {
             <div className="mt-12 flex flex-wrap items-center justify-center lg:justify-start gap-3">
               <DSButton asChild size="lg" variant="primary">
                 <Link to="/work">
-                  استعرض الأعمال
+                  {ctaPrimaryLabel}
                   <ArrowLeft />
                 </Link>
               </DSButton>
               <DSButton asChild size="lg" variant="outline">
                 <Link to="/contact" onClick={() => trackEvent("cta_click", { source: "hero_contact" })}>
-                  عندك فكرة ؟
+                  {ctaSecondaryLabel}
                   <ArrowUpRight />
                 </Link>
               </DSButton>
