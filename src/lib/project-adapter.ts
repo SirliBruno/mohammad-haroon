@@ -129,6 +129,7 @@ export function toProject(row: Row): Project {
     designProcess: mapDesignProcess(row.design_process),
     development: row.development ?? undefined,
     lessons: row.lessons && row.lessons.length ? row.lessons : undefined,
+    highlights: row.highlights && row.highlights.length ? row.highlights : undefined,
     testimonial: mapTestimonial(row.testimonial),
     featured: Boolean(row.featured),
     status: mapStatus(row.status),
