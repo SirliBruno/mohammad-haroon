@@ -306,6 +306,22 @@ function CaseStudy() {
               </Reveal>
             ) : null}
 
+            {project.highlights && project.highlights.length ? (
+              <Reveal>
+                <SectionHeading eyebrow="أبرز المميزات" title="ما يميّز هذا المشروع" />
+                <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+                  {project.highlights.map((h) => (
+                    <li key={h} className="flex items-start gap-3 rounded-lg border border-border/60 bg-card p-4">
+                      <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-primary/10 text-primary">
+                        <Check className="size-3" aria-hidden />
+                      </span>
+                      <span className="text-sm text-foreground/85">{h}</span>
+                    </li>
+                  ))}
+                </ul>
+              </Reveal>
+            ) : null}
+
             {project.lessons && project.lessons.length ? (
               <Reveal>
                 <SectionHeading eyebrow="الدروس المستفادة" title="نقاط للمرة القادمة" />
