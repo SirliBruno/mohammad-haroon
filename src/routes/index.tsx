@@ -128,8 +128,8 @@ function Home() {
         <Reveal>
           <SectionTitle
             eyebrow="أعمال مختارة"
-            title="منتجات صمّمتها وأطلقتها."
-            description="دراسات حالة موجزة لمنتجات حقيقية — من الفكرة إلى الإطلاق."
+            title="مختـــــــارات من شغـــــــــلي."
+            description="مشاريع وانظمة برمجية صُممت لتحقيق أهداف فعلية، لا مجرد مظهر جميل."
             actions={
               <DSButton asChild variant="ghost" size="sm">
                 <Link to="/work">
