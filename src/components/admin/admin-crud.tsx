@@ -60,6 +60,31 @@ export type FieldDef =
   | {
       name: string;
       label: string;
+      type: "gallery";
+      folder?: string;
+      help?: string;
+      colSpan?: 1 | 2;
+    }
+  | {
+      name: string;
+      label: string;
+      type: "structured";
+      schema: StructuredFieldSchema[];
+      addLabel?: string;
+      help?: string;
+      colSpan?: 1 | 2;
+    }
+  | {
+      name: string;
+      label: string;
+      type: "object";
+      schema: StructuredFieldSchema[];
+      help?: string;
+      colSpan?: 1 | 2;
+    }
+  | {
+      name: string;
+      label: string;
       type: "json";
       help?: string;
       rows?: number;
