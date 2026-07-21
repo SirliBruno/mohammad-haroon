@@ -249,13 +249,16 @@ function Home() {
       <Section id="services" className="border-t border-border/60">
         <Reveal>
           <SectionTitle
-            eyebrow="الخدمات"
-            title="ما الذي أُقدّمه."
-            description="خدمات قصيرة الوصف، واضحة النتيجة — لا مصطلحات، ولا وعود مفتوحة."
+            eyebrow={t("home.services.eyebrow", "الخدمات")}
+            title={t("home.services.title", "ما الذي أُقدّمه.")}
+            description={t(
+              "home.services.description",
+              "خدمات قصيرة الوصف، واضحة النتيجة — لا مصطلحات، ولا وعود مفتوحة.",
+            )}
             actions={
               <DSButton asChild variant="ghost" size="sm">
                 <Link to="/services">
-                  كل الخدمات
+                  {t("home.services.view_all", "كل الخدمات")}
                   <ArrowUpRight />
                 </Link>
               </DSButton>
@@ -264,7 +267,7 @@ function Home() {
         </Reveal>
         <Reveal delay={0.05}>
           <Grid cols={{ base: 1, sm: 2, lg: 4 }} gap="md" className="mt-12">
-            {homeServices.map((s) => (
+            {homeServicesLive.map((s) => (
               <Link
                 key={s.slug}
                 to="/services/$slug"
@@ -307,14 +310,17 @@ function Home() {
       <Section id="process" className="border-t border-border/60" size="lg">
         <Reveal>
           <SectionTitle
-            eyebrow="طريقة العمل"
-            title="من فكرة إلى منتج مُطلَق."
-            description="عملية مُنظّمة من ستّ مراحل، مُصمّمة للوضوح وسرعة اتّخاذ القرار."
+            eyebrow={t("home.process.eyebrow", "طريقة العمل")}
+            title={t("home.process.title", "من فكرة إلى منتج مُطلَق.")}
+            description={t(
+              "home.process.description",
+              "عملية مُنظّمة من ستّ مراحل، مُصمّمة للوضوح وسرعة اتّخاذ القرار.",
+            )}
           />
         </Reveal>
         <Reveal delay={0.05}>
           <ol className="mt-16 grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-border/60 bg-border/60 md:grid-cols-2 lg:grid-cols-3">
-            {workflow.map((w) => (
+            {workflowLive.map((w) => (
               <li key={w.step} className="group flex flex-col bg-background p-8 transition-colors hover:bg-muted/40 md:p-10">
                 <div className="text-xs font-medium tracking-[0.2em] text-muted-foreground">
                   {w.step}
@@ -335,13 +341,16 @@ function Home() {
       <Section id="experience" className="border-t border-border/60">
         <Reveal>
           <SectionTitle
-            eyebrow="المسيرة"
-            title="محطات مختصرة."
-            description="نظرة سريعة على الأدوار التي شكّلت طريقتي في العمل."
+            eyebrow={t("home.experience.eyebrow", "المسيرة")}
+            title={t("home.experience.title", "محطات مختصرة.")}
+            description={t(
+              "home.experience.description",
+              "نظرة سريعة على الأدوار التي شكّلت طريقتي في العمل.",
+            )}
             actions={
               <DSButton asChild variant="ghost" size="sm">
                 <Link to="/career">
-                  السيرة الكاملة
+                  {t("home.experience.view_all", "السيرة الكاملة")}
                   <ArrowUpRight />
                 </Link>
               </DSButton>
@@ -359,14 +368,17 @@ function Home() {
       <Section id="certificates" className="border-t border-border/60">
         <Reveal>
           <SectionTitle
-            eyebrow="الشهادات"
-            title="تعلُّم مُستمر."
-            description="شهادات مختارة من برامج تُواكب صناعة المنتجات الرقمية."
+            eyebrow={t("home.certificates.eyebrow", "الشهادات")}
+            title={t("home.certificates.title", "تعلُّم مُستمر.")}
+            description={t(
+              "home.certificates.description",
+              "شهادات مختارة من برامج تُواكب صناعة المنتجات الرقمية.",
+            )}
           />
         </Reveal>
         <Reveal delay={0.05}>
           <Grid cols={{ base: 1, sm: 2, lg: 4 }} gap="md" className="mt-12">
-            {certificates.map((c) => (
+            {certsLive.map((c) => (
               <CertificateCard key={c.title} certificate={c} />
             ))}
           </Grid>
@@ -377,8 +389,8 @@ function Home() {
       <Section id="testimonials" className="border-t border-border/60">
         <Reveal>
           <SectionTitle
-            eyebrow="شهادات"
-            title="بكلمات من عملت معهم."
+            eyebrow={t("home.testimonials.eyebrow", "شهادات")}
+            title={t("home.testimonials.title", "بكلمات من عملت معهم.")}
           />
         </Reveal>
         <Reveal delay={0.05}>
@@ -394,20 +406,23 @@ function Home() {
       <Reveal>
         <CTA
           className="border-t border-border/60"
-          eyebrow="لنبدأ"
-          title="لنُطلق معًا شيئًا يستحقّ."
-          description="محادثة قصيرة تكفي لنعرف إن كنّا الشريكين المناسبين لهذا المشروع."
+          eyebrow={t("home.cta.eyebrow", "لنبدأ")}
+          title={t("home.cta.title", "لنُطلق معًا شيئًا يستحقّ.")}
+          description={t(
+            "home.cta.description",
+            "محادثة قصيرة تكفي لنعرف إن كنّا الشريكين المناسبين لهذا المشروع.",
+          )}
           actions={
             <>
               <DSButton asChild size="lg" variant="primary">
                 <Link to="/contact">
-                  تواصل معي
+                  {t("home.cta.primary_label", "تواصل معي")}
                   <ArrowLeft />
                 </Link>
               </DSButton>
               <DSButton asChild size="lg" variant="outline">
                 <Link to="/work">
-                  استعرض الأعمال
+                  {t("home.cta.secondary_label", "استعرض الأعمال")}
                   <ArrowUpRight />
                 </Link>
               </DSButton>
