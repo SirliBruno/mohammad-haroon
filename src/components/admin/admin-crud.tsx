@@ -684,6 +684,49 @@ function FieldRenderer({
     );
   }
 
+  if (field.type === "gallery") {
+    return (
+      <div className={cn("flex flex-col gap-2", colSpan)}>
+        {labelEl}
+        <GalleryInput
+          value={value}
+          onChange={(items) => onChange(items)}
+          folder={field.folder ?? "gallery"}
+        />
+        {helpEl}
+      </div>
+    );
+  }
+
+  if (field.type === "structured") {
+    return (
+      <div className={cn("flex flex-col gap-2", colSpan)}>
+        {labelEl}
+        <StructuredListInput
+          value={value}
+          onChange={(items) => onChange(items)}
+          schema={field.schema}
+          addLabel={field.addLabel}
+        />
+        {helpEl}
+      </div>
+    );
+  }
+
+  if (field.type === "object") {
+    return (
+      <div className={cn("flex flex-col gap-2", colSpan)}>
+        {labelEl}
+        <ObjectInput
+          value={value}
+          onChange={(v) => onChange(v)}
+          schema={field.schema}
+        />
+        {helpEl}
+      </div>
+    );
+  }
+
   // text/url/date/datetime
   let displayVal = (value as string) ?? "";
   if (field.type === "date" && displayVal) displayVal = displayVal.slice(0, 10);
