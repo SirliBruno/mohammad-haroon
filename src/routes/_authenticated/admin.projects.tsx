@@ -105,6 +105,13 @@ const fields: FieldDef[] = [
 
   // ——— أقسام تفاصيل المشروع (اختياري) ———
   {
+    name: "highlights",
+    label: "أبرز المميزات",
+    type: "tags",
+    colSpan: 2,
+    help: "أضف ميزة في كل سطر (Enter للفصل). تظهر كنقاط بارزة في صفحة المشروع.",
+  },
+  {
     name: "description",
     label: "نظرة عامة موسّعة",
     type: "textarea",
