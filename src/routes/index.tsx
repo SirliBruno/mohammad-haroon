@@ -20,11 +20,15 @@ import {
   type TimelineItem,
 } from "@/components/ds";
 import { site } from "@/config/site";
-import { projects } from "@/data/projects";
+import { projects as staticProjects } from "@/data/projects";
 import { testimonials } from "@/data/testimonials";
 import { BrowserFrame } from "@/components/mockups/devices";
 import { DashboardUI, StoreUI, EditorUI } from "@/components/mockups/ui-samples";
 import { useHomeContent, getHomeText, getHomeList } from "@/lib/cms/home-content";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { listPublicProjects } from "@/lib/cms/projects-public.functions";
+import { toProject } from "@/lib/project-adapter";
 
 /* ---------------- Home-only data ---------------- */
 
