@@ -378,6 +378,7 @@ function AdminProjectsPage() {
             design_process: (form.design_process as string) || null,
             development: (form.development as string) || null,
             lessons: asStringArray(form.lessons),
+            highlights: asStringArray(form.highlights),
             metrics: Array.isArray(form.metrics) ? (form.metrics as unknown[]) : [],
             results: Array.isArray(form.results) ? (form.results as unknown[]) : [],
             gallery: Array.isArray(form.gallery) ? (form.gallery as unknown[]) : [],
