@@ -121,7 +121,16 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
-  const featured = projects.filter((p) => p.featured).slice(0, 3);
+  const listFn = useServerFn(listPublicProjects);
+  const featuredQ = useQuery({
+    queryKey: ["home", "featured"],
+    queryFn: () => listFn({ data: { featured: true, limit: 3 } }),
+    staleTime: 60_000,
+  });
+  const cmsFeatured = (featuredQ.data?.rows ?? []).map(toProject);
+  const featured = cmsFeatured.length
+    ? cmsFeatured
+    : staticProjects.filter((p) => p.featured).slice(0, 3);
   const featuredTestimonials = testimonials.slice(0, 3);
   const { data: homeRows } = useHomeContent();
   const t = (k: string, fb: string) => getHomeText(homeRows, k, fb);
