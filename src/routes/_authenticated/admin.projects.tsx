@@ -316,7 +316,16 @@ const asStringArray = (v: unknown): string[] =>
   Array.isArray(v) ? v.map((x) => String(x)).filter(Boolean) : [];
 
 const asJsonOrNull = (v: unknown, fallback: unknown = null): unknown => {
-  if (v === "" || v === undefined) return fallback;
+  if (v === undefined || v === null) return fallback;
+  if (typeof v === "string") {
+    const s = v.trim();
+    if (!s) return fallback;
+    try {
+      return JSON.parse(s);
+    } catch {
+      throw new Error("تنسيق JSON غير صالح — تأكد من صحة الأقواس وعلامات الاقتباس.");
+    }
+  }
   return v ?? fallback;
 };
 
