@@ -88,6 +88,7 @@ export const projectInputSchema = z.object({
   development: optionalText(),
   lessons: stringArray(),
   highlights: stringArray(),
+  section_order: z.array(z.string().trim().min(1).max(60)).max(40).default([]),
   results: jsonArray,
   testimonial: jsonObject,
   metrics: jsonArray,

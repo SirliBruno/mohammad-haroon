@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AdminShell } from "@/components/admin/admin-shell";
 import { AdminCrud, type FieldDef, type ListColumn } from "@/components/admin/admin-crud";
+import { PROJECT_SECTION_OPTIONS, PROJECT_SECTION_KEYS } from "@/lib/project-sections";
 import {
   adminListProjects,
   createProject,
