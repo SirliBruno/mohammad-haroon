@@ -87,6 +87,7 @@ export const projectInputSchema = z.object({
   design_process: optionalText(),
   development: optionalText(),
   lessons: stringArray(),
+  highlights: stringArray(),
   results: jsonArray,
   testimonial: jsonObject,
   metrics: jsonArray,

@@ -520,6 +520,7 @@ export type Database = {
           gallery: Json
           github_url: string | null
           goals: string[]
+          highlights: string[]
           id: string
           lessons: string[]
           live_url: string | null
@@ -555,6 +556,7 @@ export type Database = {
           gallery?: Json
           github_url?: string | null
           goals?: string[]
+          highlights?: string[]
           id?: string
           lessons?: string[]
           live_url?: string | null
@@ -590,6 +592,7 @@ export type Database = {
           gallery?: Json
           github_url?: string | null
           goals?: string[]
+          highlights?: string[]
           id?: string
           lessons?: string[]
           live_url?: string | null

@@ -105,6 +105,13 @@ const fields: FieldDef[] = [
 
   // ——— أقسام تفاصيل المشروع (اختياري) ———
   {
+    name: "highlights",
+    label: "أبرز المميزات",
+    type: "tags",
+    colSpan: 2,
+    help: "أضف ميزة في كل سطر (Enter للفصل). تظهر كنقاط بارزة في صفحة المشروع.",
+  },
+  {
     name: "description",
     label: "نظرة عامة موسّعة",
     type: "textarea",
@@ -233,6 +240,7 @@ const emptyValues: Record<string, unknown> = {
   design_process: "",
   development: "",
   lessons: [],
+  highlights: [],
   metrics: [],
   results: [],
   gallery: [],
@@ -370,6 +378,7 @@ function AdminProjectsPage() {
             design_process: (form.design_process as string) || null,
             development: (form.development as string) || null,
             lessons: asStringArray(form.lessons),
+            highlights: asStringArray(form.highlights),
             metrics: Array.isArray(form.metrics) ? (form.metrics as unknown[]) : [],
             results: Array.isArray(form.results) ? (form.results as unknown[]) : [],
             gallery: Array.isArray(form.gallery) ? (form.gallery as unknown[]) : [],
