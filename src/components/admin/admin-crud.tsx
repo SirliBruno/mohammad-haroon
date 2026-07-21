@@ -614,6 +614,12 @@ function FieldRenderer({
       for (const p of parts) if (!next.includes(p)) next.push(p);
       onChange(next);
     };
+    const commitInput = (input: HTMLInputElement) => {
+      const text = input.value.trim();
+      if (!text) return;
+      addTokens(text);
+      input.value = "";
+    };
     return (
       <div className={cn("flex flex-col gap-1", colSpan)}>
         {labelEl}
@@ -625,6 +631,13 @@ function FieldRenderer({
           onClick={(e) => {
             const input = (e.currentTarget.querySelector("input") as HTMLInputElement | null);
             input?.focus();
+          }}
+          onKeyDownCapture={(e) => {
+            if (e.key !== "Enter" && e.key !== ",") return;
+            if (!(e.target instanceof HTMLInputElement)) return;
+            e.preventDefault();
+            e.stopPropagation();
+            commitInput(e.target);
           }}
         >
           {arr.map((tag, i) => (
@@ -645,16 +658,16 @@ function FieldRenderer({
           ))}
           <input
             type="text"
+            enterKeyHint="done"
+            data-admin-tags-input="true"
             placeholder={field.placeholder ?? "اكتب واضغط Enter"}
             className="flex-1 min-w-24 bg-transparent outline-none text-sm py-0.5"
             onKeyDown={(e) => {
               const el = e.currentTarget;
               if (e.key === "Enter" || e.key === ",") {
                 e.preventDefault();
-                if (el.value.trim()) {
-                  addTokens(el.value);
-                  el.value = "";
-                }
+                e.stopPropagation();
+                commitInput(el);
               } else if (e.key === "Backspace" && !el.value && arr.length) {
                 onChange(arr.slice(0, -1));
               }
