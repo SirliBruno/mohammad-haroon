@@ -240,6 +240,7 @@ const emptyValues: Record<string, unknown> = {
   design_process: "",
   development: "",
   lessons: [],
+  highlights: [],
   metrics: [],
   results: [],
   gallery: [],
