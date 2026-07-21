@@ -27,6 +27,7 @@ import { site } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { statusMeta } from "@/lib/project-status";
 import { toProject } from "@/lib/project-adapter";
+import { normalizeSectionOrder, type ProjectSectionKey } from "@/lib/project-sections";
 import {
   getPublicProjectBySlug,
   listPublicProjects,
