@@ -145,13 +145,16 @@ function Home() {
       <Section id="work" className="border-t border-border/60" size="lg">
         <Reveal>
           <SectionTitle
-            eyebrow="أعمال مختارة"
-            title="مختـــــــارات من شغـــــــــلي."
-            description="مشاريع وانظمة برمجية صُممت لتحقيق أهداف فعلية، لا مجرد مظهر جميل."
+            eyebrow={t("home.featured.eyebrow", "أعمال مختارة")}
+            title={t("home.featured.title", "مختـــــــارات من شغـــــــــلي.")}
+            description={t(
+              "home.featured.description",
+              "مشاريع وانظمة برمجية صُممت لتحقيق أهداف فعلية، لا مجرد مظهر جميل.",
+            )}
             actions={
               <DSButton asChild variant="ghost" size="sm">
                 <Link to="/work">
-                  كل الأعمال
+                  {t("home.featured.view_all", "كل الأعمال")}
                   <ArrowUpRight />
                 </Link>
               </DSButton>
