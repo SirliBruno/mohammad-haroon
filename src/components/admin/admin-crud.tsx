@@ -604,23 +604,76 @@ function FieldRenderer({
 
   if (field.type === "tags") {
     const arr = Array.isArray(value) ? (value as string[]) : [];
+    const addTokens = (raw: string) => {
+      const parts = raw
+        .split(/[,\n]/)
+        .map((s) => s.trim())
+        .filter(Boolean);
+      if (!parts.length) return;
+      const next = [...arr];
+      for (const p of parts) if (!next.includes(p)) next.push(p);
+      onChange(next);
+    };
     return (
       <div className={cn("flex flex-col gap-1", colSpan)}>
         {labelEl}
-        <input
-          type="text"
-          value={arr.join(", ")}
-          onChange={(e) =>
-            onChange(
-              e.target.value
-                .split(",")
-                .map((s) => s.trim())
-                .filter(Boolean),
-            )
-          }
-          placeholder={field.placeholder ?? "افصل بفواصل: قيمة، قيمة، قيمة"}
-          className={baseInput}
-        />
+        <div
+          className={cn(
+            baseInput,
+            "flex flex-wrap items-center gap-1.5 min-h-10 h-auto py-1.5 cursor-text",
+          )}
+          onClick={(e) => {
+            const input = (e.currentTarget.querySelector("input") as HTMLInputElement | null);
+            input?.focus();
+          }}
+        >
+          {arr.map((tag, i) => (
+            <span
+              key={`${tag}-${i}`}
+              className="inline-flex items-center gap-1 rounded-md bg-neutral-100 dark:bg-neutral-800 px-2 py-0.5 text-xs"
+            >
+              <span>{tag}</span>
+              <button
+                type="button"
+                onClick={() => onChange(arr.filter((_, j) => j !== i))}
+                className="text-neutral-500 hover:text-red-600"
+                aria-label="حذف"
+              >
+                ×
+              </button>
+            </span>
+          ))}
+          <input
+            type="text"
+            placeholder={field.placeholder ?? "اكتب واضغط Enter"}
+            className="flex-1 min-w-24 bg-transparent outline-none text-sm py-0.5"
+            onKeyDown={(e) => {
+              const el = e.currentTarget;
+              if (e.key === "Enter" || e.key === ",") {
+                e.preventDefault();
+                if (el.value.trim()) {
+                  addTokens(el.value);
+                  el.value = "";
+                }
+              } else if (e.key === "Backspace" && !el.value && arr.length) {
+                onChange(arr.slice(0, -1));
+              }
+            }}
+            onBlur={(e) => {
+              if (e.currentTarget.value.trim()) {
+                addTokens(e.currentTarget.value);
+                e.currentTarget.value = "";
+              }
+            }}
+            onPaste={(e) => {
+              const text = e.clipboardData.getData("text");
+              if (/[,\n]/.test(text)) {
+                e.preventDefault();
+                addTokens(text);
+              }
+            }}
+          />
+        </div>
         {helpEl}
       </div>
     );
