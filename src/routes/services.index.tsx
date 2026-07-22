@@ -43,8 +43,9 @@ export const Route = createFileRoute("/services/")({
 function ServicesIndex() {
   const { data } = useSuspenseQuery(serviceListOptions(listParams));
   const { data: projectData } = useQuery(projectListOptions({ limit: 200, orderBy: "sort_order", ascending: true }));
+  const projectRows = (projectData as { rows?: Array<{ slug: string; title: string }> } | undefined)?.rows ?? [];
   const projectTitleBySlug: Record<string, string> = {};
-  for (const row of projectData?.rows ?? []) {
+  for (const row of projectRows) {
     if (row.slug) projectTitleBySlug[row.slug] = row.title;
   }
   const fromDb: Service[] = (data?.rows ?? []).map((row) => dbRowToService(row, projectTitleBySlug));
