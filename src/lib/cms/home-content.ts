@@ -9,6 +9,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { listSiteContent, upsertSiteContent } from "@/lib/cms/content.functions";
+import { site as staticSite } from "@/config/site";
 
 export type HomeFieldKind = "text" | "textarea" | "json";
 
@@ -302,7 +303,52 @@ export const PAGE_GROUPS: {
       },
     ],
   },
+  {
+    id: "site",
+    label: "هوية الموقع",
+    sections: [
+      {
+        id: "identity",
+        label: "المعلومات الأساسية",
+        description: "تُستخدم في التذييل وبطاقات التواصل وبيانات التعريف.",
+        fields: [
+          { key: "site.name", label: "الاسم", kind: "text", defaultValue: "محمد هارون" },
+          { key: "site.tagline", label: "الشعار المختصر", kind: "text", defaultValue: "أُصمّم وأُطوِّر منتجات رقمية تُحقّق نتائج واضحة." },
+          { key: "site.description", label: "الوصف", kind: "textarea", rows: 3, defaultValue: "أعمال ومقالات وأفكار محمد هارون — مهندس منتجات ومصمم واجهات، أبني تجارب رقمية للشركات والعلامات التجارية." },
+          { key: "site.email", label: "البريد الإلكتروني", kind: "text", defaultValue: "hello@mohammadharoon.com" },
+          { key: "site.whatsapp", label: "رقم واتساب (E.164)", kind: "text", defaultValue: "+966500000000" },
+          { key: "site.whatsappDisplay", label: "رقم واتساب (للعرض)", kind: "text", defaultValue: "+966 50 000 0000" },
+          { key: "site.location", label: "الموقع", kind: "text", defaultValue: "الرياض · عن بُعد" },
+          { key: "site.workingHours", label: "ساعات العمل", kind: "text", defaultValue: "الأحد–الخميس · 9:00 ص – 6:00 م" },
+          { key: "site.availabilityLabel", label: "شارة التوفر", kind: "text", defaultValue: "متاح لمشاريع جديدة" },
+        ],
+      },
+    ],
+  },
 ];
+
+/**
+ * Merge CMS `site` group values over the static `site` config.
+ * Reads from the cache primed by `usePageContent("site")`; returns
+ * the static config unchanged until the CMS rows load.
+ */
+export function useSite() {
+  const { data } = usePageContent("site");
+  if (!data || data.length === 0) return staticSite;
+  const g = (k: string, f: string) => getPageText(data, k, f);
+  return {
+    ...staticSite,
+    name: g("site.name", staticSite.name),
+    tagline: g("site.tagline", staticSite.tagline),
+    description: g("site.description", staticSite.description),
+    email: g("site.email", staticSite.email),
+    whatsapp: g("site.whatsapp", staticSite.whatsapp),
+    whatsappDisplay: g("site.whatsappDisplay", staticSite.whatsappDisplay),
+    location: g("site.location", staticSite.location),
+    workingHours: g("site.workingHours", staticSite.workingHours),
+    availabilityLabel: g("site.availabilityLabel", staticSite.availabilityLabel),
+  };
+}
 
 /** Fetch content rows for any group (home, about, contact, career, work, services-page…). */
 export function usePageContent(group: string) {
