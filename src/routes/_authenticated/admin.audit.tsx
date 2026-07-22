@@ -131,9 +131,8 @@ function AdminAuditPage() {
                     const isOpen = expanded === row.id;
                     const action = ACTION_LABELS[row.action];
                     return (
-                      <>
+                      <Fragment key={row.id}>
                         <tr
-                          key={row.id}
                           className="border-t border-border dark:border-border hover:bg-muted/50 dark:hover:bg-muted/30"
                         >
                           <td className="px-4 py-3 align-top text-xs tabular-nums text-muted-foreground dark:text-muted-foreground">
@@ -164,7 +163,7 @@ function AdminAuditPage() {
                           </td>
                         </tr>
                         {isOpen && (
-                          <tr key={`${row.id}-body`} className="border-t border-border dark:border-border">
+                          <tr className="border-t border-border dark:border-border">
                             <td colSpan={5} className="bg-neutral-50/60 px-4 py-3 dark:bg-neutral-950/40">
                               <pre
                                 dir="ltr"
@@ -175,7 +174,7 @@ function AdminAuditPage() {
                             </td>
                           </tr>
                         )}
-                      </>
+                      </Fragment>
                     );
                   })
                 )}
