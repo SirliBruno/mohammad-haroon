@@ -3,6 +3,7 @@ import { z } from "zod";
 export const featuredProjectRefSchema = z.object({
   slug: z.string(),
   title: z.string(),
+  cover: z.string().url().optional(),
 });
 
 export const serviceShowcaseSchema = z.object({

@@ -43,12 +43,12 @@ export const Route = createFileRoute("/services/")({
 function ServicesIndex() {
   const { data } = useSuspenseQuery(serviceListOptions(listParams));
   const { data: projectData } = useQuery(projectListOptions({ limit: 200, orderBy: "sort_order", ascending: true }));
-  const projectRows = (projectData as { rows?: Array<{ slug: string; title: string }> } | undefined)?.rows ?? [];
-  const projectTitleBySlug: Record<string, string> = {};
+  const projectRows = (projectData as { rows?: Array<{ slug: string; title: string; cover_url?: string | null }> } | undefined)?.rows ?? [];
+  const projectLookup: Record<string, { title: string; cover?: string }> = {};
   for (const row of projectRows) {
-    if (row.slug) projectTitleBySlug[row.slug] = row.title;
+    if (row.slug) projectLookup[row.slug] = { title: row.title, cover: row.cover_url ?? undefined };
   }
-  const fromDb: Service[] = (data?.rows ?? []).map((row) => dbRowToService(row, projectTitleBySlug));
+  const fromDb: Service[] = (data?.rows ?? []).map((row) => dbRowToService(row, projectLookup));
   const services = fromDb.length > 0 ? fromDb : staticServices;
   const { data: servicesRows } = usePageContent("services-page");
   const tt = (k: string, fb: string) => getPageText(servicesRows, k, fb);
