@@ -72,9 +72,9 @@ export function ServiceShowcaseCard({
         className={cn(
           "relative aspect-[4/5] w-full rounded-[32px]",
           "border border-border/50 bg-gradient-to-b from-secondary/40 to-card",
-        "shadow-[0_1px_2px_hsl(0_0%_0%/0.04),0_20px_40px_-24px_hsl(0_0%_0%/0.12)]",
-          "transition-[box-shadow,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
-          "group-hover:border-primary/25",
+          "shadow-[0_1px_2px_hsl(0_0%_0%/0.04),0_20px_40px_-24px_hsl(0_0%_0%/0.12)]",
+          "transition-[transform,box-shadow,border-color] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
+          "group-hover:-translate-y-1 group-hover:border-primary/25",
           "group-hover:shadow-[0_1px_2px_hsl(0_0%_0%/0.06),0_40px_70px_-24px_hsl(0_0%_0%/0.22)]",
         )}
       >
@@ -125,7 +125,8 @@ export function ServiceShowcaseCard({
         <div className="pointer-events-none absolute inset-x-0 top-[34%] z-20 flex justify-center">
           <div
             className={cn(
-              "relative",
+              "relative transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
+              "group-hover:-translate-y-1.5",
             )}
             style={{
               transform: `rotate(${v.rotate}deg)`,
@@ -168,6 +169,8 @@ export function ServiceShowcaseCard({
                   "grid size-[70px] place-items-center rounded-2xl md:size-[78px]",
                   "border border-white/40 bg-white/70 backdrop-blur-2xl backdrop-saturate-150 dark:border-white/20 dark:bg-white/10",
                   "shadow-[0_10px_20px_-6px_hsl(0_0%_0%/0.25),0_24px_44px_-10px_hsl(0_0%_0%/0.35),inset_0_1px_0_hsl(0_0%_100%/0.6)]",
+                  "transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
+                  "group-hover:-translate-y-1 group-hover:scale-[1.06]",
                 )}
                 style={{ transform: `rotate(${v.logoRotate}deg)` }}
               >
@@ -196,6 +199,8 @@ export function ServiceShowcaseCard({
           className={cn(
             "relative z-10 mx-3 -mt-[13%] rounded-3xl border border-border/60 bg-card/95 p-7 backdrop-blur-xl md:p-8",
             "shadow-[0_1px_2px_hsl(0_0%_0%/0.05),0_30px_60px_-24px_hsl(0_0%_0%/0.22)]",
+            "transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
+            "group-hover:-translate-y-1.5",
           )}
         >
           <ul className="grid grid-cols-3 gap-5">
