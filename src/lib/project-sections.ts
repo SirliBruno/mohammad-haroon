@@ -4,6 +4,7 @@
  * custom `section_order` saved.
  */
 export const PROJECT_SECTION_KEYS = [
+  "spotlight",
   "problem",
   "goals",
   "research",
@@ -21,6 +22,7 @@ export const PROJECT_SECTION_KEYS = [
 export type ProjectSectionKey = (typeof PROJECT_SECTION_KEYS)[number];
 
 export const PROJECT_SECTION_LABELS: Record<ProjectSectionKey, string> = {
+  spotlight: "قسم مميّز (Spotlight)",
   problem: "المشكلة",
   goals: "الأهداف",
   research: "البحث",

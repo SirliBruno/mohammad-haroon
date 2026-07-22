@@ -88,6 +88,14 @@ export const projectInputSchema = z.object({
   development: optionalText(),
   lessons: stringArray(),
   highlights: stringArray(),
+  spotlight: z
+    .object({
+      title: z.string().trim().min(1).max(200),
+      description: z.string().trim().min(1).max(4000),
+    })
+    .partial()
+    .optional()
+    .nullable(),
   section_order: z.array(z.string().trim().min(1).max(60)).max(40).default([]),
   results: jsonArray,
   testimonial: jsonObject,

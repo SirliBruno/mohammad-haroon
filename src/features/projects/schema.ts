@@ -45,6 +45,12 @@ export const projectSchema = z.object({
   development: z.string().optional(),
   lessons: z.array(z.string()).optional(),
   highlights: z.array(z.string()).optional(),
+  spotlight: z
+    .object({
+      title: z.string(),
+      description: z.string(),
+    })
+    .optional(),
   sectionOrder: z.array(z.string()).optional(),
   testimonial: z
     .object({
