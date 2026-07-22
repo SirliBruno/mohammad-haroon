@@ -298,14 +298,25 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
     deleteMut.mutate(confirmDelete.id);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const payload = fromForm ? fromForm(form) : sanitizeForm(form, fields);
+  const submitForm = (overrideStatus?: "draft" | "published") => {
+    const source = overrideStatus
+      ? { ...form, content_status: overrideStatus }
+      : form;
+    const payload = fromForm ? fromForm(source) : sanitizeForm(source, fields);
     if (editingId) {
       updateMut.mutate({ id: editingId, patch: payload });
     } else {
       createMut.mutate(payload);
     }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    submitForm();
+  };
+
+  const quickSetStatus = (row: Row, next: "draft" | "published") => {
+    updateMut.mutate({ id: row.id, patch: { content_status: next } });
   };
 
 
