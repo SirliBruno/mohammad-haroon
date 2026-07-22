@@ -98,7 +98,6 @@ export const projectInputSchema = z.object({
     .optional()
     .nullable(),
   section_order: z.array(z.string().trim().min(1).max(60)).max(40).default([]),
-  results: jsonArray,
   testimonial: jsonObject,
   metrics: jsonArray,
   published_at: z.string().datetime().optional().nullable(),
