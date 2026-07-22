@@ -112,7 +112,6 @@ const featuredMockups: Record<string, React.ComponentType> = {
 
 /* ---------------- Route ---------------- */
 
-import { RouteErrorBoundary, RouteNotFoundBoundary } from "@/components/layout/route-boundaries";
 
 export const Route = createFileRoute("/")({
   errorComponent: ({ reset }) => <RouteErrorBoundary reset={reset} />,
