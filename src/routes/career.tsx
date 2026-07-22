@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { buildMeta } from "@/features/seo/build-meta";
 import { PageHeader } from "@/components/layout/page-header";
+import { usePageContent, getPageText } from "@/lib/cms/home-content";
 import { Section } from "@/components/layout/section";
 import { SectionTitle } from "@/components/layout/section-title";
 import { Eyebrow } from "@/components/typography/eyebrow";
