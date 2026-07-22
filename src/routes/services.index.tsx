@@ -43,14 +43,20 @@ function ServicesIndex() {
   const { data } = useSuspenseQuery(serviceListOptions(listParams));
   const fromDb: Service[] = (data?.rows ?? []).map(dbRowToService);
   const services = fromDb.length > 0 ? fromDb : staticServices;
+  const { data: servicesRows } = usePageContent("services-page");
+  const tt = (k: string, fb: string) => getPageText(servicesRows, k, fb);
 
   return (
     <>
       <PageHeader
-        eyebrow="الخدمات"
-        title="تصميم وتطوير احترافي متكامل"
-        description="خدمات متخصّصة تُغطّي دورة حياة المنتج الرقمي بأكملها — من صفحة مقصودة واحدة إلى متجر إلكتروني كامل، وكلّ ما بينهما."
+        eyebrow={tt("services.header.eyebrow", "الخدمات")}
+        title={tt("services.header.title", "تصميم وتطوير احترافي متكامل")}
+        description={tt(
+          "services.header.description",
+          "خدمات متخصّصة تُغطّي دورة حياة المنتج الرقمي بأكملها — من صفحة مقصودة واحدة إلى متجر إلكتروني كامل، وكلّ ما بينهما.",
+        )}
       />
+
 
       <Section>
         <Grid cols={{ base: 1, md: 2, lg: 3 }} gap="md">
