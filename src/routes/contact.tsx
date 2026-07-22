@@ -484,7 +484,7 @@ function ContactPage() {
       <CTA
         eyebrow={tt("contact.direct.eyebrow", "تُفضّل الطريق المباشر؟")}
         title={tt("contact.direct.title", "تجاوز النموذج — راسلني مباشرة.")}
-        description="بريد، أو واتساب، أو لينكدإن — اختر ما يناسبك، والرد يصلك بنفس السرعة."
+        description={tt("contact.direct.description", "بريد، أو واتساب، أو لينكدإن — اختر ما يناسبك، والرد يصلك بنفس السرعة.")}
         actions={
           <>
             <DSButton asChild size="lg">
