@@ -155,8 +155,14 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
   const update = useServerFn(props.updateFn as never) as unknown as (arg: { data: { id: string; patch: Record<string, unknown> } }) => Promise<unknown>;
   const remove = useServerFn(props.deleteFn as never) as unknown as (arg: { data: { id: string } }) => Promise<unknown>;
 
+  const hasStatus = useMemo(
+    () => fields.some((f) => f.name === "content_status"),
+    [fields],
+  );
+
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"" | "draft" | "published" | "archived">("");
   const [page, setPage] = useState(0);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -174,10 +180,15 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
   }, [searchInput]);
 
   const listQuery = useQuery({
-    queryKey: ["admin-crud", cacheKey, { search, page, pageSize }],
+    queryKey: ["admin-crud", cacheKey, { search, page, pageSize, statusFilter }],
     queryFn: async () => {
       const res = await list({
-        data: { limit: pageSize, offset: page * pageSize, ...(search ? { search } : {}) },
+        data: {
+          limit: pageSize,
+          offset: page * pageSize,
+          ...(search ? { search } : {}),
+          ...(statusFilter ? { status: statusFilter } : {}),
+        },
       });
       return coerceListResult<Row>(res);
     },
@@ -287,14 +298,25 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
     deleteMut.mutate(confirmDelete.id);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const payload = fromForm ? fromForm(form) : sanitizeForm(form, fields);
+  const submitForm = (overrideStatus?: "draft" | "published") => {
+    const source = overrideStatus
+      ? { ...form, content_status: overrideStatus }
+      : form;
+    const payload = fromForm ? fromForm(source) : sanitizeForm(source, fields);
     if (editingId) {
       updateMut.mutate({ id: editingId, patch: payload });
     } else {
       createMut.mutate(payload);
     }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    submitForm();
+  };
+
+  const quickSetStatus = (row: Row, next: "draft" | "published") => {
+    updateMut.mutate({ id: row.id, patch: { content_status: next } });
   };
 
 
@@ -330,6 +352,37 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
         </button>
       </div>
 
+      {hasStatus && (
+        <div className="flex flex-wrap items-center gap-1 text-xs">
+          {([
+            { v: "", label: "الكل" },
+            { v: "published", label: "منشور" },
+            { v: "draft", label: "مسودة" },
+            { v: "archived", label: "مؤرشف" },
+          ] as const).map((t) => {
+            const active = statusFilter === t.v;
+            return (
+              <button
+                key={t.v || "all"}
+                type="button"
+                onClick={() => {
+                  setStatusFilter(t.v as typeof statusFilter);
+                  setPage(0);
+                }}
+                className={cn(
+                  "rounded-full px-3 py-1 border transition",
+                  active
+                    ? "bg-neutral-900 text-white border-neutral-900 dark:bg-white dark:text-neutral-900 dark:border-white"
+                    : "bg-white text-neutral-700 border-neutral-300 hover:bg-neutral-50 dark:bg-neutral-900 dark:text-neutral-300 dark:border-neutral-700 dark:hover:bg-neutral-800",
+                )}
+              >
+                {t.label}
+              </button>
+            );
+          })}
+        </div>
+      )}
+
       <div className="rounded-2xl border border-neutral-200 bg-white overflow-hidden dark:border-neutral-800 dark:bg-neutral-900">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
@@ -357,13 +410,36 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
                       </td>
                     ))}
                     <td className="px-4 py-3 align-top">
-                      <div className="flex gap-1">
+                      <div className="flex flex-wrap gap-1">
                         <button
                           onClick={() => openEdit(row)}
                           className="rounded-md border border-neutral-300 bg-white px-2 py-1 text-xs hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-800 dark:hover:bg-neutral-700"
                         >
                           تعديل
                         </button>
+                        {hasStatus && (() => {
+                          const cs = (row as unknown as { content_status?: string }).content_status;
+                          if (cs === "published") {
+                            return (
+                              <button
+                                onClick={() => quickSetStatus(row, "draft")}
+                                disabled={busy}
+                                className="rounded-md border border-amber-300 bg-amber-50 px-2 py-1 text-xs text-amber-800 hover:bg-amber-100 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-300"
+                              >
+                                تحويل لمسودة
+                              </button>
+                            );
+                          }
+                          return (
+                            <button
+                              onClick={() => quickSetStatus(row, "published")}
+                              disabled={busy}
+                              className="rounded-md border border-emerald-300 bg-emerald-50 px-2 py-1 text-xs text-emerald-800 hover:bg-emerald-100 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-300"
+                            >
+                              نشر
+                            </button>
+                          );
+                        })()}
                         <button
                           onClick={() => setConfirmDelete(row)}
                           disabled={busy}
@@ -441,7 +517,7 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
                   onChange={(v) => setForm((f) => ({ ...f, [field.name]: v }))}
                 />
               ))}
-              <div className="md:col-span-2 flex items-center justify-end gap-2 pt-4 border-t border-neutral-100 dark:border-neutral-800">
+              <div className="md:col-span-2 flex flex-wrap items-center justify-end gap-2 pt-4 border-t border-neutral-100 dark:border-neutral-800">
                 <button
                   type="button"
                   onClick={closeForm}
@@ -449,6 +525,17 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
                 >
                   إلغاء
                 </button>
+
+                {hasStatus && (
+                  <button
+                    type="button"
+                    onClick={() => submitForm("draft")}
+                    disabled={busy}
+                    className="rounded-md border border-amber-300 bg-amber-50 px-4 py-2 text-sm font-medium text-amber-800 hover:bg-amber-100 disabled:opacity-50 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-200"
+                  >
+                    حفظ كمسودة
+                  </button>
+                )}
 
                 <button
                   type="submit"

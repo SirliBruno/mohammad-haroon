@@ -230,7 +230,7 @@ const emptyValues: Record<string, unknown> = {
   category: "",
   year: new Date().getFullYear(),
   status: "live",
-  content_status: "published",
+  content_status: "draft",
   featured: false,
   sort_order: 0,
   cover_url: "",
