@@ -410,13 +410,36 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
                       </td>
                     ))}
                     <td className="px-4 py-3 align-top">
-                      <div className="flex gap-1">
+                      <div className="flex flex-wrap gap-1">
                         <button
                           onClick={() => openEdit(row)}
                           className="rounded-md border border-neutral-300 bg-white px-2 py-1 text-xs hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-800 dark:hover:bg-neutral-700"
                         >
                           تعديل
                         </button>
+                        {hasStatus && (() => {
+                          const cs = (row as unknown as { content_status?: string }).content_status;
+                          if (cs === "published") {
+                            return (
+                              <button
+                                onClick={() => quickSetStatus(row, "draft")}
+                                disabled={busy}
+                                className="rounded-md border border-amber-300 bg-amber-50 px-2 py-1 text-xs text-amber-800 hover:bg-amber-100 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-300"
+                              >
+                                تحويل لمسودة
+                              </button>
+                            );
+                          }
+                          return (
+                            <button
+                              onClick={() => quickSetStatus(row, "published")}
+                              disabled={busy}
+                              className="rounded-md border border-emerald-300 bg-emerald-50 px-2 py-1 text-xs text-emerald-800 hover:bg-emerald-100 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-300"
+                            >
+                              نشر
+                            </button>
+                          );
+                        })()}
                         <button
                           onClick={() => setConfirmDelete(row)}
                           disabled={busy}
