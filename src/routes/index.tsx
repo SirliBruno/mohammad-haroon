@@ -1,4 +1,5 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
+import { RouteErrorBoundary, RouteNotFoundBoundary } from "@/components/layout/route-boundaries";
 import { ArrowLeft, ArrowUpRight, ExternalLink } from "lucide-react";
 
 import { Reveal } from "@/components/motion/reveal";
