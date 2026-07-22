@@ -62,7 +62,7 @@ export function ServiceShowcaseCard({
   return (
     <article
       className={cn(
-        "group relative w-full",
+        "group relative w-full overflow-hidden rounded-[32px]",
         "pb-[16%]", // room for the projects panel to hang below the stage
         className,
       )}
