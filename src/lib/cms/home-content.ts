@@ -349,19 +349,6 @@ export function useSite() {
     availabilityLabel: g("site.availabilityLabel", staticSite.availabilityLabel),
   };
 }
-  return {
-    ...site,
-    name: g("site.name", site.name),
-    tagline: g("site.tagline", site.tagline),
-    description: g("site.description", site.description),
-    email: g("site.email", site.email),
-    whatsapp: g("site.whatsapp", site.whatsapp),
-    whatsappDisplay: g("site.whatsappDisplay", site.whatsappDisplay),
-    location: g("site.location", site.location),
-    workingHours: g("site.workingHours", site.workingHours),
-    availabilityLabel: g("site.availabilityLabel", site.availabilityLabel),
-  };
-}
 
 /** Fetch content rows for any group (home, about, contact, career, work, services-page…). */
 export function usePageContent(group: string) {
