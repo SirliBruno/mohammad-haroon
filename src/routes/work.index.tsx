@@ -15,6 +15,7 @@ import {
   listPublicProjects,
   getProjectFacets,
 } from "@/lib/cms/projects-public.functions";
+import { usePageContent, getPageText } from "@/lib/cms/home-content";
 
 const PAGE_SIZE = 6;
 const CATEGORY_FILTERS = ["الكل", ...projectCategories] as const;
