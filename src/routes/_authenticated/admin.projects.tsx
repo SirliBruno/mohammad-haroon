@@ -205,15 +205,11 @@ const fields: FieldDef[] = [
     ],
   },
   {
-    name: "results",
-    label: "النتائج",
-    type: "structured",
+    name: "tools",
+    label: "الأدوات",
+    type: "tags",
     colSpan: 2,
-    addLabel: "+ إضافة نتيجة",
-    schema: [
-      { name: "label", label: "التسمية", placeholder: "مثال: NPS" },
-      { name: "value", label: "القيمة", placeholder: "مثال: 72" },
-    ],
+    help: "أدوات التصميم/التطوير المستخدمة (Figma, VS Code…). تظهر في الشريط الجانبي لصفحة المشروع.",
   },
   {
     name: "gallery",
