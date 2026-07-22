@@ -49,7 +49,11 @@ import { inquirySchema, type Inquiry } from "@/features/contact/schema";
 import { submitInquiry } from "@/lib/contact.functions";
 import { site } from "@/config/site";
 
+import { RouteErrorBoundary, RouteNotFoundBoundary } from "@/components/layout/route-boundaries";
+
 export const Route = createFileRoute("/contact")({
+  errorComponent: ({ reset }) => <RouteErrorBoundary reset={reset} />,
+  notFoundComponent: () => <RouteNotFoundBoundary />,
   head: () => ({
     meta: buildMeta({
       title: "تواصل",

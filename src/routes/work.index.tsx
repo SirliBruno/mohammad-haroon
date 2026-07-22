@@ -21,7 +21,11 @@ const PAGE_SIZE = 6;
 const CATEGORY_FILTERS = ["الكل", ...projectCategories] as const;
 type CategoryFilter = (typeof CATEGORY_FILTERS)[number];
 
+import { RouteErrorBoundary, RouteNotFoundBoundary } from "@/components/layout/route-boundaries";
+
 export const Route = createFileRoute("/work/")({
+  errorComponent: ({ reset }) => <RouteErrorBoundary reset={reset} eyebrow="المشاريع" />,
+  notFoundComponent: () => <RouteNotFoundBoundary eyebrow="المشاريع" />,
   head: () => ({
     meta: buildMeta({
       title: "المشاريع",
