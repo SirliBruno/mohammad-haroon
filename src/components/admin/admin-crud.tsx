@@ -517,7 +517,7 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
                   onChange={(v) => setForm((f) => ({ ...f, [field.name]: v }))}
                 />
               ))}
-              <div className="md:col-span-2 flex items-center justify-end gap-2 pt-4 border-t border-neutral-100 dark:border-neutral-800">
+              <div className="md:col-span-2 flex flex-wrap items-center justify-end gap-2 pt-4 border-t border-neutral-100 dark:border-neutral-800">
                 <button
                   type="button"
                   onClick={closeForm}
@@ -526,12 +526,27 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
                   إلغاء
                 </button>
 
+                {hasStatus && (
+                  <button
+                    type="button"
+                    onClick={() => submitForm("draft")}
+                    disabled={busy}
+                    className="rounded-md border border-amber-300 bg-amber-50 px-4 py-2 text-sm font-medium text-amber-800 hover:bg-amber-100 disabled:opacity-50 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-200"
+                  >
+                    حفظ كمسودة
+                  </button>
+                )}
+
                 <button
                   type="submit"
                   disabled={busy}
                   className="rounded-md bg-neutral-900 px-5 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-white dark:text-neutral-900"
                 >
-                  {busy ? "جارِ الحفظ…" : editingId ? "حفظ التعديلات" : "إضافة"}
+                  {busy
+                    ? "جارِ الحفظ…"
+                    : hasStatus
+                      ? editingId ? "حفظ ونشر" : "نشر"
+                      : editingId ? "حفظ التعديلات" : "إضافة"}
                 </button>
               </div>
             </form>
