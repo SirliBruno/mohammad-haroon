@@ -42,7 +42,12 @@ export const Route = createFileRoute("/services/")({
 
 function ServicesIndex() {
   const { data } = useSuspenseQuery(serviceListOptions(listParams));
-  const fromDb: Service[] = (data?.rows ?? []).map(dbRowToService);
+  const { data: projectData } = useQuery(projectListOptions({ limit: 200, orderBy: "sort_order", ascending: true }));
+  const projectTitleBySlug: Record<string, string> = {};
+  for (const row of projectData?.rows ?? []) {
+    if (row.slug) projectTitleBySlug[row.slug] = row.title;
+  }
+  const fromDb: Service[] = (data?.rows ?? []).map((row) => dbRowToService(row, projectTitleBySlug));
   const services = fromDb.length > 0 ? fromDb : staticServices;
   const { data: servicesRows } = usePageContent("services-page");
   const tt = (k: string, fb: string) => getPageText(servicesRows, k, fb);
@@ -62,17 +67,11 @@ function ServicesIndex() {
       <Section>
         <Grid cols={{ base: 1, md: 2, lg: 3 }} gap="md">
           {services.map((s) => (
-            <Link
-              key={s.slug}
-              to="/services/$slug"
-              params={{ slug: s.slug }}
-              className="rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-            >
-              <ServiceCard service={s} className="h-full transition-colors hover:border-primary/40" />
-            </Link>
+            <ServiceShowcaseCard key={s.slug} service={s} />
           ))}
         </Grid>
       </Section>
+
 
       <Section className="border-t border-border/60">
         <SectionTitle
