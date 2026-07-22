@@ -34,12 +34,12 @@ type Variant = {
 function variantFor(slug: string): Variant {
   const h = hashSlug(slug);
   const variants: Variant[] = [
-    { rotate: -6, phoneWidth: "w-[158px] md:w-[178px]", logoSide: "right", logoOffset: "-right-6", logoRotate: 8 },
-    { rotate: 0, phoneWidth: "w-[162px] md:w-[184px]", logoSide: "right", logoOffset: "-right-7", logoRotate: 6 },
-    { rotate: 6, phoneWidth: "w-[156px] md:w-[176px]", logoSide: "left", logoOffset: "-left-6", logoRotate: -8 },
-    { rotate: -4, phoneWidth: "w-[168px] md:w-[190px]", logoSide: "left", logoOffset: "-left-7", logoRotate: -5 },
-    { rotate: 4, phoneWidth: "w-[160px] md:w-[180px]", logoSide: "right", logoOffset: "-right-5", logoRotate: 10 },
-    { rotate: -8, phoneWidth: "w-[154px] md:w-[174px]", logoSide: "left", logoOffset: "-left-5", logoRotate: -10 },
+    { rotate: -6, phoneWidth: "w-[130px] md:w-[148px]", logoSide: "right", logoOffset: "-right-5", logoRotate: 8 },
+    { rotate: 0, phoneWidth: "w-[134px] md:w-[152px]", logoSide: "right", logoOffset: "-right-6", logoRotate: 6 },
+    { rotate: 6, phoneWidth: "w-[128px] md:w-[146px]", logoSide: "left", logoOffset: "-left-5", logoRotate: -8 },
+    { rotate: -4, phoneWidth: "w-[138px] md:w-[156px]", logoSide: "left", logoOffset: "-left-6", logoRotate: -5 },
+    { rotate: 4, phoneWidth: "w-[132px] md:w-[150px]", logoSide: "right", logoOffset: "-right-5", logoRotate: 10 },
+    { rotate: -8, phoneWidth: "w-[126px] md:w-[144px]", logoSide: "left", logoOffset: "-left-5", logoRotate: -10 },
   ];
   return variants[h % variants.length];
 }
@@ -122,7 +122,7 @@ export function ServiceShowcaseCard({
         </div>
 
         {/* ── 2. PHONE (hero) + 3. FLOATING LOGO ── */}
-        <div className="pointer-events-none absolute inset-x-0 top-[34%] z-20 flex justify-center">
+        <div className="pointer-events-none absolute inset-x-0 bottom-[6%] z-20 flex justify-center">
           <div
             className={cn(
               "relative transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
