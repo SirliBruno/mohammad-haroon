@@ -352,6 +352,37 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
         </button>
       </div>
 
+      {hasStatus && (
+        <div className="flex flex-wrap items-center gap-1 text-xs">
+          {([
+            { v: "", label: "الكل" },
+            { v: "published", label: "منشور" },
+            { v: "draft", label: "مسودة" },
+            { v: "archived", label: "مؤرشف" },
+          ] as const).map((t) => {
+            const active = statusFilter === t.v;
+            return (
+              <button
+                key={t.v || "all"}
+                type="button"
+                onClick={() => {
+                  setStatusFilter(t.v as typeof statusFilter);
+                  setPage(0);
+                }}
+                className={cn(
+                  "rounded-full px-3 py-1 border transition",
+                  active
+                    ? "bg-neutral-900 text-white border-neutral-900 dark:bg-white dark:text-neutral-900 dark:border-white"
+                    : "bg-white text-neutral-700 border-neutral-300 hover:bg-neutral-50 dark:bg-neutral-900 dark:text-neutral-300 dark:border-neutral-700 dark:hover:bg-neutral-800",
+                )}
+              >
+                {t.label}
+              </button>
+            );
+          })}
+        </div>
+      )}
+
       <div className="rounded-2xl border border-neutral-200 bg-white overflow-hidden dark:border-neutral-800 dark:bg-neutral-900">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
