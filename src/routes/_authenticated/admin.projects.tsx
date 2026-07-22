@@ -399,6 +399,7 @@ function AdminProjectsPage() {
             timeline: (form.timeline as string) || null,
             tags: asStringArray(form.tags),
             technologies: asStringArray(form.technologies),
+            tools: asStringArray(form.tools),
             problem: (form.problem as string) || null,
             goals: asStringArray(form.goals),
             research: (form.research as string) || null,
@@ -417,7 +418,6 @@ function AdminProjectsPage() {
                   })()
                 : null,
             metrics: Array.isArray(form.metrics) ? (form.metrics as unknown[]) : [],
-            results: Array.isArray(form.results) ? (form.results as unknown[]) : [],
             gallery: Array.isArray(form.gallery) ? (form.gallery as unknown[]) : [],
             testimonial:
               form.testimonial && typeof form.testimonial === "object" && !Array.isArray(form.testimonial)
