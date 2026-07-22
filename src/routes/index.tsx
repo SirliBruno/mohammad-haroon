@@ -28,6 +28,7 @@ import { useHomeContent, getHomeText, getHomeList } from "@/lib/cms/home-content
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { listPublicProjects } from "@/lib/cms/projects-public.functions";
+import { listTestimonials } from "@/lib/cms/simple.functions";
 import { toProject } from "@/lib/project-adapter";
 
 /* ---------------- Home-only data ---------------- */
