@@ -48,22 +48,22 @@ export function ImageInput({
 
   return (
     <div className={cn("flex flex-col gap-2", className)}>
-      {label && <label className="text-xs font-medium text-neutral-700 dark:text-neutral-300">{label}</label>}
+      {label && <label className="text-xs font-medium text-foreground dark:text-muted-foreground">{label}</label>}
       <div className="flex items-start gap-3">
         {value ? (
           <img
             src={value}
             alt=""
-            className="h-20 w-20 rounded-lg object-cover border border-neutral-200 dark:border-neutral-800"
+            className="h-20 w-20 rounded-lg object-cover border border-border dark:border-border"
           />
         ) : (
-          <div className="h-20 w-20 rounded-lg border border-dashed border-neutral-300 bg-neutral-100 flex items-center justify-center text-xs text-neutral-400 dark:border-neutral-700 dark:bg-neutral-800">
+          <div className="h-20 w-20 rounded-lg border border-dashed border-input bg-neutral-100 flex items-center justify-center text-xs text-muted-foreground dark:border-border dark:bg-neutral-800">
             بدون صورة
           </div>
         )}
         <div className="flex flex-col gap-2 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <label className="cursor-pointer rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-xs hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-800 dark:hover:bg-neutral-700">
+            <label className="cursor-pointer rounded-md border border-input bg-white px-3 py-1.5 text-xs hover:bg-muted dark:border-border dark:bg-neutral-800 dark:hover:bg-neutral-700">
               {busy ? "جاري الرفع…" : "رفع صورة"}
               <input
                 type="file"
@@ -89,7 +89,7 @@ export function ImageInput({
             onChange={(e) => onChange(e.target.value || null)}
             placeholder="أو ألصق رابط الصورة"
             dir="ltr"
-            className="w-full rounded-md border border-neutral-300 bg-white px-2.5 py-1.5 text-xs dark:border-neutral-700 dark:bg-neutral-900"
+            className="w-full rounded-md border border-input bg-white px-2.5 py-1.5 text-xs dark:border-border dark:bg-neutral-900"
           />
           {error && <p className="text-xs text-red-600">{error}</p>}
         </div>

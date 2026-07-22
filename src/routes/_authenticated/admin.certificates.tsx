@@ -42,8 +42,8 @@ function Page() {
         updateFn={updateCertificate}
         deleteFn={deleteCertificate}
         columns={[
-          { header: "الشهادة", render: (r: any) => <div><div className="font-medium">{r.title}</div><div className="text-xs text-neutral-500">{r.issuer}</div></div> },
-          { header: "التاريخ", render: (r: any) => <span className="text-xs text-neutral-500">{r.issued_on ?? "—"}</span> },
+          { header: "الشهادة", render: (r: any) => <div><div className="font-medium">{r.title}</div><div className="text-xs text-muted-foreground">{r.issuer}</div></div> },
+          { header: "التاريخ", render: (r: any) => <span className="text-xs text-muted-foreground">{r.issued_on ?? "—"}</span> },
           { header: "الحالة", render: (r: any) => <StatusPill status={r.content_status} /> },
         ]}
       />
@@ -55,7 +55,7 @@ function StatusPill({ status }: { status: string }) {
   const map: Record<string, string> = {
     published: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300",
     draft: "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300",
-    archived: "bg-neutral-100 text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400",
+    archived: "bg-neutral-100 text-muted-foreground dark:bg-neutral-800 dark:text-muted-foreground",
   };
   const label: Record<string, string> = { published: "منشور", draft: "مسودة", archived: "مؤرشف" };
   return <span className={`rounded-full px-2 py-0.5 text-xs ${map[status] ?? ""}`}>{label[status] ?? status}</span>;

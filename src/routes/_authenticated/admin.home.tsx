@@ -39,7 +39,7 @@ function Page() {
       </div>
 
       {isLoading || !rows ? (
-        <div className="rounded-xl border border-neutral-200 p-6 text-sm text-neutral-500 dark:border-neutral-800">
+        <div className="rounded-xl border border-border p-6 text-sm text-muted-foreground dark:border-border">
           جارِ التحميل…
         </div>
       ) : (
@@ -123,7 +123,7 @@ function SectionEditor({
               <div className="flex items-center justify-between gap-2">
                 <Label className="text-xs">{f.label}</Label>
                 <code
-                  className="text-[10px] text-neutral-400 dark:text-neutral-500"
+                  className="text-[10px] text-muted-foreground dark:text-muted-foreground"
                   dir="ltr"
                 >
                   {f.key}
@@ -131,7 +131,7 @@ function SectionEditor({
               </div>
               {f.help ? (
                 <p
-                  className="mt-1 text-[11px] text-neutral-500"
+                  className="mt-1 text-[11px] text-muted-foreground"
                   dir="ltr"
                 >
                   {f.help}

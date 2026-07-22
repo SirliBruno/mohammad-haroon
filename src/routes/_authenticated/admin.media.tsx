@@ -131,7 +131,7 @@ function Page() {
           <button
             onClick={() => fileRef.current?.click()}
             disabled={busy}
-            className="rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-white dark:text-neutral-900"
+            className="rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-white dark:text-foreground"
           >
             {busy ? "جارِ الرفع…" : "+ رفع ملف"}
           </button>
@@ -139,9 +139,9 @@ function Page() {
       }
     >
       {listQ.isLoading ? (
-        <div className="p-10 text-center text-neutral-500">جارِ التحميل…</div>
+        <div className="p-10 text-center text-muted-foreground">جارِ التحميل…</div>
       ) : rows.length === 0 ? (
-        <div className="p-10 text-center text-neutral-500 rounded-xl border border-dashed border-neutral-300 dark:border-neutral-700">
+        <div className="p-10 text-center text-muted-foreground rounded-xl border border-dashed border-input dark:border-border">
           لم يتم رفع أي وسائط بعد.
         </div>
       ) : (
@@ -149,24 +149,24 @@ function Page() {
           {rows.map((r) => (
             <div
               key={r.id}
-              className="group rounded-xl overflow-hidden border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900"
+              className="group rounded-xl overflow-hidden border border-border bg-white dark:border-border dark:bg-neutral-900"
             >
               <div className="aspect-square bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center">
                 {r.kind === "image" ? (
                   <img src={r.url} alt={r.alt ?? ""} className="w-full h-full object-cover" />
                 ) : (
-                  <span className="text-xs text-neutral-400">{r.kind}</span>
+                  <span className="text-xs text-muted-foreground">{r.kind}</span>
                 )}
               </div>
               <div className="p-2">
                 <div className="text-xs font-medium truncate">{r.filename ?? "—"}</div>
-                <div className="text-[10px] text-neutral-500 truncate">
+                <div className="text-[10px] text-muted-foreground truncate">
                   {r.size_bytes ? `${Math.round(r.size_bytes / 1024)} KB` : "—"}
                 </div>
                 <div className="mt-1 flex gap-1">
                   <button
                     onClick={() => setEditing(r)}
-                    className="flex-1 text-[11px] rounded border border-neutral-300 px-2 py-0.5 hover:bg-neutral-50 dark:border-neutral-700 dark:hover:bg-neutral-800"
+                    className="flex-1 text-[11px] rounded border border-input px-2 py-0.5 hover:bg-muted dark:border-border dark:hover:bg-muted"
                   >
                     تعديل
                   </button>
@@ -175,7 +175,7 @@ function Page() {
                       void navigator.clipboard.writeText(r.url);
                       toast.success("تم نسخ الرابط.");
                     }}
-                    className="flex-1 text-[11px] rounded border border-neutral-300 px-2 py-0.5 hover:bg-neutral-50 dark:border-neutral-700 dark:hover:bg-neutral-800"
+                    className="flex-1 text-[11px] rounded border border-input px-2 py-0.5 hover:bg-muted dark:border-border dark:hover:bg-muted"
                   >
                     نسخ URL
                   </button>
@@ -196,31 +196,31 @@ function Page() {
 
       {editing && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="w-full max-w-md rounded-2xl bg-white p-6 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800">
+          <div className="w-full max-w-md rounded-2xl bg-white p-6 dark:bg-neutral-900 border border-border dark:border-border">
             <h3 className="font-semibold mb-3">بيانات الملف</h3>
             <label className="text-xs">النص البديل (alt)</label>
             <input
               value={editing.alt ?? ""}
               onChange={(e) => setEditing({ ...editing, alt: e.target.value })}
-              className="mt-1 mb-3 w-full rounded-md border border-neutral-300 px-3 py-1.5 text-sm dark:border-neutral-700 dark:bg-neutral-900"
+              className="mt-1 mb-3 w-full rounded-md border border-input px-3 py-1.5 text-sm dark:border-border dark:bg-neutral-900"
             />
             <label className="text-xs">التعليق</label>
             <input
               value={editing.caption ?? ""}
               onChange={(e) => setEditing({ ...editing, caption: e.target.value })}
-              className="mt-1 mb-3 w-full rounded-md border border-neutral-300 px-3 py-1.5 text-sm dark:border-neutral-700 dark:bg-neutral-900"
+              className="mt-1 mb-3 w-full rounded-md border border-input px-3 py-1.5 text-sm dark:border-border dark:bg-neutral-900"
             />
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setEditing(null)}
-                className="rounded-md border border-neutral-300 px-3 py-1.5 text-sm dark:border-neutral-700"
+                className="rounded-md border border-input px-3 py-1.5 text-sm dark:border-border"
               >
                 إلغاء
               </button>
               <button
                 onClick={() => saveMetaMut.mutate(editing)}
                 disabled={saveMetaMut.isPending}
-                className="rounded-md bg-neutral-900 px-4 py-1.5 text-sm text-white disabled:opacity-50 dark:bg-white dark:text-neutral-900"
+                className="rounded-md bg-neutral-900 px-4 py-1.5 text-sm text-white disabled:opacity-50 dark:bg-white dark:text-foreground"
               >
                 {saveMetaMut.isPending ? "جارِ الحفظ…" : "حفظ"}
               </button>

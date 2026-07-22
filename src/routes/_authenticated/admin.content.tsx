@@ -53,14 +53,14 @@ function Page() {
         updateFn={updateSiteContent}
         deleteFn={deleteSiteContent}
         columns={[
-          { header: "المفتاح", render: (r: any) => <div><div className="font-mono text-xs" dir="ltr">{r.key}</div><div className="text-[11px] text-neutral-500">{r.group_name}</div></div> },
+          { header: "المفتاح", render: (r: any) => <div><div className="font-mono text-xs" dir="ltr">{r.key}</div><div className="text-[11px] text-muted-foreground">{r.group_name}</div></div> },
           { header: "المحتوى", render: (r: any) => (
             <div className="max-w-md">
               {r.image_url && <img src={r.image_url} alt="" className="h-10 w-10 rounded object-cover inline-block me-2" />}
-              <span className="text-xs text-neutral-700 dark:text-neutral-300 line-clamp-2">{r.value_ar || r.value_en || "—"}</span>
+              <span className="text-xs text-foreground dark:text-muted-foreground line-clamp-2">{r.value_ar || r.value_en || "—"}</span>
             </div>
           ) },
-          { header: "النوع", render: (r: any) => <span className="text-xs text-neutral-500">{r.kind}</span> },
+          { header: "النوع", render: (r: any) => <span className="text-xs text-muted-foreground">{r.kind}</span> },
         ]}
       />
     </AdminShell>

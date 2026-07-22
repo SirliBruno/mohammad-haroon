@@ -79,7 +79,7 @@ function AdminAuditPage() {
                 setTable(e.target.value);
                 setPage(0);
               }}
-              className="rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm dark:border-neutral-700 dark:bg-neutral-900"
+              className="rounded-md border border-input bg-white px-3 py-1.5 text-sm dark:border-border dark:bg-neutral-900"
             >
               {TABLES.map((t) => (
                 <option key={t.value} value={t.value}>
@@ -91,38 +91,38 @@ function AdminAuditPage() {
               type="button"
               onClick={() => void query.refetch()}
               disabled={query.isFetching}
-              className="rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm hover:bg-neutral-50 disabled:opacity-60 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:bg-neutral-800"
+              className="rounded-md border border-input bg-white px-3 py-1.5 text-sm hover:bg-muted disabled:opacity-60 dark:border-border dark:bg-neutral-900 dark:hover:bg-muted"
             >
               {query.isFetching ? "…" : "تحديث"}
             </button>
-            <span className="text-xs text-neutral-500">
+            <span className="text-xs text-muted-foreground">
               {count === 0 ? "لا توجد سجلات" : `${count} سجل`}
             </span>
           </div>
         </div>
 
-        <div className="rounded-2xl border border-neutral-200 bg-white overflow-hidden dark:border-neutral-800 dark:bg-neutral-900">
+        <div className="rounded-2xl border border-border bg-white overflow-hidden dark:border-border dark:bg-neutral-900">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-neutral-50 dark:bg-neutral-800/50">
                 <tr>
-                  <th className="text-start px-4 py-3 font-medium text-neutral-600 dark:text-neutral-300 w-40">التاريخ</th>
-                  <th className="text-start px-4 py-3 font-medium text-neutral-600 dark:text-neutral-300 w-24">العملية</th>
-                  <th className="text-start px-4 py-3 font-medium text-neutral-600 dark:text-neutral-300">الجدول</th>
-                  <th className="text-start px-4 py-3 font-medium text-neutral-600 dark:text-neutral-300 hidden md:table-cell">معرّف السجل</th>
-                  <th className="text-start px-4 py-3 font-medium text-neutral-600 dark:text-neutral-300 w-24">تفاصيل</th>
+                  <th className="text-start px-4 py-3 font-medium text-muted-foreground dark:text-muted-foreground w-40">التاريخ</th>
+                  <th className="text-start px-4 py-3 font-medium text-muted-foreground dark:text-muted-foreground w-24">العملية</th>
+                  <th className="text-start px-4 py-3 font-medium text-muted-foreground dark:text-muted-foreground">الجدول</th>
+                  <th className="text-start px-4 py-3 font-medium text-muted-foreground dark:text-muted-foreground hidden md:table-cell">معرّف السجل</th>
+                  <th className="text-start px-4 py-3 font-medium text-muted-foreground dark:text-muted-foreground w-24">تفاصيل</th>
                 </tr>
               </thead>
               <tbody>
                 {query.isLoading ? (
                   <tr>
-                    <td colSpan={5} className="px-4 py-8 text-center text-neutral-500">
+                    <td colSpan={5} className="px-4 py-8 text-center text-muted-foreground">
                       جارِ التحميل…
                     </td>
                   </tr>
                 ) : rows.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-4 py-8 text-center text-neutral-500">
+                    <td colSpan={5} className="px-4 py-8 text-center text-muted-foreground">
                       لا توجد سجلات مطابقة.
                     </td>
                   </tr>
@@ -134,9 +134,9 @@ function AdminAuditPage() {
                       <>
                         <tr
                           key={row.id}
-                          className="border-t border-neutral-100 dark:border-neutral-800 hover:bg-neutral-50/50 dark:hover:bg-neutral-800/30"
+                          className="border-t border-border dark:border-border hover:bg-muted/50 dark:hover:bg-muted/30"
                         >
-                          <td className="px-4 py-3 align-top text-xs tabular-nums text-neutral-600 dark:text-neutral-400">
+                          <td className="px-4 py-3 align-top text-xs tabular-nums text-muted-foreground dark:text-muted-foreground">
                             {fmt.format(new Date(row.created_at))}
                           </td>
                           <td className="px-4 py-3 align-top">
@@ -150,25 +150,25 @@ function AdminAuditPage() {
                             <span className="font-mono text-xs">{row.table_name}</span>
                           </td>
                           <td className="px-4 py-3 align-top hidden md:table-cell" dir="ltr">
-                            <span className="font-mono text-[11px] text-neutral-500">
+                            <span className="font-mono text-[11px] text-muted-foreground">
                               {row.row_id?.slice(0, 8) ?? "—"}
                             </span>
                           </td>
                           <td className="px-4 py-3 align-top">
                             <button
                               onClick={() => setExpanded(isOpen ? null : row.id)}
-                              className="rounded-md border border-neutral-300 bg-white px-2 py-1 text-xs hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-800"
+                              className="rounded-md border border-input bg-white px-2 py-1 text-xs hover:bg-muted dark:border-border dark:bg-neutral-800"
                             >
                               {isOpen ? "إخفاء" : "عرض"}
                             </button>
                           </td>
                         </tr>
                         {isOpen && (
-                          <tr key={`${row.id}-body`} className="border-t border-neutral-100 dark:border-neutral-800">
+                          <tr key={`${row.id}-body`} className="border-t border-border dark:border-border">
                             <td colSpan={5} className="bg-neutral-50/60 px-4 py-3 dark:bg-neutral-950/40">
                               <pre
                                 dir="ltr"
-                                className="max-h-96 overflow-auto rounded-md bg-white p-3 text-[11px] leading-relaxed text-neutral-800 shadow-inner dark:bg-neutral-900 dark:text-neutral-200"
+                                className="max-h-96 overflow-auto rounded-md bg-white p-3 text-[11px] leading-relaxed text-foreground shadow-inner dark:bg-neutral-900 dark:text-foreground"
                               >
                                 {JSON.stringify(row.diff, null, 2)}
                               </pre>
@@ -183,8 +183,8 @@ function AdminAuditPage() {
             </table>
           </div>
           {totalPages > 1 && (
-            <div className="flex items-center justify-between border-t border-neutral-100 px-4 py-3 text-xs dark:border-neutral-800">
-              <div className="text-neutral-500">
+            <div className="flex items-center justify-between border-t border-border px-4 py-3 text-xs dark:border-border">
+              <div className="text-muted-foreground">
                 صفحة {page + 1} من {totalPages}
               </div>
               <div className="flex items-center gap-1">
@@ -192,7 +192,7 @@ function AdminAuditPage() {
                   type="button"
                   onClick={() => setPage((p) => Math.max(0, p - 1))}
                   disabled={page === 0 || query.isFetching}
-                  className="rounded-md border border-neutral-300 bg-white px-2.5 py-1 disabled:opacity-40 dark:border-neutral-700 dark:bg-neutral-900"
+                  className="rounded-md border border-input bg-white px-2.5 py-1 disabled:opacity-40 dark:border-border dark:bg-neutral-900"
                 >
                   السابق
                 </button>
@@ -200,7 +200,7 @@ function AdminAuditPage() {
                   type="button"
                   onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
                   disabled={page + 1 >= totalPages || query.isFetching}
-                  className="rounded-md border border-neutral-300 bg-white px-2.5 py-1 disabled:opacity-40 dark:border-neutral-700 dark:bg-neutral-900"
+                  className="rounded-md border border-input bg-white px-2.5 py-1 disabled:opacity-40 dark:border-border dark:bg-neutral-900"
                 >
                   التالي
                 </button>

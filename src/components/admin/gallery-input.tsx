@@ -90,7 +90,7 @@ export function GalleryInput({
   return (
     <div className={cn("flex flex-col gap-3", className)}>
       <div className="flex flex-wrap items-center gap-2">
-        <label className="cursor-pointer rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-xs hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-800 dark:hover:bg-neutral-700">
+        <label className="cursor-pointer rounded-md border border-input bg-white px-3 py-1.5 text-xs hover:bg-muted dark:border-border dark:bg-neutral-800 dark:hover:bg-neutral-700">
           {busy ? "جاري الرفع…" : "+ إضافة صور"}
           <input
             type="file"
@@ -107,11 +107,11 @@ export function GalleryInput({
         <button
           type="button"
           onClick={addByUrl}
-          className="rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-xs hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-800 dark:hover:bg-neutral-700"
+          className="rounded-md border border-input bg-white px-3 py-1.5 text-xs hover:bg-muted dark:border-border dark:bg-neutral-800 dark:hover:bg-neutral-700"
         >
           إضافة برابط
         </button>
-        <span className="text-xs text-neutral-500">
+        <span className="text-xs text-muted-foreground">
           {items.length ? `${items.length} صورة` : "لا توجد صور بعد"}
         </span>
       </div>
@@ -122,12 +122,12 @@ export function GalleryInput({
           {items.map((it, i) => (
             <li
               key={`${it.src}-${i}`}
-              className="flex gap-3 rounded-lg border border-neutral-200 bg-white p-3 dark:border-neutral-800 dark:bg-neutral-900"
+              className="flex gap-3 rounded-lg border border-border bg-white p-3 dark:border-border dark:bg-neutral-900"
             >
               <img
                 src={it.src}
                 alt={it.alt}
-                className="h-20 w-24 flex-none rounded-md object-cover border border-neutral-200 dark:border-neutral-800"
+                className="h-20 w-24 flex-none rounded-md object-cover border border-border dark:border-border"
               />
               <div className="flex min-w-0 flex-1 flex-col gap-2">
                 <input
@@ -135,14 +135,14 @@ export function GalleryInput({
                   value={it.alt}
                   onChange={(e) => updateItem(i, { alt: e.target.value })}
                   placeholder="نص بديل للصورة (alt)"
-                  className="w-full rounded-md border border-neutral-300 bg-white px-2.5 py-1.5 text-xs dark:border-neutral-700 dark:bg-neutral-900"
+                  className="w-full rounded-md border border-input bg-white px-2.5 py-1.5 text-xs dark:border-border dark:bg-neutral-900"
                 />
                 <div className="flex flex-wrap items-center gap-1">
                   <button
                     type="button"
                     onClick={() => move(i, -1)}
                     disabled={i === 0}
-                    className="rounded-md border border-neutral-300 bg-white px-2 py-1 text-xs disabled:opacity-40 dark:border-neutral-700 dark:bg-neutral-800"
+                    className="rounded-md border border-input bg-white px-2 py-1 text-xs disabled:opacity-40 dark:border-border dark:bg-neutral-800"
                   >
                     ↑
                   </button>
@@ -150,7 +150,7 @@ export function GalleryInput({
                     type="button"
                     onClick={() => move(i, 1)}
                     disabled={i === items.length - 1}
-                    className="rounded-md border border-neutral-300 bg-white px-2 py-1 text-xs disabled:opacity-40 dark:border-neutral-700 dark:bg-neutral-800"
+                    className="rounded-md border border-input bg-white px-2 py-1 text-xs disabled:opacity-40 dark:border-border dark:bg-neutral-800"
                   >
                     ↓
                   </button>

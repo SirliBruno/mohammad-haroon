@@ -94,10 +94,10 @@ const columns: ListColumn<Row>[] = [
         <img
           src={r.cover_url}
           alt=""
-          className="h-12 w-20 rounded border border-neutral-200 object-cover dark:border-neutral-800"
+          className="h-12 w-20 rounded border border-border object-cover dark:border-border"
         />
       ) : (
-        <div className="h-12 w-20 rounded border border-neutral-200 bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-800" />
+        <div className="h-12 w-20 rounded border border-border bg-neutral-100 dark:border-border dark:bg-neutral-800" />
       ),
   },
   {
@@ -106,7 +106,7 @@ const columns: ListColumn<Row>[] = [
       <div className="min-w-0">
         <div className="font-medium truncate">{r.title}</div>
         {r.host && (
-          <div className="text-[11px] text-neutral-500 truncate" dir="ltr">
+          <div className="text-[11px] text-muted-foreground truncate" dir="ltr">
             {r.host}
           </div>
         )}
@@ -116,7 +116,7 @@ const columns: ListColumn<Row>[] = [
   {
     header: "التصنيف",
     render: (r) => (
-      <span className="text-xs text-neutral-600 dark:text-neutral-400">
+      <span className="text-xs text-muted-foreground dark:text-muted-foreground">
         {r.category ?? "—"} · {r.year ?? "—"}
       </span>
     ),
@@ -136,7 +136,7 @@ const columns: ListColumn<Row>[] = [
           {r.status}
         </span>
         {!r.is_active && (
-          <span className="inline-flex w-fit rounded-full bg-neutral-500/10 px-2 py-0.5 text-neutral-600 dark:text-neutral-400">
+          <span className="inline-flex w-fit rounded-full bg-neutral-500/10 px-2 py-0.5 text-muted-foreground dark:text-muted-foreground">
             مخفي
           </span>
         )}
@@ -147,7 +147,7 @@ const columns: ListColumn<Row>[] = [
     header: "ترتيب",
     className: "w-14",
     render: (r) => (
-      <span className="text-xs tabular-nums text-neutral-600 dark:text-neutral-400">
+      <span className="text-xs tabular-nums text-muted-foreground dark:text-muted-foreground">
         {r.sort_order}
       </span>
     ),

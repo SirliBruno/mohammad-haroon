@@ -50,8 +50,8 @@ function Page() {
         updateFn={updateService}
         deleteFn={deleteService}
         columns={[
-          { header: "الخدمة", render: (r: any) => <div><div className="font-medium">{r.title}</div><div className="text-xs text-neutral-500" dir="ltr">/{r.slug}</div></div> },
-          { header: "المدة", render: (r: any) => <span className="text-xs text-neutral-500">{r.timeline ?? "—"}</span> },
+          { header: "الخدمة", render: (r: any) => <div><div className="font-medium">{r.title}</div><div className="text-xs text-muted-foreground" dir="ltr">/{r.slug}</div></div> },
+          { header: "المدة", render: (r: any) => <span className="text-xs text-muted-foreground">{r.timeline ?? "—"}</span> },
           { header: "الحالة", render: (r: any) => <span className="text-xs">{r.content_status}</span> },
         ]}
       />

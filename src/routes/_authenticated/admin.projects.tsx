@@ -284,10 +284,10 @@ const columns: ListColumn<Row>[] = [
         <img
           src={r.cover_url}
           alt=""
-          className="h-12 w-20 rounded border border-neutral-200 object-cover dark:border-neutral-800"
+          className="h-12 w-20 rounded border border-border object-cover dark:border-border"
         />
       ) : (
-        <div className="h-12 w-20 rounded border border-neutral-200 bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-800" />
+        <div className="h-12 w-20 rounded border border-border bg-neutral-100 dark:border-border dark:bg-neutral-800" />
       ),
   },
   {
@@ -295,7 +295,7 @@ const columns: ListColumn<Row>[] = [
     render: (r) => (
       <div className="min-w-0">
         <div className="font-medium truncate">{r.title}</div>
-        <div className="text-[11px] text-neutral-500 truncate" dir="ltr">
+        <div className="text-[11px] text-muted-foreground truncate" dir="ltr">
           /{r.slug}
         </div>
       </div>
@@ -304,7 +304,7 @@ const columns: ListColumn<Row>[] = [
   {
     header: "التصنيف",
     render: (r) => (
-      <span className="text-xs text-neutral-600 dark:text-neutral-400">
+      <span className="text-xs text-muted-foreground dark:text-muted-foreground">
         {r.category ?? "—"}
       </span>
     ),
@@ -313,7 +313,7 @@ const columns: ListColumn<Row>[] = [
     header: "السنة",
     className: "w-16",
     render: (r) => (
-      <span className="text-xs text-neutral-600 dark:text-neutral-400">
+      <span className="text-xs text-muted-foreground dark:text-muted-foreground">
         {r.year ?? "—"}
       </span>
     ),
@@ -329,7 +329,7 @@ const columns: ListColumn<Row>[] = [
               ? "inline-flex w-fit rounded-full bg-emerald-500/10 px-2 py-0.5 text-emerald-700 dark:text-emerald-300"
               : r.content_status === "draft"
                 ? "inline-flex w-fit rounded-full bg-amber-500/10 px-2 py-0.5 text-amber-700 dark:text-amber-300"
-                : "inline-flex w-fit rounded-full bg-neutral-500/10 px-2 py-0.5 text-neutral-600 dark:text-neutral-400"
+                : "inline-flex w-fit rounded-full bg-neutral-500/10 px-2 py-0.5 text-muted-foreground dark:text-muted-foreground"
           }
         >
           {r.content_status === "published"
@@ -350,7 +350,7 @@ const columns: ListColumn<Row>[] = [
     header: "ترتيب",
     className: "w-14",
     render: (r) => (
-      <span className="text-xs tabular-nums text-neutral-600 dark:text-neutral-400">
+      <span className="text-xs tabular-nums text-muted-foreground dark:text-muted-foreground">
         {r.sort_order}
       </span>
     ),
