@@ -155,8 +155,14 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
   const update = useServerFn(props.updateFn as never) as unknown as (arg: { data: { id: string; patch: Record<string, unknown> } }) => Promise<unknown>;
   const remove = useServerFn(props.deleteFn as never) as unknown as (arg: { data: { id: string } }) => Promise<unknown>;
 
+  const hasStatus = useMemo(
+    () => fields.some((f) => f.name === "content_status"),
+    [fields],
+  );
+
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"" | "draft" | "published" | "archived">("");
   const [page, setPage] = useState(0);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
