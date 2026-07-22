@@ -17,6 +17,7 @@ import {
 import { serviceListOptions } from "@/features/cms/queries";
 import { dbRowToService } from "@/lib/service-adapter";
 import type { Service } from "@/features/services/schema";
+import { usePageContent, getPageText } from "@/lib/cms/home-content";
 
 const listParams = { limit: 50, orderBy: "sort_order", ascending: true } as const;
 
