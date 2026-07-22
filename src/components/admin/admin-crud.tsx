@@ -398,9 +398,41 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
             </thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan={columns.length + 1} className="px-4 py-8 text-center text-neutral-500">جارِ التحميل…</td></tr>
+                Array.from({ length: 5 }).map((_, r) => (
+                  <tr key={`sk-${r}`} className="border-t border-neutral-100 dark:border-neutral-800">
+                    {columns.map((_c, i) => (
+                      <td key={i} className="px-4 py-3">
+                        <div className="h-4 w-3/4 animate-pulse rounded bg-neutral-200 dark:bg-neutral-800" />
+                      </td>
+                    ))}
+                    <td className="px-4 py-3">
+                      <div className="h-4 w-20 animate-pulse rounded bg-neutral-200 dark:bg-neutral-800" />
+                    </td>
+                  </tr>
+                ))
               ) : rows.length === 0 ? (
-                <tr><td colSpan={columns.length + 1} className="px-4 py-8 text-center text-neutral-500">لا توجد {entityNamePlural} بعد.</td></tr>
+                <tr>
+                  <td colSpan={columns.length + 1} className="px-4 py-12">
+                    <div className="flex flex-col items-center gap-3 text-center">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-neutral-100 text-neutral-400 dark:bg-neutral-800 dark:text-neutral-500">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+                      </div>
+                      <div className="text-sm text-neutral-600 dark:text-neutral-400">
+                        {search || statusFilter ? `لا توجد نتائج مطابقة.` : `لا توجد ${entityNamePlural} بعد.`}
+                      </div>
+                      {!search && !statusFilter && (
+                        <button
+                          type="button"
+                          onClick={openCreate}
+                          className="rounded-md bg-neutral-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
+                        >
+                          إضافة {entityName}
+                        </button>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+
               ) : (
                 rows.map((row) => (
                   <tr key={row.id} className="border-t border-neutral-100 dark:border-neutral-800 hover:bg-neutral-50/50 dark:hover:bg-neutral-800/30">
