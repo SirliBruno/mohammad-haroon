@@ -168,8 +168,6 @@ export function ServiceShowcaseCard({
                   "grid size-[70px] place-items-center rounded-2xl md:size-[78px]",
                   "border border-white/40 bg-white/70 backdrop-blur-2xl backdrop-saturate-150 dark:border-white/20 dark:bg-white/10",
                   "shadow-[0_10px_20px_-6px_hsl(0_0%_0%/0.25),0_24px_44px_-10px_hsl(0_0%_0%/0.35),inset_0_1px_0_hsl(0_0%_100%/0.6)]",
-                  "transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
-                  "group-hover:-translate-y-1 group-hover:scale-[1.06]",
                 )}
                 style={{ transform: `rotate(${v.logoRotate}deg)` }}
               >
