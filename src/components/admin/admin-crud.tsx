@@ -872,6 +872,7 @@ function FieldRenderer({
       <div className={cn("flex flex-col gap-1", colSpan)}>
         {labelEl}
         <textarea
+          id={inputId}
           value={(value as string) ?? ""}
           onChange={(e) => onChange(e.target.value)}
           rows={field.rows ?? (field.type === "richtext" ? 10 : 4)}
