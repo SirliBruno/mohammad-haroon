@@ -710,8 +710,12 @@ function FieldRenderer({
   const baseInput =
     "w-full rounded-md border border-input bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900 dark:border-border dark:bg-neutral-900 dark:focus:ring-white";
 
+  const inputId = `f-${field.name}`;
   const labelEl = (
-    <label className="text-xs font-medium text-foreground dark:text-muted-foreground flex items-center gap-1">
+    <label
+      htmlFor={inputId}
+      className="text-xs font-medium text-foreground dark:text-muted-foreground flex items-center gap-1"
+    >
       {field.label}
       {"required" in field && field.required && <span className="text-red-500">*</span>}
     </label>
