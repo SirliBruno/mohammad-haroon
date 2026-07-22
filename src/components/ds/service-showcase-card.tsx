@@ -72,9 +72,9 @@ export function ServiceShowcaseCard({
         className={cn(
           "relative aspect-[4/5] w-full rounded-[32px]",
           "border border-border/50 bg-gradient-to-b from-secondary/40 to-card",
-          "shadow-[0_1px_2px_hsl(0_0%_0%/0.04),0_20px_40px_-24px_hsl(0_0%_0%/0.12)]",
-          "transition-[transform,box-shadow,border-color] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
-          "group-hover:-translate-y-1 group-hover:border-primary/25",
+        "shadow-[0_1px_2px_hsl(0_0%_0%/0.04),0_20px_40px_-24px_hsl(0_0%_0%/0.12)]",
+          "transition-[box-shadow,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
+          "group-hover:border-primary/25",
           "group-hover:shadow-[0_1px_2px_hsl(0_0%_0%/0.06),0_40px_70px_-24px_hsl(0_0%_0%/0.22)]",
         )}
       >
