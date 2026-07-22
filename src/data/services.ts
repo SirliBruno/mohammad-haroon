@@ -369,7 +369,15 @@ const showcaseBySlug: Record<string, ServiceShowcase> = {
 };
 
 for (const s of services) {
-  s.showcase = showcaseBySlug[s.slug];
+  const sc = showcaseBySlug[s.slug];
+  if (!sc) continue;
+  s.showcase = {
+    ...sc,
+    featuredProjects: sc.featuredProjects.map((p) => ({
+      ...p,
+      cover: p.cover ?? `https://picsum.photos/seed/${p.slug}/600/450`,
+    })),
+  };
 }
 
 
