@@ -890,6 +890,7 @@ function FieldRenderer({
       <div className={cn("flex flex-col gap-1", colSpan)}>
         {labelEl}
         <input
+          id={inputId}
           type="number"
           value={value === null || value === undefined ? "" : String(value)}
           onChange={(e) => onChange(e.target.value === "" ? null : Number(e.target.value))}
