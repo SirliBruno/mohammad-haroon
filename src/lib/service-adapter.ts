@@ -69,7 +69,7 @@ function asFaq(v: unknown): FaqEntry[] {
 
 export function dbRowToService(
   row: Row,
-  projectTitleBySlug: Record<string, string> = {},
+  projectLookup: Record<string, { title: string; cover?: string }> = {},
 ): Service {
   const rawSlugs = Array.isArray(
     (row as unknown as Record<string, unknown>).featured_project_slugs,
@@ -79,7 +79,10 @@ export function dbRowToService(
   const featuredProjects = rawSlugs
     .filter((s): s is string => typeof s === "string" && s.length > 0)
     .slice(0, 3)
-    .map((slug) => ({ slug, title: projectTitleBySlug[slug] ?? slug }));
+    .map((slug) => {
+      const found = projectLookup[slug];
+      return { slug, title: found?.title ?? slug, cover: found?.cover };
+    });
 
   const phoneImage =
     (row as unknown as Record<string, unknown>).showcase_phone_image as string | null | undefined;
