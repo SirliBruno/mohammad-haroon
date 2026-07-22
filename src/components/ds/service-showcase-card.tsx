@@ -4,12 +4,15 @@ import type { Service } from "@/features/services/schema";
 import { cn } from "@/lib/utils";
 
 /**
- * ServiceShowcaseCard — the phone is the hero.
+ * ServiceShowcaseCard — Apple-keynote composition.
  *
- * The card is a low-key stage. The phone mockup breaks out of it: rotated,
- * oversized, extending above the top edge. A single floating brand badge
- * hovers in front of the phone like a physical object. The card only
- * supports the presentation with a tiny header + 3 project thumbnails.
+ * Reading order (top → bottom):
+ *   1. Header (title + summary) — always readable, protected top zone
+ *   2. Phone mockup — hero, ~70% inside the card, ~30% extending down
+ *   3. Floating logo — attached to the phone, hovers next to the screen
+ *   4. Featured projects panel — generous, balances the composition
+ *
+ * Layers cast progressively stronger shadows to build depth.
  */
 export function ServiceShowcaseCard({
   service,
@@ -25,15 +28,15 @@ export function ServiceShowcaseCard({
     <article
       className={cn(
         "group relative w-full",
-        // extra top padding so the phone can float above the stage
-        "pt-[26%]",
+        // padding-bottom lets the phone extend slightly past the stage
+        "pb-[14%]",
         className,
       )}
     >
-      {/* The STAGE — a subtle pedestal. Not a marketing card. */}
+      {/* THE STAGE — subtle pedestal */}
       <div
         className={cn(
-          "relative aspect-[5/6] w-full rounded-[32px]",
+          "relative aspect-[4/5] w-full rounded-[32px]",
           "border border-border/50 bg-gradient-to-b from-secondary/40 to-card",
           "shadow-[0_1px_2px_hsl(0_0%_0%/0.04),0_20px_40px_-24px_hsl(0_0%_0%/0.12)]",
           "transition-[transform,box-shadow,border-color] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
@@ -41,18 +44,13 @@ export function ServiceShowcaseCard({
           "group-hover:shadow-[0_1px_2px_hsl(0_0%_0%/0.06),0_40px_70px_-24px_hsl(0_0%_0%/0.22)]",
         )}
       >
-        {/* Ambient glow anchored under the phone */}
+        {/* Ambient glow behind the phone */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-[62%] rounded-t-[32px] bg-[radial-gradient(55%_75%_at_50%_35%,color-mix(in_oklab,var(--primary)_14%,transparent),transparent_75%)] opacity-80 transition-opacity duration-700 group-hover:opacity-100"
-        />
-        {/* Soft ground shadow under the floating phone */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute left-1/2 top-[58%] h-8 w-[55%] -translate-x-1/2 rounded-[50%] bg-black/25 blur-2xl opacity-40 transition-opacity duration-700 group-hover:opacity-55"
+          className="pointer-events-none absolute inset-x-0 top-[18%] h-[55%] bg-[radial-gradient(50%_60%_at_50%_50%,color-mix(in_oklab,var(--primary)_12%,transparent),transparent_75%)] opacity-80 transition-opacity duration-700 group-hover:opacity-100"
         />
 
-        {/* Card-wide navigation surface */}
+        {/* Clickable navigation surface */}
         <Link
           to="/services/$slug"
           params={{ slug: service.slug }}
@@ -60,112 +58,119 @@ export function ServiceShowcaseCard({
           className="absolute inset-0 z-0 rounded-[32px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         />
 
-        {/* Tiny supporting header — small, calm, low priority */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-[36%] z-20 px-7 text-center">
-          <h3 className="text-base font-semibold tracking-tight text-foreground md:text-lg">
+        {/* ─── 1. HEADER — protected top zone, always readable ─── */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 px-8 pt-8 text-center md:pt-9">
+          <h3 className="text-lg font-semibold tracking-tight text-foreground md:text-xl">
             {service.title}
           </h3>
-          <p className="mx-auto mt-1 line-clamp-1 max-w-[85%] text-xs text-muted-foreground md:text-sm">
+          <p className="mx-auto mt-2 line-clamp-2 max-w-[88%] text-sm leading-relaxed text-muted-foreground">
             {service.summary}
           </p>
         </div>
 
-        {/* Footer strip — 3 project thumbnails only */}
-        <div className="pointer-events-none absolute inset-x-4 bottom-4 z-20">
-          {featured.length > 0 ? (
-            <ul className="grid grid-cols-3 gap-2">
-              {featured.map((p) => (
-                <li key={p.slug} className="pointer-events-auto">
-                  <Link
-                    to="/work/$slug"
-                    params={{ slug: p.slug }}
-                    onClick={(e) => e.stopPropagation()}
-                    className="group/mini relative z-20 block rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                  >
-                    <div className="relative aspect-[4/3] overflow-hidden rounded-xl border border-border/50 bg-muted">
-                      {p.cover ? (
-                        <img
-                          src={p.cover}
-                          alt=""
-                          loading="lazy"
-                          decoding="async"
-                          className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/mini:scale-[1.06]"
-                        />
-                      ) : (
-                        <div className="h-full w-full" />
-                      )}
-                    </div>
-                    <p className="mt-1.5 truncate text-[11px] font-medium text-foreground/80 transition-colors group-hover/mini:text-foreground">
-                      {p.title}
-                    </p>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          ) : null}
-        </div>
-      </div>
-
-      {/* THE HERO — phone breaks out of the stage from the top */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-30 flex justify-center">
-        <div
-          className={cn(
-            "relative -rotate-[8deg]",
-            "transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
-            "group-hover:-translate-y-2 group-hover:-rotate-[6deg]",
-          )}
-          style={{
-            filter:
-              "drop-shadow(0 24px 30px hsl(0 0% 0% / 0.18)) drop-shadow(0 40px 60px hsl(0 0% 0% / 0.22))",
-          }}
-        >
-          <PhoneFrame className="w-[210px] md:w-[240px]">
-            {showcase?.phoneImage ? (
-              <img
-                src={showcase.phoneImage}
-                alt={`${service.title} — preview`}
-                loading="lazy"
-                decoding="async"
-                className="h-full w-full object-cover"
-              />
-            ) : (
-              // Intentionally blank — never fake content
-              <div className="h-full w-full bg-background" />
+        {/* ─── 2. PHONE — hero, positioned below header with breathing room ─── */}
+        <div className="pointer-events-none absolute inset-x-0 top-[30%] z-20 flex justify-center">
+          <div
+            className={cn(
+              "relative -rotate-[6deg]",
+              "transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
+              "group-hover:-translate-y-1.5 group-hover:-rotate-[4deg]",
             )}
-          </PhoneFrame>
-
-          {/* Single floating brand object — feels physical, in front of phone */}
-          {(showcase?.logoImage || showcase?.logoLabel) && (
-            <div
-              aria-hidden
-              dir="ltr"
-              className={cn(
-                "absolute -left-6 bottom-[22%]",
-                "grid size-[68px] place-items-center rounded-2xl md:size-[76px]",
-                "border border-white/30 bg-white/85 backdrop-blur-2xl dark:bg-white/10",
-                "shadow-[0_20px_40px_-10px_hsl(0_0%_0%/0.4),inset_0_1px_0_hsl(0_0%_100%/0.5)]",
-                "rotate-[10deg]",
-                "transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
-                "group-hover:-translate-y-1 group-hover:rotate-[4deg] group-hover:scale-[1.05]",
-              )}
-            >
-              {showcase?.logoImage ? (
+            style={{
+              filter:
+                "drop-shadow(0 20px 24px hsl(0 0% 0% / 0.16)) drop-shadow(0 36px 48px hsl(0 0% 0% / 0.18))",
+            }}
+          >
+            <PhoneFrame className="w-[150px] md:w-[168px]">
+              {showcase?.phoneImage ? (
                 <img
-                  src={showcase.logoImage}
-                  alt=""
+                  src={showcase.phoneImage}
+                  alt={`${service.title} — preview`}
                   loading="lazy"
                   decoding="async"
-                  className="size-9 object-contain"
+                  className="h-full w-full object-cover"
                 />
               ) : (
-                <span className="px-2 text-center font-mono text-[11px] font-semibold tracking-tight text-foreground">
-                  {showcase!.logoLabel}
-                </span>
+                // Intentionally blank — never fake content
+                <div className="h-full w-full bg-background" />
               )}
-            </div>
-          )}
+            </PhoneFrame>
+
+            {/* ─── 3. FLOATING LOGO — attached to the phone ─── */}
+            {(showcase?.logoImage || showcase?.logoLabel) && (
+              <div
+                aria-hidden
+                dir="ltr"
+                className={cn(
+                  "absolute -right-5 top-[38%]",
+                  "grid size-[58px] place-items-center rounded-2xl md:size-[64px]",
+                  "border border-white/30 bg-white/90 backdrop-blur-2xl dark:bg-white/10",
+                  "shadow-[0_18px_36px_-8px_hsl(0_0%_0%/0.35),inset_0_1px_0_hsl(0_0%_100%/0.5)]",
+                  "rotate-[8deg]",
+                  "transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
+                  "group-hover:-translate-y-1 group-hover:rotate-[2deg] group-hover:scale-[1.05]",
+                )}
+              >
+                {showcase?.logoImage ? (
+                  <img
+                    src={showcase.logoImage}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    className="size-8 object-contain"
+                  />
+                ) : (
+                  <span className="px-2 text-center font-mono text-[11px] font-semibold tracking-tight text-foreground">
+                    {showcase!.logoLabel}
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
+
+      {/* ─── 4. FEATURED PROJECTS — floating panel at the base ─── */}
+      {featured.length > 0 && (
+        <div
+          className={cn(
+            "relative z-10 mx-4 -mt-[12%] rounded-3xl border border-border/60 bg-card/95 p-6 backdrop-blur-xl md:p-7",
+            "shadow-[0_1px_2px_hsl(0_0%_0%/0.04),0_24px_50px_-20px_hsl(0_0%_0%/0.18)]",
+            "transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
+            "group-hover:-translate-y-1",
+          )}
+        >
+          <ul className="grid grid-cols-3 gap-4">
+            {featured.map((p) => (
+              <li key={p.slug}>
+                <Link
+                  to="/work/$slug"
+                  params={{ slug: p.slug }}
+                  onClick={(e) => e.stopPropagation()}
+                  className="group/mini relative z-20 block rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-border/50 bg-muted shadow-sm">
+                    {p.cover ? (
+                      <img
+                        src={p.cover}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                        className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/mini:scale-[1.06]"
+                      />
+                    ) : (
+                      <div className="h-full w-full" />
+                    )}
+                  </div>
+                  <p className="mt-2.5 truncate text-xs font-medium text-foreground/80 transition-colors group-hover/mini:text-foreground">
+                    {p.title}
+                  </p>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </article>
   );
 }
