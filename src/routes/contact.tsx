@@ -138,6 +138,8 @@ const faqs = [
 ];
 
 function ContactPage() {
+  const { data: contentRows } = usePageContent("contact");
+  const tt = (k: string, fb: string) => getPageText(contentRows, k, fb);
   const [submitted, setSubmitted] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
 
