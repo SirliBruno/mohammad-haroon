@@ -67,7 +67,30 @@ function asFaq(v: unknown): FaqEntry[] {
     .filter(Boolean) as FaqEntry[];
 }
 
-export function dbRowToService(row: Row): Service {
+export function dbRowToService(
+  row: Row,
+  projectTitleBySlug: Record<string, string> = {},
+): Service {
+  const rawSlugs = Array.isArray(
+    (row as unknown as Record<string, unknown>).featured_project_slugs,
+  )
+    ? ((row as unknown as Record<string, unknown>).featured_project_slugs as string[])
+    : [];
+  const featuredProjects = rawSlugs
+    .filter((s): s is string => typeof s === "string" && s.length > 0)
+    .slice(0, 3)
+    .map((slug) => ({ slug, title: projectTitleBySlug[slug] ?? slug }));
+
+  const phoneImage =
+    (row as unknown as Record<string, unknown>).showcase_phone_image as string | null | undefined;
+  const logoImage =
+    (row as unknown as Record<string, unknown>).showcase_logo_image as string | null | undefined;
+  const logoLabel =
+    (row as unknown as Record<string, unknown>).showcase_logo_label as string | null | undefined;
+
+  const hasShowcase =
+    !!phoneImage || !!logoImage || !!logoLabel || featuredProjects.length > 0;
+
   return {
     slug: row.slug,
     title: row.title,
@@ -81,5 +104,13 @@ export function dbRowToService(row: Row): Service {
     technologies: Array.isArray(row.technologies) ? (row.technologies as string[]) : [],
     deliverables: Array.isArray(row.deliverables) ? (row.deliverables as string[]) : [],
     faq: asFaq(row.faq),
+    showcase: hasShowcase
+      ? {
+          phoneImage: phoneImage ?? undefined,
+          logoImage: logoImage ?? undefined,
+          logoLabel: logoLabel ?? undefined,
+          featuredProjects,
+        }
+      : undefined,
   };
 }

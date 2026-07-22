@@ -633,10 +633,14 @@ export type Database = {
           deliverables: string[]
           faq: Json
           featured: boolean
+          featured_project_slugs: string[]
           features: Json
           icon: string | null
           id: string
           overview: string | null
+          showcase_logo_image: string | null
+          showcase_logo_label: string | null
+          showcase_phone_image: string | null
           slug: string
           sort_order: number
           starting_price_cents: number | null
@@ -657,10 +661,14 @@ export type Database = {
           deliverables?: string[]
           faq?: Json
           featured?: boolean
+          featured_project_slugs?: string[]
           features?: Json
           icon?: string | null
           id?: string
           overview?: string | null
+          showcase_logo_image?: string | null
+          showcase_logo_label?: string | null
+          showcase_phone_image?: string | null
           slug: string
           sort_order?: number
           starting_price_cents?: number | null
@@ -681,10 +689,14 @@ export type Database = {
           deliverables?: string[]
           faq?: Json
           featured?: boolean
+          featured_project_slugs?: string[]
           features?: Json
           icon?: string | null
           id?: string
           overview?: string | null
+          showcase_logo_image?: string | null
+          showcase_logo_label?: string | null
+          showcase_phone_image?: string | null
           slug?: string
           sort_order?: number
           starting_price_cents?: number | null

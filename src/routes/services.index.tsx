@@ -1,11 +1,12 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { ArrowLeft, Mail } from "lucide-react";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useSuspenseQuery, useQuery } from "@tanstack/react-query";
 import { buildMeta } from "@/features/seo/build-meta";
 import { PageHeader } from "@/components/layout/page-header";
 import { Section } from "@/components/layout/section";
 import { SectionTitle } from "@/components/layout/section-title";
-import { DSButton, Grid, ServiceCard, CTA } from "@/components/ds";
+import { DSButton, Grid, CTA } from "@/components/ds";
+import { ServiceShowcaseCard } from "@/components/ds/service-showcase-card";
 import { services as staticServices, serviceProcess, serviceFaq } from "@/data/services";
 import { site } from "@/config/site";
 import {
@@ -14,7 +15,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { serviceListOptions } from "@/features/cms/queries";
+import { serviceListOptions, projectListOptions } from "@/features/cms/queries";
 import { dbRowToService } from "@/lib/service-adapter";
 import type { Service } from "@/features/services/schema";
 import { usePageContent, getPageText } from "@/lib/cms/home-content";
@@ -41,7 +42,13 @@ export const Route = createFileRoute("/services/")({
 
 function ServicesIndex() {
   const { data } = useSuspenseQuery(serviceListOptions(listParams));
-  const fromDb: Service[] = (data?.rows ?? []).map(dbRowToService);
+  const { data: projectData } = useQuery(projectListOptions({ limit: 200, orderBy: "sort_order", ascending: true }));
+  const projectRows = (projectData as { rows?: Array<{ slug: string; title: string }> } | undefined)?.rows ?? [];
+  const projectTitleBySlug: Record<string, string> = {};
+  for (const row of projectRows) {
+    if (row.slug) projectTitleBySlug[row.slug] = row.title;
+  }
+  const fromDb: Service[] = (data?.rows ?? []).map((row) => dbRowToService(row, projectTitleBySlug));
   const services = fromDb.length > 0 ? fromDb : staticServices;
   const { data: servicesRows } = usePageContent("services-page");
   const tt = (k: string, fb: string) => getPageText(servicesRows, k, fb);
@@ -61,17 +68,11 @@ function ServicesIndex() {
       <Section>
         <Grid cols={{ base: 1, md: 2, lg: 3 }} gap="md">
           {services.map((s) => (
-            <Link
-              key={s.slug}
-              to="/services/$slug"
-              params={{ slug: s.slug }}
-              className="rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-            >
-              <ServiceCard service={s} className="h-full transition-colors hover:border-primary/40" />
-            </Link>
+            <ServiceShowcaseCard key={s.slug} service={s} />
           ))}
         </Grid>
       </Section>
+
 
       <Section className="border-t border-border/60">
         <SectionTitle
