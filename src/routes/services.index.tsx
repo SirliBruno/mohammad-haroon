@@ -15,7 +15,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { serviceListOptions } from "@/features/cms/queries";
+import { serviceListOptions, projectListOptions } from "@/features/cms/queries";
 import { dbRowToService } from "@/lib/service-adapter";
 import type { Service } from "@/features/services/schema";
 import { usePageContent, getPageText } from "@/lib/cms/home-content";
