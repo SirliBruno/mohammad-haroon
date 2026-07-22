@@ -34,12 +34,12 @@ type Variant = {
 function variantFor(slug: string): Variant {
   const h = hashSlug(slug);
   const variants: Variant[] = [
-    { rotate: -6, phoneWidth: "w-[132px] md:w-[146px]", logoSide: "right", logoOffset: "-right-4", logoRotate: 8 },
-    { rotate: 0, phoneWidth: "w-[136px] md:w-[150px]", logoSide: "right", logoOffset: "-right-5", logoRotate: 6 },
-    { rotate: 6, phoneWidth: "w-[130px] md:w-[144px]", logoSide: "left", logoOffset: "-left-4", logoRotate: -8 },
-    { rotate: -4, phoneWidth: "w-[140px] md:w-[154px]", logoSide: "left", logoOffset: "-left-5", logoRotate: -5 },
-    { rotate: 4, phoneWidth: "w-[134px] md:w-[148px]", logoSide: "right", logoOffset: "-right-4", logoRotate: 10 },
-    { rotate: -8, phoneWidth: "w-[128px] md:w-[142px]", logoSide: "left", logoOffset: "-left-4", logoRotate: -10 },
+    { rotate: -6, phoneWidth: "w-[158px] md:w-[178px]", logoSide: "right", logoOffset: "-right-6", logoRotate: 8 },
+    { rotate: 0, phoneWidth: "w-[162px] md:w-[184px]", logoSide: "right", logoOffset: "-right-7", logoRotate: 6 },
+    { rotate: 6, phoneWidth: "w-[156px] md:w-[176px]", logoSide: "left", logoOffset: "-left-6", logoRotate: -8 },
+    { rotate: -4, phoneWidth: "w-[168px] md:w-[190px]", logoSide: "left", logoOffset: "-left-7", logoRotate: -5 },
+    { rotate: 4, phoneWidth: "w-[160px] md:w-[180px]", logoSide: "right", logoOffset: "-right-5", logoRotate: 10 },
+    { rotate: -8, phoneWidth: "w-[154px] md:w-[174px]", logoSide: "left", logoOffset: "-left-5", logoRotate: -10 },
   ];
   return variants[h % variants.length];
 }
@@ -62,7 +62,7 @@ export function ServiceShowcaseCard({
   return (
     <article
       className={cn(
-        "group relative w-full overflow-hidden rounded-[32px]",
+        "group relative w-full",
         "pb-[16%]", // room for the projects panel to hang below the stage
         className,
       )}
@@ -122,11 +122,11 @@ export function ServiceShowcaseCard({
         </div>
 
         {/* ── 2. PHONE (hero) + 3. FLOATING LOGO ── */}
-        <div className="pointer-events-none absolute inset-x-0 top-[32%] z-20 flex justify-center">
+        <div className="pointer-events-none absolute inset-x-0 top-[34%] z-20 flex justify-center">
           <div
             className={cn(
               "relative transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
-              "group-hover:-translate-y-[10px]",
+              "group-hover:-translate-y-1.5",
             )}
             style={{
               transform: `rotate(${v.rotate}deg)`,
