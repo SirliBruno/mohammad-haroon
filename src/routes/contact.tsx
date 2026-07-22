@@ -482,8 +482,8 @@ function ContactPage() {
 
 
       <CTA
-        eyebrow="تُفضّل الطريق المباشر؟"
-        title="تجاوز النموذج — راسلني مباشرة."
+        eyebrow={tt("contact.direct.eyebrow", "تُفضّل الطريق المباشر؟")}
+        title={tt("contact.direct.title", "تجاوز النموذج — راسلني مباشرة.")}
         description="بريد، أو واتساب، أو لينكدإن — اختر ما يناسبك، والرد يصلك بنفس السرعة."
         actions={
           <>
