@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { buildMeta } from "@/features/seo/build-meta";
 import { PageHeader } from "@/components/layout/page-header";
+import { usePageContent, getPageText } from "@/lib/cms/home-content";
 import { Section } from "@/components/layout/section";
 import { AvailabilityBadge } from "@/components/ds/availability-badge";
 import { Eyebrow } from "@/components/typography/eyebrow";
@@ -137,6 +138,8 @@ const faqs = [
 ];
 
 function ContactPage() {
+  const { data: contentRows } = usePageContent("contact");
+  const tt = (k: string, fb: string) => getPageText(contentRows, k, fb);
   const [submitted, setSubmitted] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
 
@@ -182,10 +185,14 @@ function ContactPage() {
   return (
     <>
       <PageHeader
-        eyebrow="تواصل"
-        title="لنتحدّث"
-        description="توظيف، أو مشروع حرّ، أو حتى سؤال عابر — أقرأ كلّ الرسائل بنفسي، وأرد خلال يومَي عمل."
+        eyebrow={tt("contact.header.eyebrow", "تواصل")}
+        title={tt("contact.header.title", "لنتحدّث")}
+        description={tt(
+          "contact.header.description",
+          "توظيف، أو مشروع حرّ، أو حتى سؤال عابر — أقرأ كلّ الرسائل بنفسي، وأرد خلال يومَي عمل.",
+        )}
       />
+
 
 
       <Section size="sm">
@@ -475,8 +482,8 @@ function ContactPage() {
 
 
       <CTA
-        eyebrow="تُفضّل الطريق المباشر؟"
-        title="تجاوز النموذج — راسلني مباشرة."
+        eyebrow={tt("contact.direct.eyebrow", "تُفضّل الطريق المباشر؟")}
+        title={tt("contact.direct.title", "تجاوز النموذج — راسلني مباشرة.")}
         description="بريد، أو واتساب، أو لينكدإن — اختر ما يناسبك، والرد يصلك بنفس السرعة."
         actions={
           <>

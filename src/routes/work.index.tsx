@@ -15,6 +15,7 @@ import {
   listPublicProjects,
   getProjectFacets,
 } from "@/lib/cms/projects-public.functions";
+import { usePageContent, getPageText } from "@/lib/cms/home-content";
 
 const PAGE_SIZE = 6;
 const CATEGORY_FILTERS = ["الكل", ...projectCategories] as const;
@@ -84,13 +85,19 @@ function WorkIndex() {
     setPage(1);
   }
 
+  const { data: workRows } = usePageContent("work");
+  const tt = (k: string, fb: string) => getPageText(workRows, k, fb);
   return (
     <>
       <PageHeader
-        eyebrow="المشاريع"
-        title="أعمال أفتخر بها"
-        description="أرشيف حيّ لأعمالي مع العملاء ومشاريعي الخاصّة — منتجات، وتجارة إلكترونيّة، وهويّات، وصور."
+        eyebrow={tt("work.header.eyebrow", "المشاريع")}
+        title={tt("work.header.title", "أعمال أفتخر بها")}
+        description={tt(
+          "work.header.description",
+          "أرشيف حيّ لأعمالي مع العملاء ومشاريعي الخاصّة — منتجات، وتجارة إلكترونيّة، وهويّات، وصور.",
+        )}
       />
+
 
       {featured.length ? (
         <Section>

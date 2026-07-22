@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { buildMeta } from "@/features/seo/build-meta";
 import { PageHeader } from "@/components/layout/page-header";
+import { usePageContent, getPageText } from "@/lib/cms/home-content";
 import { Section } from "@/components/layout/section";
 import { SectionTitle } from "@/components/layout/section-title";
 import { Eyebrow } from "@/components/typography/eyebrow";
@@ -141,13 +142,19 @@ function CareerPage() {
   const certificates = certRows.length > 0 ? certRows : staticCertificates;
   const skillGroups = skillRowsDb.length > 0 ? skillRowsDb : staticSkillGroups;
 
+  const { data: careerRows } = usePageContent("career");
+  const tt = (k: string, fb: string) => getPageText(careerRows, k, fb);
   return (
     <>
       <PageHeader
-        eyebrow="المسيرة"
-        title="الخبرة والتعليم وما بينهما"
-        description={`${site.role} مع سِجلّ حافل بمنتجات مُطلَقة ومدروسة. مُنسَّق للمسؤولين عن التوظيف: سهل التصفّح، سريع التحقّق، وجاهز للتحميل.`}
+        eyebrow={tt("career.header.eyebrow", "المسيرة")}
+        title={tt("career.header.title", "الخبرة والتعليم وما بينهما")}
+        description={tt(
+          "career.header.description",
+          `${site.role} مع سِجلّ حافل بمنتجات مُطلَقة ومدروسة. مُنسَّق للمسؤولين عن التوظيف: سهل التصفّح، سريع التحقّق، وجاهز للتحميل.`,
+        )}
       />
+
 
       <Section size="sm">
         <Reveal>

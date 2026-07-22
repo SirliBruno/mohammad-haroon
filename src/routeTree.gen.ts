@@ -37,6 +37,7 @@ import { Route as AuthenticatedAdminSkillsRouteImport } from './routes/_authenti
 import { Route as AuthenticatedAdminServicesRouteImport } from './routes/_authenticated/admin.services'
 import { Route as AuthenticatedAdminProjectsRouteImport } from './routes/_authenticated/admin.projects'
 import { Route as AuthenticatedAdminProductsRouteImport } from './routes/_authenticated/admin.products'
+import { Route as AuthenticatedAdminPagesRouteImport } from './routes/_authenticated/admin.pages'
 import { Route as AuthenticatedAdminMessagesRouteImport } from './routes/_authenticated/admin.messages'
 import { Route as AuthenticatedAdminMediaRouteImport } from './routes/_authenticated/admin.media'
 import { Route as AuthenticatedAdminIdeasRouteImport } from './routes/_authenticated/admin.ideas'
@@ -193,6 +194,11 @@ const AuthenticatedAdminProductsRoute =
     path: '/admin/products',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminPagesRoute = AuthenticatedAdminPagesRouteImport.update({
+  id: '/admin/pages',
+  path: '/admin/pages',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAdminMessagesRoute =
   AuthenticatedAdminMessagesRouteImport.update({
     id: '/admin/messages',
@@ -285,6 +291,7 @@ export interface FileRoutesByFullPath {
   '/admin/ideas': typeof AuthenticatedAdminIdeasRoute
   '/admin/media': typeof AuthenticatedAdminMediaRoute
   '/admin/messages': typeof AuthenticatedAdminMessagesRoute
+  '/admin/pages': typeof AuthenticatedAdminPagesRoute
   '/admin/products': typeof AuthenticatedAdminProductsRoute
   '/admin/projects': typeof AuthenticatedAdminProjectsRoute
   '/admin/services': typeof AuthenticatedAdminServicesRoute
@@ -322,6 +329,7 @@ export interface FileRoutesByTo {
   '/admin/ideas': typeof AuthenticatedAdminIdeasRoute
   '/admin/media': typeof AuthenticatedAdminMediaRoute
   '/admin/messages': typeof AuthenticatedAdminMessagesRoute
+  '/admin/pages': typeof AuthenticatedAdminPagesRoute
   '/admin/products': typeof AuthenticatedAdminProductsRoute
   '/admin/projects': typeof AuthenticatedAdminProjectsRoute
   '/admin/services': typeof AuthenticatedAdminServicesRoute
@@ -364,6 +372,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/ideas': typeof AuthenticatedAdminIdeasRoute
   '/_authenticated/admin/media': typeof AuthenticatedAdminMediaRoute
   '/_authenticated/admin/messages': typeof AuthenticatedAdminMessagesRoute
+  '/_authenticated/admin/pages': typeof AuthenticatedAdminPagesRoute
   '/_authenticated/admin/products': typeof AuthenticatedAdminProductsRoute
   '/_authenticated/admin/projects': typeof AuthenticatedAdminProjectsRoute
   '/_authenticated/admin/services': typeof AuthenticatedAdminServicesRoute
@@ -406,6 +415,7 @@ export interface FileRouteTypes {
     | '/admin/ideas'
     | '/admin/media'
     | '/admin/messages'
+    | '/admin/pages'
     | '/admin/products'
     | '/admin/projects'
     | '/admin/services'
@@ -443,6 +453,7 @@ export interface FileRouteTypes {
     | '/admin/ideas'
     | '/admin/media'
     | '/admin/messages'
+    | '/admin/pages'
     | '/admin/products'
     | '/admin/projects'
     | '/admin/services'
@@ -484,6 +495,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/ideas'
     | '/_authenticated/admin/media'
     | '/_authenticated/admin/messages'
+    | '/_authenticated/admin/pages'
     | '/_authenticated/admin/products'
     | '/_authenticated/admin/projects'
     | '/_authenticated/admin/services'
@@ -711,6 +723,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminProductsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/pages': {
+      id: '/_authenticated/admin/pages'
+      path: '/admin/pages'
+      fullPath: '/admin/pages'
+      preLoaderRoute: typeof AuthenticatedAdminPagesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/messages': {
       id: '/_authenticated/admin/messages'
       path: '/admin/messages'
@@ -803,6 +822,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminIdeasRoute: typeof AuthenticatedAdminIdeasRoute
   AuthenticatedAdminMediaRoute: typeof AuthenticatedAdminMediaRoute
   AuthenticatedAdminMessagesRoute: typeof AuthenticatedAdminMessagesRoute
+  AuthenticatedAdminPagesRoute: typeof AuthenticatedAdminPagesRoute
   AuthenticatedAdminProductsRoute: typeof AuthenticatedAdminProductsRoute
   AuthenticatedAdminProjectsRoute: typeof AuthenticatedAdminProjectsRoute
   AuthenticatedAdminServicesRoute: typeof AuthenticatedAdminServicesRoute
@@ -823,6 +843,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminIdeasRoute: AuthenticatedAdminIdeasRoute,
   AuthenticatedAdminMediaRoute: AuthenticatedAdminMediaRoute,
   AuthenticatedAdminMessagesRoute: AuthenticatedAdminMessagesRoute,
+  AuthenticatedAdminPagesRoute: AuthenticatedAdminPagesRoute,
   AuthenticatedAdminProductsRoute: AuthenticatedAdminProductsRoute,
   AuthenticatedAdminProjectsRoute: AuthenticatedAdminProjectsRoute,
   AuthenticatedAdminServicesRoute: AuthenticatedAdminServicesRoute,
