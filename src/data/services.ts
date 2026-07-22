@@ -296,6 +296,83 @@ export const services: Service[] = [
   },
 ];
 
+/**
+ * Showcase fallback per service — used on the /services grid to render the
+ * mini case-study cards (iPhone screenshot, glass logo badge, featured projects).
+ * The CMS row can override any of these via the four columns added in the
+ * `showcase_*` / `featured_project_slugs` migration.
+ */
+const showcaseBySlug: Record<string, ServiceShowcase> = {
+  "website-development": {
+    phoneImage: "https://picsum.photos/seed/website-development/540/1080",
+    logoLabel: "React",
+    featuredProjects: [
+      { slug: "northwind-analytics", title: "Northwind Analytics" },
+      { slug: "meridian-agency", title: "Meridian Agency" },
+      { slug: "atelier-cms", title: "Atelier CMS" },
+    ],
+  },
+  "wordpress-development": {
+    phoneImage: "https://picsum.photos/seed/wordpress-development/540/1080",
+    logoLabel: "WordPress",
+    featuredProjects: [
+      { slug: "field-notes", title: "Field Notes" },
+      { slug: "solstice-editorial", title: "Solstice Editorial" },
+      { slug: "atelier-cms", title: "Atelier CMS" },
+    ],
+  },
+  "woocommerce": {
+    phoneImage: "https://picsum.photos/seed/woocommerce/540/1080",
+    logoLabel: "WooCommerce",
+    featuredProjects: [
+      { slug: "haven-storefront", title: "Haven Storefront" },
+      { slug: "orbit-apparel", title: "Orbit Apparel" },
+      { slug: "harvest-market", title: "Harvest Market" },
+    ],
+  },
+  "ui-ux-design": {
+    phoneImage: "https://picsum.photos/seed/ui-ux-design/540/1080",
+    logoLabel: "Figma",
+    featuredProjects: [
+      { slug: "kite-mobile-banking", title: "Kite Mobile Banking" },
+      { slug: "ember-social", title: "Ember Social" },
+      { slug: "prism-identity", title: "Prism Identity" },
+    ],
+  },
+  "graphic-design": {
+    phoneImage: "https://picsum.photos/seed/graphic-design/540/1080",
+    logoLabel: "Adobe",
+    featuredProjects: [
+      { slug: "prism-identity", title: "Prism Identity" },
+      { slug: "atlas-portraits", title: "Atlas Portraits" },
+      { slug: "sable-restaurant", title: "Sable Restaurant" },
+    ],
+  },
+  "landing-pages": {
+    phoneImage: "https://picsum.photos/seed/landing-pages/540/1080",
+    logoLabel: "Framer",
+    featuredProjects: [
+      { slug: "vantage-launch", title: "Vantage Launch" },
+      { slug: "lumen-payments", title: "Lumen Payments" },
+      { slug: "lagoon-travel", title: "Lagoon Travel" },
+    ],
+  },
+  "website-maintenance": {
+    phoneImage: "https://picsum.photos/seed/website-maintenance/540/1080",
+    logoLabel: "Cloudflare",
+    featuredProjects: [
+      { slug: "northwind-analytics", title: "Northwind Analytics" },
+      { slug: "meridian-agency", title: "Meridian Agency" },
+      { slug: "atelier-cms", title: "Atelier CMS" },
+    ],
+  },
+};
+
+for (const s of services) {
+  s.showcase = showcaseBySlug[s.slug];
+}
+
+
 export const serviceProcess = [
   {
     step: "01",
