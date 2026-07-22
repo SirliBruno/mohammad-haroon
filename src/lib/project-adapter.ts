@@ -112,7 +112,7 @@ function mapDesignProcess(v: string | null): Project["designProcess"] {
 
 /** Map a `projects` DB row into the public `Project` shape. */
 export function toProject(row: Row): Project {
-  const metrics = mapMetrics(row.metrics) ?? mapMetrics(row.results);
+  const metrics = mapMetrics(row.metrics);
   return {
     slug: row.slug,
     title: row.title,
@@ -124,7 +124,7 @@ export function toProject(row: Row): Project {
     category: mapCategory(row.category),
     tags: row.tags ?? [],
     stack: row.technologies ?? [],
-    tools: undefined,
+    tools: row.tools && row.tools.length ? row.tools : undefined,
     timeline: row.timeline ?? undefined,
     cover: { src: row.cover_url ?? "", alt: row.title },
     gallery: mapGallery(row.gallery),
