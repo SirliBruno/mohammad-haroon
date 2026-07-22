@@ -30,13 +30,19 @@ type Row = {
   github_url: string | null;
 };
 
-const slugify = (s: string) =>
-  s
+const slugify = (s: string) => {
+  const base = s
     .toLowerCase()
     .trim()
-    .replace(/[^\w\s-]/g, "")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9\s-]/g, "")
     .replace(/\s+/g, "-")
-    .replace(/-+/g, "-");
+    .replace(/-+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  if (base && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(base)) return base;
+  return `project-${Date.now().toString(36)}`;
+};
 
 const fields: FieldDef[] = [
   // ——— أساسيات ———
