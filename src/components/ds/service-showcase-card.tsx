@@ -125,8 +125,7 @@ export function ServiceShowcaseCard({
         <div className="pointer-events-none absolute inset-x-0 top-[34%] z-20 flex justify-center">
           <div
             className={cn(
-              "relative transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
-              "group-hover:-translate-y-1.5",
+              "relative",
             )}
             style={{
               transform: `rotate(${v.rotate}deg)`,
