@@ -334,11 +334,21 @@ export const PAGE_GROUPS: {
  */
 export function useSite() {
   const { data } = usePageContent("site");
-  // Lazy import to avoid a cycle at module load.
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { site } = require("@/config/site") as typeof import("@/config/site");
-  if (!data || data.length === 0) return site;
+  if (!data || data.length === 0) return staticSite;
   const g = (k: string, f: string) => getPageText(data, k, f);
+  return {
+    ...staticSite,
+    name: g("site.name", staticSite.name),
+    tagline: g("site.tagline", staticSite.tagline),
+    description: g("site.description", staticSite.description),
+    email: g("site.email", staticSite.email),
+    whatsapp: g("site.whatsapp", staticSite.whatsapp),
+    whatsappDisplay: g("site.whatsappDisplay", staticSite.whatsappDisplay),
+    location: g("site.location", staticSite.location),
+    workingHours: g("site.workingHours", staticSite.workingHours),
+    availabilityLabel: g("site.availabilityLabel", staticSite.availabilityLabel),
+  };
+}
   return {
     ...site,
     name: g("site.name", site.name),
