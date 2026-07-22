@@ -542,11 +542,7 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
                   disabled={busy}
                   className="rounded-md bg-neutral-900 px-5 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-white dark:text-neutral-900"
                 >
-                  {busy
-                    ? "جارِ الحفظ…"
-                    : hasStatus
-                      ? editingId ? "حفظ ونشر" : "نشر"
-                      : editingId ? "حفظ التعديلات" : "إضافة"}
+                  {busy ? "جارِ الحفظ…" : editingId ? "حفظ التعديلات" : "إضافة"}
                 </button>
               </div>
             </form>
