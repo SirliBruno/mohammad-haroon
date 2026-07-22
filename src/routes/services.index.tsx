@@ -1,11 +1,12 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { ArrowLeft, Mail } from "lucide-react";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useSuspenseQuery, useQuery } from "@tanstack/react-query";
 import { buildMeta } from "@/features/seo/build-meta";
 import { PageHeader } from "@/components/layout/page-header";
 import { Section } from "@/components/layout/section";
 import { SectionTitle } from "@/components/layout/section-title";
-import { DSButton, Grid, ServiceCard, CTA } from "@/components/ds";
+import { DSButton, Grid, CTA } from "@/components/ds";
+import { ServiceShowcaseCard } from "@/components/ds/service-showcase-card";
 import { services as staticServices, serviceProcess, serviceFaq } from "@/data/services";
 import { site } from "@/config/site";
 import {
