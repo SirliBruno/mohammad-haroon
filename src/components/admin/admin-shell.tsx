@@ -14,6 +14,7 @@ const NAV: NavItem[] = [
   { to: "/admin/content", label: "نصوص وصور الموقع", group: "المحتوى العام" },
   { to: "/admin/home", label: "الصفحة الرئيسية", group: "الصفحة الرئيسية" },
   { to: "/admin/hero", label: "قسم الهيرو", group: "الصفحة الرئيسية" },
+  { to: "/admin/pages", label: "محتوى الصفحات", group: "المحتوى العام" },
   { to: "/admin/projects", label: "المشاريع", group: "الأعمال" },
   { to: "/admin/services", label: "الخدمات", group: "الأعمال" },
   { to: "/admin/testimonials", label: "التوصيات", group: "الأعمال" },
