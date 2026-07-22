@@ -1,5 +1,6 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
+import { AdminErrorBoundary } from "@/components/admin/admin-error-boundary";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
@@ -9,4 +10,7 @@ export const Route = createFileRoute("/_authenticated")({
     return { user: data.user };
   },
   component: () => <Outlet />,
+  errorComponent: ({ error, reset }) => (
+    <AdminErrorBoundary error={error} reset={reset} />
+  ),
 });

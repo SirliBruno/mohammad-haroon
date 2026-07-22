@@ -205,15 +205,11 @@ const fields: FieldDef[] = [
     ],
   },
   {
-    name: "results",
-    label: "النتائج",
-    type: "structured",
+    name: "tools",
+    label: "الأدوات",
+    type: "tags",
     colSpan: 2,
-    addLabel: "+ إضافة نتيجة",
-    schema: [
-      { name: "label", label: "التسمية", placeholder: "مثال: NPS" },
-      { name: "value", label: "القيمة", placeholder: "مثال: 72" },
-    ],
+    help: "أدوات التصميم/التطوير المستخدمة (Figma, VS Code…). تظهر في الشريط الجانبي لصفحة المشروع.",
   },
   {
     name: "gallery",
@@ -262,6 +258,7 @@ const emptyValues: Record<string, unknown> = {
   timeline: "",
   tags: [],
   technologies: [],
+  tools: [],
   description: "",
   problem: "",
   goals: [],
@@ -273,7 +270,6 @@ const emptyValues: Record<string, unknown> = {
   highlights: [],
   spotlight: null,
   metrics: [],
-  results: [],
   gallery: [],
   testimonial: null,
   section_order: [...PROJECT_SECTION_KEYS],
@@ -403,6 +399,7 @@ function AdminProjectsPage() {
             timeline: (form.timeline as string) || null,
             tags: asStringArray(form.tags),
             technologies: asStringArray(form.technologies),
+            tools: asStringArray(form.tools),
             problem: (form.problem as string) || null,
             goals: asStringArray(form.goals),
             research: (form.research as string) || null,
@@ -421,7 +418,6 @@ function AdminProjectsPage() {
                   })()
                 : null,
             metrics: Array.isArray(form.metrics) ? (form.metrics as unknown[]) : [],
-            results: Array.isArray(form.results) ? (form.results as unknown[]) : [],
             gallery: Array.isArray(form.gallery) ? (form.gallery as unknown[]) : [],
             testimonial:
               form.testimonial && typeof form.testimonial === "object" && !Array.isArray(form.testimonial)
