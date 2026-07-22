@@ -528,7 +528,6 @@ export type Database = {
           problem: string | null
           published_at: string | null
           research: string | null
-          results: Json
           role: string | null
           section_order: string[]
           slug: string
@@ -542,6 +541,7 @@ export type Database = {
           testimonial: Json | null
           timeline: string | null
           title: string
+          tools: string[]
           updated_at: string
           year: number | null
         }
@@ -566,7 +566,6 @@ export type Database = {
           problem?: string | null
           published_at?: string | null
           research?: string | null
-          results?: Json
           role?: string | null
           section_order?: string[]
           slug: string
@@ -580,6 +579,7 @@ export type Database = {
           testimonial?: Json | null
           timeline?: string | null
           title: string
+          tools?: string[]
           updated_at?: string
           year?: number | null
         }
@@ -604,7 +604,6 @@ export type Database = {
           problem?: string | null
           published_at?: string | null
           research?: string | null
-          results?: Json
           role?: string | null
           section_order?: string[]
           slug?: string
@@ -618,6 +617,7 @@ export type Database = {
           testimonial?: Json | null
           timeline?: string | null
           title?: string
+          tools?: string[]
           updated_at?: string
           year?: number | null
         }
