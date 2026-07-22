@@ -126,6 +126,10 @@ export const serviceInputSchema = z.object({
   featured: z.boolean().default(false),
   content_status: contentStatus.default("draft"),
   sort_order: z.number().int().default(0),
+  showcase_phone_image: optionalUrl,
+  showcase_logo_image: optionalUrl,
+  showcase_logo_label: optionalText(60),
+  featured_project_slugs: z.array(slug).max(3).default([]),
 });
 export type ServiceInput = z.infer<typeof serviceInputSchema>;
 
