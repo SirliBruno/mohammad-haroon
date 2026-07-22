@@ -1,4 +1,5 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
+import { RouteErrorBoundary, RouteNotFoundBoundary } from "@/components/layout/route-boundaries";
 import { ArrowLeft, ArrowUpRight, ExternalLink } from "lucide-react";
 
 import { Reveal } from "@/components/motion/reveal";
@@ -111,7 +112,10 @@ const featuredMockups: Record<string, React.ComponentType> = {
 
 /* ---------------- Route ---------------- */
 
+
 export const Route = createFileRoute("/")({
+  errorComponent: ({ reset }) => <RouteErrorBoundary reset={reset} />,
+  notFoundComponent: () => <RouteNotFoundBoundary />,
   head: () => ({
     meta: buildMeta({
       description: site.description,

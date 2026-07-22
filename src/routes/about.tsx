@@ -193,7 +193,11 @@ const interests = [
   { icon: Palette, label: "الخط والطباعة" },
 ];
 
+import { RouteErrorBoundary, RouteNotFoundBoundary } from "@/components/layout/route-boundaries";
+
 export const Route = createFileRoute("/about")({
+  errorComponent: ({ reset }) => <RouteErrorBoundary reset={reset} />,
+  notFoundComponent: () => <RouteNotFoundBoundary />,
   head: () => ({
     meta: buildMeta({
       title: "نبذة عني",

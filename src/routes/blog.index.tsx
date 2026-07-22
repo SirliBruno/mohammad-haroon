@@ -6,7 +6,11 @@ import { Section } from "@/components/layout/section";
 import { EmptyState } from "@/components/ds";
 import { articles } from "@/data/writing";
 
+import { RouteErrorBoundary, RouteNotFoundBoundary } from "@/components/layout/route-boundaries";
+
 export const Route = createFileRoute("/blog/")({
+  errorComponent: ({ reset }) => <RouteErrorBoundary reset={reset} eyebrow="المدوّنة" />,
+  notFoundComponent: () => <RouteNotFoundBoundary eyebrow="المدوّنة" />,
   head: () => ({
     meta: buildMeta({
       title: "المدوّنة",
