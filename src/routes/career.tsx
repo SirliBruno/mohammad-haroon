@@ -142,13 +142,19 @@ function CareerPage() {
   const certificates = certRows.length > 0 ? certRows : staticCertificates;
   const skillGroups = skillRowsDb.length > 0 ? skillRowsDb : staticSkillGroups;
 
+  const { data: careerRows } = usePageContent("career");
+  const tt = (k: string, fb: string) => getPageText(careerRows, k, fb);
   return (
     <>
       <PageHeader
-        eyebrow="المسيرة"
-        title="الخبرة والتعليم وما بينهما"
-        description={`${site.role} مع سِجلّ حافل بمنتجات مُطلَقة ومدروسة. مُنسَّق للمسؤولين عن التوظيف: سهل التصفّح، سريع التحقّق، وجاهز للتحميل.`}
+        eyebrow={tt("career.header.eyebrow", "المسيرة")}
+        title={tt("career.header.title", "الخبرة والتعليم وما بينهما")}
+        description={tt(
+          "career.header.description",
+          `${site.role} مع سِجلّ حافل بمنتجات مُطلَقة ومدروسة. مُنسَّق للمسؤولين عن التوظيف: سهل التصفّح، سريع التحقّق، وجاهز للتحميل.`,
+        )}
       />
+
 
       <Section size="sm">
         <Reveal>
