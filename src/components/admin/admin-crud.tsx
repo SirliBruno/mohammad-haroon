@@ -134,6 +134,41 @@ function coerceListResult<Row>(res: unknown): { rows: Row[]; count: number | nul
   return { rows: [], count: null };
 }
 
+function friendlyError(e: unknown, fallback: string, fields?: FieldDef[]): string {
+  const raw = e instanceof Error ? e.message : typeof e === "string" ? e : "";
+  const labelFor = (name: string) => fields?.find((f) => f.name === name)?.label ?? name;
+  const text = raw.trim();
+  if (text.startsWith("[") || text.startsWith("{")) {
+    try {
+      const parsed = JSON.parse(text);
+      const issues = Array.isArray(parsed) ? parsed : parsed?.issues;
+      if (Array.isArray(issues) && issues.length) {
+        const msgs = issues.slice(0, 3).map((it) => {
+          const path = Array.isArray(it.path) && it.path.length ? labelFor(String(it.path[0])) : null;
+          const base =
+            it.code === "invalid_type" && it.received === "null"
+              ? "هذا الحقل مطلوب"
+              : it.code === "too_small"
+              ? `القيمة قصيرة جدًا${typeof it.minimum === "number" ? ` (الحد الأدنى ${it.minimum})` : ""}`
+              : it.code === "too_big"
+              ? `القيمة طويلة جدًا${typeof it.maximum === "number" ? ` (الحد الأقصى ${it.maximum})` : ""}`
+              : it.code === "invalid_string"
+              ? "صيغة غير صالحة"
+              : it.message ?? "قيمة غير صالحة";
+          return path ? `${path}: ${base}` : base;
+        });
+        return msgs.join(" • ");
+      }
+    } catch {
+      /* fall through */
+    }
+  }
+  if (!text) return fallback;
+  if (/unauthorized/i.test(text)) return "الجلسة انتهت. سجّل الدخول من جديد.";
+  if (/forbidden|permission|not allowed/i.test(text)) return "لا تملك صلاحية لتنفيذ هذه العملية.";
+  return text.length > 200 ? text.slice(0, 200) + "…" : text;
+}
+
 export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>) {
   const {
     entityName,
@@ -212,7 +247,7 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
       setShowForm(false);
       void invalidateList();
     },
-    onError: (e) => toast.error(e instanceof Error ? e.message : "فشل الحفظ"),
+    onError: (e) => toast.error(friendlyError(e, "فشل الحفظ", fields)),
   });
 
   const updateMut = useMutation({
@@ -223,7 +258,7 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
       setShowForm(false);
       void invalidateList();
     },
-    onError: (e) => toast.error(e instanceof Error ? e.message : "فشل الحفظ"),
+    onError: (e) => toast.error(friendlyError(e, "فشل الحفظ", fields)),
   });
 
   const deleteMut = useMutation({
@@ -233,7 +268,7 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
       setConfirmDelete(null);
       void invalidateList();
     },
-    onError: (e) => toast.error(e instanceof Error ? e.message : "فشل الحذف"),
+    onError: (e) => toast.error(friendlyError(e, "فشل الحذف", fields)),
   });
 
   const busy = createMut.isPending || updateMut.isPending || deleteMut.isPending;
@@ -241,9 +276,9 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
   // Surface fetch errors as toasts (once per error object)
   useEffect(() => {
     if (listQuery.error) {
-      toast.error(listQuery.error instanceof Error ? listQuery.error.message : "فشل التحميل");
+      toast.error(friendlyError(listQuery.error, "فشل التحميل", fields));
     }
-  }, [listQuery.error]);
+  }, [listQuery.error, fields]);
 
   const rangeLabel = useMemo(() => {
     if (count == null) return `${rows.length} عنصر`;
@@ -675,8 +710,12 @@ function FieldRenderer({
   const baseInput =
     "w-full rounded-md border border-input bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900 dark:border-border dark:bg-neutral-900 dark:focus:ring-white";
 
+  const inputId = `f-${field.name}`;
   const labelEl = (
-    <label className="text-xs font-medium text-foreground dark:text-muted-foreground flex items-center gap-1">
+    <label
+      htmlFor={inputId}
+      className="text-xs font-medium text-foreground dark:text-muted-foreground flex items-center gap-1"
+    >
       {field.label}
       {"required" in field && field.required && <span className="text-red-500">*</span>}
     </label>
@@ -722,6 +761,7 @@ function FieldRenderer({
       <div className={cn("flex flex-col gap-1", colSpan)}>
         {labelEl}
         <select
+          id={inputId}
           value={(value as string) ?? ""}
           onChange={(e) => onChange(e.target.value)}
           className={baseInput}
@@ -791,6 +831,7 @@ function FieldRenderer({
             </span>
           ))}
           <input
+            id={inputId}
             type="text"
             enterKeyHint="done"
             data-admin-tags-input="true"
@@ -831,6 +872,7 @@ function FieldRenderer({
       <div className={cn("flex flex-col gap-1", colSpan)}>
         {labelEl}
         <textarea
+          id={inputId}
           value={(value as string) ?? ""}
           onChange={(e) => onChange(e.target.value)}
           rows={field.rows ?? (field.type === "richtext" ? 10 : 4)}
@@ -848,6 +890,7 @@ function FieldRenderer({
       <div className={cn("flex flex-col gap-1", colSpan)}>
         {labelEl}
         <input
+          id={inputId}
           type="number"
           value={value === null || value === undefined ? "" : String(value)}
           onChange={(e) => onChange(e.target.value === "" ? null : Number(e.target.value))}
@@ -872,6 +915,7 @@ function FieldRenderer({
       <div className={cn("flex flex-col gap-1", colSpan)}>
         {labelEl}
         <textarea
+          id={inputId}
           value={display}
           onChange={(e) => onChange(e.target.value)}
           rows={field.rows ?? 8}
@@ -1012,6 +1056,7 @@ function FieldRenderer({
     <div className={cn("flex flex-col gap-1", colSpan)}>
       {labelEl}
       <input
+        id={inputId}
         type={field.type === "url" ? "url" : field.type === "date" ? "date" : field.type === "datetime" ? "datetime-local" : "text"}
         value={displayVal}
         onChange={(e) => onChange(e.target.value)}
