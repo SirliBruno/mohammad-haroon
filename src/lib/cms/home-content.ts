@@ -9,6 +9,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { listSiteContent, upsertSiteContent } from "@/lib/cms/content.functions";
+import { site as staticSite } from "@/config/site";
 
 export type HomeFieldKind = "text" | "textarea" | "json";
 
