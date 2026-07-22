@@ -48,7 +48,7 @@ function Page() {
         entityName="خدمة"
         entityNamePlural="خدمات"
         fields={FIELDS}
-        emptyValues={{ title: "", slug: "", currency: "USD", featured: false, content_status: "draft", technologies: [], deliverables: [], benefits: [], features: [], workflow: [], faq: [], sort_order: 0 }}
+        emptyValues={{ title: "", slug: "", currency: "USD", featured: false, content_status: "draft", technologies: [], deliverables: [], benefits: [], features: [], workflow: [], faq: [], sort_order: 0, featured_project_slugs: [] }}
         listFn={adminListServices}
         createFn={createService}
         updateFn={updateService}
