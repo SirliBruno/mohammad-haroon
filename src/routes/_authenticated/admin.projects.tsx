@@ -411,6 +411,15 @@ function AdminProjectsPage() {
             development: (form.development as string) || null,
             lessons: asStringArray(form.lessons),
             highlights: asStringArray(form.highlights),
+            spotlight:
+              form.spotlight && typeof form.spotlight === "object" && !Array.isArray(form.spotlight)
+                ? (() => {
+                    const s = form.spotlight as Record<string, unknown>;
+                    const t = typeof s.title === "string" ? s.title.trim() : "";
+                    const d = typeof s.description === "string" ? s.description.trim() : "";
+                    return t && d ? { title: t, description: d } : null;
+                  })()
+                : null,
             metrics: Array.isArray(form.metrics) ? (form.metrics as unknown[]) : [],
             results: Array.isArray(form.results) ? (form.results as unknown[]) : [],
             gallery: Array.isArray(form.gallery) ? (form.gallery as unknown[]) : [],
