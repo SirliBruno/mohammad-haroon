@@ -220,7 +220,7 @@ function HeroProjectCard({
       />
 
       {/* Screenshot — dominates the card. Replace <ProjectPreview /> with
-          <img src={project.cover.src} alt={project.cover.alt} className="size-full object-cover" />
+          <img src={project.cover.src} alt={project.cover.alt} loading="lazy" decoding="async" className="size-full object-cover" />
           when a real screenshot exists. */}
       <div className="relative aspect-[4/3] w-full overflow-hidden">
         <ProjectPreview project={project} index={index} />

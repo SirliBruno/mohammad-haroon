@@ -27,7 +27,7 @@ export function CertificateCard({
       <Wrapper {...wrapperProps} className="flex items-start gap-4">
         <div className="grid size-10 shrink-0 place-items-center rounded-md border border-border/60 bg-background">
           {certificate.logoUrl ? (
-            <img src={certificate.logoUrl} alt="" className="size-6 object-contain" />
+            <img src={certificate.logoUrl} alt="" loading="lazy" decoding="async" className="size-6 object-contain" />
           ) : (
             <Award className="size-4 text-muted-foreground" aria-hidden />
           )}

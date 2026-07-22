@@ -174,7 +174,7 @@ function CaseStudy() {
         <Reveal>
           <div className="relative aspect-[16/9] overflow-hidden rounded-2xl border border-border/60 bg-linear-to-br from-primary/10 via-card to-accent/10">
             {project.cover?.src ? (
-              <img src={project.cover.src} alt={project.cover.alt} className="size-full object-cover" />
+              <img src={project.cover.src} alt={project.cover.alt} loading="lazy" decoding="async" className="size-full object-cover" />
             ) : (
               <div className="grid size-full place-items-center">
                 <span className="text-5xl font-semibold tracking-tight text-foreground/80 md:text-6xl">
