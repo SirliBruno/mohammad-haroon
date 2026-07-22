@@ -28,6 +28,7 @@ import { useHomeContent, getHomeText, getHomeList } from "@/lib/cms/home-content
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { listPublicProjects } from "@/lib/cms/projects-public.functions";
+import { listTestimonials } from "@/lib/cms/simple.functions";
 import { toProject } from "@/lib/project-adapter";
 
 /* ---------------- Home-only data ---------------- */
@@ -122,16 +123,31 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const listFn = useServerFn(listPublicProjects);
+  const testFn = useServerFn(listTestimonials);
   const featuredQ = useQuery({
     queryKey: ["home", "featured"],
     queryFn: () => listFn({ data: { featured: true, limit: 3 } }),
+    staleTime: 60_000,
+  });
+  const testimonialsQ = useQuery({
+    queryKey: ["home", "testimonials"],
+    queryFn: () =>
+      testFn({ data: { featured: true, limit: 3, orderBy: "sort_order", ascending: true } }),
     staleTime: 60_000,
   });
   const cmsFeatured = (featuredQ.data?.rows ?? []).map(toProject);
   const featured = cmsFeatured.length
     ? cmsFeatured
     : staticProjects.filter((p) => p.featured).slice(0, 3);
-  const featuredTestimonials = testimonials.slice(0, 3);
+  const cmsTestimonials = (testimonialsQ.data?.rows ?? []).map((r: any) => ({
+    id: r.id,
+    quote: r.quote,
+    author: r.author_name,
+    role: r.author_role ?? "",
+    company: r.author_company ?? undefined,
+    avatar: r.avatar_url ?? undefined,
+  }));
+  const featuredTestimonials = cmsTestimonials.length ? cmsTestimonials : testimonials.slice(0, 3);
   const { data: homeRows } = useHomeContent();
   const t = (k: string, fb: string) => getHomeText(homeRows, k, fb);
   const homeServicesLive = getHomeList<(typeof homeServices)[number]>(
