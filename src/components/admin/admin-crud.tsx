@@ -269,6 +269,10 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
     if (!showForm) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") closeForm();
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "s") {
+        e.preventDefault();
+        if (!busy) submitForm();
+      }
     };
     window.addEventListener("keydown", onKey);
     const prev = document.body.style.overflow;
@@ -278,7 +282,8 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
       document.body.style.overflow = prev;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showForm, busy]);
+  }, [showForm, busy, form]);
+
 
   const openCreate = () => {
     setEditingId(null);
