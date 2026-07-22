@@ -4,7 +4,7 @@ import { Container } from "./container";
 import { Logo } from "@/components/brand/logo";
 import { footerNav } from "@/config/nav";
 import { socials } from "@/config/socials";
-import { site } from "@/config/site";
+import { useSite } from "@/lib/cms/home-content";
 
 const iconFor: Record<string, typeof Github> = {
   GitHub: Github,
@@ -15,6 +15,7 @@ const iconFor: Record<string, typeof Github> = {
 
 export function Footer() {
   const year = new Date().getFullYear();
+  const site = useSite();
 
   return (
     <footer className="relative mt-24 border-t border-border/60 bg-background">
