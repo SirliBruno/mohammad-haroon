@@ -1056,6 +1056,7 @@ function FieldRenderer({
     <div className={cn("flex flex-col gap-1", colSpan)}>
       {labelEl}
       <input
+        id={inputId}
         type={field.type === "url" ? "url" : field.type === "date" ? "date" : field.type === "datetime" ? "datetime-local" : "text"}
         value={displayVal}
         onChange={(e) => onChange(e.target.value)}
