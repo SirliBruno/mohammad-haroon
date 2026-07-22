@@ -78,6 +78,15 @@ function mapTestimonial(v: unknown): Project["testimonial"] {
   return { quote, author, role: str(r.role) };
 }
 
+function mapSpotlight(v: unknown): Project["spotlight"] {
+  const r = asRecord(v);
+  if (!r) return undefined;
+  const title = str(r.title);
+  const description = str(r.description);
+  if (!title || !description) return undefined;
+  return { title, description };
+}
+
 function mapDesignProcess(v: string | null): Project["designProcess"] {
   if (!v) return undefined;
   const trimmed = v.trim();
@@ -132,6 +141,7 @@ export function toProject(row: Row): Project {
     highlights: row.highlights && row.highlights.length ? row.highlights : undefined,
     sectionOrder: Array.isArray(row.section_order) && row.section_order.length ? row.section_order : undefined,
     testimonial: mapTestimonial(row.testimonial),
+    spotlight: mapSpotlight((row as unknown as { spotlight?: unknown }).spotlight),
     featured: Boolean(row.featured),
     status: mapStatus(row.status),
   };
