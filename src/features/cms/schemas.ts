@@ -69,6 +69,7 @@ export const projectInputSchema = z.object({
   category: optionalText(80),
   tags: stringArray(),
   technologies: stringArray(),
+  tools: stringArray(),
   cover_url: optionalUrl,
   gallery: jsonArray,
   role: optionalText(500),
