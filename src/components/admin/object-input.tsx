@@ -32,13 +32,13 @@ export function ObjectInput({
   };
 
   const baseInput =
-    "w-full rounded-md border border-neutral-300 bg-white px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-neutral-900 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:ring-white";
+    "w-full rounded-md border border-input bg-white px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-neutral-900 dark:border-border dark:bg-neutral-900 dark:focus:ring-white";
 
   return (
-    <div className={cn("flex flex-col gap-2 rounded-lg border border-neutral-200 bg-white p-3 dark:border-neutral-800 dark:bg-neutral-900", className)}>
+    <div className={cn("flex flex-col gap-2 rounded-lg border border-border bg-white p-3 dark:border-border dark:bg-neutral-900", className)}>
       {schema.map((f) => (
         <label key={f.name} className="flex flex-col gap-1">
-          <span className="text-[11px] text-neutral-500">{f.label}</span>
+          <span className="text-[11px] text-muted-foreground">{f.label}</span>
           {f.type === "textarea" ? (
             <textarea
               value={obj[f.name] ?? ""}

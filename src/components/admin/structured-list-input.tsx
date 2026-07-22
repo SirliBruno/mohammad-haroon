@@ -53,7 +53,7 @@ export function StructuredListInput({
   };
 
   const baseInput =
-    "w-full rounded-md border border-neutral-300 bg-white px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-neutral-900 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:ring-white";
+    "w-full rounded-md border border-input bg-white px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-neutral-900 dark:border-border dark:bg-neutral-900 dark:focus:ring-white";
 
   return (
     <div className={cn("flex flex-col gap-2", className)}>
@@ -62,12 +62,12 @@ export function StructuredListInput({
           {items.map((row, i) => (
             <li
               key={i}
-              className="grid grid-cols-1 gap-2 rounded-lg border border-neutral-200 bg-white p-3 dark:border-neutral-800 dark:bg-neutral-900 sm:grid-cols-[1fr_auto]"
+              className="grid grid-cols-1 gap-2 rounded-lg border border-border bg-white p-3 dark:border-border dark:bg-neutral-900 sm:grid-cols-[1fr_auto]"
             >
               <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                 {schema.map((f) => (
                   <label key={f.name} className="flex flex-col gap-1">
-                    <span className="text-[11px] text-neutral-500">{f.label}</span>
+                    <span className="text-[11px] text-muted-foreground">{f.label}</span>
                     {f.type === "textarea" ? (
                       <textarea
                         value={row[f.name] ?? ""}
@@ -93,7 +93,7 @@ export function StructuredListInput({
                   type="button"
                   onClick={() => move(i, -1)}
                   disabled={i === 0}
-                  className="rounded-md border border-neutral-300 bg-white px-2 py-1 text-xs disabled:opacity-40 dark:border-neutral-700 dark:bg-neutral-800"
+                  className="rounded-md border border-input bg-white px-2 py-1 text-xs disabled:opacity-40 dark:border-border dark:bg-neutral-800"
                 >
                   ↑
                 </button>
@@ -101,7 +101,7 @@ export function StructuredListInput({
                   type="button"
                   onClick={() => move(i, 1)}
                   disabled={i === items.length - 1}
-                  className="rounded-md border border-neutral-300 bg-white px-2 py-1 text-xs disabled:opacity-40 dark:border-neutral-700 dark:bg-neutral-800"
+                  className="rounded-md border border-input bg-white px-2 py-1 text-xs disabled:opacity-40 dark:border-border dark:bg-neutral-800"
                 >
                   ↓
                 </button>
@@ -121,7 +121,7 @@ export function StructuredListInput({
         <button
           type="button"
           onClick={add}
-          className="rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-xs hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-800 dark:hover:bg-neutral-700"
+          className="rounded-md border border-input bg-white px-3 py-1.5 text-xs hover:bg-muted dark:border-border dark:bg-neutral-800 dark:hover:bg-neutral-700"
         >
           {addLabel}
         </button>

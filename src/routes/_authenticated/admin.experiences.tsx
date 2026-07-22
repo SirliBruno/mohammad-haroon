@@ -52,8 +52,8 @@ function Page() {
         updateFn={updateExperience}
         deleteFn={deleteExperience}
         columns={[
-          { header: "الدور", render: (r: any) => <div><div className="font-medium">{r.role}</div><div className="text-xs text-neutral-500">{r.company}</div></div> },
-          { header: "المدة", render: (r: any) => <span className="text-xs text-neutral-500">{r.started_on} → {r.is_current ? "الآن" : (r.ended_on ?? "—")}</span> },
+          { header: "الدور", render: (r: any) => <div><div className="font-medium">{r.role}</div><div className="text-xs text-muted-foreground">{r.company}</div></div> },
+          { header: "المدة", render: (r: any) => <span className="text-xs text-muted-foreground">{r.started_on} → {r.is_current ? "الآن" : (r.ended_on ?? "—")}</span> },
         ]}
       />
     </AdminShell>

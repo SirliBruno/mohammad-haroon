@@ -335,23 +335,23 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               placeholder="بحث…"
-              className="rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm dark:border-neutral-700 dark:bg-neutral-900"
+              className="rounded-md border border-input bg-white px-3 py-1.5 text-sm dark:border-border dark:bg-neutral-900"
             />
           )}
           <button
             type="button"
             onClick={() => void listQuery.refetch()}
             disabled={refetching}
-            className="rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm hover:bg-neutral-50 disabled:opacity-60 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:bg-neutral-800"
+            className="rounded-md border border-input bg-white px-3 py-1.5 text-sm hover:bg-muted disabled:opacity-60 dark:border-border dark:bg-neutral-900 dark:hover:bg-muted"
           >
             {refetching ? "…" : "تحديث"}
           </button>
-          <span className="text-xs text-neutral-500">{rangeLabel}</span>
+          <span className="text-xs text-muted-foreground">{rangeLabel}</span>
         </div>
         <button
           type="button"
           onClick={openCreate}
-          className="rounded-md bg-neutral-900 px-4 py-1.5 text-sm font-medium text-white hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
+          className="rounded-md bg-neutral-900 px-4 py-1.5 text-sm font-medium text-white hover:bg-neutral-800 dark:bg-white dark:text-foreground dark:hover:bg-neutral-200"
         >
           + إضافة {entityName}
         </button>
@@ -377,8 +377,8 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
                 className={cn(
                   "rounded-full px-3 py-1 border transition",
                   active
-                    ? "bg-neutral-900 text-white border-neutral-900 dark:bg-white dark:text-neutral-900 dark:border-white"
-                    : "bg-white text-neutral-700 border-neutral-300 hover:bg-neutral-50 dark:bg-neutral-900 dark:text-neutral-300 dark:border-neutral-700 dark:hover:bg-neutral-800",
+                    ? "bg-neutral-900 text-white border-neutral-900 dark:bg-white dark:text-foreground dark:border-white"
+                    : "bg-white text-foreground border-input hover:bg-muted dark:bg-neutral-900 dark:text-muted-foreground dark:border-border dark:hover:bg-muted",
                 )}
               >
                 {t.label}
@@ -388,23 +388,23 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
         </div>
       )}
 
-      <div className="rounded-2xl border border-neutral-200 bg-white overflow-hidden dark:border-neutral-800 dark:bg-neutral-900">
+      <div className="rounded-2xl border border-border bg-white overflow-hidden dark:border-border dark:bg-neutral-900">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="bg-neutral-50 dark:bg-neutral-800/50">
               <tr>
                 {columns.map((col, i) => (
-                  <th key={i} className={cn("text-start px-4 py-3 font-medium text-neutral-600 dark:text-neutral-300", col.className)}>
+                  <th key={i} className={cn("text-start px-4 py-3 font-medium text-muted-foreground dark:text-muted-foreground", col.className)}>
                     {col.header}
                   </th>
                 ))}
-                <th className="text-start px-4 py-3 font-medium text-neutral-600 dark:text-neutral-300 w-32">إجراءات</th>
+                <th className="text-start px-4 py-3 font-medium text-muted-foreground dark:text-muted-foreground w-32">إجراءات</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
                 Array.from({ length: 5 }).map((_, r) => (
-                  <tr key={`sk-${r}`} className="border-t border-neutral-100 dark:border-neutral-800">
+                  <tr key={`sk-${r}`} className="border-t border-border dark:border-border">
                     {columns.map((_c, i) => (
                       <td key={i} className="px-4 py-3">
                         <div className="h-4 w-3/4 animate-pulse rounded bg-neutral-200 dark:bg-neutral-800" />
@@ -419,17 +419,17 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
                 <tr>
                   <td colSpan={columns.length + 1} className="px-4 py-12">
                     <div className="flex flex-col items-center gap-3 text-center">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-neutral-100 text-neutral-400 dark:bg-neutral-800 dark:text-neutral-500">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-neutral-100 text-muted-foreground dark:bg-neutral-800 dark:text-muted-foreground">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
                       </div>
-                      <div className="text-sm text-neutral-600 dark:text-neutral-400">
+                      <div className="text-sm text-muted-foreground dark:text-muted-foreground">
                         {search || statusFilter ? `لا توجد نتائج مطابقة.` : `لا توجد ${entityNamePlural} بعد.`}
                       </div>
                       {!search && !statusFilter && (
                         <button
                           type="button"
                           onClick={openCreate}
-                          className="rounded-md bg-neutral-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
+                          className="rounded-md bg-neutral-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-neutral-800 dark:bg-white dark:text-foreground dark:hover:bg-neutral-200"
                         >
                           إضافة {entityName}
                         </button>
@@ -440,7 +440,7 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
 
               ) : (
                 rows.map((row) => (
-                  <tr key={row.id} className="border-t border-neutral-100 dark:border-neutral-800 hover:bg-neutral-50/50 dark:hover:bg-neutral-800/30">
+                  <tr key={row.id} className="border-t border-border dark:border-border hover:bg-muted/50 dark:hover:bg-muted/30">
                     {columns.map((col, i) => (
                       <td key={i} className={cn("px-4 py-3 align-top", col.className)}>
                         {col.render(row)}
@@ -450,7 +450,7 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
                       <div className="flex flex-wrap gap-1">
                         <button
                           onClick={() => openEdit(row)}
-                          className="rounded-md border border-neutral-300 bg-white px-2 py-1 text-xs hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-800 dark:hover:bg-neutral-700"
+                          className="rounded-md border border-input bg-white px-2 py-1 text-xs hover:bg-muted dark:border-border dark:bg-neutral-800 dark:hover:bg-neutral-700"
                         >
                           تعديل
                         </button>
@@ -493,8 +493,8 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
           </table>
         </div>
         {totalPages && totalPages > 1 && (
-          <div className="flex items-center justify-between border-t border-neutral-100 px-4 py-3 text-xs dark:border-neutral-800">
-            <div className="text-neutral-500">
+          <div className="flex items-center justify-between border-t border-border px-4 py-3 text-xs dark:border-border">
+            <div className="text-muted-foreground">
               صفحة {page + 1} من {totalPages}
             </div>
             <div className="flex items-center gap-1">
@@ -502,7 +502,7 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
                 type="button"
                 onClick={() => setPage((p) => Math.max(0, p - 1))}
                 disabled={page === 0 || refetching}
-                className="rounded-md border border-neutral-300 bg-white px-2.5 py-1 disabled:opacity-40 dark:border-neutral-700 dark:bg-neutral-900"
+                className="rounded-md border border-input bg-white px-2.5 py-1 disabled:opacity-40 dark:border-border dark:bg-neutral-900"
               >
                 السابق
               </button>
@@ -510,7 +510,7 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
                 type="button"
                 onClick={() => setPage((p) => (totalPages ? Math.min(totalPages - 1, p + 1) : p + 1))}
                 disabled={page + 1 >= totalPages || refetching}
-                className="rounded-md border border-neutral-300 bg-white px-2.5 py-1 disabled:opacity-40 dark:border-neutral-700 dark:bg-neutral-900"
+                className="rounded-md border border-input bg-white px-2.5 py-1 disabled:opacity-40 dark:border-border dark:bg-neutral-900"
               >
                 التالي
               </button>
@@ -530,8 +530,8 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
             if (e.target === e.currentTarget) closeForm();
           }}
         >
-          <div className="w-full max-w-3xl my-8 rounded-2xl border border-neutral-200 bg-white shadow-xl dark:border-neutral-800 dark:bg-neutral-900">
-            <div className="flex items-center justify-between border-b border-neutral-200 px-6 py-4 dark:border-neutral-800">
+          <div className="w-full max-w-3xl my-8 rounded-2xl border border-border bg-white shadow-xl dark:border-border dark:bg-neutral-900">
+            <div className="flex items-center justify-between border-b border-border px-6 py-4 dark:border-border">
               <h2 id="admin-crud-title" className="text-lg font-semibold">
                 {editingId ? `تعديل ${entityName}` : `إضافة ${entityName}`}
               </h2>
@@ -539,7 +539,7 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
                 type="button"
                 onClick={closeForm}
                 aria-label="إغلاق"
-                className="text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100"
+                className="text-muted-foreground hover:text-foreground dark:hover:text-neutral-100"
               >
                 ✕
               </button>
@@ -554,11 +554,11 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
                   onChange={(v) => setForm((f) => ({ ...f, [field.name]: v }))}
                 />
               ))}
-              <div className="md:col-span-2 flex flex-wrap items-center justify-end gap-2 pt-4 border-t border-neutral-100 dark:border-neutral-800">
+              <div className="md:col-span-2 flex flex-wrap items-center justify-end gap-2 pt-4 border-t border-border dark:border-border">
                 <button
                   type="button"
                   onClick={closeForm}
-                  className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-800"
+                  className="rounded-md border border-input bg-white px-4 py-2 text-sm dark:border-border dark:bg-neutral-800"
                 >
                   إلغاء
                 </button>
@@ -577,10 +577,10 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
                 <button
                   type="submit"
                   disabled={busy}
-                  className="inline-flex items-center gap-2 rounded-md bg-neutral-900 px-5 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-white dark:text-neutral-900"
+                  className="inline-flex items-center gap-2 rounded-md bg-neutral-900 px-5 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-white dark:text-foreground"
                 >
                   {busy ? "جارِ الحفظ…" : editingId ? "حفظ التعديلات" : "إضافة"}
-                  <kbd className="hidden sm:inline-flex rounded border border-white/30 px-1.5 py-0.5 text-[10px] font-mono text-white/70 dark:border-neutral-900/30 dark:text-neutral-900/60">⌘S</kbd>
+                  <kbd className="hidden sm:inline-flex rounded border border-white/30 px-1.5 py-0.5 text-[10px] font-mono text-white/70 dark:border-neutral-900/30 dark:text-foreground/60">⌘S</kbd>
                 </button>
 
               </div>
@@ -598,9 +598,9 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
             if (e.target === e.currentTarget && !busy) setConfirmDelete(null);
           }}
         >
-          <div className="w-full max-w-md rounded-2xl border border-neutral-200 bg-white p-6 shadow-xl dark:border-neutral-800 dark:bg-neutral-900">
+          <div className="w-full max-w-md rounded-2xl border border-border bg-white p-6 shadow-xl dark:border-border dark:bg-neutral-900">
             <h3 className="text-lg font-semibold">حذف {entityName}؟</h3>
-            <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
+            <p className="mt-2 text-sm text-muted-foreground dark:text-muted-foreground">
               هذا الإجراء لا يمكن التراجع عنه. سيُحذف العنصر نهائيًا.
             </p>
             <div className="mt-6 flex items-center justify-end gap-2">
@@ -608,7 +608,7 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
                 type="button"
                 onClick={() => setConfirmDelete(null)}
                 disabled={busy}
-                className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-800"
+                className="rounded-md border border-input bg-white px-4 py-2 text-sm dark:border-border dark:bg-neutral-800"
               >
                 إلغاء
               </button>
@@ -634,16 +634,16 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
             if (e.target === e.currentTarget) setConfirmDiscard(false);
           }}
         >
-          <div className="w-full max-w-sm rounded-2xl border border-neutral-200 bg-white p-6 shadow-xl dark:border-neutral-800 dark:bg-neutral-900">
+          <div className="w-full max-w-sm rounded-2xl border border-border bg-white p-6 shadow-xl dark:border-border dark:bg-neutral-900">
             <h3 className="text-base font-semibold">تجاهل التغييرات؟</h3>
-            <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
+            <p className="mt-2 text-sm text-muted-foreground dark:text-muted-foreground">
               لديك تغييرات لم تُحفظ بعد. هل تريد الخروج وتجاهلها؟
             </p>
             <div className="mt-6 flex items-center justify-end gap-2">
               <button
                 type="button"
                 onClick={() => setConfirmDiscard(false)}
-                className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-800"
+                className="rounded-md border border-input bg-white px-4 py-2 text-sm dark:border-border dark:bg-neutral-800"
               >
                 متابعة التعديل
               </button>
@@ -673,16 +673,16 @@ function FieldRenderer({
 }) {
   const colSpan = field.colSpan === 2 || field.type === "textarea" || field.type === "richtext" ? "md:col-span-2" : "";
   const baseInput =
-    "w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:ring-white";
+    "w-full rounded-md border border-input bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900 dark:border-border dark:bg-neutral-900 dark:focus:ring-white";
 
   const labelEl = (
-    <label className="text-xs font-medium text-neutral-700 dark:text-neutral-300 flex items-center gap-1">
+    <label className="text-xs font-medium text-foreground dark:text-muted-foreground flex items-center gap-1">
       {field.label}
       {"required" in field && field.required && <span className="text-red-500">*</span>}
     </label>
   );
   const helpEl = "help" in field && field.help ? (
-    <p className="text-[11px] text-neutral-500">{field.help}</p>
+    <p className="text-[11px] text-muted-foreground">{field.help}</p>
   ) : null;
 
   if (field.type === "boolean") {
@@ -695,7 +695,7 @@ function FieldRenderer({
           onChange={(e) => onChange(e.target.checked)}
           className="h-4 w-4"
         />
-        <label htmlFor={`f-${field.name}`} className="text-sm text-neutral-700 dark:text-neutral-300 cursor-pointer">
+        <label htmlFor={`f-${field.name}`} className="text-sm text-foreground dark:text-muted-foreground cursor-pointer">
           {field.label}
         </label>
         {helpEl}
@@ -783,7 +783,7 @@ function FieldRenderer({
               <button
                 type="button"
                 onClick={() => onChange(arr.filter((_, j) => j !== i))}
-                className="text-neutral-500 hover:text-red-600"
+                className="text-muted-foreground hover:text-red-600"
                 aria-label="حذف"
               >
                 ×
@@ -948,12 +948,12 @@ function FieldRenderer({
           <button
             type="button"
             onClick={reset}
-            className="text-[11px] text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
+            className="text-[11px] text-muted-foreground hover:text-foreground dark:hover:text-white"
           >
             إعادة الترتيب الافتراضي
           </button>
         </div>
-        <ol className="flex flex-col gap-1.5 rounded-md border border-neutral-200 bg-white p-2 dark:border-neutral-800 dark:bg-neutral-900">
+        <ol className="flex flex-col gap-1.5 rounded-md border border-border bg-white p-2 dark:border-border dark:bg-neutral-900">
           {order.map((key, i) => {
             const item = field.items.find((it) => it.value === key);
             if (!item) return null;
@@ -963,7 +963,7 @@ function FieldRenderer({
                 className="flex items-center justify-between gap-3 rounded-md bg-neutral-50 px-3 py-2 text-sm dark:bg-neutral-800/50"
               >
                 <div className="flex items-center gap-2 min-w-0">
-                  <span className="text-[11px] tabular-nums text-neutral-500 w-5" dir="ltr">
+                  <span className="text-[11px] tabular-nums text-muted-foreground w-5" dir="ltr">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <span className="truncate">{item.label}</span>
@@ -973,7 +973,7 @@ function FieldRenderer({
                     type="button"
                     onClick={() => move(i, -1)}
                     disabled={i === 0}
-                    className="rounded border border-neutral-200 px-2 py-0.5 text-xs disabled:opacity-40 hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-800"
+                    className="rounded border border-border px-2 py-0.5 text-xs disabled:opacity-40 hover:bg-neutral-100 dark:border-border dark:hover:bg-muted"
                     aria-label="نقل لأعلى"
                   >
                     ↑
@@ -982,7 +982,7 @@ function FieldRenderer({
                     type="button"
                     onClick={() => move(i, 1)}
                     disabled={i === order.length - 1}
-                    className="rounded border border-neutral-200 px-2 py-0.5 text-xs disabled:opacity-40 hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-800"
+                    className="rounded border border-border px-2 py-0.5 text-xs disabled:opacity-40 hover:bg-neutral-100 dark:border-border dark:hover:bg-muted"
                     aria-label="نقل لأسفل"
                   >
                     ↓

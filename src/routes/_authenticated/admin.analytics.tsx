@@ -25,10 +25,10 @@ const EVENT_LABEL: Record<string, string> = {
 
 function Card({ label, value, hint }: { label: string; value: string | number; hint?: string }) {
   return (
-    <div className="rounded-xl border border-neutral-200 bg-white p-5 dark:border-neutral-800 dark:bg-neutral-900">
-      <p className="text-xs text-neutral-500">{label}</p>
+    <div className="rounded-xl border border-border bg-white p-5 dark:border-border dark:bg-neutral-900">
+      <p className="text-xs text-muted-foreground">{label}</p>
       <p className="mt-1 text-2xl font-semibold tabular-nums">{value}</p>
-      {hint ? <p className="mt-1 text-xs text-neutral-500">{hint}</p> : null}
+      {hint ? <p className="mt-1 text-xs text-muted-foreground">{hint}</p> : null}
     </div>
   );
 }
@@ -57,8 +57,8 @@ function Page() {
             onClick={() => setDays(d)}
             className={`rounded-md border px-3 py-1.5 text-sm transition-colors ${
               days === d
-                ? "border-neutral-900 bg-neutral-900 text-white dark:border-neutral-100 dark:bg-neutral-100 dark:text-neutral-900"
-                : "border-neutral-200 bg-white text-neutral-700 hover:border-neutral-400 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-300"
+                ? "border-neutral-900 bg-neutral-900 text-white dark:border-border dark:bg-neutral-100 dark:text-foreground"
+                : "border-border bg-white text-foreground hover:border-neutral-400 dark:border-border dark:bg-neutral-900 dark:text-muted-foreground"
             }`}
           >
             آخر {d} يوم
@@ -67,7 +67,7 @@ function Page() {
       </div>
 
       {q.isLoading ? (
-        <p className="text-sm text-neutral-500">جارٍ التحميل…</p>
+        <p className="text-sm text-muted-foreground">جارٍ التحميل…</p>
       ) : q.isError ? (
         <p className="text-sm text-red-600">
           {q.error instanceof Error ? q.error.message : "تعذّر تحميل البيانات"}
@@ -75,7 +75,7 @@ function Page() {
       ) : !data ? null : (
         <div className="flex flex-col gap-8">
           <section>
-            <h3 className="mb-3 text-xs uppercase tracking-wider text-neutral-500">
+            <h3 className="mb-3 text-xs uppercase tracking-wider text-muted-foreground">
               مسار التحويل (جلسات فريدة)
             </h3>
             <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
@@ -88,7 +88,7 @@ function Page() {
           </section>
 
           <section>
-            <h3 className="mb-3 text-xs uppercase tracking-wider text-neutral-500">
+            <h3 className="mb-3 text-xs uppercase tracking-wider text-muted-foreground">
               معدلات التحويل
             </h3>
             <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
@@ -105,12 +105,12 @@ function Page() {
           </section>
 
           <section>
-            <h3 className="mb-3 text-xs uppercase tracking-wider text-neutral-500">
+            <h3 className="mb-3 text-xs uppercase tracking-wider text-muted-foreground">
               إجمالي الأحداث
             </h3>
-            <div className="overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-800">
+            <div className="overflow-hidden rounded-xl border border-border dark:border-border">
               <table className="w-full text-sm">
-                <thead className="bg-neutral-50 text-neutral-500 dark:bg-neutral-900">
+                <thead className="bg-neutral-50 text-muted-foreground dark:bg-neutral-900">
                   <tr>
                     <th className="px-4 py-2 text-start font-medium">الحدث</th>
                     <th className="px-4 py-2 text-start font-medium">العدد</th>
@@ -123,7 +123,7 @@ function Page() {
                     .map(([ev, count]) => (
                       <tr
                         key={ev}
-                        className="border-t border-neutral-200 dark:border-neutral-800"
+                        className="border-t border-border dark:border-border"
                       >
                         <td className="px-4 py-2">{EVENT_LABEL[ev] ?? ev}</td>
                         <td className="px-4 py-2 tabular-nums">{count}</td>
@@ -134,7 +134,7 @@ function Page() {
                     ))}
                   {Object.keys(data.totals).length === 0 ? (
                     <tr>
-                      <td colSpan={3} className="px-4 py-8 text-center text-neutral-500">
+                      <td colSpan={3} className="px-4 py-8 text-center text-muted-foreground">
                         لا توجد بيانات في هذه الفترة بعد.
                       </td>
                     </tr>
@@ -146,16 +146,16 @@ function Page() {
 
           {data.topPaths.length > 0 ? (
             <section>
-              <h3 className="mb-3 text-xs uppercase tracking-wider text-neutral-500">
+              <h3 className="mb-3 text-xs uppercase tracking-wider text-muted-foreground">
                 أكثر الصفحات مشاهدة
               </h3>
-              <div className="overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-800">
+              <div className="overflow-hidden rounded-xl border border-border dark:border-border">
                 <table className="w-full text-sm">
                   <tbody>
                     {data.topPaths.map((p) => (
                       <tr
                         key={p.path}
-                        className="border-t border-neutral-200 first:border-t-0 dark:border-neutral-800"
+                        className="border-t border-border first:border-t-0 dark:border-border"
                       >
                         <td className="px-4 py-2 font-mono text-xs" dir="ltr">
                           {p.path}

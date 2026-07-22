@@ -93,7 +93,7 @@ function AdminHomePage() {
 
         {Object.entries(groups).map(([group, items]) => (
           <div key={group}>
-            <h3 className="text-xs uppercase tracking-wider text-neutral-500 mb-3">{group}</h3>
+            <h3 className="text-xs uppercase tracking-wider text-muted-foreground mb-3">{group}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
               {items.map((c) => {
                 const Icon = c.icon;
@@ -101,16 +101,16 @@ function AdminHomePage() {
                   <Link
                     key={c.to}
                     to={c.to}
-                    className="group flex flex-col gap-2 rounded-xl border border-neutral-200 bg-white p-5 hover:border-neutral-400 hover:shadow-sm transition-all dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-neutral-600"
+                    className="group flex flex-col gap-2 rounded-xl border border-border bg-white p-5 hover:border-neutral-400 hover:shadow-sm transition-all dark:border-border dark:bg-neutral-900 dark:hover:border-neutral-600"
                   >
                     <div className="flex items-center justify-between">
-                      <div className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-200">
+                      <div className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-neutral-100 text-foreground dark:bg-neutral-800 dark:text-foreground">
                         <Icon className="h-4.5 w-4.5" />
                       </div>
-                      <ArrowLeft className="h-4 w-4 text-neutral-400 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                      <ArrowLeft className="h-4 w-4 text-muted-foreground opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
                     </div>
                     <h4 className="font-semibold">{c.title}</h4>
-                    <p className="text-sm text-neutral-500 leading-relaxed">{c.description}</p>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{c.description}</p>
                   </Link>
                 );
               })}
@@ -144,21 +144,21 @@ function QuickTile({
         "flex items-center justify-between gap-3 rounded-xl border p-4 transition-all hover:shadow-sm " +
         (highlight
           ? "border-red-200 bg-red-50 dark:border-red-900/40 dark:bg-red-950/20"
-          : "border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900")
+          : "border-border bg-white dark:border-border dark:bg-neutral-900")
       }
     >
       <div className="min-w-0">
-        <div className="text-xs text-neutral-500">{label}</div>
+        <div className="text-xs text-muted-foreground">{label}</div>
         <div className="mt-1 text-2xl font-bold tabular-nums">
           {value !== undefined ? value : "—"}
         </div>
-        <div className="text-xs text-neutral-500 mt-0.5 truncate">{hint}</div>
+        <div className="text-xs text-muted-foreground mt-0.5 truncate">{hint}</div>
       </div>
       <div className={
         "inline-flex h-10 w-10 items-center justify-center rounded-lg " +
         (highlight
           ? "bg-red-500 text-white"
-          : "bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-200")
+          : "bg-neutral-100 text-foreground dark:bg-neutral-800 dark:text-foreground")
       }>
         <Icon className="h-5 w-5" />
       </div>

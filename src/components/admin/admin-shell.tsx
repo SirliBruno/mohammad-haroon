@@ -116,7 +116,7 @@ export function AdminShell({
     <nav className="flex flex-col gap-4 text-sm">
       {Object.entries(groups).map(([group, items]) => (
         <div key={group} className="flex flex-col gap-1">
-          <div className="text-[11px] uppercase tracking-wider text-neutral-400 px-2">{group}</div>
+          <div className="text-[11px] uppercase tracking-wider text-muted-foreground px-2">{group}</div>
           {items.map((item) => {
             const active = location.pathname === item.to;
             const badge = item.to === "/admin/messages" && newCount > 0 ? newCount : null;
@@ -129,8 +129,8 @@ export function AdminShell({
                 className={cn(
                   "flex items-center justify-between gap-2 rounded-lg px-3 py-2 transition-colors",
                   active
-                    ? "bg-neutral-900 text-white dark:bg-white dark:text-neutral-900"
-                    : "text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800",
+                    ? "bg-neutral-900 text-white dark:bg-white dark:text-foreground"
+                    : "text-foreground hover:bg-neutral-100 dark:text-muted-foreground dark:hover:bg-muted",
                 )}
               >
                 <span className="flex items-center gap-2.5 min-w-0">
@@ -158,27 +158,27 @@ export function AdminShell({
   return (
     <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950">
       <div className="mx-auto flex max-w-[1400px] gap-6 px-4 py-6 md:px-8 md:py-10 lg:grid lg:grid-cols-[260px_1fr]">
-        <aside className="hidden lg:flex flex-col gap-6 sticky top-6 self-start max-h-[calc(100vh-3rem)] overflow-y-auto rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+        <aside className="hidden lg:flex flex-col gap-6 sticky top-6 self-start max-h-[calc(100vh-3rem)] overflow-y-auto rounded-2xl border border-border bg-white p-5 shadow-sm dark:border-border dark:bg-neutral-900">
           <div>
-            <Link to="/" className="text-sm text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 inline-flex items-center gap-1">
+            <Link to="/" className="text-sm text-muted-foreground hover:text-foreground dark:hover:text-neutral-100 inline-flex items-center gap-1">
               <ArrowRight className="h-3.5 w-3.5" /> العودة للموقع
             </Link>
             <h2 className="mt-3 text-lg font-semibold">لوحة الإدارة</h2>
-            <p className="text-xs text-neutral-500 mt-1">نظام إدارة المحتوى</p>
+            <p className="text-xs text-muted-foreground mt-1">نظام إدارة المحتوى</p>
           </div>
           <button
             onClick={() => setPaletteOpen(true)}
-            className="flex items-center justify-between gap-2 rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-xs text-neutral-500 hover:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-950 dark:hover:bg-neutral-800"
+            className="flex items-center justify-between gap-2 rounded-lg border border-border bg-neutral-50 px-3 py-2 text-xs text-muted-foreground hover:bg-neutral-100 dark:border-border dark:bg-neutral-950 dark:hover:bg-muted"
           >
             <span className="flex items-center gap-2">
               <Search className="h-3.5 w-3.5" /> بحث سريع
             </span>
-            <kbd className="rounded bg-white px-1.5 py-0.5 text-[10px] border border-neutral-200 dark:bg-neutral-900 dark:border-neutral-700">⌘K</kbd>
+            <kbd className="rounded bg-white px-1.5 py-0.5 text-[10px] border border-border dark:bg-neutral-900 dark:border-border">⌘K</kbd>
           </button>
           <NavList />
           <button
             onClick={handleSignOut}
-            className="mt-auto flex items-center justify-center gap-2 rounded-lg border border-neutral-200 px-3 py-2 text-xs text-neutral-600 hover:bg-neutral-100 dark:border-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800"
+            className="mt-auto flex items-center justify-center gap-2 rounded-lg border border-border px-3 py-2 text-xs text-muted-foreground hover:bg-neutral-100 dark:border-border dark:text-muted-foreground dark:hover:bg-muted"
           >
             <LogOut className="h-3.5 w-3.5" /> تسجيل الخروج
           </button>
@@ -191,7 +191,7 @@ export function AdminShell({
               <SheetTrigger asChild>
                 <button
                   aria-label="القائمة"
-                  className="inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm dark:border-neutral-800 dark:bg-neutral-900"
+                  className="inline-flex items-center gap-2 rounded-lg border border-border bg-white px-3 py-2 text-sm dark:border-border dark:bg-neutral-900"
                 >
                   <Menu className="h-4 w-4" /> القائمة
                   {newCount > 0 && (
@@ -212,7 +212,7 @@ export function AdminShell({
             </Sheet>
             <button
               onClick={() => setPaletteOpen(true)}
-              className="flex-1 inline-flex items-center justify-between gap-2 rounded-lg border border-neutral-200 bg-white px-3 py-2 text-xs text-neutral-500 dark:border-neutral-800 dark:bg-neutral-900"
+              className="flex-1 inline-flex items-center justify-between gap-2 rounded-lg border border-border bg-white px-3 py-2 text-xs text-muted-foreground dark:border-border dark:bg-neutral-900"
             >
               <span className="flex items-center gap-2">
                 <Search className="h-3.5 w-3.5" /> بحث سريع
@@ -223,11 +223,11 @@ export function AdminShell({
 
           {/* Breadcrumb */}
           {activeItem && (
-            <div className="flex items-center gap-1.5 text-xs text-neutral-500">
-              <Link to="/admin" className="hover:text-neutral-900 dark:hover:text-neutral-100">لوحة الإدارة</Link>
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+              <Link to="/admin" className="hover:text-foreground dark:hover:text-neutral-100">لوحة الإدارة</Link>
               {crumbGroup && <><span>/</span><span>{crumbGroup}</span></>}
               <span>/</span>
-              <span className="text-neutral-900 dark:text-neutral-100">{activeItem.label}</span>
+              <span className="text-foreground dark:text-foreground">{activeItem.label}</span>
             </div>
           )}
 
@@ -235,7 +235,7 @@ export function AdminShell({
             <div>
               <h1 className="text-2xl md:text-3xl font-bold">{title}</h1>
               {description && (
-                <p className="mt-1 text-sm text-neutral-500 max-w-2xl">{description}</p>
+                <p className="mt-1 text-sm text-muted-foreground max-w-2xl">{description}</p>
               )}
             </div>
             {actions && <div className="flex flex-wrap gap-2">{actions}</div>}

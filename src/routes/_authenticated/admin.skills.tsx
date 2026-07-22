@@ -41,7 +41,7 @@ function Page() {
         deleteFn={deleteSkill}
         columns={[
           { header: "الاسم", render: (r: any) => <div className="font-medium">{r.name}</div> },
-          { header: "الفئة", render: (r: any) => <span className="text-xs text-neutral-500">{r.category ?? "—"}</span> },
+          { header: "الفئة", render: (r: any) => <span className="text-xs text-muted-foreground">{r.category ?? "—"}</span> },
           { header: "المستوى", render: (r: any) => <span className="text-xs">{r.level != null ? `${r.level}%` : "—"}</span> },
         ]}
       />

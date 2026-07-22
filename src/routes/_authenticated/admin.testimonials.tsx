@@ -40,8 +40,8 @@ function Page() {
         updateFn={updateTestimonial}
         deleteFn={deleteTestimonial}
         columns={[
-          { header: "العميل", render: (r: any) => <div><div className="font-medium">{r.author_name}</div><div className="text-xs text-neutral-500">{[r.author_role, r.author_company].filter(Boolean).join(" · ")}</div></div> },
-          { header: "النص", render: (r: any) => <div className="text-xs text-neutral-600 dark:text-neutral-400 line-clamp-2 max-w-md">{r.quote}</div> },
+          { header: "العميل", render: (r: any) => <div><div className="font-medium">{r.author_name}</div><div className="text-xs text-muted-foreground">{[r.author_role, r.author_company].filter(Boolean).join(" · ")}</div></div> },
+          { header: "النص", render: (r: any) => <div className="text-xs text-muted-foreground dark:text-muted-foreground line-clamp-2 max-w-md">{r.quote}</div> },
           { header: "التقييم", render: (r: any) => <span className="text-xs">{"★".repeat(r.rating ?? 0)}</span> },
         ]}
       />

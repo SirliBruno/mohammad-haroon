@@ -37,8 +37,8 @@ function Page() {
         updateFn={updateIdea}
         deleteFn={deleteIdea}
         columns={[
-          { header: "الفكرة", render: (r: any) => <div><div className="font-medium">{r.title}</div><div className="text-xs text-neutral-500 line-clamp-1">{r.summary}</div></div> },
-          { header: "المرحلة", render: (r: any) => <span className="text-xs text-neutral-500">{r.stage ?? "—"}</span> },
+          { header: "الفكرة", render: (r: any) => <div><div className="font-medium">{r.title}</div><div className="text-xs text-muted-foreground line-clamp-1">{r.summary}</div></div> },
+          { header: "المرحلة", render: (r: any) => <span className="text-xs text-muted-foreground">{r.stage ?? "—"}</span> },
           { header: "الحالة", render: (r: any) => <span className="text-xs">{r.content_status}</span> },
         ]}
       />

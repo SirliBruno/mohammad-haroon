@@ -120,21 +120,21 @@ function Page() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-4">
-        <div className="rounded-2xl border border-neutral-200 bg-white overflow-hidden dark:border-neutral-800 dark:bg-neutral-900">
+        <div className="rounded-2xl border border-border bg-white overflow-hidden dark:border-border dark:bg-neutral-900">
           <div className="max-h-[70vh] overflow-y-auto divide-y divide-neutral-100 dark:divide-neutral-800">
             {query.isLoading ? (
-              <div className="p-6 text-center text-neutral-500">جارِ التحميل…</div>
+              <div className="p-6 text-center text-muted-foreground">جارِ التحميل…</div>
             ) : query.isError ? (
               <div className="p-6 text-center text-red-600">تعذّر تحميل الرسائل.</div>
             ) : filtered.length === 0 ? (
-              <div className="p-6 text-center text-neutral-500">لا رسائل.</div>
+              <div className="p-6 text-center text-muted-foreground">لا رسائل.</div>
             ) : (
               filtered.map((m) => (
                 <button
                   key={m.id}
                   onClick={() => openMessage(m)}
                   className={cn(
-                    "w-full text-start p-4 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors",
+                    "w-full text-start p-4 hover:bg-muted dark:hover:bg-muted/50 transition-colors",
                     selectedId === m.id && "bg-neutral-100 dark:bg-neutral-800",
                   )}
                 >
@@ -142,13 +142,13 @@ function Page() {
                     <div className="font-medium">{m.name}</div>
                     {m.status === "new" && <span className="h-2 w-2 rounded-full bg-blue-500" />}
                   </div>
-                  <div className="text-xs text-neutral-500 mt-0.5" dir="ltr">
+                  <div className="text-xs text-muted-foreground mt-0.5" dir="ltr">
                     {m.email}
                   </div>
-                  <div className="text-xs text-neutral-600 dark:text-neutral-400 mt-1 line-clamp-2">
+                  <div className="text-xs text-muted-foreground dark:text-muted-foreground mt-1 line-clamp-2">
                     {m.message}
                   </div>
-                  <div className="text-[11px] text-neutral-400 mt-1">
+                  <div className="text-[11px] text-muted-foreground mt-1">
                     {new Date(m.created_at).toLocaleString("ar")}
                   </div>
                 </button>
@@ -157,9 +157,9 @@ function Page() {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900">
+        <div className="rounded-2xl border border-border bg-white dark:border-border dark:bg-neutral-900">
           {!selected ? (
-            <div className="p-10 text-center text-neutral-500">اختر رسالة لعرض تفاصيلها.</div>
+            <div className="p-10 text-center text-muted-foreground">اختر رسالة لعرض تفاصيلها.</div>
           ) : (
             <div className="p-6 flex flex-col gap-4">
               <div className="flex items-start justify-between gap-4">
@@ -186,11 +186,11 @@ function Page() {
                   ))}
                 </div>
               </div>
-              <div className="flex gap-4 text-xs text-neutral-500">
+              <div className="flex gap-4 text-xs text-muted-foreground">
                 {selected.inquiry_type && (
                   <div>
                     النوع:{" "}
-                    <span className="text-neutral-800 dark:text-neutral-200">
+                    <span className="text-foreground dark:text-foreground">
                       {selected.inquiry_type}
                     </span>
                   </div>
@@ -198,11 +198,11 @@ function Page() {
                 {selected.budget && (
                   <div>
                     الميزانية:{" "}
-                    <span className="text-neutral-800 dark:text-neutral-200">{selected.budget}</span>
+                    <span className="text-foreground dark:text-foreground">{selected.budget}</span>
                   </div>
                 )}
               </div>
-              <div className="rounded-lg bg-neutral-50 border border-neutral-200 p-4 text-sm whitespace-pre-wrap leading-relaxed dark:bg-neutral-800 dark:border-neutral-700">
+              <div className="rounded-lg bg-neutral-50 border border-border p-4 text-sm whitespace-pre-wrap leading-relaxed dark:bg-neutral-800 dark:border-border">
                 {selected.message}
               </div>
               <div>
@@ -211,17 +211,17 @@ function Page() {
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   rows={4}
-                  className="mt-1 w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-900"
+                  className="mt-1 w-full rounded-md border border-input bg-white px-3 py-2 text-sm dark:border-border dark:bg-neutral-900"
                 />
                 <button
                   onClick={saveNotes}
                   disabled={updateMut.isPending}
-                  className="mt-2 rounded-md bg-neutral-900 px-3 py-1.5 text-xs text-white dark:bg-white dark:text-neutral-900 disabled:opacity-50"
+                  className="mt-2 rounded-md bg-neutral-900 px-3 py-1.5 text-xs text-white dark:bg-white dark:text-foreground disabled:opacity-50"
                 >
                   {updateMut.isPending ? "جارِ الحفظ…" : "حفظ الملاحظات"}
                 </button>
               </div>
-              <div className="flex justify-end pt-2 border-t border-neutral-100 dark:border-neutral-800">
+              <div className="flex justify-end pt-2 border-t border-border dark:border-border">
                 <button
                   onClick={() => del(selected)}
                   disabled={deleteMut.isPending}
@@ -242,7 +242,7 @@ function pill(active: boolean) {
   return cn(
     "rounded-full px-3 py-1 text-xs border",
     active
-      ? "bg-neutral-900 text-white border-neutral-900 dark:bg-white dark:text-neutral-900 dark:border-white"
-      : "bg-white text-neutral-600 border-neutral-200 hover:bg-neutral-50 dark:bg-neutral-900 dark:text-neutral-400 dark:border-neutral-800 dark:hover:bg-neutral-800",
+      ? "bg-neutral-900 text-white border-neutral-900 dark:bg-white dark:text-foreground dark:border-white"
+      : "bg-white text-muted-foreground border-border hover:bg-muted dark:bg-neutral-900 dark:text-muted-foreground dark:border-border dark:hover:bg-muted",
   );
 }

@@ -44,7 +44,7 @@ function Page() {
         updateFn={updateProduct}
         deleteFn={deleteProduct}
         columns={[
-          { header: "المنتج", render: (r: any) => <div><div className="font-medium">{r.name}</div><div className="text-xs text-neutral-500" dir="ltr">/{r.slug}</div></div> },
+          { header: "المنتج", render: (r: any) => <div><div className="font-medium">{r.name}</div><div className="text-xs text-muted-foreground" dir="ltr">/{r.slug}</div></div> },
           { header: "السعر", render: (r: any) => <span className="text-xs">{r.price_cents != null ? `${(r.price_cents / 100).toFixed(2)} ${r.currency}` : "—"}</span> },
           { header: "الحالة", render: (r: any) => <span className="text-xs">{r.content_status}</span> },
         ]}

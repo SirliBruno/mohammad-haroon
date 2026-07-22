@@ -44,9 +44,9 @@ function Page() {
         updateFn={updateBlogPost}
         deleteFn={deleteBlogPost}
         columns={[
-          { header: "العنوان", render: (r: any) => <div><div className="font-medium">{r.title}</div><div className="text-xs text-neutral-500" dir="ltr">/{r.slug}</div></div> },
+          { header: "العنوان", render: (r: any) => <div><div className="font-medium">{r.title}</div><div className="text-xs text-muted-foreground" dir="ltr">/{r.slug}</div></div> },
           { header: "الحالة", render: (r: any) => <span className="text-xs">{r.content_status}</span> },
-          { header: "النشر", render: (r: any) => <span className="text-xs text-neutral-500">{r.published_at ? new Date(r.published_at).toLocaleDateString("ar") : "—"}</span> },
+          { header: "النشر", render: (r: any) => <span className="text-xs text-muted-foreground">{r.published_at ? new Date(r.published_at).toLocaleDateString("ar") : "—"}</span> },
         ]}
       />
     </AdminShell>
