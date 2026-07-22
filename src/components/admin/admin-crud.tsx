@@ -761,6 +761,7 @@ function FieldRenderer({
       <div className={cn("flex flex-col gap-1", colSpan)}>
         {labelEl}
         <select
+          id={inputId}
           value={(value as string) ?? ""}
           onChange={(e) => onChange(e.target.value)}
           className={baseInput}
