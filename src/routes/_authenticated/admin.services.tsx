@@ -35,6 +35,10 @@ const FIELDS: FieldDef[] = [
   { name: "featured", label: "مميّز", type: "boolean" },
   { name: "content_status", label: "الحالة", type: "select", options: STATUS },
   { name: "sort_order", label: "الترتيب", type: "number" },
+  { name: "showcase_phone_image", label: "صورة الهاتف (Showcase)", type: "image", folder: "services", colSpan: 2, help: "لقطة شاشة تظهر داخل الأيفون في بطاقة الخدمة" },
+  { name: "showcase_logo_image", label: "شعار التقنية (Showcase)", type: "image", folder: "services", help: "اختياري — بديل عن النص" },
+  { name: "showcase_logo_label", label: "اسم التقنية", type: "text", help: "مثال: React، WordPress، Figma", dir: "ltr" },
+  { name: "featured_project_slugs", label: "معرّفات المشاريع المميزة", type: "tags", colSpan: 2, help: "حتى 3 معرّفات (slug) — تظهر في أسفل البطاقة" },
 ];
 
 function Page() {
