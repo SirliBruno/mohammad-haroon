@@ -85,13 +85,19 @@ function WorkIndex() {
     setPage(1);
   }
 
+  const { data: workRows } = usePageContent("work");
+  const tt = (k: string, fb: string) => getPageText(workRows, k, fb);
   return (
     <>
       <PageHeader
-        eyebrow="المشاريع"
-        title="أعمال أفتخر بها"
-        description="أرشيف حيّ لأعمالي مع العملاء ومشاريعي الخاصّة — منتجات، وتجارة إلكترونيّة، وهويّات، وصور."
+        eyebrow={tt("work.header.eyebrow", "المشاريع")}
+        title={tt("work.header.title", "أعمال أفتخر بها")}
+        description={tt(
+          "work.header.description",
+          "أرشيف حيّ لأعمالي مع العملاء ومشاريعي الخاصّة — منتجات، وتجارة إلكترونيّة، وهويّات، وصور.",
+        )}
       />
+
 
       {featured.length ? (
         <Section>
