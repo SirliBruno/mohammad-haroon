@@ -247,7 +247,7 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
       setShowForm(false);
       void invalidateList();
     },
-    onError: (e) => toast.error(e instanceof Error ? e.message : "فشل الحفظ"),
+    onError: (e) => toast.error(friendlyError(e, "فشل الحفظ", fields)),
   });
 
   const updateMut = useMutation({
@@ -258,7 +258,7 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
       setShowForm(false);
       void invalidateList();
     },
-    onError: (e) => toast.error(e instanceof Error ? e.message : "فشل الحفظ"),
+    onError: (e) => toast.error(friendlyError(e, "فشل الحفظ", fields)),
   });
 
   const deleteMut = useMutation({
@@ -268,7 +268,7 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
       setConfirmDelete(null);
       void invalidateList();
     },
-    onError: (e) => toast.error(e instanceof Error ? e.message : "فشل الحذف"),
+    onError: (e) => toast.error(friendlyError(e, "فشل الحذف", fields)),
   });
 
   const busy = createMut.isPending || updateMut.isPending || deleteMut.isPending;
@@ -276,9 +276,9 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
   // Surface fetch errors as toasts (once per error object)
   useEffect(() => {
     if (listQuery.error) {
-      toast.error(listQuery.error instanceof Error ? listQuery.error.message : "فشل التحميل");
+      toast.error(friendlyError(listQuery.error, "فشل التحميل", fields));
     }
-  }, [listQuery.error]);
+  }, [listQuery.error, fields]);
 
   const rangeLabel = useMemo(() => {
     if (count == null) return `${rows.length} عنصر`;
