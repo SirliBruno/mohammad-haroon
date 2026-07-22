@@ -185,10 +185,14 @@ function ContactPage() {
   return (
     <>
       <PageHeader
-        eyebrow="تواصل"
-        title="لنتحدّث"
-        description="توظيف، أو مشروع حرّ، أو حتى سؤال عابر — أقرأ كلّ الرسائل بنفسي، وأرد خلال يومَي عمل."
+        eyebrow={tt("contact.header.eyebrow", "تواصل")}
+        title={tt("contact.header.title", "لنتحدّث")}
+        description={tt(
+          "contact.header.description",
+          "توظيف، أو مشروع حرّ، أو حتى سؤال عابر — أقرأ كلّ الرسائل بنفسي، وأرد خلال يومَي عمل.",
+        )}
       />
+
 
 
       <Section size="sm">
