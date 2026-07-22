@@ -365,6 +365,32 @@ function RelatedCard({ project }: { project: Project }) {
 
 function SectionByKey({ sectionKey, project }: { sectionKey: ProjectSectionKey; project: Project }) {
   switch (sectionKey) {
+    case "spotlight":
+      return project.spotlight ? (
+        <Reveal>
+          <div className="relative overflow-hidden rounded-3xl border border-primary/25 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-8 sm:p-12">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -left-24 -top-24 size-64 rounded-full bg-primary/20 blur-3xl"
+            />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -bottom-24 -right-16 size-64 rounded-full bg-primary/10 blur-3xl"
+            />
+            <div className="relative">
+              <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+                <Sparkles className="size-3.5" aria-hidden /> ميزة مميّزة
+              </span>
+              <h3 className="mt-5 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl md:text-4xl">
+                {project.spotlight.title}
+              </h3>
+              <p className="mt-4 max-w-2xl whitespace-pre-line text-base leading-relaxed text-foreground/85 sm:text-lg">
+                {project.spotlight.description}
+              </p>
+            </div>
+          </div>
+        </Reveal>
+      ) : null;
     case "problem":
       return project.problem ? (
         <Reveal>
