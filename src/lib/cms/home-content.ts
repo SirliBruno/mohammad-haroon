@@ -201,6 +201,127 @@ export function getHomeList<T>(
 }
 
 export function useSaveHomeSection() {
+  return useSavePageSection("home");
+}
+
+/* =====================================================================
+ * Generic page-content bindings.
+ *
+ * Every content page can register a group of editable fields backed by
+ * `site_content`. Public pages consume the group via `usePageContent()`
+ * and `getPageText()/getPageList()`. The admin edits them via
+ * `useSavePageSection()`, which reuses the same server function.
+ * ===================================================================== */
+
+/** Editable page groups exposed to the /admin/pages tab UI. */
+export const PAGE_GROUPS: {
+  id: string;
+  label: string;
+  sections: HomeSectionDef[];
+}[] = [
+  {
+    id: "about",
+    label: "من أنا",
+    sections: [
+      {
+        id: "header",
+        label: "ترويسة الصفحة",
+        fields: [
+          { key: "about.header.eyebrow", label: "الترويسة", kind: "text", defaultValue: "من أنا" },
+          { key: "about.header.title", label: "العنوان", kind: "text", defaultValue: "أُصمّم وأُطوِّر منتجات رقمية بحرفة." },
+          { key: "about.header.description", label: "الوصف", kind: "textarea", rows: 3, defaultValue: "مصمّم ومطوّر منتجات، أساعد الفرق في بناء تجارب رقمية هادئة وسريعة." },
+        ],
+      },
+    ],
+  },
+  {
+    id: "contact",
+    label: "تواصل",
+    sections: [
+      {
+        id: "header",
+        label: "ترويسة الصفحة",
+        fields: [
+          { key: "contact.header.eyebrow", label: "الترويسة", kind: "text", defaultValue: "تواصل" },
+          { key: "contact.header.title", label: "العنوان", kind: "text", defaultValue: "لنتحدّث" },
+          { key: "contact.header.description", label: "الوصف", kind: "textarea", rows: 3, defaultValue: "شاركني تفاصيل مشروعك، وسأعود إليك خلال يومَي عمل." },
+        ],
+      },
+      {
+        id: "direct",
+        label: "قسم التواصل المباشر",
+        fields: [
+          { key: "contact.direct.eyebrow", label: "الترويسة", kind: "text", defaultValue: "تُفضّل الطريق المباشر؟" },
+          { key: "contact.direct.title", label: "العنوان", kind: "text", defaultValue: "تجاوز النموذج — راسلني مباشرة." },
+        ],
+      },
+    ],
+  },
+  {
+    id: "career",
+    label: "المسيرة",
+    sections: [
+      {
+        id: "header",
+        label: "ترويسة الصفحة",
+        fields: [
+          { key: "career.header.eyebrow", label: "الترويسة", kind: "text", defaultValue: "المسيرة" },
+          { key: "career.header.title", label: "العنوان", kind: "text", defaultValue: "الخبرة والتعليم وما بينهما" },
+          { key: "career.header.description", label: "الوصف", kind: "textarea", rows: 3, defaultValue: "محطات مختصرة، شهادات مختارة، ومهارات صقلتها في أرض الواقع." },
+        ],
+      },
+    ],
+  },
+  {
+    id: "work",
+    label: "الأعمال",
+    sections: [
+      {
+        id: "header",
+        label: "ترويسة الصفحة",
+        fields: [
+          { key: "work.header.eyebrow", label: "الترويسة", kind: "text", defaultValue: "المشاريع" },
+          { key: "work.header.title", label: "العنوان", kind: "text", defaultValue: "أعمال أفتخر بها" },
+          { key: "work.header.description", label: "الوصف", kind: "textarea", rows: 3, defaultValue: "دراسات حالة موجزة لمنتجات حقيقية — من الفكرة إلى الإطلاق." },
+        ],
+      },
+    ],
+  },
+  {
+    id: "services-page",
+    label: "الخدمات",
+    sections: [
+      {
+        id: "header",
+        label: "ترويسة الصفحة",
+        fields: [
+          { key: "services.header.eyebrow", label: "الترويسة", kind: "text", defaultValue: "الخدمات" },
+          { key: "services.header.title", label: "العنوان", kind: "text", defaultValue: "تصميم وتطوير احترافي متكامل" },
+          { key: "services.header.description", label: "الوصف", kind: "textarea", rows: 3, defaultValue: "خدمات مُنظّمة، لكلٍّ منها هدف واضح ونتيجة قابلة للقياس." },
+        ],
+      },
+    ],
+  },
+];
+
+/** Fetch content rows for any group (home, about, contact, career, work, services-page…). */
+export function usePageContent(group: string) {
+  const fn = useServerFn(listSiteContent);
+  return useQuery({
+    queryKey: ["page-content", group],
+    queryFn: async () => (await fn({ data: { group_name: group } })) as HomeContentRow[],
+    staleTime: 60_000,
+  });
+}
+
+/** Alias of `getHomeText` — kept for clarity when reading non-home groups. */
+export const getPageText = getHomeText;
+
+/** Alias of `getHomeList` — kept for clarity when reading non-home groups. */
+export const getPageList = getHomeList;
+
+/** Mutation to save a section into any group. */
+export function useSavePageSection(group: string) {
   const upsertFn = useServerFn(upsertSiteContent);
   const qc = useQueryClient();
   return useMutation({
@@ -213,7 +334,7 @@ export function useSaveHomeSection() {
         const raw = values[field.key];
         const body: Record<string, unknown> = {
           key: field.key,
-          group_name: "home",
+          group_name: group,
           label: field.label,
           kind:
             field.kind === "json"
@@ -233,7 +354,8 @@ export function useSaveHomeSection() {
       }
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["home-content"] });
+      qc.invalidateQueries({ queryKey: ["page-content", group] });
+      if (group === "home") qc.invalidateQueries({ queryKey: ["home-content"] });
       qc.invalidateQueries({ queryKey: ["site_content"] });
       toast.success("تم الحفظ.");
     },
@@ -243,3 +365,4 @@ export function useSaveHomeSection() {
     },
   });
 }
+
