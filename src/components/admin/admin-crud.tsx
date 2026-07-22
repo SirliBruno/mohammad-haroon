@@ -134,6 +134,41 @@ function coerceListResult<Row>(res: unknown): { rows: Row[]; count: number | nul
   return { rows: [], count: null };
 }
 
+function friendlyError(e: unknown, fallback: string, fields?: FieldDef[]): string {
+  const raw = e instanceof Error ? e.message : typeof e === "string" ? e : "";
+  const labelFor = (name: string) => fields?.find((f) => f.name === name)?.label ?? name;
+  const text = raw.trim();
+  if (text.startsWith("[") || text.startsWith("{")) {
+    try {
+      const parsed = JSON.parse(text);
+      const issues = Array.isArray(parsed) ? parsed : parsed?.issues;
+      if (Array.isArray(issues) && issues.length) {
+        const msgs = issues.slice(0, 3).map((it) => {
+          const path = Array.isArray(it.path) && it.path.length ? labelFor(String(it.path[0])) : null;
+          const base =
+            it.code === "invalid_type" && it.received === "null"
+              ? "هذا الحقل مطلوب"
+              : it.code === "too_small"
+              ? `القيمة قصيرة جدًا${typeof it.minimum === "number" ? ` (الحد الأدنى ${it.minimum})` : ""}`
+              : it.code === "too_big"
+              ? `القيمة طويلة جدًا${typeof it.maximum === "number" ? ` (الحد الأقصى ${it.maximum})` : ""}`
+              : it.code === "invalid_string"
+              ? "صيغة غير صالحة"
+              : it.message ?? "قيمة غير صالحة";
+          return path ? `${path}: ${base}` : base;
+        });
+        return msgs.join(" • ");
+      }
+    } catch {
+      /* fall through */
+    }
+  }
+  if (!text) return fallback;
+  if (/unauthorized/i.test(text)) return "الجلسة انتهت. سجّل الدخول من جديد.";
+  if (/forbidden|permission|not allowed/i.test(text)) return "لا تملك صلاحية لتنفيذ هذه العملية.";
+  return text.length > 200 ? text.slice(0, 200) + "…" : text;
+}
+
 export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>) {
   const {
     entityName,
