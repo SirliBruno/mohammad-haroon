@@ -343,6 +343,26 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
       ? { ...form, content_status: overrideStatus }
       : form;
     const payload = fromForm ? fromForm(source) : sanitizeForm(source, fields);
+
+    // Client-side required check — prevents a server round-trip that would
+    // surface as a Zod RUNTIME_ERROR in the dev overlay.
+    const missing = fields
+      .filter((f) => "required" in f && f.required)
+      .filter((f) => {
+        const v = (payload as Record<string, unknown>)[f.name];
+        return v === null || v === undefined || (typeof v === "string" && v.trim() === "");
+      })
+      .map((f) => f.label);
+    if (missing.length) {
+      toast.error(`الحقول المطلوبة: ${missing.join("، ")}`);
+      const first = fields.find((f) => "required" in f && f.required && missing.includes(f.label));
+      if (first) {
+        const el = document.getElementById(`f-${first.name}`);
+        (el as HTMLElement | null)?.focus?.();
+      }
+      return;
+    }
+
     if (editingId) {
       updateMut.mutate({ id: editingId, patch: payload });
     } else {
