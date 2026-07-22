@@ -180,10 +180,15 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
   }, [searchInput]);
 
   const listQuery = useQuery({
-    queryKey: ["admin-crud", cacheKey, { search, page, pageSize }],
+    queryKey: ["admin-crud", cacheKey, { search, page, pageSize, statusFilter }],
     queryFn: async () => {
       const res = await list({
-        data: { limit: pageSize, offset: page * pageSize, ...(search ? { search } : {}) },
+        data: {
+          limit: pageSize,
+          offset: page * pageSize,
+          ...(search ? { search } : {}),
+          ...(statusFilter ? { status: statusFilter } : {}),
+        },
       });
       return coerceListResult<Row>(res);
     },
