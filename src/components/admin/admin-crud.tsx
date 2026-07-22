@@ -915,6 +915,7 @@ function FieldRenderer({
       <div className={cn("flex flex-col gap-1", colSpan)}>
         {labelEl}
         <textarea
+          id={inputId}
           value={display}
           onChange={(e) => onChange(e.target.value)}
           rows={field.rows ?? 8}
