@@ -831,6 +831,7 @@ function FieldRenderer({
             </span>
           ))}
           <input
+            id={inputId}
             type="text"
             enterKeyHint="done"
             data-admin-tags-input="true"
