@@ -254,6 +254,31 @@ export const PAGE_GROUPS: {
         fields: [
           { key: "contact.direct.eyebrow", label: "الترويسة", kind: "text", defaultValue: "تُفضّل الطريق المباشر؟" },
           { key: "contact.direct.title", label: "العنوان", kind: "text", defaultValue: "تجاوز النموذج — راسلني مباشرة." },
+          { key: "contact.direct.description", label: "الوصف", kind: "textarea", rows: 2, defaultValue: "بريد، أو واتساب، أو لينكدإن — اختر ما يناسبك، والرد يصلك بنفس السرعة." },
+        ],
+      },
+      {
+        id: "faq",
+        label: "الأسئلة الشائعة",
+        fields: [
+          { key: "contact.faq.eyebrow", label: "الترويسة", kind: "text", defaultValue: "الأسئلة الشائعة" },
+          { key: "contact.faq.title", label: "العنوان", kind: "text", defaultValue: "قبل أن ترسل" },
+          { key: "contact.faq.description", label: "الوصف", kind: "textarea", rows: 2, defaultValue: "أسئلة يتكرّر طرحها. إن لم يكن سؤالك هنا، أرسله وسأجيبك بكلّ سرور." },
+          {
+            key: "contact.faq.items",
+            label: "الأسئلة",
+            kind: "json",
+            help: 'JSON: { "items": [{"q","a"}, ...] }',
+            rows: 14,
+            defaultValue: {
+              items: [
+                { q: "كم يستغرق الرد عادةً؟", a: "خلال يومَي عمل، وغالبًا في اليوم نفسه إن وصلت الرسالة قبل الثالثة عصرًا بتوقيت السعوديّة." },
+                { q: "هل تقبل المشاريع القصيرة؟", a: "نعم — من صفحة مقصودة خلال أسبوعين، إلى مشروع منتج متكامل. وإن لم أكن الشريك المناسب، أخبرك بصراحة." },
+                { q: "ما الذي يُسرّع الرد؟", a: "ملخّص للمشكلة في سطر أو سطرين، والجدول الزمني، ونطاق ميزانيّة تقريبي إن أمكن." },
+                { q: "هل تُوقّع اتفاقيّة عدم إفصاح؟", a: "بكلّ سرور — أُوقّع NDA متبادلة قبل المكالمة الأولى للأعمال الحسّاسة." },
+              ],
+            },
+          },
         ],
       },
     ],

@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { buildMeta } from "@/features/seo/build-meta";
 import { PageHeader } from "@/components/layout/page-header";
-import { usePageContent, getPageText } from "@/lib/cms/home-content";
+import { usePageContent, getPageText, getPageList } from "@/lib/cms/home-content";
 import { Section } from "@/components/layout/section";
 import { AvailabilityBadge } from "@/components/ds/availability-badge";
 import { Eyebrow } from "@/components/typography/eyebrow";
@@ -114,7 +114,7 @@ const channels = [
   },
 ] as const;
 
-const faqs = [
+const faqsFallback = [
   {
     q: "كم يستغرق الرد عادةً؟",
     a: "خلال يومَي عمل، وغالبًا في اليوم نفسه إن وصلت الرسالة قبل الثالثة عصرًا بتوقيت السعوديّة.",
@@ -459,16 +459,16 @@ function ContactPage() {
       <Section className="border-t border-border/60">
         <div className="grid gap-12 lg:grid-cols-[1fr_2fr]">
           <div>
-            <Eyebrow>الأسئلة الشائعة</Eyebrow>
+            <Eyebrow>{tt("contact.faq.eyebrow", "الأسئلة الشائعة")}</Eyebrow>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight text-foreground text-balance md:text-4xl lg:text-5xl">
-              قبل أن ترسل
+              {tt("contact.faq.title", "قبل أن ترسل")}
             </h2>
             <p className="mt-4 text-muted-foreground">
-              أسئلة يتكرّر طرحها. إن لم يكن سؤالك هنا، أرسله وسأجيبك بكلّ سرور.
+              {tt("contact.faq.description", "أسئلة يتكرّر طرحها. إن لم يكن سؤالك هنا، أرسله وسأجيبك بكلّ سرور.")}
             </p>
           </div>
           <Accordion type="single" collapsible className="w-full">
-            {faqs.map((f, i) => (
+            {getPageList<{ q: string; a: string }>(contentRows, "contact.faq.items", faqsFallback).map((f, i) => (
               <AccordionItem key={f.q} value={`item-${i}`}>
                 <AccordionTrigger className="text-right text-base font-medium">
                   {f.q}
@@ -484,7 +484,7 @@ function ContactPage() {
       <CTA
         eyebrow={tt("contact.direct.eyebrow", "تُفضّل الطريق المباشر؟")}
         title={tt("contact.direct.title", "تجاوز النموذج — راسلني مباشرة.")}
-        description="بريد، أو واتساب، أو لينكدإن — اختر ما يناسبك، والرد يصلك بنفس السرعة."
+        description={tt("contact.direct.description", "بريد، أو واتساب، أو لينكدإن — اختر ما يناسبك، والرد يصلك بنفس السرعة.")}
         actions={
           <>
             <DSButton asChild size="lg">
