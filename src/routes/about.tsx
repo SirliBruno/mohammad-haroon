@@ -213,13 +213,16 @@ export const Route = createFileRoute("/about")({
 });
 
 function About() {
+  const { data: rows } = usePageContent("about");
+  const t = (k: string, fb: string) => getPageText(rows, k, fb);
   return (
     <>
       <PageHeader
-        eyebrow="من أنا"
-        title={`أنا ${site.shortName}. أُصمّم وأُطوِّر منتجات رقمية بحرفة.`}
-        description={profile.bio}
+        eyebrow={t("about.header.eyebrow", "من أنا")}
+        title={t("about.header.title", `أنا ${site.shortName}. أُصمّم وأُطوِّر منتجات رقمية بحرفة.`)}
+        description={t("about.header.description", profile.bio)}
       />
+
 
       <Section>
         <div className="grid gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:gap-16">
