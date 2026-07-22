@@ -534,6 +534,7 @@ export type Database = {
           slug: string
           solution: string | null
           sort_order: number
+          spotlight: Json | null
           status: Database["public"]["Enums"]["project_status"]
           summary: string | null
           tags: string[]
@@ -571,6 +572,7 @@ export type Database = {
           slug: string
           solution?: string | null
           sort_order?: number
+          spotlight?: Json | null
           status?: Database["public"]["Enums"]["project_status"]
           summary?: string | null
           tags?: string[]
@@ -608,6 +610,7 @@ export type Database = {
           slug?: string
           solution?: string | null
           sort_order?: number
+          spotlight?: Json | null
           status?: Database["public"]["Enums"]["project_status"]
           summary?: string | null
           tags?: string[]
