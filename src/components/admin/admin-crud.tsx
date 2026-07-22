@@ -577,10 +577,12 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
                 <button
                   type="submit"
                   disabled={busy}
-                  className="rounded-md bg-neutral-900 px-5 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-white dark:text-neutral-900"
+                  className="inline-flex items-center gap-2 rounded-md bg-neutral-900 px-5 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-white dark:text-neutral-900"
                 >
                   {busy ? "جارِ الحفظ…" : editingId ? "حفظ التعديلات" : "إضافة"}
+                  <kbd className="hidden sm:inline-flex rounded border border-white/30 px-1.5 py-0.5 text-[10px] font-mono text-white/70 dark:border-neutral-900/30 dark:text-neutral-900/60">⌘S</kbd>
                 </button>
+
               </div>
             </form>
           </div>
