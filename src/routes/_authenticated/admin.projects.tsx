@@ -112,6 +112,21 @@ const fields: FieldDef[] = [
 
   // ——— أقسام تفاصيل المشروع (اختياري) ———
   {
+    name: "spotlight",
+    label: "قسم مميّز (Spotlight)",
+    type: "object",
+    colSpan: 2,
+    schema: [
+      { name: "title", label: "عنوان الميزة", placeholder: "مثال: مساعد الإيجار الذكي" },
+      {
+        name: "description",
+        label: "الوصف",
+        type: "textarea",
+        placeholder: "اشرح الميزة البارزة التي تريد إبرازها…",
+      },
+    ],
+  },
+  {
     name: "highlights",
     label: "أبرز المميزات",
     type: "tags",
@@ -256,6 +271,7 @@ const emptyValues: Record<string, unknown> = {
   development: "",
   lessons: [],
   highlights: [],
+  spotlight: null,
   metrics: [],
   results: [],
   gallery: [],
