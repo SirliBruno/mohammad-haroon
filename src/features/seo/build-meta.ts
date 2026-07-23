@@ -18,6 +18,7 @@ export function buildMeta(input: MetaInput = {}) {
 
   const meta: Array<Record<string, string>> = [
     { title },
+    { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
     { name: "description", content: description },
     { name: "author", content: site.name },
     { property: "og:title", content: title },
