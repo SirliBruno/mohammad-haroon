@@ -97,9 +97,9 @@ export function Hero() {
               id="hero-heading"
               className="mt-8 font-semibold tracking-tight text-foreground leading-[1.18] text-[1.75rem] sm:text-4xl md:text-5xl lg:text-[3.5rem]"
             >
-              <span className="block whitespace-nowrap">أعـــــــــطِ الخبـــــز لخبّــــــــــازه</span>
+              <span className="block whitespace-nowrap">أعطِ الخبر لخُبازه.</span>
               <span className="block whitespace-nowrap mt-[6px]">
-                وأعــــطِ <RotatingWord /> لأهلهــــــــــا
+                واترك <RotatingWord /> لي.
               </span>
             </h1>
 
