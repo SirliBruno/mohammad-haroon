@@ -32,9 +32,6 @@ export function RotatingWord() {
   }
 
   const current = WORDS[i];
-  // Longest word establishes the reserved width so surrounding words keep
-  // their natural spacing without layout shift when the word changes.
-  const longest = WORDS.reduce((a, b) => (b.text.length > a.text.length ? b : a));
 
   return (
     <span
@@ -42,12 +39,12 @@ export function RotatingWord() {
       style={{ verticalAlign: "baseline", lineHeight: "1.15" }}
       aria-live="polite"
     >
-      {/* Invisible sizer — reserves exact width of the widest word. */}
+      {/* Sizer matches the current word so width tracks it exactly — no side gaps. */}
       <span
         aria-hidden
         className="invisible col-start-1 row-start-1 whitespace-nowrap"
       >
-        {longest.text}
+        {current.text}
       </span>
       <span className="relative col-start-1 row-start-1 block">
         <AnimatePresence mode="popLayout" initial={false}>
