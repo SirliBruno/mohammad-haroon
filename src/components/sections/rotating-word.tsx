@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 const WORDS = [
-  { text: "متجــــرك", color: "#06B6D4" },
-  { text: "موقعــــك", color: "#3B82F6" },
-  { text: "هويتـــك", color: "#A855F7" },
-  { text: "مشروعــك", color: "#22C55E" },
-  { text: "منصتـــك", color: "#F59E0B" },
-  { text: "فكرتـــك", color: "#6366F1" },
+  { text: "متجرك", color: "#06B6D4" },
+  { text: "موقعك", color: "#3B82F6" },
+  { text: "هويتك", color: "#A855F7" },
+  { text: "مشروعك", color: "#22C55E" },
+  { text: "منصتك", color: "#F59E0B" },
+  { text: "فكرتك", color: "#6366F1" },
 ] as const;
 
 export function RotatingWord() {
