@@ -1,4 +1,5 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
+import { useRef, useCallback } from "react";
 import { RouteErrorBoundary, RouteNotFoundBoundary } from "@/components/layout/route-boundaries";
 import { ArrowLeft, ArrowUpRight, ExternalLink } from "lucide-react";
 
@@ -38,26 +39,38 @@ const homeServices = [
   {
     slug: "web-development",
     title: "مواقع أعمال",
-    outcome: "مواقع حديثة تحوّل الزوّار إلى عملاء.",
+    outcome: "مواقع حديثة تحوّل الزوّار إلى عملاء — سريعة ومصممة للتحويل.",
     tags: ["React", "Next.js", "TanStack"],
+    metric: "+40 مشروع",
+    size: "lg" as const,
+    iconPath: "M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5",
   },
   {
     slug: "ecommerce",
     title: "متاجر إلكترونية",
     outcome: "متاجر مكتملة، جاهزة للنموّ من اليوم الأول.",
     tags: ["Shopify", "WooCommerce", "Stripe"],
+    metric: "Stripe + WooCommerce",
+    size: "sm" as const,
+    iconPath: "M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0",
   },
   {
     slug: "ui-ux-design",
-    title: "تصميم واجهات وتجربة",
+    title: "تصميم واجهات",
     outcome: "تجارب رقمية يستمتع المستخدمون باستخدامها.",
-    tags: ["Figma", "أنظمة تصميم", "بحث UX"],
+    tags: ["Figma", "أنظمة تصميم", "UX"],
+    metric: "Figma + Research",
+    size: "sm" as const,
+    iconPath: "M12 2a5 5 0 100 10A5 5 0 0012 2zM2 20s1-3 10-3 10 3 10 3",
   },
   {
     slug: "wordpress",
     title: "ووردبريس",
-    outcome: "مواقع سريعة، قابلة للتوسّع، وسهلة الإدارة.",
+    outcome: "مواقع سريعة، قابلة للتوسّع، وسهلة الإدارة من قِبل فريقك.",
     tags: ["WordPress", "WooCommerce", "SEO"],
+    metric: "أمان + سرعة",
+    size: "lg" as const,
+    iconPath: "M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zM7 12h10M12 7v10",
   },
 ];
 
@@ -298,44 +311,29 @@ function Home() {
             }
           />
         </Reveal>
+
         <Reveal delay={0.05}>
-          <Grid cols={{ base: 1, sm: 2, lg: 4 }} gap="md" className="mt-12">
-            {homeServicesLive.map((s) => (
-              <Link
+          {/* Bento Grid — 2-col on mobile, asymmetric 2x2 on desktop */}
+          <div className="mt-12 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-2">
+            {/* Row 1: lg card + sm card */}
+            {homeServicesLive.slice(0, 2).map((s, i) => (
+              <ServiceBentoCard
                 key={s.slug}
-                to="/services/$slug"
-                params={{ slug: s.slug }}
-                className="group block h-full"
-              >
-                <DSCard
-                  variant="surface"
-                  padding="lg"
-                  className="flex h-full flex-col transition-colors group-hover:border-border"
-                >
-                  <h3 className="text-lg font-semibold tracking-tight text-foreground">
-                    {s.title}
-                  </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                    {s.outcome}
-                  </p>
-                  <div className="mt-6 flex flex-wrap gap-1.5">
-                    {s.tags.map((t) => (
-                      <span
-                        key={t}
-                        className="rounded-full border border-border/70 px-2 py-0.5 text-[10px] font-medium text-muted-foreground"
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="mt-auto pt-8 text-xs font-medium text-foreground/80 transition-colors group-hover:text-foreground">
-                    اقرأ التفاصيل
-                    <ArrowUpRight className="ms-1 inline size-3.5" aria-hidden />
-                  </div>
-                </DSCard>
-              </Link>
+                service={s as ServiceItem}
+                delay={i * 0.07}
+                prominent={i === 0}
+              />
             ))}
-          </Grid>
+            {/* Row 2: sm card + lg card */}
+            {homeServicesLive.slice(2, 4).map((s, i) => (
+              <ServiceBentoCard
+                key={s.slug}
+                service={s as ServiceItem}
+                delay={(i + 2) * 0.07}
+                prominent={i === 1}
+              />
+            ))}
+          </div>
         </Reveal>
       </Section>
 
@@ -464,5 +462,187 @@ function Home() {
         />
       </Reveal>
     </>
+  );
+}
+
+/* ============================================================
+   ServiceItem type & ServiceBentoCard
+   ============================================================ */
+
+type ServiceItem = {
+  slug: string;
+  title: string;
+  outcome: string;
+  tags: string[];
+  metric?: string;
+  size?: "lg" | "sm";
+  iconPath?: string;
+};
+
+function ServiceBentoCard({
+  service,
+  delay = 0,
+  prominent = false,
+}: {
+  service: ServiceItem;
+  delay?: number;
+  prominent?: boolean;
+}) {
+  const cardRef = useRef<HTMLAnchorElement>(null);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
+    const card = cardRef.current;
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    card.style.setProperty("--spotlight-x", `${x}%`);
+    card.style.setProperty("--spotlight-y", `${y}%`);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    const card = cardRef.current;
+    if (!card) return;
+    card.style.setProperty("--spotlight-x", "50%");
+    card.style.setProperty("--spotlight-y", "50%");
+  }, []);
+
+  return (
+    <Link
+      ref={cardRef}
+      to="/services/$slug"
+      params={{ slug: service.slug }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      aria-label={service.title}
+      style={
+        {
+          "--spotlight-x": "50%",
+          "--spotlight-y": "50%",
+        } as React.CSSProperties
+      }
+      className={[
+        "group relative flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-card",
+        "transition-all duration-300 ease-out",
+        /* touch feedback */
+        "active:scale-[0.985]",
+        /* desktop hover lift + border */
+        "hover:border-primary/40 hover:shadow-lg motion-safe:hover:-translate-y-1",
+        /* spotlight via CSS custom props */
+        "[background-image:radial-gradient(circle_at_var(--spotlight-x)_var(--spotlight-y),color-mix(in_oklab,var(--color-primary)_6%,transparent)_0%,transparent_65%)]",
+        /* prominent cards taller on desktop */
+        prominent ? "lg:row-span-1 min-h-72 lg:min-h-80" : "min-h-60 lg:min-h-64",
+        /* padding */
+        "p-7 sm:p-8",
+      ].join(" ")}
+    >
+      {/* Top row: icon + metric badge */}
+      <div className="flex items-start justify-between gap-3">
+        {/* Animated SVG icon */}
+        {service.iconPath ? (
+          <div
+            aria-hidden
+            className={[
+              "flex size-11 shrink-0 items-center justify-center rounded-xl",
+              "border border-border/60 bg-background/70 backdrop-blur-sm",
+              "transition-all duration-300 ease-out",
+              "group-hover:border-primary/30 group-hover:bg-primary/8",
+              "motion-safe:group-hover:rotate-6 motion-safe:group-hover:scale-110",
+            ].join(" ")}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="size-5 text-muted-foreground transition-colors duration-300 group-hover:text-primary"
+              aria-hidden
+            >
+              <path d={service.iconPath} />
+            </svg>
+          </div>
+        ) : null}
+
+        {/* Metric badge */}
+        {service.metric ? (
+          <span
+            className={[
+              "rounded-full border border-border/60 bg-background/60 px-3 py-1",
+              "text-[10px] font-medium tracking-wide text-muted-foreground backdrop-blur-sm",
+              "transition-colors duration-300 group-hover:border-primary/30 group-hover:text-foreground",
+            ].join(" ")}
+          >
+            {service.metric}
+          </span>
+        ) : null}
+      </div>
+
+      {/* Content */}
+      <div className="mt-6 flex-1">
+        {/* Title with animated underline */}
+        <h3 className="relative inline-block text-xl font-semibold tracking-tight text-foreground">
+          {service.title}
+          {/* Slide-in underline on hover */}
+          <span
+            aria-hidden
+            className={[
+              "absolute inset-x-0 -bottom-0.5 h-px origin-left scale-x-0 rounded-full",
+              "bg-primary transition-transform duration-300 ease-out",
+              "group-hover:scale-x-100",
+            ].join(" ")}
+          />
+        </h3>
+        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+          {service.outcome}
+        </p>
+      </div>
+
+      {/* Bottom row: tags + arrow */}
+      <div className="mt-6 flex items-end justify-between gap-3">
+        <div className="flex flex-wrap gap-1.5">
+          {service.tags.slice(0, 3).map((tag) => (
+            <span
+              key={tag}
+              className={[
+                "rounded-full border border-border/60 bg-background/50 px-2.5 py-0.5",
+                "text-[10px] font-medium text-muted-foreground backdrop-blur-sm",
+                "transition-colors duration-200 group-hover:border-primary/20",
+              ].join(" ")}
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        {/* Arrow icon — animates on hover */}
+        <div
+          aria-hidden
+          className={[
+            "flex size-8 shrink-0 items-center justify-center rounded-full",
+            "border border-border/60 bg-background/60 text-muted-foreground backdrop-blur-sm",
+            "transition-all duration-300 ease-out",
+            "group-hover:border-primary/40 group-hover:bg-primary/10 group-hover:text-primary",
+            "motion-safe:group-hover:-translate-y-0.5 motion-safe:group-hover:translate-x-0.5",
+          ].join(" ")}
+        >
+          <ArrowUpRight className="size-3.5" />
+        </div>
+      </div>
+
+      {/* Mobile: subtle bottom accent line */}
+      <div
+        aria-hidden
+        className={[
+          "absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0 rounded-full",
+          "bg-linear-to-r from-primary/60 via-primary/30 to-transparent",
+          "transition-transform duration-500 ease-out",
+          "group-hover:scale-x-100",
+          /* always visible on touch devices (mobile) */
+          "@media(hover:none){scale-x-100 opacity-40}",
+        ].join(" ")}
+      />
+    </Link>
   );
 }
