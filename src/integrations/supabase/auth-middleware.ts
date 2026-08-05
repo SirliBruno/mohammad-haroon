@@ -45,7 +45,17 @@ function getEnvVar(key: string): string | undefined {
   return undefined;
 }
 
-export const requireSupabaseAuth = createMiddleware({ type: 'function' }).server(
+export const requireSupabaseAuth = createMiddleware({ type: 'function' })
+  .client(async ({ next }) => {
+    // Dynamically import client to avoid circular dependencies or early init issues
+    const { supabase } = await import('./client');
+    const { data } = await supabase.auth.getSession();
+    const token = data.session?.access_token;
+    return next({
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+  })
+  .server(
   async ({ next }) => {
     const SUPABASE_URL = getEnvVar('SUPABASE_URL');
     const SUPABASE_PUBLISHABLE_KEY = getEnvVar('SUPABASE_PUBLISHABLE_KEY');
