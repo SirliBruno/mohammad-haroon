@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -14,10 +14,15 @@ import {
   ShieldCheck,
   Layout,
   Code2,
-  Terminal,
+  Terminal as TerminalIcon,
   Layers,
   Cpu,
   Sparkles,
+  Command,
+  Check,
+  Copy,
+  Smartphone,
+  CheckCircle2,
 } from "lucide-react";
 
 import { Reveal } from "@/components/motion/reveal";
@@ -46,25 +51,25 @@ import { listPublicProjects } from "@/lib/cms/projects-public.functions";
 import { listTestimonials } from "@/lib/cms/simple.functions";
 import { toProject } from "@/lib/project-adapter";
 
-// Register GSAP plugins safely on client side
+// Register GSAP plugins safely on client
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, useGSAP);
 }
 
-/* ---------------- Route ---------------- */
+/* ---------------- Route Definition ---------------- */
 
 export const Route = createFileRoute("/home2")({
-  component: Home2Page,
+  component: Home2RadicalPage,
   head: () => ({
     meta: buildMeta({
-      title: "محمد هارون — مهندس ومنتج رقمي | الصفحة الرئيسية 2.0 (GSAP)",
+      title: "محمد هارون — مهندس ومنتج رقمي | التجربة التفاعلية 2.0",
       description: site.description,
       path: "/home2",
     }),
   }),
 });
 
-/* ---------------- Data & Mockups ---------------- */
+/* ---------------- Mockup Mapping & Constant Data ---------------- */
 
 const featuredMockups: Record<string, React.ComponentType> = {
   "northwind-analytics": DashboardUI,
@@ -73,11 +78,18 @@ const featuredMockups: Record<string, React.ComponentType> = {
   "haven-storefront": StoreUI,
 };
 
+const rotatingTitles = [
+  "مواقع أعمال فائقة الأداء",
+  "متاجر إلكترونية عالية التحويل",
+  "منتجات SaaS وفاخرة",
+  "أنظمة تصميم متكاملة",
+];
+
 const homeServicesData = [
   {
     slug: "web-development",
-    title: "مواقع أعمال فاخرة",
-    outcome: "واجهات فائقة السرعة، مصممة بأعلى معايير تحويل الزوار إلى عملاء فعليين.",
+    title: "مواقع أعمال وتجارب رقمية",
+    outcome: "واجهات فائقة السرعة بـ React 19 و Next.js مصممة بأعلى معايير تحويل الزوار إلى عملاء.",
     tags: ["React 19", "Next.js", "TanStack"],
     metric: "+40 مشروع مُنجز",
     iconPath: "M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5",
@@ -85,8 +97,8 @@ const homeServicesData = [
   },
   {
     slug: "ecommerce",
-    title: "متاجر إلكترونية",
-    outcome: "تجربة تسوق سلسة وجاهزة للنمو وتكامل مع بوابات الدفع العالمية والمحلية.",
+    title: "متاجر إلكترونية عالمية",
+    outcome: "تجربة تسوق سلسة جاهزة للنمو وتكامل تام مع بوابات الدفع المحلية والعالمية.",
     tags: ["Shopify", "WooCommerce", "Stripe"],
     metric: "Stripe + WooCommerce",
     iconPath: "M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0",
@@ -94,17 +106,17 @@ const homeServicesData = [
   },
   {
     slug: "ui-ux-design",
-    title: "تصميم واجهات ותجربة مستخدم",
-    outcome: "أنظمة تصميم متكاملة (Design Systems) وتجارب ناعمة تضع المستخدم في المركز.",
-    tags: ["Figma", "Atomic Design", "UX Research"],
-    metric: "Figma + Research",
+    title: "تصميم أنظمة الواجهات (Design Systems)",
+    outcome: "أنظمة مكونات ذرية (Atomic Design) وتجارب مستخدم فائقة الاستجابة.",
+    tags: ["Figma", "Atomic Systems", "UX Research"],
+    metric: "Figma + OKLCH Tokens",
     iconPath: "M12 2a5 5 0 100 10A5 5 0 0012 2zM2 20s1-3 10-3 10 3 10 3",
     size: "sm" as const,
   },
   {
     slug: "wordpress",
     title: "حلول WordPress المخصصة",
-    outcome: "قوالب وكتل Gutenberg مخصصة، أمان عالٍ، وسرعة فائقة بدون تضخم الإضافات.",
+    outcome: "قوالب وكتل Gutenberg مخصصة، أمان عالٍ، وسرعة خرافية بدون بطء الإضافات.",
     tags: ["WordPress", "Gutenberg", "Headless"],
     metric: "أمان + سرعة 100%",
     iconPath: "M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zM7 12h10M12 7v10",
@@ -113,31 +125,29 @@ const homeServicesData = [
 ];
 
 const processSteps = [
-  { step: "01", title: "الاكتشاف والتحليل", description: "فهم أهدافك، نيتش الجمهور، والمنافسين لوضع أساس متين." },
-  { step: "02", title: "الهندسة والاستراتيجية", description: "تحديد تجربة المستخدم، خريطة الطريق، وتقنيات الحل الأنسب." },
-  { step: "03", title: "التصميم والتفاعل", description: "بناء واجهات ناعمة ونماذج أولية تفاعلية بأسلوب عصري." },
-  { step: "04", title: "التطوير والتنفيذ", description: "كود نظيف، استجابة تامة، وأداء عالٍ وفق أعلى المعايير." },
-  { step: "05", title: "الاختبار والإطلاق", description: "ضمان الجودة، التحقق من الوصولية (WCAG)، وضبط SEO." },
-  { step: "06", title: "الدعم والنمو", description: "متابعة بعد الإطلاق لقياس الأداء وإحداث التحسين المستمر." },
+  { step: "01", title: "الاكتشاف والاستراتيجية", description: "تحليل شامل للأهداف والجمهور والمنافسين لرسم خارطة الطريق." },
+  { step: "02", title: "الهندسة والمعمارية", description: "تحديد هيكلية البيانات، الأداء، واختيار المكتبات والحلول التقنية." },
+  { step: "03", title: "التصميم والتفاعل", description: "بناء أنظمة المكونات وتجارب التفاعل الناعمة بأسلوب عصري." },
+  { step: "04", title: "التطوير والتنفيذ", description: "كود نظيف استجابة كاملة وأعلى جودة برمجية متوافقة مع الأجهزة." },
+  { step: "05", title: "الاختبار والإطلاق", description: "ضمان سرعة التحميل، معايير الوصولية WCAG، واختبار الأمان." },
+  { step: "06", title: "المتابعة والنمو", description: "قياس الأداء الفعلي بعد الإطلاق والتطوير المستمر." },
 ];
 
-const techStack = [
-  { name: "React 19", category: "Frontend", icon: Code2 },
-  { name: "TypeScript", category: "Language", icon: Terminal },
-  { name: "Next.js", category: "Framework", icon: Globe },
-  { name: "TanStack", category: "Architecture", icon: Layers },
-  { name: "Tailwind CSS", category: "Styling", icon: Layout },
-  { name: "Figma", category: "Design", icon: Layout },
-  { name: "Node.js", category: "Backend", icon: Cpu },
-  { name: "Supabase", category: "Database", icon: ShieldCheck },
+const techStackData = [
+  { name: "React 19", category: "Frontend", icon: Code2, desc: "تطوير واجهات حية بـ Server Components" },
+  { name: "TypeScript", category: "Language", icon: TerminalIcon, desc: "كود برمجي موثوق وخالٍ من الأخطاء" },
+  { name: "Next.js 15", category: "Framework", icon: Globe, desc: "سرعة تحميل خارقة وتهيئة ممتازة للـ SEO" },
+  { name: "TanStack", category: "Architecture", icon: Layers, desc: "إدارة البيانات والروابط بأعلى كفاءة" },
+  { name: "Tailwind CSS v4", category: "Styling", icon: Layout, desc: "تنسيق ناتيف فائق الأداء والسرعة" },
+  { name: "Figma", category: "Design", icon: Layout, desc: "أنظمة تصميم ثنائية وثلاثية الأبعاد" },
+  { name: "Node.js", category: "Backend", icon: Cpu, desc: "خوادم خلفية سريعة وقابلة للتوسع" },
+  { name: "Supabase", category: "Database", icon: ShieldCheck, desc: "قواعد بيانات وأمان فوري متكامل" },
 ];
-
-const clientProofLogos = ["Northwind Analytics", "Lumen Payments", "Atelier CMS", "Haven Storefront"];
 
 const certificatesList: Certificate[] = [
   { title: "مطوّر واجهات أمامية — Meta", issuer: "Meta", issuedAt: "2025" },
   { title: "تصميم تجربة المستخدم — Google", issuer: "Google", issuedAt: "2024" },
-  { title: "شهادة شريك Shopify", issuer: "Shopify", issuedAt: "2024" },
+  { title: "شهادة شريك Shopify الرسمي", issuer: "Shopify", issuedAt: "2024" },
   { title: "أنماط React المتقدمة", issuer: "Frontend Masters", issuedAt: "2024" },
 ];
 
@@ -164,22 +174,32 @@ const timelineData: TimelineItem[] = [
 
 /* ---------------- Main Page Component ---------------- */
 
-function Home2Page() {
+function Home2RadicalPage() {
   const containerRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
-  const stackRef = useRef<HTMLDivElement>(null);
 
+  // Rotating Word Index
+  const [titleIdx, setTitleIdx] = useState(0);
+
+  // Command Palette Terminal Tabs
+  const [activeTerminalTab, setActiveTerminalTab] = useState<"overview" | "metrics" | "code">("overview");
+  const [copiedCode, setCopiedCode] = useState(false);
+
+  // Tech Stack Filter State
+  const [selectedTechCategory, setSelectedTechCategory] = useState<string>("All");
+
+  // CMS Server Data
   const listFn = useServerFn(listPublicProjects);
   const testFn = useServerFn(listTestimonials);
 
   const featuredQ = useQuery({
-    queryKey: ["home2", "featured"],
+    queryKey: ["home2_radical", "featured"],
     queryFn: () => listFn({ data: { featured: true, limit: 3 } }),
     staleTime: 60_000,
   });
 
   const testimonialsQ = useQuery({
-    queryKey: ["home2", "testimonials"],
+    queryKey: ["home2_radical", "testimonials"],
     queryFn: () => testFn({ data: { featured: true, limit: 3, orderBy: "sort_order", ascending: true } }),
     staleTime: 60_000,
   });
@@ -200,121 +220,183 @@ function Home2Page() {
   const { data: homeRows } = useHomeContent();
   const t = (k: string, fb: string) => getHomeText(homeRows, k, fb);
 
-  // Active project index for Scrollytelling on Desktop
-  const [activeProjectIndex, setActiveProjectIndex] = useState(0);
+  // Active Project for Desktop Split Showcase
+  const [activeProjectIdx, setActiveProjectIdx] = useState(0);
+
+  // Rotate Hero Title Word
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTitleIdx((prev) => (prev + 1) % rotatingTitles.length);
+    }, 3200);
+    return () => clearInterval(timer);
+  }, []);
 
   // GSAP Animations
   useGSAP(
     () => {
-      // Hero Entrance Stagger
       if (heroRef.current) {
-        gsap.from(heroRef.current.querySelectorAll(".gsap-hero-item"), {
-          y: 30,
+        gsap.from(heroRef.current.querySelectorAll(".gsap-anim-item"), {
+          y: 40,
           opacity: 0,
-          duration: 0.9,
-          stagger: 0.12,
+          duration: 1,
+          stagger: 0.15,
           ease: "power3.out",
-        });
-      }
-
-      // Tech Stack Entrance Wave
-      if (stackRef.current) {
-        gsap.from(stackRef.current.querySelectorAll(".gsap-stack-card"), {
-          scrollTrigger: {
-            trigger: stackRef.current,
-            start: "top 80%",
-          },
-          scale: 0.9,
-          opacity: 0,
-          duration: 0.6,
-          stagger: 0.08,
-          ease: "back.out(1.7)",
         });
       }
     },
     { scope: containerRef }
   );
 
-  return (
-    <div ref={containerRef} className="relative min-h-[100dvh] overflow-hidden bg-background text-foreground">
-      {/* ================= 1. HERO SECTION ================= */}
-      <section ref={heroRef} className="relative overflow-hidden pt-12 pb-20 md:pt-24 md:pb-32 border-b border-border/60">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute left-1/2 top-0 -z-10 h-[500px] w-full max-w-7xl -translate-x-1/2 rounded-full bg-linear-to-b from-primary/10 via-accent/5 to-transparent blur-3xl"
-        />
+  const handleCopyCode = () => {
+    navigator.clipboard.writeText(`npx create-haroon-app@latest my-product --template=saas`);
+    setCopiedCode(true);
+    setTimeout(() => setCopiedCode(false), 2000);
+  };
 
+  const filteredTech = selectedTechCategory === "All"
+    ? techStackData
+    : techStackData.filter((t) => t.category.toLowerCase() === selectedTechCategory.toLowerCase());
+
+  return (
+    <div ref={containerRef} className="relative min-h-[100dvh] overflow-hidden bg-[#07080a] text-foreground font-sans">
+      {/* Dynamic Background Light Orbs */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-40 left-1/2 -z-10 h-[600px] w-full max-w-7xl -translate-x-1/2 rounded-full bg-linear-to-b from-primary/15 via-accent/10 to-transparent blur-[120px]"
+      />
+
+      {/* ================= 1. RADICAL HERO SECTION ================= */}
+      <section ref={heroRef} className="relative overflow-hidden pt-12 pb-24 md:pt-28 md:pb-36 border-b border-border/40">
         <div className="container-page flex flex-col items-center text-center">
-          <div className="gsap-hero-item inline-flex items-center gap-2">
-            <DSBadge variant="success" className="animate-pulse shadow-sm">
-              <span className="relative flex size-2 me-1.5 inline-block">
-                <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
-              </span>
-              متاح لمشاريع جديدة — Q3/Q4 2026
-            </DSBadge>
+          {/* Availability Pill */}
+          <div className="gsap-anim-item inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-1.5 text-xs font-semibold text-emerald-400 backdrop-blur-md shadow-xs">
+            <span className="relative flex size-2">
+              <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
+            </span>
+            <span>متاح لاستلام مشاريع جديدة — Q3/Q4 2026</span>
           </div>
 
-          <h1 className="gsap-hero-item mt-8 max-w-4xl text-5xl font-bold tracking-tight text-foreground text-balance md:text-7xl">
-            أصمّم وأبني منتجات رقمية{" "}
-            <span className="text-gradient-brand">تُحقّق نتائج فعلية.</span>
+          {/* Main H1 with Word Rotator */}
+          <h1 className="gsap-anim-item mt-8 max-w-5xl text-5xl font-extrabold tracking-tight text-foreground text-balance md:text-7xl lg:text-8xl">
+            أبني وأبتكر{" "}
+            <span className="inline-block min-w-[320px] text-gradient-brand transition-all duration-500">
+              {rotatingTitles[titleIdx]}
+            </span>
           </h1>
 
-          <p className="gsap-hero-item mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground text-pretty md:text-xl">
-            مهندس منتجات وواجهات مستخدم متخصص في تحويل المفاهيم المعقدة إلى تجارب ويب فاخرة وسريعة تلفت الانتباه وتزيد المبيعات.
+          <p className="gsap-anim-item mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground text-pretty md:text-xl">
+            مهندس منتجات وواجهات مستخدم متخصص في تحويل المفاهيم الرائدة إلى واجهات ويب فائقة السرعة والانقاد تضاعف نمو الأعمال.
           </p>
 
-          <div className="gsap-hero-item mt-10 flex flex-wrap items-center justify-center gap-4">
-            <DSButton asChild size="lg" variant="primary" className="shadow-md">
+          {/* Action CTAs */}
+          <div className="gsap-anim-item mt-10 flex flex-wrap items-center justify-center gap-4">
+            <DSButton asChild size="lg" variant="primary" className="shadow-lg shadow-primary/20">
               <Link to="/work">
                 استعرض الأعمال
-                <ArrowLeft className="ms-1.5 size-4" />
+                <ArrowLeft className="ms-2 size-4" />
               </Link>
             </DSButton>
-            <DSButton asChild size="lg" variant="outline">
+            <DSButton asChild size="lg" variant="outline" className="border-border/80">
               <Link to="/contact">
-                تواصل معي
-                <ArrowUpRight className="ms-1.5 size-4" />
+                تواصل معي مباشرة
+                <ArrowUpRight className="ms-2 size-4" />
               </Link>
             </DSButton>
           </div>
 
-          <div className="gsap-hero-item mt-16 w-full max-w-4xl">
-            <Grid cols={{ base: 2, sm: 4 }} gap="md">
-              <DSCard variant="surface" className="text-center p-6 bg-card/40 backdrop-blur-md border border-border/60">
-                <div className="text-3xl font-bold tracking-tight text-foreground tabular-nums">+40</div>
-                <div className="mt-1 text-sm text-muted-foreground">مشروع مُنجز</div>
-              </DSCard>
-              <DSCard variant="surface" className="text-center p-6 bg-card/40 backdrop-blur-md border border-border/60">
-                <div className="text-3xl font-bold tracking-tight text-foreground tabular-nums">+25</div>
-                <div className="mt-1 text-sm text-muted-foreground">عميل شريك</div>
-              </DSCard>
-              <DSCard variant="surface" className="text-center p-6 bg-card/40 backdrop-blur-md border border-border/60">
-                <div className="text-3xl font-bold tracking-tight text-foreground tabular-nums">98%</div>
-                <div className="mt-1 text-sm text-muted-foreground">نسبة الرضا</div>
-              </DSCard>
-              <DSCard variant="surface" className="text-center p-6 bg-card/40 backdrop-blur-md border border-border/60">
-                <div className="text-3xl font-bold tracking-tight text-foreground tabular-nums">+6</div>
-                <div className="mt-1 text-sm text-muted-foreground">سنوات خبرة</div>
-              </DSCard>
-            </Grid>
-          </div>
+          {/* Raycast-style Command Palette Terminal */}
+          <div className="gsap-anim-item mt-16 w-full max-w-4xl overflow-hidden rounded-2xl border border-border/80 bg-card/70 p-1 shadow-2xl backdrop-blur-xl">
+            <div className="flex items-center justify-between border-b border-border/60 bg-muted/40 px-4 py-3">
+              <div className="flex items-center gap-2">
+                <div className="size-3 rounded-full bg-rose-500/80" />
+                <div className="size-3 rounded-full bg-amber-500/80" />
+                <div className="size-3 rounded-full bg-emerald-500/80" />
+                <span className="ms-2 text-xs font-mono text-muted-foreground">haroon-terminal // v2.0</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setActiveTerminalTab("overview")}
+                  className={`rounded-md px-3 py-1 text-xs font-medium transition-colors ${
+                    activeTerminalTab === "overview" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  نظرة عامة
+                </button>
+                <button
+                  onClick={() => setActiveTerminalTab("metrics")}
+                  className={`rounded-md px-3 py-1 text-xs font-medium transition-colors ${
+                    activeTerminalTab === "metrics" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  الأرقام
+                </button>
+                <button
+                  onClick={() => setActiveTerminalTab("code")}
+                  className={`rounded-md px-3 py-1 text-xs font-medium transition-colors ${
+                    activeTerminalTab === "code" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  الأمر السريع
+                </button>
+              </div>
+            </div>
 
-          <div className="gsap-hero-item mt-16 w-full max-w-4xl border-t border-border/40 pt-8">
-            <p className="text-xs font-medium tracking-widest text-muted-foreground uppercase">مشاريع ومنتجات شريكة</p>
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-8 md:gap-16">
-              {clientProofLogos.map((logo) => (
-                <span key={logo} className="text-sm font-semibold tracking-tight text-muted-foreground transition-colors hover:text-foreground">
-                  {logo}
-                </span>
-              ))}
+            <div className="p-6 text-start font-mono text-sm leading-relaxed">
+              {activeTerminalTab === "overview" && (
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 text-emerald-400">
+                    <CheckCircle2 className="size-4" />
+                    <span>جاهزية النظام: 100% | خالي من الأخطاء النحوية</span>
+                  </div>
+                  <p className="text-muted-foreground">
+                    تخصص هندسي كامل في بناء واجهات React 19، Next.js، وأنظمة تصميم مخصصة تضمن سرعة تحميل أقل من 1.2 ثانية.
+                  </p>
+                </div>
+              )}
+
+              {activeTerminalTab === "metrics" && (
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                  <div className="rounded-xl border border-border/60 bg-background/50 p-4">
+                    <div className="text-2xl font-bold text-foreground tabular-nums">+40</div>
+                    <div className="text-xs text-muted-foreground mt-1">مشروع مُنجز</div>
+                  </div>
+                  <div className="rounded-xl border border-border/60 bg-background/50 p-4">
+                    <div className="text-2xl font-bold text-foreground tabular-nums">+25</div>
+                    <div className="text-xs text-muted-foreground mt-1">عميل شريك</div>
+                  </div>
+                  <div className="rounded-xl border border-border/60 bg-background/50 p-4">
+                    <div className="text-2xl font-bold text-foreground tabular-nums">98%</div>
+                    <div className="text-xs text-muted-foreground mt-1">رضا العملاء</div>
+                  </div>
+                  <div className="rounded-xl border border-border/60 bg-background/50 p-4">
+                    <div className="text-2xl font-bold text-foreground tabular-nums">+6</div>
+                    <div className="text-xs text-muted-foreground mt-1">سنوات خبرة</div>
+                  </div>
+                </div>
+              )}
+
+              {activeTerminalTab === "code" && (
+                <div className="flex items-center justify-between rounded-xl border border-border/60 bg-background/80 p-4">
+                  <span className="text-primary dir-ltr font-mono">
+                    $ npx create-haroon-app@latest my-product
+                  </span>
+                  <button
+                    onClick={handleCopyCode}
+                    className="flex items-center gap-1.5 rounded-lg border border-border/60 bg-muted px-3 py-1.5 text-xs transition-colors hover:bg-muted/80"
+                  >
+                    {copiedCode ? <Check className="size-3.5 text-emerald-400" /> : <Copy className="size-3.5" />}
+                    <span>{copiedCode ? "تم النسخ" : "نسخ"}</span>
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
       </section>
 
-      {/* ================= 2. FEATURED WORK ================= */}
-      <Section id="work" size="lg">
+      {/* ================= 2. SPLIT-SCREEN INTERACTIVE FEATURED SHOWCASE ================= */}
+      <Section id="work" size="lg" className="border-b border-border/40">
         <Reveal>
           <SectionTitle
             eyebrow={t("home.featured.eyebrow", "أعمال مختارة")}
@@ -331,81 +413,110 @@ function Home2Page() {
           />
         </Reveal>
 
-        <div className="mt-16 space-y-24 md:mt-24 md:space-y-40">
-          {featuredProjects.map((project, idx) => {
+        {/* Desktop Split Showcase */}
+        <div className="mt-16 hidden lg:grid lg:grid-cols-12 lg:gap-10 lg:items-center">
+          {/* Left Side: Pinned Interactive Browser frame */}
+          <div className="sticky top-28 lg:col-span-7">
+            <div className="group relative overflow-hidden rounded-[2.5rem] border border-border/80 bg-card p-3 shadow-2xl transition-all duration-500">
+              <div
+                aria-hidden
+                className="pointer-events-none absolute -inset-10 -z-10 rounded-[3rem] bg-linear-to-br from-primary/20 via-accent/10 to-transparent blur-3xl"
+              />
+              {featuredProjects.map((project, idx) => {
+                if (idx !== activeProjectIdx) return null;
+                const MockupUI = featuredMockups[project.slug] ?? DashboardUI;
+                return (
+                  <div key={project.slug} className="animate-fade-in">
+                    <BrowserFrame url={project.liveDemo ? new URL(project.liveDemo).host : `${project.slug}.app`}>
+                      {project.cover?.src ? (
+                        <img src={project.cover.src} alt={project.cover.alt} className="size-full object-cover" />
+                      ) : (
+                        <MockupUI />
+                      )}
+                    </BrowserFrame>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Right Side: Interactive Project Selectors */}
+          <div className="space-y-4 lg:col-span-5">
+            {featuredProjects.map((project, idx) => {
+              const isActive = idx === activeProjectIdx;
+              return (
+                <div
+                  key={project.slug}
+                  onMouseEnter={() => setActiveProjectIdx(idx)}
+                  className={`group relative cursor-pointer overflow-hidden rounded-2xl border p-6 transition-all duration-300 ${
+                    isActive
+                      ? "border-primary bg-primary/10 shadow-lg"
+                      : "border-border/60 bg-card/60 hover:border-foreground/30"
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <DSBadge variant={isActive ? "brand" : "outline"}>{project.category}</DSBadge>
+                    <span className="text-xs text-muted-foreground">{project.year}</span>
+                  </div>
+                  <h3 className="mt-4 text-2xl font-bold tracking-tight text-foreground">{project.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground line-clamp-2">{project.summary}</p>
+                  <div className="mt-6 flex items-center justify-between">
+                    <div className="flex flex-wrap gap-1.5">
+                      {project.tags.slice(0, 2).map((t) => (
+                        <span key={t} className="rounded-md border border-border/60 bg-background px-2.5 py-0.5 text-[10px]">
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                    <DSButton asChild variant="ghost" size="sm">
+                      <Link to="/work/$slug" params={{ slug: project.slug }}>
+                        عرض الدراسة <ArrowLeft className="ms-1 size-3.5" />
+                      </Link>
+                    </DSButton>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Mobile Horizontal Snap Layout */}
+        <div className="mt-12 flex gap-4 overflow-x-auto pb-6 lg:hidden home2-snap-carousel">
+          {featuredProjects.map((project) => {
             const MockupUI = featuredMockups[project.slug] ?? DashboardUI;
             return (
-              <Reveal key={project.slug} delay={idx * 0.1}>
-                <article className="mx-auto max-w-6xl">
-                  <Link
-                    to="/work/$slug"
-                    params={{ slug: project.slug }}
-                    className="group relative block overflow-hidden rounded-[2.5rem] bg-muted/20 border border-border/60"
-                    aria-label={project.title}
-                  >
-                    <div
-                      aria-hidden
-                      className="pointer-events-none absolute -inset-10 -z-10 rounded-[3rem] bg-linear-to-br from-primary/10 via-accent/5 to-transparent blur-2xl"
-                    />
-                    <BrowserFrame
-                      url={
-                        project.liveDemo
-                          ? new URL(project.liveDemo).host
-                          : `${project.slug}.app`
-                      }
-                      className="transition-transform duration-700 ease-out group-hover:-translate-y-2"
-                    >
+              <div key={project.slug} className="min-w-[85vw] shrink-0 home2-snap-item">
+                <DSCard variant="surface" padding="none" className="overflow-hidden border border-border/60">
+                  <Link to="/work/$slug" params={{ slug: project.slug }}>
+                    <BrowserFrame url={project.liveDemo ? new URL(project.liveDemo).host : `${project.slug}.app`}>
                       {project.cover?.src ? (
-                        <img
-                          src={project.cover.src}
-                          alt={project.cover.alt}
-                          className="size-full object-cover"
-                        />
+                        <img src={project.cover.src} alt={project.cover.alt} className="size-full object-cover" />
                       ) : (
                         <MockupUI />
                       )}
                     </BrowserFrame>
                   </Link>
-
-                  <div className="mt-10 grid gap-6 md:grid-cols-2 md:items-end">
-                    <div>
-                      <div className="flex items-center gap-3">
-                        <DSBadge variant="outline">{project.category}</DSBadge>
-                        <span className="text-sm text-muted-foreground">{project.year}</span>
-                      </div>
-                      <h3 className="mt-4 text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
-                        {project.title}
-                      </h3>
-                      <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground">
-                        {project.summary}
-                      </p>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-3 md:justify-end">
-                      <DSButton asChild variant="primary" size="md">
+                  <div className="p-6">
+                    <DSBadge variant="outline">{project.category}</DSBadge>
+                    <h3 className="mt-3 text-xl font-bold tracking-tight text-foreground">{project.title}</h3>
+                    <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{project.summary}</p>
+                    <div className="mt-4 flex items-center justify-between border-t border-border/60 pt-4">
+                      <DSButton asChild variant="ghost" size="sm">
                         <Link to="/work/$slug" params={{ slug: project.slug }}>
-                          دراسة الحالة
-                          <ArrowLeft className="ms-1.5 size-4" />
+                          التفاصيل <ArrowLeft className="ms-1 size-3.5" />
                         </Link>
                       </DSButton>
-                      {project.liveDemo ? (
-                        <DSButton asChild variant="ghost" size="md">
-                          <a href={project.liveDemo} target="_blank" rel="noreferrer">
-                            معاينة حيّة
-                            <ExternalLink className="ms-1.5 size-4" />
-                          </a>
-                        </DSButton>
-                      ) : null}
                     </div>
                   </div>
-                </article>
-              </Reveal>
+                </DSCard>
+              </div>
             );
           })}
         </div>
       </Section>
 
-      {/* ================= 3. SERVICES (BENTO GRID WITH GSAP PERSPECTIVE TILT) ================= */}
-      <Section id="services" className="border-t border-border/60">
+      {/* ================= 3. SERVICES (INTERACTIVE BENTO SANDBOX) ================= */}
+      <Section id="services" className="border-b border-border/40">
         <Reveal>
           <SectionTitle
             eyebrow="الخدمات والحلول"
@@ -415,19 +526,16 @@ function Home2Page() {
         </Reveal>
 
         <Reveal delay={0.1}>
-          <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2">
-            {homeServicesData.slice(0, 2).map((s, i) => (
-              <ServiceBentoCardGSAP key={s.slug} service={s as any} prominent={i === 0} />
-            ))}
-            {homeServicesData.slice(2, 4).map((s, i) => (
-              <ServiceBentoCardGSAP key={s.slug} service={s as any} prominent={i === 1} />
+          <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-2">
+            {homeServicesData.map((s, idx) => (
+              <BentoSandboxCard key={s.slug} service={s} featured={idx === 0 || idx === 3} />
             ))}
           </div>
         </Reveal>
       </Section>
 
-      {/* ================= 4. HOW I WORK (WORKFLOW STEPPER) ================= */}
-      <Section id="process" className="border-t border-border/60" size="lg">
+      {/* ================= 4. HOW I WORK (PIPELINE TIMELINE) ================= */}
+      <Section id="process" className="border-b border-border/40" size="lg">
         <Reveal>
           <SectionTitle
             eyebrow="طريقة العمل"
@@ -443,7 +551,7 @@ function Home2Page() {
                 <div className="text-sm font-semibold tracking-widest text-primary/80 group-hover:text-primary">
                   {step.step}
                 </div>
-                <h3 className="mt-5 text-xl font-semibold tracking-tight text-foreground">
+                <h3 className="mt-5 text-xl font-bold tracking-tight text-foreground">
                   {step.title}
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
@@ -455,8 +563,8 @@ function Home2Page() {
         </Reveal>
       </Section>
 
-      {/* ================= 5. TECH STACK STRIP (GSAP WAVE ENTRANCE) ================= */}
-      <Section id="stack" className="border-t border-border/60">
+      {/* ================= 5. INTERACTIVE FILTERABLE TECH STACK ================= */}
+      <Section id="stack" className="border-b border-border/40">
         <Reveal>
           <SectionTitle
             eyebrow="أدوات العمل"
@@ -465,31 +573,50 @@ function Home2Page() {
           />
         </Reveal>
 
-        <div ref={stackRef} className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-4">
-          {techStack.map((tech) => {
-            const IconComp = tech.icon;
-            return (
-              <DSCard
-                key={tech.name}
-                variant="surface"
-                padding="sm"
-                className="gsap-stack-card group flex flex-col items-center gap-4 text-center transition-all duration-300 hover:border-primary/40 hover:shadow-md motion-safe:hover:-translate-y-1"
+        {/* Filter Pills */}
+        <Reveal delay={0.1}>
+          <div className="mt-8 flex flex-wrap items-center gap-2">
+            {["All", "Frontend", "Language", "Framework", "Backend", "Design", "Database"].map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setSelectedTechCategory(cat)}
+                className={`rounded-full px-4 py-1.5 text-xs font-semibold transition-all duration-200 ${
+                  selectedTechCategory === cat
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : "border border-border/60 bg-card text-muted-foreground hover:text-foreground"
+                }`}
               >
-                <div className="flex size-14 items-center justify-center rounded-2xl border border-border/60 bg-background text-muted-foreground transition-colors group-hover:border-primary/30 group-hover:text-primary group-hover:bg-primary/5">
-                  <IconComp className="size-6" />
-                </div>
-                <div>
-                  <div className="text-base font-semibold text-foreground">{tech.name}</div>
-                  <div className="text-xs text-muted-foreground">{tech.category}</div>
-                </div>
-              </DSCard>
-            );
-          })}
-        </div>
+                {cat === "All" ? "الكل" : cat}
+              </button>
+            ))}
+          </div>
+
+          <Grid cols={{ base: 2, sm: 4, lg: 4 }} gap="md" className="mt-8">
+            {filteredTech.map((tech) => {
+              const IconComp = tech.icon;
+              return (
+                <DSCard
+                  key={tech.name}
+                  variant="surface"
+                  padding="sm"
+                  className="group flex flex-col items-center gap-3 text-center transition-all duration-300 hover:border-primary/40 hover:shadow-md motion-safe:hover:-translate-y-1"
+                >
+                  <div className="flex size-14 items-center justify-center rounded-2xl border border-border/60 bg-background text-muted-foreground transition-colors group-hover:border-primary/30 group-hover:bg-primary/10 group-hover:text-primary">
+                    <IconComp className="size-6" />
+                  </div>
+                  <div>
+                    <div className="text-base font-bold text-foreground">{tech.name}</div>
+                    <div className="text-[11px] text-muted-foreground">{tech.category}</div>
+                  </div>
+                </DSCard>
+              );
+            })}
+          </Grid>
+        </Reveal>
       </Section>
 
-      {/* ================= 6. SOCIAL PROOF & TESTIMONIALS ================= */}
-      <Section id="testimonials" className="border-t border-border/60">
+      {/* ================= 6. TESTIMONIALS & SOCIAL PROOF ================= */}
+      <Section id="testimonials" className="border-b border-border/40">
         <Reveal>
           <SectionTitle eyebrow="التقييمات" title="بكلمات من عملت معهم." />
         </Reveal>
@@ -503,7 +630,7 @@ function Home2Page() {
       </Section>
 
       {/* ================= 7. CAREER & CERTIFICATES ================= */}
-      <Section id="career" className="border-t border-border/60">
+      <Section id="career" className="border-b border-border/40">
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-12">
           {/* Left Column: Career Timeline */}
           <div className="lg:col-span-7">
@@ -529,7 +656,7 @@ function Home2Page() {
         </div>
       </Section>
 
-      {/* ================= 8. FINAL CINEMATIC CTA ================= */}
+      {/* ================= 8. CINEMATIC FULL-VIEWPORT CTA ================= */}
       <Reveal>
         <CTA
           className="border-t border-border/60"
@@ -558,25 +685,15 @@ function Home2Page() {
 }
 
 /* ============================================================
-   Service Bento Card Component with GSAP Mouse Spotlight & 3D Tilt
+   Bento Sandbox Card Component with Custom Mouse Spotlight
    ============================================================ */
 
-type ServiceItem = {
-  slug: string;
-  title: string;
-  outcome: string;
-  tags: string[];
-  metric?: string;
-  size?: "lg" | "sm";
-  iconPath?: string;
-};
-
-function ServiceBentoCardGSAP({
+function BentoSandboxCard({
   service,
-  prominent = false,
+  featured = false,
 }: {
-  service: ServiceItem;
-  prominent?: boolean;
+  service: typeof homeServicesData[number];
+  featured?: boolean;
 }) {
   const cardRef = useRef<HTMLAnchorElement>(null);
 
@@ -586,34 +703,8 @@ function ServiceBentoCardGSAP({
     const rect = card.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
-    
-    // Set Spotlight CSS variables
     card.style.setProperty("--spotlight-x", `${x}%`);
     card.style.setProperty("--spotlight-y", `${y}%`);
-
-    // GSAP 3D Tilt
-    const tiltX = (y - 50) * -0.08;
-    const tiltY = (x - 50) * 0.08;
-    gsap.to(card, {
-      rotateX: tiltX,
-      rotateY: tiltY,
-      duration: 0.3,
-      ease: "power1.out",
-    });
-  }, []);
-
-  const handleMouseLeave = useCallback(() => {
-    const card = cardRef.current;
-    if (!card) return;
-    card.style.setProperty("--spotlight-x", "50%");
-    card.style.setProperty("--spotlight-y", "50%");
-    
-    gsap.to(card, {
-      rotateX: 0,
-      rotateY: 0,
-      duration: 0.5,
-      ease: "power2.out",
-    });
   }, []);
 
   return (
@@ -622,116 +713,47 @@ function ServiceBentoCardGSAP({
       to="/services/$slug"
       params={{ slug: service.slug }}
       onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      aria-label={service.title}
-      style={{ "--spotlight-x": "50%", "--spotlight-y": "50%", transformStyle: "preserve-3d" } as React.CSSProperties}
-      className={[
-        "group relative flex flex-col overflow-hidden rounded-3xl border border-border/60 bg-card",
-        "transition-all duration-300 ease-out",
-        "active:scale-[0.985]",
-        "hover:border-primary/40 hover:shadow-xl motion-safe:hover:-translate-y-1",
-        "[background-image:radial-gradient(circle_at_var(--spotlight-x)_var(--spotlight-y),color-mix(in_oklab,var(--color-primary)_8%,transparent)_0%,transparent_60%)]",
-        prominent ? "lg:row-span-1 min-h-72 lg:min-h-80" : "min-h-60 lg:min-h-64",
-        "p-8 sm:p-10",
-      ].join(" ")}
+      style={{ "--spotlight-x": "50%", "--spotlight-y": "50%" } as React.CSSProperties}
+      className={`group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-border/60 bg-card p-8 transition-all duration-300 hover:border-primary/50 hover:shadow-xl ${
+        featured ? "lg:min-h-80" : "lg:min-h-64"
+      }`}
     >
       <div className="flex items-start justify-between gap-4">
-        {service.iconPath ? (
-          <div
-            aria-hidden
-            className={[
-              "flex size-14 shrink-0 items-center justify-center rounded-2xl",
-              "border border-border/60 bg-background/80 backdrop-blur-md shadow-sm",
-              "transition-all duration-300 ease-out",
-              "group-hover:border-primary/40 group-hover:bg-primary/10",
-              "motion-safe:group-hover:rotate-6 motion-safe:group-hover:scale-110",
-            ].join(" ")}
+        <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl border border-border/60 bg-background/80 text-muted-foreground backdrop-blur-md shadow-sm transition-all duration-300 group-hover:border-primary/40 group-hover:bg-primary/10 group-hover:text-primary">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="size-6"
           >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="size-6 text-muted-foreground transition-colors duration-300 group-hover:text-primary"
-              aria-hidden
-            >
-              <path d={service.iconPath} />
-            </svg>
-          </div>
-        ) : null}
-
-        {service.metric ? (
-          <span
-            className={[
-              "rounded-full border border-border/60 bg-background/80 px-3 py-1.5",
-              "text-[11px] font-medium tracking-wide text-muted-foreground backdrop-blur-md shadow-sm",
-              "transition-colors duration-300 group-hover:border-primary/40 group-hover:text-foreground",
-            ].join(" ")}
-          >
-            {service.metric}
-          </span>
-        ) : null}
+            <path d={service.iconPath} />
+          </svg>
+        </div>
+        <span className="rounded-full border border-border/60 bg-background/80 px-3 py-1.5 text-xs font-medium text-muted-foreground backdrop-blur-md">
+          {service.metric}
+        </span>
       </div>
 
       <div className="mt-8 flex-1">
-        <h3 className="relative inline-block text-2xl font-bold tracking-tight text-foreground">
+        <h3 className="text-2xl font-bold tracking-tight text-foreground group-hover:text-primary transition-colors">
           {service.title}
-          <span
-            aria-hidden
-            className={[
-              "absolute inset-x-0 -bottom-1 h-[2px] origin-left scale-x-0 rounded-full",
-              "bg-primary transition-transform duration-300 ease-out",
-              "group-hover:scale-x-100",
-            ].join(" ")}
-          />
         </h3>
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
-          {service.outcome}
-        </p>
+        <p className="mt-3 text-base leading-relaxed text-muted-foreground">{service.outcome}</p>
       </div>
 
-      <div className="mt-8 flex items-end justify-between gap-4">
+      <div className="mt-8 flex items-center justify-between border-t border-border/40 pt-4">
         <div className="flex flex-wrap gap-2">
-          {service.tags.slice(0, 3).map((tag) => (
-            <span
-              key={tag}
-              className={[
-                "rounded-full border border-border/60 bg-background/60 px-3 py-1",
-                "text-xs font-medium text-muted-foreground backdrop-blur-sm shadow-sm",
-                "transition-colors duration-200 group-hover:border-primary/30 group-hover:text-foreground",
-              ].join(" ")}
-            >
+          {service.tags.map((tag) => (
+            <span key={tag} className="rounded-full border border-border/60 bg-background/60 px-3 py-1 text-xs text-muted-foreground">
               {tag}
             </span>
           ))}
         </div>
-
-        <div
-          aria-hidden
-          className={[
-            "flex size-10 shrink-0 items-center justify-center rounded-full",
-            "border border-border/60 bg-background/80 text-muted-foreground backdrop-blur-md shadow-sm",
-            "transition-all duration-300 ease-out",
-            "group-hover:border-primary/50 group-hover:bg-primary/10 group-hover:text-primary",
-            "motion-safe:group-hover:-translate-y-1 motion-safe:group-hover:translate-x-1",
-          ].join(" ")}
-        >
-          <ArrowUpRight className="size-4" />
-        </div>
+        <ArrowUpRight className="size-5 text-muted-foreground transition-all duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-primary" />
       </div>
-
-      <div
-        aria-hidden
-        className={[
-          "absolute inset-x-0 bottom-0 h-1 origin-left scale-x-0 rounded-full",
-          "bg-linear-to-r from-primary/60 via-primary/30 to-transparent",
-          "transition-transform duration-500 ease-out",
-          "group-hover:scale-x-100",
-          "@media(hover:none){scale-x-100 opacity-40}",
-        ].join(" ")}
-      />
     </Link>
   );
 }
