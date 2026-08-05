@@ -35,8 +35,9 @@ function throwSafe(op: string, table: string, error: { message?: string; code?: 
 export const listHeroProjectsPublic = createServerFn({ method: "GET" }).handler(
   async () => {
     const { createClient } = await import("@supabase/supabase-js");
-    const key = process.env.SUPABASE_PUBLISHABLE_KEY!;
-    const url = process.env.SUPABASE_URL!;
+    const key = process.env.SUPABASE_PUBLISHABLE_KEY || process.env.VITE_SUPABASE_PUBLISHABLE_KEY || "";
+    const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || "";
+    if (!url || !key) throw new Error("Missing SUPABASE_URL / SUPABASE_PUBLISHABLE_KEY.");
     const client = createClient(url, key, {
       auth: { persistSession: false, autoRefreshToken: false },
       global: {

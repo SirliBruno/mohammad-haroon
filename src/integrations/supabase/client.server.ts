@@ -29,17 +29,34 @@ function createSupabaseFetch(supabaseKey: string): typeof fetch {
   };
 }
 
+function getEnvVar(key: string): string | undefined {
+  if (typeof process !== 'undefined' && process.env) {
+    if (process.env[key]) return process.env[key];
+    if (process.env[`VITE_${key}`]) return process.env[`VITE_${key}`];
+  }
+  try {
+    if (typeof import.meta !== 'undefined' && import.meta.env) {
+      const metaEnv = import.meta.env as Record<string, string | undefined>;
+      if (metaEnv[key]) return metaEnv[key];
+      if (metaEnv[`VITE_${key}`]) return metaEnv[`VITE_${key}`];
+    }
+  } catch {
+    /* ignore */
+  }
+  return undefined;
+}
+
 function createSupabaseAdminClient() {
-  const SUPABASE_URL = process.env.SUPABASE_URL;
-  const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const SUPABASE_URL = getEnvVar('SUPABASE_URL');
+  const SUPABASE_SERVICE_ROLE_KEY = getEnvVar('SUPABASE_SERVICE_ROLE_KEY') || getEnvVar('SUPABASE_PUBLISHABLE_KEY');
 
   if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
     const missing = [
       ...(!SUPABASE_URL ? ['SUPABASE_URL'] : []),
       ...(!SUPABASE_SERVICE_ROLE_KEY ? ['SUPABASE_SERVICE_ROLE_KEY'] : []),
     ];
-    const message = `Missing Supabase environment variable(s): ${missing.join(', ')}. Connect Supabase in Lovable Cloud.`;
-    console.error(`[Supabase] ${message}`);
+    const message = `Missing Supabase admin environment variable(s): ${missing.join(', ')}.`;
+    console.error(`[Supabase Admin Client Error] ${message}`);
     throw new Error(message);
   }
 
@@ -51,11 +68,12 @@ function createSupabaseAdminClient() {
       storage: undefined,
       persistSession: false,
       autoRefreshToken: false,
-    }
+    },
   });
 }
 
 let _supabaseAdmin: ReturnType<typeof createSupabaseAdminClient> | undefined;
+let _adminInitError: Error | undefined;
 
 // Server-side Supabase client with service role - bypasses RLS
 // SECURITY: Only use this for trusted server-side operations, never expose to client code
@@ -63,7 +81,20 @@ let _supabaseAdmin: ReturnType<typeof createSupabaseAdminClient> | undefined;
 // Top-level import is safe only in other .server.ts modules - route files and *.functions.ts ship to the client bundle.
 export const supabaseAdmin = new Proxy({} as ReturnType<typeof createSupabaseAdminClient>, {
   get(_, prop, receiver) {
-    if (!_supabaseAdmin) _supabaseAdmin = createSupabaseAdminClient();
-    return Reflect.get(_supabaseAdmin, prop, receiver);
+    if (!_supabaseAdmin && !_adminInitError) {
+      try {
+        _supabaseAdmin = createSupabaseAdminClient();
+      } catch (err) {
+        _adminInitError = err instanceof Error ? err : new Error(String(err));
+      }
+    }
+    if (_adminInitError || !_supabaseAdmin) {
+      throw _adminInitError ?? new Error("عميل Supabase المسؤول غير مفعّل. تأكد من ضبط متغيرات البيئة.");
+    }
+    const val = Reflect.get(_supabaseAdmin, prop, receiver);
+    if (typeof val === 'function') {
+      return val.bind(_supabaseAdmin);
+    }
+    return val;
   },
 });

@@ -26,20 +26,34 @@ function createSupabaseFetch(supabaseKey: string): typeof fetch {
   };
 }
 
+function getEnvVar(key: string): string | undefined {
+  if (typeof process !== 'undefined' && process.env) {
+    if (process.env[key]) return process.env[key];
+    if (process.env[`VITE_${key}`]) return process.env[`VITE_${key}`];
+  }
+  try {
+    if (typeof import.meta !== 'undefined' && import.meta.env) {
+      const metaEnv = import.meta.env as Record<string, string | undefined>;
+      if (metaEnv[key]) return metaEnv[key];
+      if (metaEnv[`VITE_${key}`]) return metaEnv[`VITE_${key}`];
+    }
+  } catch {
+    /* ignore */
+  }
+  return undefined;
+}
 
 function createSupabaseClient() {
-  // Use import.meta.env for client-side (Vite build-time replacement)
-  // Fall back to process.env for SSR (server-side rendering)
-  const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
-  const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || process.env.SUPABASE_PUBLISHABLE_KEY;
+  const SUPABASE_URL = getEnvVar('SUPABASE_URL');
+  const SUPABASE_PUBLISHABLE_KEY = getEnvVar('SUPABASE_PUBLISHABLE_KEY');
 
   if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
     const missing = [
       ...(!SUPABASE_URL ? ['SUPABASE_URL'] : []),
       ...(!SUPABASE_PUBLISHABLE_KEY ? ['SUPABASE_PUBLISHABLE_KEY'] : []),
     ];
-    const message = `Missing Supabase environment variable(s): ${missing.join(', ')}. Connect Supabase in Lovable Cloud.`;
-    console.error(`[Supabase] ${message}`);
+    const message = `Missing Supabase environment variable(s): ${missing.join(', ')}. Check .env configuration.`;
+    console.error(`[Supabase Client Error] ${message}`);
     throw new Error(message);
   }
 
@@ -51,18 +65,31 @@ function createSupabaseClient() {
       storage: typeof window !== 'undefined' ? localStorage : undefined,
       persistSession: true,
       autoRefreshToken: true,
-    }
+    },
   });
 }
 
 let _supabase: ReturnType<typeof createSupabaseClient> | undefined;
+let _initError: Error | undefined;
 
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 export const supabase = new Proxy({} as ReturnType<typeof createSupabaseClient>, {
   get(_, prop, receiver) {
-    if (!_supabase) _supabase = createSupabaseClient();
-    return Reflect.get(_supabase, prop, receiver);
+    if (!_supabase && !_initError) {
+      try {
+        _supabase = createSupabaseClient();
+      } catch (err) {
+        _initError = err instanceof Error ? err : new Error(String(err));
+      }
+    }
+    if (_initError || !_supabase) {
+      throw _initError ?? new Error("عميل Supabase غير مفعّل. تأكد من ضبط متغيرات البيئة.");
+    }
+    const val = Reflect.get(_supabase, prop, receiver);
+    if (typeof val === 'function') {
+      return val.bind(_supabase);
+    }
+    return val;
   },
 });
-

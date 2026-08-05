@@ -19,14 +19,31 @@ export type TableName = keyof Database["public"]["Tables"];
 
 let _publicClient: Db | undefined;
 
+function getEnvVar(key: string): string | undefined {
+  if (typeof process !== "undefined" && process.env) {
+    if (process.env[key]) return process.env[key];
+    if (process.env[`VITE_${key}`]) return process.env[`VITE_${key}`];
+  }
+  try {
+    if (typeof import.meta !== "undefined" && import.meta.env) {
+      const metaEnv = import.meta.env as Record<string, string | undefined>;
+      if (metaEnv[key]) return metaEnv[key];
+      if (metaEnv[`VITE_${key}`]) return metaEnv[`VITE_${key}`];
+    }
+  } catch {
+    /* ignore */
+  }
+  return undefined;
+}
+
 /**
  * Publishable-key Supabase client for public read-only Data API calls
  * from server functions. RLS applies as the anon role.
  */
 export function getPublicServerClient(): Db {
   if (_publicClient) return _publicClient;
-  const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_PUBLISHABLE_KEY;
+  const url = getEnvVar("SUPABASE_URL");
+  const key = getEnvVar("SUPABASE_PUBLISHABLE_KEY");
   if (!url || !key) {
     throw new Error(
       "Missing SUPABASE_URL / SUPABASE_PUBLISHABLE_KEY. Enable Lovable Cloud.",
