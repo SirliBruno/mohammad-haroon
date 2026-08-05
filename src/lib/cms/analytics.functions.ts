@@ -28,8 +28,7 @@ export const getFunnelSummary = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => paramsSchema.parse(d ?? { days: 30 }))
   .handler(async ({ data, context }): Promise<FunnelSummary> => {
     const { requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
 
     const days = data.days;

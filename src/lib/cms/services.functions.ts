@@ -37,8 +37,7 @@ export const createService = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => serviceInputSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { createRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return createRow(db, "services", data);
   });
@@ -50,8 +49,7 @@ export const updateService = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     const { updateRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return updateRow(db, "services", data.id, data.patch);
   });
@@ -61,8 +59,7 @@ export const deleteService = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { deleteRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return deleteRow(db, "services", data.id);
   });

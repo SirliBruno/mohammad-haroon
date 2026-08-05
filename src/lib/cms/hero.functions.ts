@@ -66,8 +66,7 @@ export const adminListHeroProjects = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     const { requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     const { data, error } = await db
       .from("hero_projects")
@@ -84,8 +83,7 @@ export const createHeroProject = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => heroInputSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     const { data: row, error } = await db
       .from("hero_projects")
@@ -103,8 +101,7 @@ export const updateHeroProject = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     const { requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     const { data: row, error } = await db
       .from("hero_projects")
@@ -121,8 +118,7 @@ export const deleteHeroProject = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     const { error } = await db
       .from("hero_projects")
@@ -170,8 +166,7 @@ export const signHeroMediaPath = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => z.object({ path: safeMediaPath }).parse(d))
   .handler(async ({ data, context }) => {
     const { requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     const { data: signed, error } = await db.storage
       .from("media")

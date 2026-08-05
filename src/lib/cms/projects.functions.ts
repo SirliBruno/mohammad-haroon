@@ -35,8 +35,7 @@ export const adminListProjects = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => listParamsSchema.parse(d ?? {}))
   .handler(async ({ data, context }) => {
     const { listRows, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return listRows(db, "projects", data, [...SEARCH_COLUMNS.projects]);
   });
@@ -47,8 +46,7 @@ export const getAdminProjectById = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { getRowById, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return getRowById(db, "projects", data.id);
   });
@@ -58,8 +56,7 @@ export const createProject = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => projectInputSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { createRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return createRow(db, "projects", data);
   });
@@ -71,8 +68,7 @@ export const updateProject = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     const { updateRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return updateRow(db, "projects", data.id, data.patch);
   });
@@ -82,8 +78,7 @@ export const deleteProject = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { deleteRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return deleteRow(db, "projects", data.id);
   });

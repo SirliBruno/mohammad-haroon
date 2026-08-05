@@ -77,8 +77,7 @@ export const listMessages = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => listParamsSchema.parse(d ?? {}))
   .handler(async ({ data, context }) => {
     const { listRows, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return listRows(db, "messages", data, [...SEARCH_COLUMNS.messages]);
   });
@@ -88,8 +87,7 @@ export const updateMessage = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => messageUpdateSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { updateRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     const { id, ...patch } = data;
     return updateRow(db, "messages", id, patch);
@@ -100,8 +98,7 @@ export const deleteMessage = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { deleteRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return deleteRow(db, "messages", data.id);
   });
@@ -111,8 +108,7 @@ export const countNewMessages = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     const { requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     const { count, error } = await db
       .from("messages")

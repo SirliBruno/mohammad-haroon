@@ -16,9 +16,7 @@ function make(table: keyof typeof SEARCH_COLUMNS, defaultOrder?: string, ascendi
     .handler(async ({ data, context }) => {
       const { listRows, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
       
-      const db = await getRequestContextClient(context);
-      const userId = context.userId || "anonymous"; 
-      
+      const { db, userId } = await getRequestContextClient(context);
       await requireAdmin(db, userId);
       return listRows(
         db,

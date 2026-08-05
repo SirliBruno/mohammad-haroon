@@ -41,8 +41,7 @@ export const createCertificate = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => certificateInputSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { createRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return createRow(db, "certificates", data);
   });
@@ -54,8 +53,7 @@ export const updateCertificate = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     const { updateRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return updateRow(db, "certificates", data.id, data.patch);
   });
@@ -65,8 +63,7 @@ export const deleteCertificate = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { deleteRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return deleteRow(db, "certificates", data.id);
   });
@@ -89,8 +86,7 @@ export const createExperience = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => experienceInputSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { createRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return createRow(db, "experiences", data);
   });
@@ -102,8 +98,7 @@ export const updateExperience = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     const { updateRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return updateRow(db, "experiences", data.id, data.patch);
   });
@@ -113,8 +108,7 @@ export const deleteExperience = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { deleteRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return deleteRow(db, "experiences", data.id);
   });
@@ -137,8 +131,7 @@ export const createSkill = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => skillInputSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { createRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return createRow(db, "skills", data);
   });
@@ -150,8 +143,7 @@ export const updateSkill = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     const { updateRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return updateRow(db, "skills", data.id, data.patch);
   });
@@ -161,8 +153,7 @@ export const deleteSkill = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { deleteRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return deleteRow(db, "skills", data.id);
   });
@@ -182,8 +173,7 @@ export const createTestimonial = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => testimonialInputSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { createRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return createRow(db, "testimonials", data);
   });
@@ -195,8 +185,7 @@ export const updateTestimonial = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     const { updateRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return updateRow(db, "testimonials", data.id, data.patch);
   });
@@ -206,8 +195,7 @@ export const deleteTestimonial = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { deleteRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return deleteRow(db, "testimonials", data.id);
   });
@@ -239,8 +227,7 @@ export const createBlogPost = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => blogPostInputSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { createRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return createRow(db, "blog_posts", { ...data, author_id: userId });
   });
@@ -252,8 +239,7 @@ export const updateBlogPost = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     const { updateRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return updateRow(db, "blog_posts", data.id, data.patch);
   });
@@ -263,8 +249,7 @@ export const deleteBlogPost = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { deleteRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return deleteRow(db, "blog_posts", data.id);
   });
@@ -284,8 +269,7 @@ export const createIdea = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => ideaInputSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { createRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return createRow(db, "ideas", data);
   });
@@ -297,8 +281,7 @@ export const updateIdea = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     const { updateRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return updateRow(db, "ideas", data.id, data.patch);
   });
@@ -308,8 +291,7 @@ export const deleteIdea = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { deleteRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return deleteRow(db, "ideas", data.id);
   });
@@ -338,8 +320,7 @@ export const createProduct = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => productInputSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { createRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return createRow(db, "products", data);
   });
@@ -351,8 +332,7 @@ export const updateProduct = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     const { updateRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return updateRow(db, "products", data.id, data.patch);
   });
@@ -362,8 +342,7 @@ export const deleteProduct = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { deleteRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return deleteRow(db, "products", data.id);
   });

@@ -31,8 +31,7 @@ export const adminListAuditLog = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => listSchema.parse(d ?? {}))
   .handler(async ({ data, context }) => {
     const { requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -58,8 +58,7 @@ export const upsertSiteContent = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => siteContentInputSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     const { data: row, error } = await db
       .from("site_content")
@@ -77,8 +76,7 @@ export const updateSiteContent = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     const { requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     const { data: row, error } = await db
       .from("site_content")
@@ -95,8 +93,7 @@ export const deleteSiteContent = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     const { error } = await db
       .from("site_content")

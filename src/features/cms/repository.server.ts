@@ -56,62 +56,84 @@ export function getPublicServerClient(): Db {
 }
 
 /**
- * Re-creates the Supabase client if TanStack Start drops it from context
+ * Re-creates the Supabase client if TanStack Start drops it from context.
+ * Returns both the DB client and a resolved userId — never "anonymous".
  */
-export async function getRequestContextClient(context: any): Promise<Db> {
-  if (context?.supabase && context.supabase.from) {
-    return context.supabase as Db;
+export async function getRequestContextClient(context: any): Promise<{ db: Db; userId: string }> {
+  // Fast path: middleware propagated everything correctly
+  if (context?.supabase && context.supabase.from && context?.userId && context.userId !== "anonymous") {
+    return { db: context.supabase as Db, userId: context.userId };
   }
-  console.warn(`[getRequestContextClient] context.supabase missing or invalid. Re-creating client.`);
-  
+
+  console.warn(`[getRequestContextClient] context incomplete (supabase: ${!!context?.supabase?.from}, userId: ${context?.userId}). Re-creating from request.`);
+
   try {
     const { getRequest } = await import(/* @vite-ignore */ "@tanstack/react-start/server");
     const req = getRequest();
     const authHeader = req?.headers?.get('authorization');
     const token = authHeader?.replace('Bearer ', '');
-    
+
     if (token) {
       const url = getEnvVar("SUPABASE_URL");
       const key = getEnvVar("SUPABASE_PUBLISHABLE_KEY");
       if (url && key) {
-        return createClient<Database>(url, key, {
+        const db = createClient<Database>(url, key, {
           global: { headers: { Authorization: `Bearer ${token}` } },
-          auth: { persistSession: false }
+          auth: { persistSession: false, autoRefreshToken: false },
         });
+
+        // Extract userId from JWT payload (middle segment)
+        let userId: string | undefined;
+        try {
+          const parts = token.split(".");
+          if (parts.length === 3) {
+            const payload = JSON.parse(
+              typeof atob === "function"
+                ? atob(parts[1].replace(/-/g, "+").replace(/_/g, "/"))
+                : Buffer.from(parts[1], "base64").toString("utf-8"),
+            );
+            userId = payload.sub;
+          }
+        } catch {
+          console.warn("[getRequestContextClient] Failed to decode JWT payload");
+        }
+
+        // Fallback: ask Supabase for the user if JWT decoding failed
+        if (!userId) {
+          const { data } = await db.auth.getUser(token);
+          userId = data?.user?.id;
+        }
+
+        if (userId) {
+          return { db, userId };
+        }
       }
     }
   } catch (e) {
-    console.warn("Failed to get request context", e);
+    console.warn("[getRequestContextClient] Failed to get request context", e);
   }
-  
-  return getPublicServerClient();
+
+  throw new Error("Unauthorized: Could not resolve authenticated session.");
 }
 
 /**
  * Assert the currently-authenticated user has the `admin` role.
- * Throws a 403-style error otherwise. Uses the request-scoped client so RLS
- * enforces "read own row" on `user_roles`.
+ * Throws a 403-style error otherwise.
  */
 export async function requireAdmin(supabase: Db | undefined, userId: string): Promise<void> {
   if (!supabase || !supabase.from) {
-    console.error("[requireAdmin] Missing or invalid Supabase client. Fallback check failed.");
+    console.error("[requireAdmin] Missing or invalid Supabase client.");
     throw new Error("Role check failed: Invalid database client.");
   }
 
-  let actualUserId = userId;
-  if (!actualUserId || actualUserId === "anonymous") {
-    const { data: authData, error: authError } = await supabase.auth.getUser();
-    if (authError || !authData?.user?.id) {
-      console.error("[requireAdmin] Failed to fetch actual user ID:", authError?.message);
-      throw new Error("Unauthorized: Invalid user session.");
-    }
-    actualUserId = authData.user.id;
+  if (!userId || userId === "anonymous") {
+    throw new Error("Unauthorized: No valid user identity.");
   }
 
   const { data, error } = await supabase
     .from("user_roles")
     .select("role")
-    .eq("user_id", actualUserId)
+    .eq("user_id", userId)
     .eq("role", "admin")
     .maybeSingle();
   if (error) throw new Error(`Role check failed: ${error.message}`);

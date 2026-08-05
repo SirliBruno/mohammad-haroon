@@ -12,8 +12,7 @@ export const listMedia = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => listParamsSchema.parse(d ?? {}))
   .handler(async ({ data, context }) => {
     const { listRows, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return listRows(db, "media", data, [...SEARCH_COLUMNS.media]);
   });
@@ -23,8 +22,7 @@ export const createMedia = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => mediaInputSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { createRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return createRow(db, "media", { ...data, uploaded_by: userId });
   });
@@ -36,8 +34,7 @@ export const updateMedia = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     const { updateRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
     return updateRow(db, "media", data.id, data.patch);
   });
@@ -49,8 +46,7 @@ export const deleteMedia = createServerFn({ method: "POST" })
     const { getRowById, deleteRow, requireAdmin, getRequestContextClient } = await import(
       "@/features/cms/repository.server"
     );
-    const db = await getRequestContextClient(context);
-    const userId = context.userId || "anonymous";
+    const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
 
     // 1. Fetch to get storage path
