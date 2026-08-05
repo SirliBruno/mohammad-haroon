@@ -19,8 +19,15 @@ function AuthPage() {
   const [info, setInfo] = useState<string | null>(null);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: "/admin/hero" });
+    supabase.auth.getUser().then(({ data, error }) => {
+      if (error || !data.user) {
+        void supabase.auth.signOut();
+        try {
+          localStorage.clear();
+        } catch {}
+      } else {
+        navigate({ to: "/admin/hero" });
+      }
     });
   }, [navigate]);
 
