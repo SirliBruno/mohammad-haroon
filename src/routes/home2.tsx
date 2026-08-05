@@ -1,30 +1,19 @@
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import {
   ArrowLeft,
   ArrowUpRight,
-  Sparkles,
   ExternalLink,
-  CheckCircle2,
-  Code2,
   Globe,
-  Layers,
   Zap,
   ShieldCheck,
   Layout,
-  Briefcase,
-  Award,
-  Star,
+  Code2,
   Terminal,
-  ChevronLeft,
-  ChevronRight,
-  FolderKanban,
-  Wrench,
-  MessagesSquare,
+  Layers,
   Cpu,
-  type LucideIcon,
 } from "lucide-react";
 
 import { Reveal } from "@/components/motion/reveal";
@@ -36,6 +25,7 @@ import {
   CTA,
   DSButton,
   DSCard,
+  DSBadge,
   Grid,
   TestimonialQuote,
   Timeline,
@@ -47,7 +37,7 @@ import { projects as staticProjects } from "@/data/projects";
 import { testimonials as staticTestimonials } from "@/data/testimonials";
 import { BrowserFrame } from "@/components/mockups/devices";
 import { DashboardUI, StoreUI, EditorUI } from "@/components/mockups/ui-samples";
-import { useHomeContent, getHomeText, getHomeList } from "@/lib/cms/home-content";
+import { useHomeContent, getHomeText } from "@/lib/cms/home-content";
 import { listPublicProjects } from "@/lib/cms/projects-public.functions";
 import { listTestimonials } from "@/lib/cms/simple.functions";
 import { toProject } from "@/lib/project-adapter";
@@ -58,7 +48,7 @@ export const Route = createFileRoute("/home2")({
   component: Home2Page,
   head: () => ({
     meta: buildMeta({
-      title: "محمد هارون — مهندس ومنتج رقمي | الصفحة الرئيسية 2.0",
+      title: "محمد هارون — مهندس ومنتج رقمي | الرئيسية 2.0",
       description: site.description,
       path: "/home2",
     }),
@@ -81,35 +71,35 @@ const homeServicesData = [
     outcome: "واجهات فائقة السرعة، مصممة بأعلى معايير تحويل الزوار إلى عملاء فعليين.",
     tags: ["React", "Next.js", "TanStack"],
     metric: "+40 مشروع مُنجز",
-    icon: Globe,
     iconPath: "M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5",
+    size: "lg" as const,
   },
   {
     slug: "ecommerce",
-    title: "متاجر إلكترونية عالية الأداء",
-    outcome: "تجربة تسوق سلسة وجاهزة للنمو وتكامل تام مع بوابات الدفع العالمية والمحلية.",
+    title: "متاجر إلكترونية",
+    outcome: "تجربة تسوق سلسة وجاهزة للنمو وتكامل مع بوابات الدفع.",
     tags: ["Shopify", "WooCommerce", "Stripe"],
     metric: "Stripe + WooCommerce",
-    icon: Zap,
     iconPath: "M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0",
+    size: "sm" as const,
   },
   {
     slug: "ui-ux-design",
-    title: "تصميم واجهات وتجربة المستخدم",
-    outcome: "أنظمة تصميم متكاملة (Design Systems) وتجارب تفاعلية تضع المستخدم في المركز.",
+    title: "تصميم واجهات",
+    outcome: "أنظمة تصميم متكاملة (Design Systems) وتجارب تضع المستخدم في المركز.",
     tags: ["Figma", "Design Systems", "UX Research"],
     metric: "Figma + Atomic Design",
-    icon: Layout,
     iconPath: "M12 2a5 5 0 100 10A5 5 0 0012 2zM2 20s1-3 10-3 10 3 10 3",
+    size: "sm" as const,
   },
   {
     slug: "wordpress",
-    title: "حلول WordPress المخصصة",
-    outcome: "قوالب وكتل Gutenberg مخصصة، أمان عالٍ، وسرعة فائقة بدون تضخم الإضافات.",
+    title: "حلول WordPress",
+    outcome: "قوالب مخصصة، أمان عالٍ، وسرعة فائقة بدون تضخم الإضافات.",
     tags: ["WordPress", "Gutenberg", "Headless"],
     metric: "أمان + سرعة 100%",
-    icon: ShieldCheck,
     iconPath: "M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zM7 12h10M12 7v10",
+    size: "lg" as const,
   },
 ];
 
@@ -197,52 +187,37 @@ function Home2Page() {
   const { data: homeRows } = useHomeContent();
   const t = (k: string, fb: string) => getHomeText(homeRows, k, fb);
 
-  // Active project index for Scrollytelling on Desktop
-  const [activeProjectIndex, setActiveProjectIndex] = useState(0);
-
   return (
     <>
-      {/* Native Scroll Progress Indicator */}
-      <div className="home2-scroll-progress" aria-hidden />
-
       {/* ================= 1. HERO SECTION ================= */}
-      <section className="relative overflow-hidden pt-12 pb-20 md:pt-20 md:pb-32">
-        {/* Ambient Subtle Background Glow */}
+      <section className="relative overflow-hidden pt-12 pb-20 md:pt-24 md:pb-32 border-b border-border/60">
         <div
           aria-hidden
           className="pointer-events-none absolute left-1/2 top-0 -z-10 h-[500px] w-full max-w-7xl -translate-x-1/2 rounded-full bg-linear-to-b from-primary/10 via-accent/5 to-transparent blur-3xl"
         />
 
         <div className="container-page flex flex-col items-center text-center">
-          {/* Availability Badge */}
           <Reveal>
-            <div className="inline-flex items-center gap-2 rounded-full border border-border/80 bg-background/80 px-3.5 py-1.5 text-xs font-medium text-foreground backdrop-blur-md shadow-xs">
-              <span className="relative flex size-2">
-                <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
-              </span>
-              <span>متاح لمشاريع جديدة — Q3/Q4 2026</span>
-            </div>
+            <DSBadge variant="success" className="animate-pulse">
+              متاح لمشاريع جديدة — Q3/Q4 2026
+            </DSBadge>
           </Reveal>
 
-          {/* Main Headline */}
-          <Reveal delay={0.08}>
-            <h1 className="mt-8 max-w-4xl text-4xl font-bold tracking-tight text-foreground text-balance md:text-6xl lg:text-7xl">
+          <Reveal delay={0.1}>
+            <h1 className="mt-8 max-w-4xl text-5xl font-bold tracking-tight text-foreground text-balance md:text-7xl">
               أصمّم وأبني منتجات رقمية{" "}
               <span className="text-gradient-brand">تُحقّق نتائج فعلية.</span>
             </h1>
           </Reveal>
 
-          {/* Subtitle Pitch */}
-          <Reveal delay={0.14}>
-            <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground text-pretty md:text-xl">
+          <Reveal delay={0.15}>
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground text-pretty md:text-xl">
               مهندس منتجات وواجهات مستخدم متخصص في تحويل المفاهيم المعقدة إلى تجارب ويب فاخرة وسريعة تلفت الانتباه وتزيد المبيعات.
             </p>
           </Reveal>
 
-          {/* CTAs & Social Proof Metrics */}
           <Reveal delay={0.2}>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
               <DSButton asChild size="lg" variant="primary" className="shadow-md">
                 <Link to="/work">
                   استعرض الأعمال
@@ -258,35 +233,33 @@ function Home2Page() {
             </div>
           </Reveal>
 
-          {/* Hero Metrics Pill */}
-          <Reveal delay={0.25}>
-            <div className="mt-12 grid grid-cols-2 gap-4 rounded-2xl border border-border/60 bg-card/60 p-4 text-start backdrop-blur-sm sm:grid-cols-4 sm:gap-8 sm:px-8">
-              <div>
-                <div className="text-2xl font-bold tracking-tight text-foreground tabular-nums sm:text-3xl">+40</div>
-                <div className="text-xs text-muted-foreground">مشروع مُنجز</div>
-              </div>
-              <div>
-                <div className="text-2xl font-bold tracking-tight text-foreground tabular-nums sm:text-3xl">+25</div>
-                <div className="text-xs text-muted-foreground">عميل شريك</div>
-              </div>
-              <div>
-                <div className="text-2xl font-bold tracking-tight text-foreground tabular-nums sm:text-3xl">98%</div>
-                <div className="text-xs text-muted-foreground">نسبة الرضا</div>
-              </div>
-              <div>
-                <div className="text-2xl font-bold tracking-tight text-foreground tabular-nums sm:text-3xl">+6</div>
-                <div className="text-xs text-muted-foreground">سنوات خبرة</div>
-              </div>
-            </div>
+          <Reveal delay={0.3}>
+            <Grid cols={{ base: 2, sm: 4 }} gap="md" className="mt-16 w-full max-w-4xl">
+              <DSCard variant="surface" className="text-center p-6 bg-card/40 backdrop-blur-md">
+                <div className="text-3xl font-bold tracking-tight text-foreground tabular-nums">+40</div>
+                <div className="mt-1 text-sm text-muted-foreground">مشروع مُنجز</div>
+              </DSCard>
+              <DSCard variant="surface" className="text-center p-6 bg-card/40 backdrop-blur-md">
+                <div className="text-3xl font-bold tracking-tight text-foreground tabular-nums">+25</div>
+                <div className="mt-1 text-sm text-muted-foreground">عميل شريك</div>
+              </DSCard>
+              <DSCard variant="surface" className="text-center p-6 bg-card/40 backdrop-blur-md">
+                <div className="text-3xl font-bold tracking-tight text-foreground tabular-nums">98%</div>
+                <div className="mt-1 text-sm text-muted-foreground">نسبة الرضا</div>
+              </DSCard>
+              <DSCard variant="surface" className="text-center p-6 bg-card/40 backdrop-blur-md">
+                <div className="text-3xl font-bold tracking-tight text-foreground tabular-nums">+6</div>
+                <div className="mt-1 text-sm text-muted-foreground">سنوات خبرة</div>
+              </DSCard>
+            </Grid>
           </Reveal>
 
-          {/* Client Proof Marquee */}
-          <Reveal delay={0.3}>
-            <div className="mt-14 w-full max-w-4xl border-t border-border/40 pt-8">
+          <Reveal delay={0.4}>
+            <div className="mt-16 w-full max-w-4xl border-t border-border/40 pt-8">
               <p className="text-xs font-medium tracking-widest text-muted-foreground uppercase">مشاريع ومنتجات شريكة</p>
-              <div className="mt-4 flex flex-wrap items-center justify-center gap-6 opacity-75 md:gap-12">
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-8 md:gap-16">
                 {clientProofLogos.map((logo) => (
-                  <span key={logo} className="text-sm font-semibold tracking-tight text-foreground/80 hover:opacity-100 transition-opacity">
+                  <span key={logo} className="text-sm font-semibold tracking-tight text-muted-foreground transition-colors hover:text-foreground">
                     {logo}
                   </span>
                 ))}
@@ -296,8 +269,8 @@ function Home2Page() {
         </div>
       </section>
 
-      {/* ================= 2. FEATURED WORK (SCROLLYTELLING & CAROUSEL) ================= */}
-      <Section id="work" className="border-t border-border/60" size="lg">
+      {/* ================= 2. FEATURED WORK ================= */}
+      <Section id="work" size="lg">
         <Reveal>
           <SectionTitle
             eyebrow={t("home.featured.eyebrow", "أعمال مختارة")}
@@ -314,111 +287,81 @@ function Home2Page() {
           />
         </Reveal>
 
-        {/* Desktop Pinned Scrollytelling / Mobile Horizontal Snap Carousel */}
-        <div className="mt-12">
-          {/* Mobile Snap Carousel */}
-          <div className="flex gap-4 overflow-x-auto pb-6 home2-snap-carousel lg:hidden">
-            {featuredProjects.map((project) => {
-              const MockupUI = featuredMockups[project.slug] ?? DashboardUI;
-              return (
-                <div key={project.slug} className="min-w-[85vw] shrink-0 home2-snap-item">
-                  <DSCard variant="surface" padding="none" className="overflow-hidden border border-border/60">
-                    <Link to="/work/$slug" params={{ slug: project.slug }}>
-                      <BrowserFrame url={project.liveDemo ? new URL(project.liveDemo).host : `${project.slug}.app`}>
-                        {project.cover?.src ? (
-                          <img src={project.cover.src} alt={project.cover.alt} className="size-full object-cover" />
-                        ) : (
-                          <MockupUI />
-                        )}
-                      </BrowserFrame>
-                    </Link>
-                    <div className="p-6">
-                      <h3 className="text-xl font-semibold tracking-tight text-foreground">{project.title}</h3>
-                      <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{project.summary}</p>
-                      <div className="mt-4 flex items-center justify-between border-t border-border/60 pt-4">
-                        <span className="text-xs text-muted-foreground">{project.category}</span>
-                        <DSButton asChild variant="ghost" size="sm">
-                          <Link to="/work/$slug" params={{ slug: project.slug }}>
-                            عرض الدراسة <ArrowLeft className="ms-1 size-3.5" />
-                          </Link>
-                        </DSButton>
-                      </div>
-                    </div>
-                  </DSCard>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Desktop Interactive Layout (Sticky Preview + Interactive List) */}
-          <div className="hidden lg:grid lg:grid-cols-12 lg:gap-8 lg:items-start">
-            {/* Left Column: Pinned Mockup Showcase */}
-            <div className="sticky top-24 lg:col-span-7">
-              <div className="overflow-hidden rounded-2xl border border-border/60 bg-card p-2 shadow-lg transition-all duration-500">
-                {featuredProjects.map((project, idx) => {
-                  if (idx !== activeProjectIndex) return null;
-                  const MockupUI = featuredMockups[project.slug] ?? DashboardUI;
-                  return (
-                    <div key={project.slug} className="animate-fade-in">
-                      <BrowserFrame url={project.liveDemo ? new URL(project.liveDemo).host : `${project.slug}.app`}>
-                        {project.cover?.src ? (
-                          <img src={project.cover.src} alt={project.cover.alt} className="size-full object-cover" />
-                        ) : (
-                          <MockupUI />
-                        )}
-                      </BrowserFrame>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Right Column: Project Selection Cards */}
-            <div className="space-y-4 lg:col-span-5">
-              {featuredProjects.map((project, idx) => {
-                const isActive = idx === activeProjectIndex;
-                return (
-                  <div
-                    key={project.slug}
-                    onClick={() => setActiveProjectIndex(idx)}
-                    className={`cursor-pointer rounded-2xl border p-6 transition-all duration-300 ${
-                      isActive
-                        ? "border-primary bg-primary/5 shadow-md"
-                        : "border-border/60 bg-card hover:border-foreground/30"
-                    }`}
+        <div className="mt-16 space-y-24 md:mt-24 md:space-y-40">
+          {featuredProjects.map((project, idx) => {
+            const MockupUI = featuredMockups[project.slug] ?? DashboardUI;
+            return (
+              <Reveal key={project.slug} delay={idx * 0.1}>
+                <article className="mx-auto max-w-6xl">
+                  <Link
+                    to="/work/$slug"
+                    params={{ slug: project.slug }}
+                    className="group relative block overflow-hidden rounded-[2.5rem] bg-muted/20"
+                    aria-label={project.title}
                   >
-                    <div className="flex items-center justify-between">
-                      <span className="rounded-full bg-muted px-2.5 py-0.5 text-[10px] font-medium text-muted-foreground">
-                        {project.category}
-                      </span>
-                      <span className="text-xs text-muted-foreground">{project.year}</span>
-                    </div>
-                    <h3 className="mt-3 text-lg font-semibold tracking-tight text-foreground">{project.title}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground line-clamp-2">{project.summary}</p>
-                    <div className="mt-4 flex items-center justify-between">
-                      <div className="flex flex-wrap gap-1">
-                        {project.tags.slice(0, 2).map((t) => (
-                          <span key={t} className="rounded-md border border-border/60 bg-background px-2 py-0.5 text-[10px]">
-                            {t}
-                          </span>
-                        ))}
+                    <div
+                      aria-hidden
+                      className="pointer-events-none absolute -inset-10 -z-10 rounded-[3rem] bg-linear-to-br from-primary/10 via-accent/5 to-transparent blur-2xl"
+                    />
+                    <BrowserFrame
+                      url={
+                        project.liveDemo
+                          ? new URL(project.liveDemo).host
+                          : `${project.slug}.app`
+                      }
+                      className="transition-transform duration-700 ease-out group-hover:-translate-y-2"
+                    >
+                      {project.cover?.src ? (
+                        <img
+                          src={project.cover.src}
+                          alt={project.cover.alt}
+                          className="size-full object-cover"
+                        />
+                      ) : (
+                        <MockupUI />
+                      )}
+                    </BrowserFrame>
+                  </Link>
+
+                  <div className="mt-10 grid gap-6 md:grid-cols-2 md:items-end">
+                    <div>
+                      <div className="flex items-center gap-3">
+                        <DSBadge variant="outline">{project.category}</DSBadge>
+                        <span className="text-sm text-muted-foreground">{project.year}</span>
                       </div>
-                      <DSButton asChild variant="ghost" size="sm">
+                      <h3 className="mt-4 text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
+                        {project.title}
+                      </h3>
+                      <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground">
+                        {project.summary}
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-3 md:justify-end">
+                      <DSButton asChild variant="primary" size="md">
                         <Link to="/work/$slug" params={{ slug: project.slug }}>
-                          التفاصيل <ArrowLeft className="ms-1 size-3.5" />
+                          دراسة الحالة
+                          <ArrowLeft className="ms-1.5 size-4" />
                         </Link>
                       </DSButton>
+                      {project.liveDemo ? (
+                        <DSButton asChild variant="ghost" size="md">
+                          <a href={project.liveDemo} target="_blank" rel="noreferrer">
+                            معاينة حيّة
+                            <ExternalLink className="ms-1.5 size-4" />
+                          </a>
+                        </DSButton>
+                      ) : null}
                     </div>
                   </div>
-                );
-              })}
-            </div>
-          </div>
+                </article>
+              </Reveal>
+            );
+          })}
         </div>
       </Section>
 
-      {/* ================= 3. SERVICES (BENTO GRID WITH CONTAINER QUERIES) ================= */}
-      <Section id="services" className="border-t border-border/60 home2-section-lazy">
+      {/* ================= 3. SERVICES (BENTO GRID) ================= */}
+      <Section id="services" className="border-t border-border/60">
         <Reveal>
           <SectionTitle
             eyebrow="الخدمات والحلول"
@@ -427,44 +370,88 @@ function Home2Page() {
           />
         </Reveal>
 
-        <Reveal delay={0.05}>
+        <Reveal delay={0.1}>
           <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2">
-            {homeServicesData.map((s, idx) => (
-              <ServiceBentoCardNew key={s.slug} service={s} featured={idx === 0 || idx === 3} />
+            {homeServicesData.slice(0, 2).map((s, i) => (
+              <ServiceBentoCard key={s.slug} service={s as any} prominent={i === 0} />
+            ))}
+            {homeServicesData.slice(2, 4).map((s, i) => (
+              <ServiceBentoCard key={s.slug} service={s as any} prominent={i === 1} />
             ))}
           </div>
         </Reveal>
       </Section>
 
-      {/* ================= 4. HOW I WORK (WORKFLOW STEPPER) ================= */}
-      <Section id="process" className="border-t border-border/60 home2-section-lazy">
+      {/* ================= 4. HOW I WORK (WORKFLOW) ================= */}
+      <Section id="process" className="border-t border-border/60" size="lg">
         <Reveal>
           <SectionTitle
             eyebrow="طريقة العمل"
-            title="خطوات منظمة لنقل الفكرة إلى الواقع."
+            title="من فكرة إلى منتج مُطلَق."
             description="مسار شفاف ومحسوب يضمن السرعة والجودة ووضوح القرارات."
           />
         </Reveal>
 
-        <Reveal delay={0.05}>
-          <div className="mt-12 grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-border/60 bg-border/60 md:grid-cols-2 lg:grid-cols-3">
-            {processSteps.map((step) => (
-              <div key={step.step} className="group flex flex-col bg-card p-8 transition-colors hover:bg-muted/40">
-                <div className="text-xs font-semibold tracking-widest text-primary">{step.step}</div>
-                <h3 className="mt-4 text-xl font-semibold tracking-tight text-foreground">{step.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{step.description}</p>
-              </div>
+        <Reveal delay={0.1}>
+          <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap="sm" className="mt-16">
+            {processSteps.map((step, idx) => (
+              <DSCard key={step.step} variant="surface" className="group p-8 transition-colors hover:border-primary/40 hover:bg-muted/30">
+                <div className="text-sm font-semibold tracking-widest text-primary/80 group-hover:text-primary">
+                  {step.step}
+                </div>
+                <h3 className="mt-5 text-xl font-semibold tracking-tight text-foreground">
+                  {step.title}
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  {step.description}
+                </p>
+              </DSCard>
             ))}
-          </div>
+          </Grid>
         </Reveal>
       </Section>
 
-      {/* ================= 5. SOCIAL PROOF & TESTIMONIALS ================= */}
-      <Section id="testimonials" className="border-t border-border/60 home2-section-lazy">
+      {/* ================= 5. TECH STACK STRIP ================= */}
+      <Section id="stack" className="border-t border-border/60">
         <Reveal>
-          <SectionTitle eyebrow="التقييمات" title="آراء وشهدات شركاء النجاح." />
+          <SectionTitle
+            eyebrow="أدوات العمل"
+            title="التقنيات والأدوات الأساسية."
+            description="تقنيات حديثة وموثوقة لضمان أداء عالٍ وسهولة الصيانة."
+          />
         </Reveal>
-        <Reveal delay={0.05}>
+
+        <Reveal delay={0.1}>
+          <Grid cols={{ base: 2, sm: 4, lg: 4 }} gap="md" className="mt-12">
+            {techStack.map((tech) => {
+              const IconComp = tech.icon;
+              return (
+                <DSCard
+                  key={tech.name}
+                  variant="surface"
+                  padding="sm"
+                  className="group flex flex-col items-center gap-4 text-center transition-all duration-300 hover:border-primary/40 hover:shadow-md motion-safe:hover:-translate-y-1"
+                >
+                  <div className="flex size-14 items-center justify-center rounded-2xl border border-border/60 bg-background text-muted-foreground transition-colors group-hover:border-primary/30 group-hover:text-primary group-hover:bg-primary/5">
+                    <IconComp className="size-6" />
+                  </div>
+                  <div>
+                    <div className="text-base font-semibold text-foreground">{tech.name}</div>
+                    <div className="text-xs text-muted-foreground">{tech.category}</div>
+                  </div>
+                </DSCard>
+              );
+            })}
+          </Grid>
+        </Reveal>
+      </Section>
+
+      {/* ================= 6. SOCIAL PROOF & TESTIMONIALS ================= */}
+      <Section id="testimonials" className="border-t border-border/60">
+        <Reveal>
+          <SectionTitle eyebrow="التقييمات" title="بكلمات من عملت معهم." />
+        </Reveal>
+        <Reveal delay={0.1}>
           <Grid cols={{ base: 1, md: 3 }} gap="md" className="mt-12">
             {featuredTestimonials.map((tItem) => (
               <TestimonialQuote key={tItem.author} testimonial={tItem} />
@@ -473,14 +460,14 @@ function Home2Page() {
         </Reveal>
       </Section>
 
-      {/* ================= 6. CAREER & CERTIFICATES ================= */}
-      <Section id="career" className="border-t border-border/60 home2-section-lazy">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
+      {/* ================= 7. CAREER & CERTIFICATES ================= */}
+      <Section id="career" className="border-t border-border/60">
+        <div className="grid grid-cols-1 gap-16 lg:grid-cols-12">
           {/* Left Column: Career Timeline */}
           <div className="lg:col-span-7">
             <Reveal>
-              <SectionTitle eyebrow="المسيرة" title="خبرات ومحطات مهنية." />
-              <div className="mt-8">
+              <SectionTitle eyebrow="المسيرة" title="محطات مختصرة." />
+              <div className="mt-12">
                 <Timeline items={timelineData} />
               </div>
             </Reveal>
@@ -489,8 +476,8 @@ function Home2Page() {
           {/* Right Column: Certificates */}
           <div className="lg:col-span-5">
             <Reveal delay={0.1}>
-              <SectionTitle eyebrow="الاعتمادات" title="الشهادات والتعلم المستمر." />
-              <div className="mt-8 space-y-3">
+              <SectionTitle eyebrow="الاعتمادات" title="تعلُّم مُستمر." />
+              <div className="mt-12 space-y-4">
                 {certificatesList.map((cert) => (
                   <CertificateCard key={cert.title} certificate={cert} />
                 ))}
@@ -498,35 +485,6 @@ function Home2Page() {
             </Reveal>
           </div>
         </div>
-      </Section>
-
-      {/* ================= 7. TECH STACK STRIP ================= */}
-      <Section id="stack" className="border-t border-border/60 home2-section-lazy">
-        <Reveal>
-          <SectionTitle eyebrow="أدوات العمل" title="التقنيات والأدوات الأساسية." description="تقنيات حديثة وموثوقة لضمان أداء عالٍ وسهولة الصيانة." />
-        </Reveal>
-
-        <Reveal delay={0.05}>
-          <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-4">
-            {techStack.map((tech) => {
-              const IconComp = tech.icon;
-              return (
-                <div
-                  key={tech.name}
-                  className="group flex items-center gap-3 rounded-xl border border-border/60 bg-card p-4 transition-all duration-300 hover:border-primary/40 hover:shadow-sm"
-                >
-                  <div className="grid size-9 place-items-center rounded-lg border border-border/60 bg-background text-muted-foreground transition-colors group-hover:border-primary/30 group-hover:text-primary">
-                    <IconComp className="size-4.5" />
-                  </div>
-                  <div>
-                    <div className="text-sm font-semibold text-foreground">{tech.name}</div>
-                    <div className="text-[10px] text-muted-foreground">{tech.category}</div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </Reveal>
       </Section>
 
       {/* ================= 8. FINAL CINEMATIC CTA ================= */}
@@ -558,15 +516,25 @@ function Home2Page() {
 }
 
 /* ============================================================
-   Service Bento Card Component with Mouse Spotlight
+   Service Bento Card Component with Mouse Spotlight (from index.tsx)
    ============================================================ */
 
-function ServiceBentoCardNew({
+type ServiceItem = {
+  slug: string;
+  title: string;
+  outcome: string;
+  tags: string[];
+  metric?: string;
+  size?: "lg" | "sm";
+  iconPath?: string;
+};
+
+function ServiceBentoCard({
   service,
-  featured = false,
+  prominent = false,
 }: {
-  service: typeof homeServicesData[number];
-  featured?: boolean;
+  service: ServiceItem;
+  prominent?: boolean;
 }) {
   const cardRef = useRef<HTMLAnchorElement>(null);
 
@@ -580,19 +548,44 @@ function ServiceBentoCardNew({
     card.style.setProperty("--spotlight-y", `${y}%`);
   }, []);
 
+  const handleMouseLeave = useCallback(() => {
+    const card = cardRef.current;
+    if (!card) return;
+    card.style.setProperty("--spotlight-x", "50%");
+    card.style.setProperty("--spotlight-y", "50%");
+  }, []);
+
   return (
     <Link
       ref={cardRef}
       to="/services/$slug"
       params={{ slug: service.slug }}
       onMouseMove={handleMouseMove}
-      className={`group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-border/60 bg-card p-7 transition-all duration-300 active:scale-[0.985] hover:border-primary/40 hover:shadow-lg motion-safe:hover:-translate-y-1 home2-spotlight-card ${
-        featured ? "lg:min-h-72" : "lg:min-h-60"
-      }`}
+      onMouseLeave={handleMouseLeave}
+      aria-label={service.title}
+      style={{ "--spotlight-x": "50%", "--spotlight-y": "50%" } as React.CSSProperties}
+      className={[
+        "group relative flex flex-col overflow-hidden rounded-3xl border border-border/60 bg-card",
+        "transition-all duration-300 ease-out",
+        "active:scale-[0.985]",
+        "hover:border-primary/40 hover:shadow-lg motion-safe:hover:-translate-y-1",
+        "[background-image:radial-gradient(circle_at_var(--spotlight-x)_var(--spotlight-y),color-mix(in_oklab,var(--color-primary)_8%,transparent)_0%,transparent_60%)]",
+        prominent ? "lg:row-span-1 min-h-72 lg:min-h-80" : "min-h-60 lg:min-h-64",
+        "p-8 sm:p-10",
+      ].join(" ")}
     >
-      <div>
-        <div className="flex items-start justify-between gap-3">
-          <div className="grid size-11 place-items-center rounded-xl border border-border/60 bg-background/80 text-muted-foreground backdrop-blur-sm transition-all duration-300 group-hover:border-primary/30 group-hover:bg-primary/10 group-hover:text-primary">
+      <div className="flex items-start justify-between gap-4">
+        {service.iconPath ? (
+          <div
+            aria-hidden
+            className={[
+              "flex size-14 shrink-0 items-center justify-center rounded-2xl",
+              "border border-border/60 bg-background/80 backdrop-blur-md shadow-sm",
+              "transition-all duration-300 ease-out",
+              "group-hover:border-primary/40 group-hover:bg-primary/10",
+              "motion-safe:group-hover:rotate-6 motion-safe:group-hover:scale-110",
+            ].join(" ")}
+          >
             <svg
               viewBox="0 0 24 24"
               fill="none"
@@ -600,34 +593,84 @@ function ServiceBentoCardNew({
               strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="size-5"
+              className="size-6 text-muted-foreground transition-colors duration-300 group-hover:text-primary"
+              aria-hidden
             >
               <path d={service.iconPath} />
             </svg>
           </div>
-          <span className="rounded-full border border-border/60 bg-background/60 px-3 py-1 text-[10px] font-medium text-muted-foreground backdrop-blur-sm group-hover:text-foreground">
+        ) : null}
+
+        {service.metric ? (
+          <span
+            className={[
+              "rounded-full border border-border/60 bg-background/80 px-3 py-1.5",
+              "text-[11px] font-medium tracking-wide text-muted-foreground backdrop-blur-md shadow-sm",
+              "transition-colors duration-300 group-hover:border-primary/40 group-hover:text-foreground",
+            ].join(" ")}
+          >
             {service.metric}
           </span>
-        </div>
+        ) : null}
+      </div>
 
-        <h3 className="mt-6 text-xl font-semibold tracking-tight text-foreground home2-balance">
+      <div className="mt-8 flex-1">
+        <h3 className="relative inline-block text-2xl font-bold tracking-tight text-foreground">
           {service.title}
+          <span
+            aria-hidden
+            className={[
+              "absolute inset-x-0 -bottom-1 h-[2px] origin-left scale-x-0 rounded-full",
+              "bg-primary transition-transform duration-300 ease-out",
+              "group-hover:scale-x-100",
+            ].join(" ")}
+          />
         </h3>
-        <p className="mt-2 text-sm leading-relaxed text-muted-foreground home2-pretty">
+        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
           {service.outcome}
         </p>
       </div>
 
-      <div className="mt-6 flex items-center justify-between border-t border-border/40 pt-4">
-        <div className="flex flex-wrap gap-1.5">
-          {service.tags.map((tag) => (
-            <span key={tag} className="rounded-full border border-border/60 bg-background/50 px-2.5 py-0.5 text-[10px] text-muted-foreground">
+      <div className="mt-8 flex items-end justify-between gap-4">
+        <div className="flex flex-wrap gap-2">
+          {service.tags.slice(0, 3).map((tag) => (
+            <span
+              key={tag}
+              className={[
+                "rounded-full border border-border/60 bg-background/60 px-3 py-1",
+                "text-xs font-medium text-muted-foreground backdrop-blur-sm shadow-sm",
+                "transition-colors duration-200 group-hover:border-primary/30 group-hover:text-foreground",
+              ].join(" ")}
+            >
               {tag}
             </span>
           ))}
         </div>
-        <ArrowUpRight className="size-4 text-muted-foreground transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary" />
+
+        <div
+          aria-hidden
+          className={[
+            "flex size-10 shrink-0 items-center justify-center rounded-full",
+            "border border-border/60 bg-background/80 text-muted-foreground backdrop-blur-md shadow-sm",
+            "transition-all duration-300 ease-out",
+            "group-hover:border-primary/50 group-hover:bg-primary/10 group-hover:text-primary",
+            "motion-safe:group-hover:-translate-y-1 motion-safe:group-hover:translate-x-1",
+          ].join(" ")}
+        >
+          <ArrowUpRight className="size-4" />
+        </div>
       </div>
+
+      <div
+        aria-hidden
+        className={[
+          "absolute inset-x-0 bottom-0 h-1 origin-left scale-x-0 rounded-full",
+          "bg-linear-to-r from-primary/60 via-primary/30 to-transparent",
+          "transition-transform duration-500 ease-out",
+          "group-hover:scale-x-100",
+          "@media(hover:none){scale-x-100 opacity-40}",
+        ].join(" ")}
+      />
     </Link>
   );
 }
