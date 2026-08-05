@@ -1,0 +1,140 @@
+/* ============================================================
+   Home2 — Modern Web Guidance Design & Animation Foundation
+   ============================================================ */
+
+/* 1. Global Interpolate Size & Root Config */
+@supports (interpolate-size: allow-keywords) {
+  :root {
+    interpolate-size: allow-keywords;
+  }
+}
+
+/* 2. Top Scroll Progress Bar (Scroll-Driven Animation) */
+.home2-scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+  transform-origin: 0 50%;
+  z-index: 100;
+}
+
+@supports (animation-timeline: scroll()) {
+  .home2-scroll-progress {
+    animation: home2-grow-progress linear;
+    animation-timeline: scroll(root block);
+  }
+}
+
+@keyframes home2-grow-progress {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* 3. Typography & Text Wrap Balances */
+.home2-balance {
+  text-wrap: balance;
+}
+
+.home2-pretty {
+  text-wrap: pretty;
+}
+
+/* 4. Content Visibility for Performance Optimization */
+.home2-section-lazy {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
+}
+
+/* 5. Scroll-Driven Reveal Animations for Below-The-Fold Elements */
+@supports (animation-timeline: view()) {
+  .home2-reveal-view {
+    animation: home2-fade-in-scroll linear both;
+    animation-timeline: view();
+    animation-range: entry 10% cover 30%;
+  }
+}
+
+@keyframes home2-fade-in-scroll {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* 6. Entry Starting Styles for Top Layer & Dynamic Modals/Cards */
+@starting-style {
+  .home2-starting-card {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+/* 7. Mouse Radial Spotlight Container */
+.home2-spotlight-card {
+  --spotlight-x: 50%;
+  --spotlight-y: 50%;
+  position: relative;
+  background-image: radial-gradient(
+    circle at var(--spotlight-x) var(--spotlight-y),
+    color-mix(in oklab, var(--color-primary) 8%, transparent) 0%,
+    transparent 70%
+  );
+  transition: border-color var(--duration-base) var(--ease-out-quart),
+              box-shadow var(--duration-base) var(--ease-out-quart),
+              transform var(--duration-base) var(--ease-out-quart);
+}
+
+/* 8. Mobile Scroll Snap Carousel Rules */
+.home2-snap-carousel {
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.home2-snap-item {
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+}
+
+/* 9. Glowing Border Accent Sweep */
+.home2-glow-border {
+  position: relative;
+}
+.home2-glow-border::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--color-primary) 40%, transparent),
+    transparent 50%,
+    color-mix(in oklab, var(--color-accent) 40%, transparent)
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.6;
+  transition: opacity var(--duration-base) var(--ease-out-quart);
+}
+.home2-glow-border:hover::after {
+  opacity: 1;
+}
+
+/* 10. Honor Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .home2-scroll-progress,
+  .home2-reveal-view {
+    animation: none !important;
+    transform: none !important;
+  }
+}
