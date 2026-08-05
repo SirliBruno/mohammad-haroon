@@ -164,8 +164,8 @@ function friendlyError(e: unknown, fallback: string, fields?: FieldDef[]): strin
     }
   }
   if (!text) return fallback;
-  if (/unauthorized/i.test(text)) return "الجلسة انتهت. سجّل الدخول من جديد.";
-  if (/forbidden|permission|not allowed/i.test(text)) return "لا تملك صلاحية لتنفيذ هذه العملية.";
+  if (/unauthorized/i.test(text)) return `غير مصرح (${text})`;
+  if (/forbidden|permission|not allowed/i.test(text)) return `غير مسموح (${text})`;
   return text.length > 200 ? text.slice(0, 200) + "…" : text;
 }
 

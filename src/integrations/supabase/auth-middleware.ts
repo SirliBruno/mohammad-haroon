@@ -68,13 +68,16 @@ export const requireSupabaseAuth = createMiddleware({ type: 'function' })
       }
     }
 
-    const token = session?.access_token;
+    const token = session?.access_token || "";
     return next({
+      sendContext: {
+        token,
+      },
       headers: token ? { Authorization: `Bearer ${token}` } : {},
     });
   })
   .server(
-  async ({ next }) => {
+  async ({ next, context }) => {
     const SUPABASE_URL = getEnvVar('SUPABASE_URL');
     const SUPABASE_PUBLISHABLE_KEY = getEnvVar('SUPABASE_PUBLISHABLE_KEY');
 
@@ -88,29 +91,22 @@ export const requireSupabaseAuth = createMiddleware({ type: 'function' })
       throw new Error(message);
     }
 
-    const request = getRequest();
+    let token = (context as any)?.token as string | undefined;
 
-    if (!request?.headers) {
-      throw new Error('Unauthorized: No request headers available');
-    }
-
-    const authHeader = request.headers.get('authorization');
-
-    if (!authHeader) {
-      throw new Error('Unauthorized: No authorization header provided');
-    }
-
-    if (!authHeader.startsWith('Bearer ')) {
-      throw new Error('Unauthorized: Only Bearer tokens are supported');
-    }
-
-    const token = authHeader.replace('Bearer ', '');
     if (!token) {
-      throw new Error('Unauthorized: No token provided');
+      const request = getRequest();
+      const authHeader = request?.headers?.get('authorization') || request?.headers?.get('Authorization');
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        token = authHeader.replace('Bearer ', '');
+      }
+    }
+
+    if (!token) {
+      throw new Error('Unauthorized: No authorization token provided in headers or context');
     }
 
     if (token.split('.').length !== 3) {
-      throw new Error('Unauthorized: Invalid token');
+      throw new Error('Unauthorized: Invalid JWT token format');
     }
     
     const supabase = createClient<Database>(
@@ -137,7 +133,7 @@ export const requireSupabaseAuth = createMiddleware({ type: 'function' })
       throw new Error(`Unauthorized: ${error?.message || 'Invalid token'}`);
     }
 
-    console.log("[auth-middleware.ts] Server middleware success, returning supabase:", !!supabase, "has from:", !!supabase.from);
+    console.log("[auth-middleware.ts] Server middleware success for user:", data.user.id);
 
     return next({
       context: {
