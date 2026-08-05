@@ -50,7 +50,25 @@ export const requireSupabaseAuth = createMiddleware({ type: 'function' })
     // Dynamically import client to avoid circular dependencies or early init issues
     const { supabase } = await import('./client');
     const { data } = await supabase.auth.getSession();
-    const token = data.session?.access_token;
+    let session = data.session;
+
+    if (session) {
+      const now = Math.floor(Date.now() / 1000);
+      if (session.expires_at && session.expires_at - now < 120) {
+        try {
+          const { data: refreshed, error } = await supabase.auth.refreshSession();
+          if (refreshed?.session) {
+            session = refreshed.session;
+          } else if (error) {
+            console.warn('[auth-middleware.client] Refresh token failed:', error.message);
+          }
+        } catch (e) {
+          console.warn('[auth-middleware.client] Refresh token exception:', e);
+        }
+      }
+    }
+
+    const token = session?.access_token;
     return next({
       headers: token ? { Authorization: `Bearer ${token}` } : {},
     });
@@ -115,7 +133,8 @@ export const requireSupabaseAuth = createMiddleware({ type: 'function' })
 
     const { data, error } = await supabase.auth.getUser(token);
     if (error || !data?.user) {
-      throw new Error('Unauthorized: Invalid token');
+      console.error("[auth-middleware.ts] getUser failed:", error?.message || "No user returned");
+      throw new Error(`Unauthorized: ${error?.message || 'Invalid token'}`);
     }
 
     console.log("[auth-middleware.ts] Server middleware success, returning supabase:", !!supabase, "has from:", !!supabase.from);

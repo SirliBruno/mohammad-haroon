@@ -240,6 +240,17 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
   const invalidateList = () =>
     qc.invalidateQueries({ queryKey: ["admin-crud", cacheKey] });
 
+  const handleMutationError = (e: unknown, fallback: string) => {
+    const msg = friendlyError(e, fallback, fields);
+    toast.error(msg);
+    const raw = e instanceof Error ? e.message : String(e);
+    if (/unauthorized/i.test(raw) || msg.includes("الجلسة انتهت")) {
+      setTimeout(() => {
+        window.location.href = "/auth";
+      }, 2000);
+    }
+  };
+
   const createMut = useMutation({
     mutationFn: (payload: Record<string, unknown>) => create({ data: payload }),
     onSuccess: () => {
@@ -247,7 +258,7 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
       setShowForm(false);
       void invalidateList();
     },
-    onError: (e) => toast.error(friendlyError(e, "فشل الحفظ", fields)),
+    onError: (e) => handleMutationError(e, "فشل الحفظ"),
   });
 
   const updateMut = useMutation({
@@ -258,7 +269,7 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
       setShowForm(false);
       void invalidateList();
     },
-    onError: (e) => toast.error(friendlyError(e, "فشل الحفظ", fields)),
+    onError: (e) => handleMutationError(e, "فشل الحفظ"),
   });
 
   const deleteMut = useMutation({
@@ -268,7 +279,7 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
       setConfirmDelete(null);
       void invalidateList();
     },
-    onError: (e) => toast.error(friendlyError(e, "فشل الحذف", fields)),
+    onError: (e) => handleMutationError(e, "فشل الحذف"),
   });
 
   const busy = createMut.isPending || updateMut.isPending || deleteMut.isPending;
