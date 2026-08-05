@@ -2,6 +2,9 @@ import { useState, useRef, useCallback } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import {
   ArrowLeft,
   ArrowUpRight,
@@ -14,6 +17,7 @@ import {
   Terminal,
   Layers,
   Cpu,
+  Sparkles,
 } from "lucide-react";
 
 import { Reveal } from "@/components/motion/reveal";
@@ -42,13 +46,18 @@ import { listPublicProjects } from "@/lib/cms/projects-public.functions";
 import { listTestimonials } from "@/lib/cms/simple.functions";
 import { toProject } from "@/lib/project-adapter";
 
+// Register GSAP plugins safely on client side
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger, useGSAP);
+}
+
 /* ---------------- Route ---------------- */
 
 export const Route = createFileRoute("/home2")({
   component: Home2Page,
   head: () => ({
     meta: buildMeta({
-      title: "محمد هارون — مهندس ومنتج رقمي | الرئيسية 2.0",
+      title: "محمد هارون — مهندس ومنتج رقمي | الصفحة الرئيسية 2.0 (GSAP)",
       description: site.description,
       path: "/home2",
     }),
@@ -69,7 +78,7 @@ const homeServicesData = [
     slug: "web-development",
     title: "مواقع أعمال فاخرة",
     outcome: "واجهات فائقة السرعة، مصممة بأعلى معايير تحويل الزوار إلى عملاء فعليين.",
-    tags: ["React", "Next.js", "TanStack"],
+    tags: ["React 19", "Next.js", "TanStack"],
     metric: "+40 مشروع مُنجز",
     iconPath: "M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5",
     size: "lg" as const,
@@ -77,7 +86,7 @@ const homeServicesData = [
   {
     slug: "ecommerce",
     title: "متاجر إلكترونية",
-    outcome: "تجربة تسوق سلسة وجاهزة للنمو وتكامل مع بوابات الدفع.",
+    outcome: "تجربة تسوق سلسة وجاهزة للنمو وتكامل مع بوابات الدفع العالمية والمحلية.",
     tags: ["Shopify", "WooCommerce", "Stripe"],
     metric: "Stripe + WooCommerce",
     iconPath: "M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0",
@@ -85,17 +94,17 @@ const homeServicesData = [
   },
   {
     slug: "ui-ux-design",
-    title: "تصميم واجهات",
-    outcome: "أنظمة تصميم متكاملة (Design Systems) وتجارب تضع المستخدم في المركز.",
-    tags: ["Figma", "Design Systems", "UX Research"],
-    metric: "Figma + Atomic Design",
+    title: "تصميم واجهات ותجربة مستخدم",
+    outcome: "أنظمة تصميم متكاملة (Design Systems) وتجارب ناعمة تضع المستخدم في المركز.",
+    tags: ["Figma", "Atomic Design", "UX Research"],
+    metric: "Figma + Research",
     iconPath: "M12 2a5 5 0 100 10A5 5 0 0012 2zM2 20s1-3 10-3 10 3 10 3",
     size: "sm" as const,
   },
   {
     slug: "wordpress",
-    title: "حلول WordPress",
-    outcome: "قوالب مخصصة، أمان عالٍ، وسرعة فائقة بدون تضخم الإضافات.",
+    title: "حلول WordPress المخصصة",
+    outcome: "قوالب وكتل Gutenberg مخصصة، أمان عالٍ، وسرعة فائقة بدون تضخم الإضافات.",
     tags: ["WordPress", "Gutenberg", "Headless"],
     metric: "أمان + سرعة 100%",
     iconPath: "M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zM7 12h10M12 7v10",
@@ -156,6 +165,10 @@ const timelineData: TimelineItem[] = [
 /* ---------------- Main Page Component ---------------- */
 
 function Home2Page() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
+  const stackRef = useRef<HTMLDivElement>(null);
+
   const listFn = useServerFn(listPublicProjects);
   const testFn = useServerFn(listTestimonials);
 
@@ -187,85 +200,116 @@ function Home2Page() {
   const { data: homeRows } = useHomeContent();
   const t = (k: string, fb: string) => getHomeText(homeRows, k, fb);
 
+  // Active project index for Scrollytelling on Desktop
+  const [activeProjectIndex, setActiveProjectIndex] = useState(0);
+
+  // GSAP Animations
+  useGSAP(
+    () => {
+      // Hero Entrance Stagger
+      if (heroRef.current) {
+        gsap.from(heroRef.current.querySelectorAll(".gsap-hero-item"), {
+          y: 30,
+          opacity: 0,
+          duration: 0.9,
+          stagger: 0.12,
+          ease: "power3.out",
+        });
+      }
+
+      // Tech Stack Entrance Wave
+      if (stackRef.current) {
+        gsap.from(stackRef.current.querySelectorAll(".gsap-stack-card"), {
+          scrollTrigger: {
+            trigger: stackRef.current,
+            start: "top 80%",
+          },
+          scale: 0.9,
+          opacity: 0,
+          duration: 0.6,
+          stagger: 0.08,
+          ease: "back.out(1.7)",
+        });
+      }
+    },
+    { scope: containerRef }
+  );
+
   return (
-    <>
+    <div ref={containerRef} className="relative min-h-[100dvh] overflow-hidden bg-background text-foreground">
       {/* ================= 1. HERO SECTION ================= */}
-      <section className="relative overflow-hidden pt-12 pb-20 md:pt-24 md:pb-32 border-b border-border/60">
+      <section ref={heroRef} className="relative overflow-hidden pt-12 pb-20 md:pt-24 md:pb-32 border-b border-border/60">
         <div
           aria-hidden
           className="pointer-events-none absolute left-1/2 top-0 -z-10 h-[500px] w-full max-w-7xl -translate-x-1/2 rounded-full bg-linear-to-b from-primary/10 via-accent/5 to-transparent blur-3xl"
         />
 
         <div className="container-page flex flex-col items-center text-center">
-          <Reveal>
-            <DSBadge variant="success" className="animate-pulse">
+          <div className="gsap-hero-item inline-flex items-center gap-2">
+            <DSBadge variant="success" className="animate-pulse shadow-sm">
+              <span className="relative flex size-2 me-1.5 inline-block">
+                <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
+              </span>
               متاح لمشاريع جديدة — Q3/Q4 2026
             </DSBadge>
-          </Reveal>
+          </div>
 
-          <Reveal delay={0.1}>
-            <h1 className="mt-8 max-w-4xl text-5xl font-bold tracking-tight text-foreground text-balance md:text-7xl">
-              أصمّم وأبني منتجات رقمية{" "}
-              <span className="text-gradient-brand">تُحقّق نتائج فعلية.</span>
-            </h1>
-          </Reveal>
+          <h1 className="gsap-hero-item mt-8 max-w-4xl text-5xl font-bold tracking-tight text-foreground text-balance md:text-7xl">
+            أصمّم وأبني منتجات رقمية{" "}
+            <span className="text-gradient-brand">تُحقّق نتائج فعلية.</span>
+          </h1>
 
-          <Reveal delay={0.15}>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground text-pretty md:text-xl">
-              مهندس منتجات وواجهات مستخدم متخصص في تحويل المفاهيم المعقدة إلى تجارب ويب فاخرة وسريعة تلفت الانتباه وتزيد المبيعات.
-            </p>
-          </Reveal>
+          <p className="gsap-hero-item mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground text-pretty md:text-xl">
+            مهندس منتجات وواجهات مستخدم متخصص في تحويل المفاهيم المعقدة إلى تجارب ويب فاخرة وسريعة تلفت الانتباه وتزيد المبيعات.
+          </p>
 
-          <Reveal delay={0.2}>
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-              <DSButton asChild size="lg" variant="primary" className="shadow-md">
-                <Link to="/work">
-                  استعرض الأعمال
-                  <ArrowLeft className="ms-1.5 size-4" />
-                </Link>
-              </DSButton>
-              <DSButton asChild size="lg" variant="outline">
-                <Link to="/contact">
-                  تواصل معي
-                  <ArrowUpRight className="ms-1.5 size-4" />
-                </Link>
-              </DSButton>
-            </div>
-          </Reveal>
+          <div className="gsap-hero-item mt-10 flex flex-wrap items-center justify-center gap-4">
+            <DSButton asChild size="lg" variant="primary" className="shadow-md">
+              <Link to="/work">
+                استعرض الأعمال
+                <ArrowLeft className="ms-1.5 size-4" />
+              </Link>
+            </DSButton>
+            <DSButton asChild size="lg" variant="outline">
+              <Link to="/contact">
+                تواصل معي
+                <ArrowUpRight className="ms-1.5 size-4" />
+              </Link>
+            </DSButton>
+          </div>
 
-          <Reveal delay={0.3}>
-            <Grid cols={{ base: 2, sm: 4 }} gap="md" className="mt-16 w-full max-w-4xl">
-              <DSCard variant="surface" className="text-center p-6 bg-card/40 backdrop-blur-md">
+          <div className="gsap-hero-item mt-16 w-full max-w-4xl">
+            <Grid cols={{ base: 2, sm: 4 }} gap="md">
+              <DSCard variant="surface" className="text-center p-6 bg-card/40 backdrop-blur-md border border-border/60">
                 <div className="text-3xl font-bold tracking-tight text-foreground tabular-nums">+40</div>
                 <div className="mt-1 text-sm text-muted-foreground">مشروع مُنجز</div>
               </DSCard>
-              <DSCard variant="surface" className="text-center p-6 bg-card/40 backdrop-blur-md">
+              <DSCard variant="surface" className="text-center p-6 bg-card/40 backdrop-blur-md border border-border/60">
                 <div className="text-3xl font-bold tracking-tight text-foreground tabular-nums">+25</div>
                 <div className="mt-1 text-sm text-muted-foreground">عميل شريك</div>
               </DSCard>
-              <DSCard variant="surface" className="text-center p-6 bg-card/40 backdrop-blur-md">
+              <DSCard variant="surface" className="text-center p-6 bg-card/40 backdrop-blur-md border border-border/60">
                 <div className="text-3xl font-bold tracking-tight text-foreground tabular-nums">98%</div>
                 <div className="mt-1 text-sm text-muted-foreground">نسبة الرضا</div>
               </DSCard>
-              <DSCard variant="surface" className="text-center p-6 bg-card/40 backdrop-blur-md">
+              <DSCard variant="surface" className="text-center p-6 bg-card/40 backdrop-blur-md border border-border/60">
                 <div className="text-3xl font-bold tracking-tight text-foreground tabular-nums">+6</div>
                 <div className="mt-1 text-sm text-muted-foreground">سنوات خبرة</div>
               </DSCard>
             </Grid>
-          </Reveal>
+          </div>
 
-          <Reveal delay={0.4}>
-            <div className="mt-16 w-full max-w-4xl border-t border-border/40 pt-8">
-              <p className="text-xs font-medium tracking-widest text-muted-foreground uppercase">مشاريع ومنتجات شريكة</p>
-              <div className="mt-6 flex flex-wrap items-center justify-center gap-8 md:gap-16">
-                {clientProofLogos.map((logo) => (
-                  <span key={logo} className="text-sm font-semibold tracking-tight text-muted-foreground transition-colors hover:text-foreground">
-                    {logo}
-                  </span>
-                ))}
-              </div>
+          <div className="gsap-hero-item mt-16 w-full max-w-4xl border-t border-border/40 pt-8">
+            <p className="text-xs font-medium tracking-widest text-muted-foreground uppercase">مشاريع ومنتجات شريكة</p>
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-8 md:gap-16">
+              {clientProofLogos.map((logo) => (
+                <span key={logo} className="text-sm font-semibold tracking-tight text-muted-foreground transition-colors hover:text-foreground">
+                  {logo}
+                </span>
+              ))}
             </div>
-          </Reveal>
+          </div>
         </div>
       </section>
 
@@ -296,7 +340,7 @@ function Home2Page() {
                   <Link
                     to="/work/$slug"
                     params={{ slug: project.slug }}
-                    className="group relative block overflow-hidden rounded-[2.5rem] bg-muted/20"
+                    className="group relative block overflow-hidden rounded-[2.5rem] bg-muted/20 border border-border/60"
                     aria-label={project.title}
                   >
                     <div
@@ -360,7 +404,7 @@ function Home2Page() {
         </div>
       </Section>
 
-      {/* ================= 3. SERVICES (BENTO GRID) ================= */}
+      {/* ================= 3. SERVICES (BENTO GRID WITH GSAP PERSPECTIVE TILT) ================= */}
       <Section id="services" className="border-t border-border/60">
         <Reveal>
           <SectionTitle
@@ -373,16 +417,16 @@ function Home2Page() {
         <Reveal delay={0.1}>
           <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2">
             {homeServicesData.slice(0, 2).map((s, i) => (
-              <ServiceBentoCard key={s.slug} service={s as any} prominent={i === 0} />
+              <ServiceBentoCardGSAP key={s.slug} service={s as any} prominent={i === 0} />
             ))}
             {homeServicesData.slice(2, 4).map((s, i) => (
-              <ServiceBentoCard key={s.slug} service={s as any} prominent={i === 1} />
+              <ServiceBentoCardGSAP key={s.slug} service={s as any} prominent={i === 1} />
             ))}
           </div>
         </Reveal>
       </Section>
 
-      {/* ================= 4. HOW I WORK (WORKFLOW) ================= */}
+      {/* ================= 4. HOW I WORK (WORKFLOW STEPPER) ================= */}
       <Section id="process" className="border-t border-border/60" size="lg">
         <Reveal>
           <SectionTitle
@@ -394,8 +438,8 @@ function Home2Page() {
 
         <Reveal delay={0.1}>
           <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap="sm" className="mt-16">
-            {processSteps.map((step, idx) => (
-              <DSCard key={step.step} variant="surface" className="group p-8 transition-colors hover:border-primary/40 hover:bg-muted/30">
+            {processSteps.map((step) => (
+              <DSCard key={step.step} variant="surface" className="group p-8 transition-all duration-300 hover:border-primary/40 hover:bg-muted/30">
                 <div className="text-sm font-semibold tracking-widest text-primary/80 group-hover:text-primary">
                   {step.step}
                 </div>
@@ -411,7 +455,7 @@ function Home2Page() {
         </Reveal>
       </Section>
 
-      {/* ================= 5. TECH STACK STRIP ================= */}
+      {/* ================= 5. TECH STACK STRIP (GSAP WAVE ENTRANCE) ================= */}
       <Section id="stack" className="border-t border-border/60">
         <Reveal>
           <SectionTitle
@@ -421,29 +465,27 @@ function Home2Page() {
           />
         </Reveal>
 
-        <Reveal delay={0.1}>
-          <Grid cols={{ base: 2, sm: 4, lg: 4 }} gap="md" className="mt-12">
-            {techStack.map((tech) => {
-              const IconComp = tech.icon;
-              return (
-                <DSCard
-                  key={tech.name}
-                  variant="surface"
-                  padding="sm"
-                  className="group flex flex-col items-center gap-4 text-center transition-all duration-300 hover:border-primary/40 hover:shadow-md motion-safe:hover:-translate-y-1"
-                >
-                  <div className="flex size-14 items-center justify-center rounded-2xl border border-border/60 bg-background text-muted-foreground transition-colors group-hover:border-primary/30 group-hover:text-primary group-hover:bg-primary/5">
-                    <IconComp className="size-6" />
-                  </div>
-                  <div>
-                    <div className="text-base font-semibold text-foreground">{tech.name}</div>
-                    <div className="text-xs text-muted-foreground">{tech.category}</div>
-                  </div>
-                </DSCard>
-              );
-            })}
-          </Grid>
-        </Reveal>
+        <div ref={stackRef} className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-4">
+          {techStack.map((tech) => {
+            const IconComp = tech.icon;
+            return (
+              <DSCard
+                key={tech.name}
+                variant="surface"
+                padding="sm"
+                className="gsap-stack-card group flex flex-col items-center gap-4 text-center transition-all duration-300 hover:border-primary/40 hover:shadow-md motion-safe:hover:-translate-y-1"
+              >
+                <div className="flex size-14 items-center justify-center rounded-2xl border border-border/60 bg-background text-muted-foreground transition-colors group-hover:border-primary/30 group-hover:text-primary group-hover:bg-primary/5">
+                  <IconComp className="size-6" />
+                </div>
+                <div>
+                  <div className="text-base font-semibold text-foreground">{tech.name}</div>
+                  <div className="text-xs text-muted-foreground">{tech.category}</div>
+                </div>
+              </DSCard>
+            );
+          })}
+        </div>
       </Section>
 
       {/* ================= 6. SOCIAL PROOF & TESTIMONIALS ================= */}
@@ -511,12 +553,12 @@ function Home2Page() {
           }
         />
       </Reveal>
-    </>
+    </div>
   );
 }
 
 /* ============================================================
-   Service Bento Card Component with Mouse Spotlight (from index.tsx)
+   Service Bento Card Component with GSAP Mouse Spotlight & 3D Tilt
    ============================================================ */
 
 type ServiceItem = {
@@ -529,7 +571,7 @@ type ServiceItem = {
   iconPath?: string;
 };
 
-function ServiceBentoCard({
+function ServiceBentoCardGSAP({
   service,
   prominent = false,
 }: {
@@ -544,8 +586,20 @@ function ServiceBentoCard({
     const rect = card.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
+    
+    // Set Spotlight CSS variables
     card.style.setProperty("--spotlight-x", `${x}%`);
     card.style.setProperty("--spotlight-y", `${y}%`);
+
+    // GSAP 3D Tilt
+    const tiltX = (y - 50) * -0.08;
+    const tiltY = (x - 50) * 0.08;
+    gsap.to(card, {
+      rotateX: tiltX,
+      rotateY: tiltY,
+      duration: 0.3,
+      ease: "power1.out",
+    });
   }, []);
 
   const handleMouseLeave = useCallback(() => {
@@ -553,6 +607,13 @@ function ServiceBentoCard({
     if (!card) return;
     card.style.setProperty("--spotlight-x", "50%");
     card.style.setProperty("--spotlight-y", "50%");
+    
+    gsap.to(card, {
+      rotateX: 0,
+      rotateY: 0,
+      duration: 0.5,
+      ease: "power2.out",
+    });
   }, []);
 
   return (
@@ -563,12 +624,12 @@ function ServiceBentoCard({
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       aria-label={service.title}
-      style={{ "--spotlight-x": "50%", "--spotlight-y": "50%" } as React.CSSProperties}
+      style={{ "--spotlight-x": "50%", "--spotlight-y": "50%", transformStyle: "preserve-3d" } as React.CSSProperties}
       className={[
         "group relative flex flex-col overflow-hidden rounded-3xl border border-border/60 bg-card",
         "transition-all duration-300 ease-out",
         "active:scale-[0.985]",
-        "hover:border-primary/40 hover:shadow-lg motion-safe:hover:-translate-y-1",
+        "hover:border-primary/40 hover:shadow-xl motion-safe:hover:-translate-y-1",
         "[background-image:radial-gradient(circle_at_var(--spotlight-x)_var(--spotlight-y),color-mix(in_oklab,var(--color-primary)_8%,transparent)_0%,transparent_60%)]",
         prominent ? "lg:row-span-1 min-h-72 lg:min-h-80" : "min-h-60 lg:min-h-64",
         "p-8 sm:p-10",
