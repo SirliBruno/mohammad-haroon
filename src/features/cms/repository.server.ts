@@ -60,18 +60,24 @@ export function getPublicServerClient(): Db {
  * Returns both the DB client and a resolved userId — never "anonymous".
  */
 export async function getRequestContextClient(context: any): Promise<{ db: Db; userId: string }> {
-  // Fast path: middleware propagated everything correctly
+  // Fast path 1: middleware propagated everything correctly
   if (context?.supabase && context.supabase.from && context?.userId && context.userId !== "anonymous") {
     return { db: context.supabase as Db, userId: context.userId };
   }
 
-  console.warn(`[getRequestContextClient] context incomplete (supabase: ${!!context?.supabase?.from}, userId: ${context?.userId}). Re-creating from request.`);
+  console.warn(`[getRequestContextClient] context incomplete (supabase: ${!!context?.supabase?.from}, userId: ${context?.userId}). Re-creating from request/context.`);
 
   try {
-    const { getRequest } = await import(/* @vite-ignore */ "@tanstack/react-start/server");
-    const req = getRequest();
-    const authHeader = req?.headers?.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
+    let token: string | undefined = context?.token;
+
+    if (!token) {
+      const { getRequest } = await import(/* @vite-ignore */ "@tanstack/react-start/server");
+      const req = getRequest();
+      const authHeader = req?.headers?.get('authorization') || req?.headers?.get('Authorization');
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        token = authHeader.replace('Bearer ', '');
+      }
+    }
 
     if (token) {
       const url = getEnvVar("SUPABASE_URL");
