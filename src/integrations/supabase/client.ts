@@ -46,6 +46,7 @@ function getEnvVar(key: string): string | undefined {
 function createSupabaseClient() {
   const SUPABASE_URL = getEnvVar('SUPABASE_URL');
   const SUPABASE_PUBLISHABLE_KEY = getEnvVar('SUPABASE_PUBLISHABLE_KEY');
+  const SUPABASE_PROJECT_ID = getEnvVar('SUPABASE_PROJECT_ID') || 'kdcvjrwfoivxheeyrtga';
 
   if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
     const missing = [
@@ -55,6 +56,19 @@ function createSupabaseClient() {
     const message = `Missing Supabase environment variable(s): ${missing.join(', ')}. Check .env configuration.`;
     console.error(`[Supabase Client Error] ${message}`);
     throw new Error(message);
+  }
+
+  if (typeof window !== 'undefined' && window.localStorage) {
+    try {
+      const keysToRemove: string[] = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith('sb-') && k.endsWith('-auth-token') && !k.includes(SUPABASE_PROJECT_ID)) {
+          keysToRemove.push(k);
+        }
+      }
+      keysToRemove.forEach((k) => localStorage.removeItem(k));
+    } catch {}
   }
 
   return createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {

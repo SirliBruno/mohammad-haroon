@@ -130,7 +130,11 @@ export const requireSupabaseAuth = createMiddleware({ type: 'function' })
     const { data, error } = await supabase.auth.getUser(token);
     if (error || !data?.user) {
       console.error("[auth-middleware.ts] getUser failed:", error?.message || "No user returned");
-      throw new Error(`Unauthorized: ${error?.message || 'Invalid token'}`);
+      const errText = error?.message || "";
+      if (/invalid JWT|unverifiable|unrecognized JWT|kid/i.test(errText)) {
+        throw new Error("الجلسة انتهت: الرمز القديم غير صالح. يرجى تسجيل الدخول من جديد.");
+      }
+      throw new Error(`Unauthorized: ${errText || 'Invalid token'}`);
     }
 
     console.log("[auth-middleware.ts] Server middleware success for user:", data.user.id);
