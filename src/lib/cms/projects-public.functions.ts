@@ -18,7 +18,7 @@ const listSchema = z.object({
 });
 
 export const listPublicProjects = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) => listSchema.parse(d ?? {}))
+  .validator((d: unknown) => listSchema.parse(d ?? {}))
   .handler(async ({ data }) => {
     const { getPublicServerClient } = await import("@/features/cms/repository.server");
     const supabase = getPublicServerClient();
@@ -47,7 +47,7 @@ export const listPublicProjects = createServerFn({ method: "POST" })
   });
 
 export const getPublicProjectBySlug = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) => z.object({ slug: z.string().trim().min(1).max(200) }).parse(d))
+  .validator((d: unknown) => z.object({ slug: z.string().trim().min(1).max(200) }).parse(d))
   .handler(async ({ data }) => {
     const { getPublicServerClient } = await import("@/features/cms/repository.server");
     const supabase = getPublicServerClient();

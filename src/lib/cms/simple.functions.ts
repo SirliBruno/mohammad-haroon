@@ -28,7 +28,7 @@ import { SEARCH_COLUMNS } from "./search-columns";
 
 // ---------- Certificates ----------
 export const listCertificates = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) => listParamsSchema.parse(d ?? {}))
+  .validator((d: unknown) => listParamsSchema.parse(d ?? {}))
   .handler(async ({ data }) => {
     const { getPublicServerClient, listRows } = await import("@/features/cms/repository.server");
     return listRows(getPublicServerClient(), "certificates", { ...data, onlyPublished: true }, [
@@ -38,7 +38,7 @@ export const listCertificates = createServerFn({ method: "POST" })
 
 export const createCertificate = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => certificateInputSchema.parse(d))
+  .validator((d: unknown) => certificateInputSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { createRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
     const { db, userId } = await getRequestContextClient(context);
@@ -48,7 +48,7 @@ export const createCertificate = createServerFn({ method: "POST" })
 
 export const updateCertificate = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({ id: z.string().uuid(), patch: certificateInputSchema.partial() }).parse(d),
   )
   .handler(async ({ data, context }) => {
@@ -60,7 +60,7 @@ export const updateCertificate = createServerFn({ method: "POST" })
 
 export const deleteCertificate = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => idSchema.parse(d))
+  .validator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { deleteRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
     const { db, userId } = await getRequestContextClient(context);
@@ -70,7 +70,7 @@ export const deleteCertificate = createServerFn({ method: "POST" })
 
 // ---------- Experiences ----------
 export const listExperiences = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) => listParamsSchema.parse(d ?? {}))
+  .validator((d: unknown) => listParamsSchema.parse(d ?? {}))
   .handler(async ({ data }) => {
     const { getPublicServerClient, listRows } = await import("@/features/cms/repository.server");
     return listRows(
@@ -83,7 +83,7 @@ export const listExperiences = createServerFn({ method: "POST" })
 
 export const createExperience = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => experienceInputSchema.parse(d))
+  .validator((d: unknown) => experienceInputSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { createRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
     const { db, userId } = await getRequestContextClient(context);
@@ -93,7 +93,7 @@ export const createExperience = createServerFn({ method: "POST" })
 
 export const updateExperience = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({ id: z.string().uuid(), patch: experienceInputSchema.partial() }).parse(d),
   )
   .handler(async ({ data, context }) => {
@@ -105,7 +105,7 @@ export const updateExperience = createServerFn({ method: "POST" })
 
 export const deleteExperience = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => idSchema.parse(d))
+  .validator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { deleteRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
     const { db, userId } = await getRequestContextClient(context);
@@ -115,7 +115,7 @@ export const deleteExperience = createServerFn({ method: "POST" })
 
 // ---------- Skills ----------
 export const listSkills = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) => listParamsSchema.parse(d ?? {}))
+  .validator((d: unknown) => listParamsSchema.parse(d ?? {}))
   .handler(async ({ data }) => {
     const { getPublicServerClient, listRows } = await import("@/features/cms/repository.server");
     return listRows(
@@ -128,7 +128,7 @@ export const listSkills = createServerFn({ method: "POST" })
 
 export const createSkill = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => skillInputSchema.parse(d))
+  .validator((d: unknown) => skillInputSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { createRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
     const { db, userId } = await getRequestContextClient(context);
@@ -138,7 +138,7 @@ export const createSkill = createServerFn({ method: "POST" })
 
 export const updateSkill = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({ id: z.string().uuid(), patch: skillInputSchema.partial() }).parse(d),
   )
   .handler(async ({ data, context }) => {
@@ -150,7 +150,7 @@ export const updateSkill = createServerFn({ method: "POST" })
 
 export const deleteSkill = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => idSchema.parse(d))
+  .validator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { deleteRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
     const { db, userId } = await getRequestContextClient(context);
@@ -160,7 +160,7 @@ export const deleteSkill = createServerFn({ method: "POST" })
 
 // ---------- Testimonials ----------
 export const listTestimonials = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) => listParamsSchema.parse(d ?? {}))
+  .validator((d: unknown) => listParamsSchema.parse(d ?? {}))
   .handler(async ({ data }) => {
     const { getPublicServerClient, listRows } = await import("@/features/cms/repository.server");
     return listRows(getPublicServerClient(), "testimonials", { ...data, onlyPublished: true }, [
@@ -170,7 +170,7 @@ export const listTestimonials = createServerFn({ method: "POST" })
 
 export const createTestimonial = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => testimonialInputSchema.parse(d))
+  .validator((d: unknown) => testimonialInputSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { createRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
     const { db, userId } = await getRequestContextClient(context);
@@ -180,7 +180,7 @@ export const createTestimonial = createServerFn({ method: "POST" })
 
 export const updateTestimonial = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({ id: z.string().uuid(), patch: testimonialInputSchema.partial() }).parse(d),
   )
   .handler(async ({ data, context }) => {
@@ -192,7 +192,7 @@ export const updateTestimonial = createServerFn({ method: "POST" })
 
 export const deleteTestimonial = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => idSchema.parse(d))
+  .validator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { deleteRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
     const { db, userId } = await getRequestContextClient(context);
@@ -202,7 +202,7 @@ export const deleteTestimonial = createServerFn({ method: "POST" })
 
 // ---------- Blog posts ----------
 export const listBlogPosts = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) => listParamsSchema.parse(d ?? {}))
+  .validator((d: unknown) => listParamsSchema.parse(d ?? {}))
   .handler(async ({ data }) => {
     const { getPublicServerClient, listRows } = await import("@/features/cms/repository.server");
     return listRows(
@@ -214,7 +214,7 @@ export const listBlogPosts = createServerFn({ method: "POST" })
   });
 
 export const getBlogPostBySlug = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) => slugSchema.parse(d))
+  .validator((d: unknown) => slugSchema.parse(d))
   .handler(async ({ data }) => {
     const { getPublicServerClient, getRowBySlug } = await import(
       "@/features/cms/repository.server"
@@ -224,7 +224,7 @@ export const getBlogPostBySlug = createServerFn({ method: "POST" })
 
 export const createBlogPost = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => blogPostInputSchema.parse(d))
+  .validator((d: unknown) => blogPostInputSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { createRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
     const { db, userId } = await getRequestContextClient(context);
@@ -234,7 +234,7 @@ export const createBlogPost = createServerFn({ method: "POST" })
 
 export const updateBlogPost = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({ id: z.string().uuid(), patch: blogPostInputSchema.partial() }).parse(d),
   )
   .handler(async ({ data, context }) => {
@@ -246,7 +246,7 @@ export const updateBlogPost = createServerFn({ method: "POST" })
 
 export const deleteBlogPost = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => idSchema.parse(d))
+  .validator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { deleteRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
     const { db, userId } = await getRequestContextClient(context);
@@ -256,7 +256,7 @@ export const deleteBlogPost = createServerFn({ method: "POST" })
 
 // ---------- Ideas ----------
 export const listIdeas = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) => listParamsSchema.parse(d ?? {}))
+  .validator((d: unknown) => listParamsSchema.parse(d ?? {}))
   .handler(async ({ data }) => {
     const { getPublicServerClient, listRows } = await import("@/features/cms/repository.server");
     return listRows(getPublicServerClient(), "ideas", { ...data, onlyPublished: true }, [
@@ -266,7 +266,7 @@ export const listIdeas = createServerFn({ method: "POST" })
 
 export const createIdea = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => ideaInputSchema.parse(d))
+  .validator((d: unknown) => ideaInputSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { createRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
     const { db, userId } = await getRequestContextClient(context);
@@ -276,7 +276,7 @@ export const createIdea = createServerFn({ method: "POST" })
 
 export const updateIdea = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({ id: z.string().uuid(), patch: ideaInputSchema.partial() }).parse(d),
   )
   .handler(async ({ data, context }) => {
@@ -288,7 +288,7 @@ export const updateIdea = createServerFn({ method: "POST" })
 
 export const deleteIdea = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => idSchema.parse(d))
+  .validator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { deleteRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
     const { db, userId } = await getRequestContextClient(context);
@@ -298,7 +298,7 @@ export const deleteIdea = createServerFn({ method: "POST" })
 
 // ---------- Products ----------
 export const listProducts = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) => listParamsSchema.parse(d ?? {}))
+  .validator((d: unknown) => listParamsSchema.parse(d ?? {}))
   .handler(async ({ data }) => {
     const { getPublicServerClient, listRows } = await import("@/features/cms/repository.server");
     return listRows(getPublicServerClient(), "products", { ...data, onlyPublished: true }, [
@@ -307,7 +307,7 @@ export const listProducts = createServerFn({ method: "POST" })
   });
 
 export const getProductBySlug = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) => slugSchema.parse(d))
+  .validator((d: unknown) => slugSchema.parse(d))
   .handler(async ({ data }) => {
     const { getPublicServerClient, getRowBySlug } = await import(
       "@/features/cms/repository.server"
@@ -317,7 +317,7 @@ export const getProductBySlug = createServerFn({ method: "POST" })
 
 export const createProduct = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => productInputSchema.parse(d))
+  .validator((d: unknown) => productInputSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { createRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
     const { db, userId } = await getRequestContextClient(context);
@@ -327,7 +327,7 @@ export const createProduct = createServerFn({ method: "POST" })
 
 export const updateProduct = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({ id: z.string().uuid(), patch: productInputSchema.partial() }).parse(d),
   )
   .handler(async ({ data, context }) => {
@@ -339,7 +339,7 @@ export const updateProduct = createServerFn({ method: "POST" })
 
 export const deleteProduct = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => idSchema.parse(d))
+  .validator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { deleteRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
     const { db, userId } = await getRequestContextClient(context);

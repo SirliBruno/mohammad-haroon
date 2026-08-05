@@ -25,7 +25,7 @@ export type FunnelSummary = {
 
 export const getFunnelSummary = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => paramsSchema.parse(d ?? { days: 30 }))
+  .validator((d: unknown) => paramsSchema.parse(d ?? { days: 30 }))
   .handler(async ({ data, context }): Promise<FunnelSummary> => {
     const { requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
     const { db, userId } = await getRequestContextClient(context);

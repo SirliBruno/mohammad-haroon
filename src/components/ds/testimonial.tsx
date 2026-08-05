@@ -20,6 +20,8 @@ export function TestimonialQuote({
           <img
             src={testimonial.avatar}
             alt=""
+            loading="lazy"
+            decoding="async"
             className="size-9 rounded-full border border-border/60 object-cover"
           />
         ) : (

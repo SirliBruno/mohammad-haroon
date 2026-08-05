@@ -80,7 +80,7 @@ export const adminListHeroProjects = createServerFn({ method: "POST" })
 
 export const createHeroProject = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => heroInputSchema.parse(d))
+  .validator((d: unknown) => heroInputSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
     const { db, userId } = await getRequestContextClient(context);
@@ -96,7 +96,7 @@ export const createHeroProject = createServerFn({ method: "POST" })
 
 export const updateHeroProject = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({ id: z.string().uuid(), patch: heroInputSchema.partial() }).parse(d),
   )
   .handler(async ({ data, context }) => {
@@ -115,7 +115,7 @@ export const updateHeroProject = createServerFn({ method: "POST" })
 
 export const deleteHeroProject = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
     const { db, userId } = await getRequestContextClient(context);
@@ -163,7 +163,7 @@ const safeMediaPath = z
 /** Sign a long-lived URL for a stored object (10 years). Admin only. */
 export const signHeroMediaPath = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ path: safeMediaPath }).parse(d))
+  .validator((d: unknown) => z.object({ path: safeMediaPath }).parse(d))
   .handler(async ({ data, context }) => {
     const { requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
     const { db, userId } = await getRequestContextClient(context);

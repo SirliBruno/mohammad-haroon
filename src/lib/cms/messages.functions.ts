@@ -34,7 +34,7 @@ function callerIp(): string {
 
 /** Public submit — anon-safe. Rate-limited by IP hash. */
 export const submitMessage = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) => messageSubmitSchema.parse(d))
+  .validator((d: unknown) => messageSubmitSchema.parse(d))
   .handler(async ({ data }) => {
     const { getPublicServerClient, createRow } = await import(
       "@/features/cms/repository.server"
@@ -74,7 +74,7 @@ export const submitMessage = createServerFn({ method: "POST" })
 /** Admin inbox list. */
 export const listMessages = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => listParamsSchema.parse(d ?? {}))
+  .validator((d: unknown) => listParamsSchema.parse(d ?? {}))
   .handler(async ({ data, context }) => {
     const { listRows, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
     const { db, userId } = await getRequestContextClient(context);
@@ -84,7 +84,7 @@ export const listMessages = createServerFn({ method: "POST" })
 
 export const updateMessage = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => messageUpdateSchema.parse(d))
+  .validator((d: unknown) => messageUpdateSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { updateRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
     const { db, userId } = await getRequestContextClient(context);
@@ -95,7 +95,7 @@ export const updateMessage = createServerFn({ method: "POST" })
 
 export const deleteMessage = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => idSchema.parse(d))
+  .validator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { deleteRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
     const { db, userId } = await getRequestContextClient(context);

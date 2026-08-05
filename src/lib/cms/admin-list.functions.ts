@@ -12,7 +12,7 @@ import { SEARCH_COLUMNS } from "./search-columns";
 function make(table: keyof typeof SEARCH_COLUMNS, defaultOrder?: string, ascending = false) {
   return createServerFn({ method: "POST" })
     .middleware([requireSupabaseAuth])
-    .inputValidator((d: unknown) => listParamsSchema.parse(d ?? {}))
+    .validator((d: unknown) => listParamsSchema.parse(d ?? {}))
     .handler(async ({ data, context }) => {
       const { listRows, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
       

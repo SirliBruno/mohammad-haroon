@@ -17,7 +17,7 @@ const listInput = z.object({
 const keyInput = z.object({ key: z.string().trim().min(1).max(200) });
 
 export const listSiteContent = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) => listInput.parse(d ?? {}))
+  .validator((d: unknown) => listInput.parse(d ?? {}))
   .handler(async ({ data }) => {
     const { getPublicServerClient } = await import("@/features/cms/repository.server");
     const client = getPublicServerClient();
@@ -40,7 +40,7 @@ export const listSiteContent = createServerFn({ method: "POST" })
   });
 
 export const getSiteContentByKey = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) => keyInput.parse(d))
+  .validator((d: unknown) => keyInput.parse(d))
   .handler(async ({ data }) => {
     const { getPublicServerClient } = await import("@/features/cms/repository.server");
     const client = getPublicServerClient();
@@ -55,7 +55,7 @@ export const getSiteContentByKey = createServerFn({ method: "POST" })
 
 export const upsertSiteContent = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => siteContentInputSchema.parse(d))
+  .validator((d: unknown) => siteContentInputSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
     const { db, userId } = await getRequestContextClient(context);
@@ -71,7 +71,7 @@ export const upsertSiteContent = createServerFn({ method: "POST" })
 
 export const updateSiteContent = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({ id: z.string().uuid(), patch: siteContentInputSchema.partial() }).parse(d),
   )
   .handler(async ({ data, context }) => {
@@ -90,7 +90,7 @@ export const updateSiteContent = createServerFn({ method: "POST" })
 
 export const deleteSiteContent = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => idSchema.parse(d))
+  .validator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
     const { db, userId } = await getRequestContextClient(context);

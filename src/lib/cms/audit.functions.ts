@@ -28,7 +28,7 @@ export type AuditLogRow = {
 
 export const adminListAuditLog = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => listSchema.parse(d ?? {}))
+  .validator((d: unknown) => listSchema.parse(d ?? {}))
   .handler(async ({ data, context }) => {
     const { requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
     const { db, userId } = await getRequestContextClient(context);

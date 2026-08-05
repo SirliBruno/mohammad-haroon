@@ -9,7 +9,7 @@ import { SEARCH_COLUMNS } from "./search-columns";
 // generic list.
 export const listMedia = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => listParamsSchema.parse(d ?? {}))
+  .validator((d: unknown) => listParamsSchema.parse(d ?? {}))
   .handler(async ({ data, context }) => {
     const { listRows, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
     const { db, userId } = await getRequestContextClient(context);
@@ -19,7 +19,7 @@ export const listMedia = createServerFn({ method: "POST" })
 
 export const createMedia = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => mediaInputSchema.parse(d))
+  .validator((d: unknown) => mediaInputSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { createRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
     const { db, userId } = await getRequestContextClient(context);
@@ -29,7 +29,7 @@ export const createMedia = createServerFn({ method: "POST" })
 
 export const updateMedia = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({ id: z.string().uuid(), patch: mediaInputSchema.partial() }).parse(d),
   )
   .handler(async ({ data, context }) => {
@@ -41,7 +41,7 @@ export const updateMedia = createServerFn({ method: "POST" })
 
 export const deleteMedia = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => idSchema.parse(d))
+  .validator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { getRowById, deleteRow, requireAdmin, getRequestContextClient } = await import(
       "@/features/cms/repository.server"

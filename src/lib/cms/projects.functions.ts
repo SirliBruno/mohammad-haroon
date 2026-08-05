@@ -10,7 +10,7 @@ import { z } from "zod";
 import { SEARCH_COLUMNS } from "./search-columns";
 
 export const listProjects = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) => listParamsSchema.parse(d ?? {}))
+  .validator((d: unknown) => listParamsSchema.parse(d ?? {}))
   .handler(async ({ data }) => {
     const { getPublicServerClient, listRows } = await import(
       "@/features/cms/repository.server"
@@ -21,7 +21,7 @@ export const listProjects = createServerFn({ method: "POST" })
   });
 
 export const getProjectBySlug = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) => slugSchema.parse(d))
+  .validator((d: unknown) => slugSchema.parse(d))
   .handler(async ({ data }) => {
     const { getPublicServerClient, getRowBySlug } = await import(
       "@/features/cms/repository.server"
@@ -32,7 +32,7 @@ export const getProjectBySlug = createServerFn({ method: "POST" })
 // ----- Admin mutations -----
 export const adminListProjects = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => listParamsSchema.parse(d ?? {}))
+  .validator((d: unknown) => listParamsSchema.parse(d ?? {}))
   .handler(async ({ data, context }) => {
     const { listRows, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
     const { db, userId } = await getRequestContextClient(context);
@@ -43,7 +43,7 @@ export const adminListProjects = createServerFn({ method: "POST" })
 /** Fetch a single project by id with ALL columns (admin edit form). */
 export const getAdminProjectById = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => idSchema.parse(d))
+  .validator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { getRowById, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
     const { db, userId } = await getRequestContextClient(context);
@@ -53,7 +53,7 @@ export const getAdminProjectById = createServerFn({ method: "POST" })
 
 export const createProject = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => projectInputSchema.parse(d))
+  .validator((d: unknown) => projectInputSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { createRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
     const { db, userId } = await getRequestContextClient(context);
@@ -63,7 +63,7 @@ export const createProject = createServerFn({ method: "POST" })
 
 export const updateProject = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({ id: z.string().uuid(), patch: projectInputSchema.partial() }).parse(d),
   )
   .handler(async ({ data, context }) => {
@@ -75,7 +75,7 @@ export const updateProject = createServerFn({ method: "POST" })
 
 export const deleteProject = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => idSchema.parse(d))
+  .validator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { deleteRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
     const { db, userId } = await getRequestContextClient(context);

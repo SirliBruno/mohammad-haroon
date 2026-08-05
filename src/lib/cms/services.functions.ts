@@ -10,7 +10,7 @@ import {
 import { SEARCH_COLUMNS } from "./search-columns";
 
 export const listServices = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) => listParamsSchema.parse(d ?? {}))
+  .validator((d: unknown) => listParamsSchema.parse(d ?? {}))
   .handler(async ({ data }) => {
     const { getPublicServerClient, listRows } = await import(
       "@/features/cms/repository.server"
@@ -24,7 +24,7 @@ export const listServices = createServerFn({ method: "POST" })
   });
 
 export const getServiceBySlug = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) => slugSchema.parse(d))
+  .validator((d: unknown) => slugSchema.parse(d))
   .handler(async ({ data }) => {
     const { getPublicServerClient, getRowBySlug } = await import(
       "@/features/cms/repository.server"
@@ -34,7 +34,7 @@ export const getServiceBySlug = createServerFn({ method: "POST" })
 
 export const createService = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => serviceInputSchema.parse(d))
+  .validator((d: unknown) => serviceInputSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { createRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
     const { db, userId } = await getRequestContextClient(context);
@@ -44,7 +44,7 @@ export const createService = createServerFn({ method: "POST" })
 
 export const updateService = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({ id: z.string().uuid(), patch: serviceInputSchema.partial() }).parse(d),
   )
   .handler(async ({ data, context }) => {
@@ -56,7 +56,7 @@ export const updateService = createServerFn({ method: "POST" })
 
 export const deleteService = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => idSchema.parse(d))
+  .validator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { deleteRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
     const { db, userId } = await getRequestContextClient(context);

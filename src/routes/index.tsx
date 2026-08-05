@@ -148,7 +148,7 @@ function Home() {
                     <div aria-hidden className="pointer-events-none absolute -inset-10 -z-10 rounded-[3rem] bg-linear-to-br from-primary/12 via-accent/8 to-transparent blur-3xl" />
                     {project.cover?.src ? (
                       <BrowserFrame url={project.liveDemo ? new URL(project.liveDemo).host : `${project.slug}.app`} className="transition-transform duration-700 ease-out group-hover:-translate-y-1">
-                        <img src={project.cover.src} alt={project.cover.alt} className="size-full object-cover" />
+                        <img src={project.cover.src} alt={project.cover.alt} loading="lazy" decoding="async" className="size-full object-cover" />
                       </BrowserFrame>
                     ) : (
                       <BrowserFrame url={project.liveDemo ? new URL(project.liveDemo).host : `${project.slug}.app`} className="transition-transform duration-700 ease-out group-hover:-translate-y-1">
@@ -197,7 +197,7 @@ function Home() {
               skills.map((skill: any, i: number) => (
                 <div key={skill.id} className="group flex items-center gap-3 rounded-full border border-border/50 bg-background/50 px-5 py-3 text-sm font-medium text-foreground backdrop-blur-md transition-all hover:border-primary/50 hover:bg-primary/5 motion-safe:hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/5">
                   <div className="flex size-7 items-center justify-center rounded-full bg-muted/50 text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary transition-colors">
-                    {skill.icon_url ? <img src={skill.icon_url} alt="" className="size-4" /> : <Code2 className="size-4" />}
+                    {skill.icon_url ? <img src={skill.icon_url} alt="" loading="lazy" decoding="async" className="size-4" /> : <Code2 className="size-4" />}
                   </div>
                   {skill.name}
                 </div>
@@ -372,7 +372,7 @@ function ServiceBentoCard({ service, prominent = false }: { service: any; promin
       <div className="flex items-start justify-between gap-4">
         {service.icon_url ? (
           <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl border border-border/50 bg-background/50 shadow-sm transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3 group-hover:border-primary/30 group-hover:bg-primary/5">
-            <img src={service.icon_url} alt="" className="size-6 object-contain" />
+            <img src={service.icon_url} alt="" loading="lazy" decoding="async" className="size-6 object-contain" />
           </div>
         ) : (
           <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl border border-border/50 bg-background/50 shadow-sm transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3 group-hover:border-primary/30 group-hover:bg-primary/5">

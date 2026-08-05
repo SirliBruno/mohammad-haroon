@@ -6,7 +6,7 @@ import { inquirySchema, type Inquiry } from "@/features/contact/schema";
  * collection via the shared repository so the admin inbox picks it up.
  */
 export const submitInquiry = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown): Inquiry => inquirySchema.parse(data))
+  .validator((data: unknown): Inquiry => inquirySchema.parse(data))
   .handler(async ({ data }) => {
     const { getPublicServerClient, createRow } = await import(
       "@/features/cms/repository.server"
