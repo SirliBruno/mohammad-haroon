@@ -17,7 +17,7 @@ const STATUS = [
 
 const FIELDS: FieldDef[] = [
   { name: "title", label: "اسم الخدمة", type: "text", required: true },
-  { name: "slug", label: "المعرّف (slug)", type: "text", required: true, dir: "ltr" },
+  { name: "slug", label: "المعرّف (slug)", type: "text", required: true, dir: "ltr", help: "أحرف إنجليزية صغيرة وشرطات فقط بدون مسافات (مثال: web-development)" },
   { name: "tagline", label: "الشعار المختصر", type: "text", colSpan: 2 },
   { name: "icon", label: "الأيقونة", type: "text", help: "اسم أيقونة اختياري" },
   { name: "timeline", label: "المدة الزمنية", type: "text", help: "مثال: 2-4 أسابيع" },

@@ -374,6 +374,16 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
       return;
     }
 
+    // Auto-clean slug field to lower-kebab-case if present
+    if ("slug" in payload && typeof payload.slug === "string" && payload.slug) {
+      const cleaned = payload.slug
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+      (payload as Record<string, unknown>).slug = cleaned;
+    }
+
     if (editingId) {
       updateMut.mutate({ id: editingId, patch: payload });
     } else {
