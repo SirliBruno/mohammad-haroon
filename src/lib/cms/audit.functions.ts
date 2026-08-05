@@ -30,11 +30,13 @@ export const adminListAuditLog = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => listSchema.parse(d ?? {}))
   .handler(async ({ data, context }) => {
-    const { requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
+    const { requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let q: any = context.supabase
+    let q: any = db
       .from("audit_log")
       .select("id, table_name, row_id, action, actor_id, diff, created_at", { count: "exact" });
 

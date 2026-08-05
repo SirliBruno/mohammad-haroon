@@ -57,9 +57,11 @@ export const upsertSiteContent = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => siteContentInputSchema.parse(d))
   .handler(async ({ data, context }) => {
-    const { requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    const { data: row, error } = await context.supabase
+    const { requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    const { data: row, error } = await db
       .from("site_content")
       .upsert(data, { onConflict: "key" })
       .select("*")
@@ -74,9 +76,11 @@ export const updateSiteContent = createServerFn({ method: "POST" })
     z.object({ id: z.string().uuid(), patch: siteContentInputSchema.partial() }).parse(d),
   )
   .handler(async ({ data, context }) => {
-    const { requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    const { data: row, error } = await context.supabase
+    const { requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    const { data: row, error } = await db
       .from("site_content")
       .update(data.patch)
       .eq("id", data.id)
@@ -90,9 +94,11 @@ export const deleteSiteContent = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
-    const { requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    const { error } = await context.supabase
+    const { requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    const { error } = await db
       .from("site_content")
       .delete()
       .eq("id", data.id);

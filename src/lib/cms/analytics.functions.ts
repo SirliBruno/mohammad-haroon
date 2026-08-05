@@ -27,14 +27,16 @@ export const getFunnelSummary = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => paramsSchema.parse(d ?? { days: 30 }))
   .handler(async ({ data, context }): Promise<FunnelSummary> => {
-    const { requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
+    const { requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
 
     const days = data.days;
     const to = new Date();
     const from = new Date(to.getTime() - days * 24 * 60 * 60 * 1000);
 
-    const { data: rows, error } = await context.supabase
+    const { data: rows, error } = await db
       .from("analytics_events")
       .select("event, path, session_id, created_at")
       .gte("created_at", from.toISOString())

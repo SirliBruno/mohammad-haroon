@@ -11,20 +11,22 @@ export const listMedia = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => listParamsSchema.parse(d ?? {}))
   .handler(async ({ data, context }) => {
-    const { listRows, requireAdmin } = await import(
-      "@/features/cms/repository.server"
-    );
-    await requireAdmin(context.supabase, context.userId);
-    return listRows(context.supabase, "media", data, [...SEARCH_COLUMNS.media]);
+    const { listRows, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    return listRows(db, "media", data, [...SEARCH_COLUMNS.media]);
   });
 
 export const createMedia = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => mediaInputSchema.parse(d))
   .handler(async ({ data, context }) => {
-    const { createRow, requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    return createRow(context.supabase, "media", { ...data, uploaded_by: context.userId });
+    const { createRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    return createRow(db, "media", { ...data, uploaded_by: userId });
   });
 
 export const updateMedia = createServerFn({ method: "POST" })
@@ -33,32 +35,39 @@ export const updateMedia = createServerFn({ method: "POST" })
     z.object({ id: z.string().uuid(), patch: mediaInputSchema.partial() }).parse(d),
   )
   .handler(async ({ data, context }) => {
-    const { updateRow, requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    return updateRow(context.supabase, "media", data.id, data.patch);
+    const { updateRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    return updateRow(db, "media", data.id, data.patch);
   });
 
 export const deleteMedia = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
-    const { deleteRow, requireAdmin, getRowById } = await import(
+    const { getRowById, deleteRow, requireAdmin, getRequestContextClient } = await import(
       "@/features/cms/repository.server"
     );
-    await requireAdmin(context.supabase, context.userId);
-    // Belt-and-braces storage cleanup: fetch the row's storage_path first,
-    // delete the DB row, then best-effort remove the stored object. If the
-    // storage delete fails we log and continue — the row is already gone.
-    const row = (await getRowById(context.supabase, "media", data.id)) as
-      | { storage_path: string | null }
-      | null;
-    const result = await deleteRow(context.supabase, "media", data.id);
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+
+    // 1. Fetch to get storage path
+    const row = (await getRowById(db, "media", data.id)) as
+      | { url: string; storage_path?: string }
+      | undefined;
+    
+    // 2. Delete row
+    const result = await deleteRow(db, "media", data.id);
+    
+    // 3. Delete from storage if possible
     if (row?.storage_path) {
-      const { error: rmErr } = await context.supabase.storage
+      const { error: rmErr } = await db.storage
         .from("media")
         .remove([row.storage_path]);
-      if (rmErr) console.warn("[cms] storage cleanup failed for", row.storage_path, rmErr);
+      if (rmErr) console.warn("Failed to delete storage object:", rmErr);
     }
+    
     return result;
   });
-

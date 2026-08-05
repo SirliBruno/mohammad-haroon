@@ -14,10 +14,14 @@ function make(table: keyof typeof SEARCH_COLUMNS, defaultOrder?: string, ascendi
     .middleware([requireSupabaseAuth])
     .inputValidator((d: unknown) => listParamsSchema.parse(d ?? {}))
     .handler(async ({ data, context }) => {
-      const { listRows, requireAdmin } = await import("@/features/cms/repository.server");
-      await requireAdmin(context.supabase, context.userId);
+      const { listRows, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+      
+      const db = await getRequestContextClient(context);
+      const userId = context.userId || "anonymous"; 
+      
+      await requireAdmin(db, userId);
       return listRows(
-        context.supabase,
+        db,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         table as any,
         { ...data, orderBy: data.orderBy ?? defaultOrder, ascending: data.ascending ?? ascending },

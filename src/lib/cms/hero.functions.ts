@@ -65,9 +65,11 @@ export const listHeroProjectsPublic = createServerFn({ method: "GET" }).handler(
 export const adminListHeroProjects = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    const { requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    const { data, error } = await context.supabase
+    const { requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    const { data, error } = await db
       .from("hero_projects")
       .select("*")
       .order("sort_order", { ascending: true })
@@ -81,11 +83,13 @@ export const createHeroProject = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => heroInputSchema.parse(d))
   .handler(async ({ data, context }) => {
-    const { requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    const { data: row, error } = await context.supabase
+    const { requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    const { data: row, error } = await db
       .from("hero_projects")
-      .insert({ ...data, created_by: context.userId })
+      .insert({ ...data, created_by: userId })
       .select()
       .single();
     if (error) throwSafe("create", "hero_projects", error);
@@ -98,9 +102,11 @@ export const updateHeroProject = createServerFn({ method: "POST" })
     z.object({ id: z.string().uuid(), patch: heroInputSchema.partial() }).parse(d),
   )
   .handler(async ({ data, context }) => {
-    const { requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    const { data: row, error } = await context.supabase
+    const { requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    const { data: row, error } = await db
       .from("hero_projects")
       .update(data.patch)
       .eq("id", data.id)
@@ -114,9 +120,11 @@ export const deleteHeroProject = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
-    const { requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    const { error } = await context.supabase
+    const { requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    const { error } = await db
       .from("hero_projects")
       .delete()
       .eq("id", data.id);
@@ -161,9 +169,11 @@ export const signHeroMediaPath = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => z.object({ path: safeMediaPath }).parse(d))
   .handler(async ({ data, context }) => {
-    const { requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    const { data: signed, error } = await context.supabase.storage
+    const { requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    const { data: signed, error } = await db.storage
       .from("media")
       .createSignedUrl(data.path, 60 * 60 * 24 * 365 * 10); // 10 years
     if (error) throwSafe("sign", "storage.media", error);

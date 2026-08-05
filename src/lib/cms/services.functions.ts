@@ -36,9 +36,11 @@ export const createService = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => serviceInputSchema.parse(d))
   .handler(async ({ data, context }) => {
-    const { createRow, requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    return createRow(context.supabase, "services", data);
+    const { createRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    return createRow(db, "services", data);
   });
 
 export const updateService = createServerFn({ method: "POST" })
@@ -47,16 +49,20 @@ export const updateService = createServerFn({ method: "POST" })
     z.object({ id: z.string().uuid(), patch: serviceInputSchema.partial() }).parse(d),
   )
   .handler(async ({ data, context }) => {
-    const { updateRow, requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    return updateRow(context.supabase, "services", data.id, data.patch);
+    const { updateRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    return updateRow(db, "services", data.id, data.patch);
   });
 
 export const deleteService = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
-    const { deleteRow, requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    return deleteRow(context.supabase, "services", data.id);
+    const { deleteRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    return deleteRow(db, "services", data.id);
   });

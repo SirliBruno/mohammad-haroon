@@ -56,11 +56,48 @@ export function getPublicServerClient(): Db {
 }
 
 /**
+ * Re-creates the Supabase client if TanStack Start drops it from context
+ */
+export async function getRequestContextClient(context: any): Promise<Db> {
+  if (context?.supabase && context.supabase.from) {
+    return context.supabase as Db;
+  }
+  console.warn(`[getRequestContextClient] context.supabase missing or invalid. Re-creating client.`);
+  
+  try {
+    const { getRequest } = await import(/* @vite-ignore */ "@tanstack/react-start/server");
+    const req = getRequest();
+    const authHeader = req?.headers?.get('authorization');
+    const token = authHeader?.replace('Bearer ', '');
+    
+    if (token) {
+      const url = getEnvVar("SUPABASE_URL");
+      const key = getEnvVar("SUPABASE_PUBLISHABLE_KEY");
+      if (url && key) {
+        return createClient<Database>(url, key, {
+          global: { headers: { Authorization: `Bearer ${token}` } },
+          auth: { persistSession: false }
+        });
+      }
+    }
+  } catch (e) {
+    console.warn("Failed to get request context", e);
+  }
+  
+  return getPublicServerClient();
+}
+
+/**
  * Assert the currently-authenticated user has the `admin` role.
  * Throws a 403-style error otherwise. Uses the request-scoped client so RLS
  * enforces "read own row" on `user_roles`.
  */
-export async function requireAdmin(supabase: Db, userId: string): Promise<void> {
+export async function requireAdmin(supabase: Db | undefined, userId: string): Promise<void> {
+  if (!supabase || !supabase.from) {
+    console.error("[requireAdmin] Missing or invalid Supabase client. Fallback check failed.");
+    throw new Error("Role check failed: Invalid database client.");
+  }
+
   const { data, error } = await supabase
     .from("user_roles")
     .select("role")

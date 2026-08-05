@@ -76,37 +76,45 @@ export const listMessages = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => listParamsSchema.parse(d ?? {}))
   .handler(async ({ data, context }) => {
-    const { listRows, requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    return listRows(context.supabase, "messages", data, [...SEARCH_COLUMNS.messages]);
+    const { listRows, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    return listRows(db, "messages", data, [...SEARCH_COLUMNS.messages]);
   });
 
 export const updateMessage = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => messageUpdateSchema.parse(d))
   .handler(async ({ data, context }) => {
-    const { updateRow, requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
+    const { updateRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
     const { id, ...patch } = data;
-    return updateRow(context.supabase, "messages", id, patch);
+    return updateRow(db, "messages", id, patch);
   });
 
 export const deleteMessage = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
-    const { deleteRow, requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    return deleteRow(context.supabase, "messages", data.id);
+    const { deleteRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    return deleteRow(db, "messages", data.id);
   });
 
 /** Admin — عدد الرسائل الجديدة (لشارة القائمة الجانبية). */
 export const countNewMessages = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    const { requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    const { count, error } = await context.supabase
+    const { requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    const { count, error } = await db
       .from("messages")
       .select("id", { count: "exact", head: true })
       .eq("status", "new");

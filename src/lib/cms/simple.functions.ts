@@ -40,9 +40,11 @@ export const createCertificate = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => certificateInputSchema.parse(d))
   .handler(async ({ data, context }) => {
-    const { createRow, requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    return createRow(context.supabase, "certificates", data);
+    const { createRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    return createRow(db, "certificates", data);
   });
 
 export const updateCertificate = createServerFn({ method: "POST" })
@@ -51,18 +53,22 @@ export const updateCertificate = createServerFn({ method: "POST" })
     z.object({ id: z.string().uuid(), patch: certificateInputSchema.partial() }).parse(d),
   )
   .handler(async ({ data, context }) => {
-    const { updateRow, requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    return updateRow(context.supabase, "certificates", data.id, data.patch);
+    const { updateRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    return updateRow(db, "certificates", data.id, data.patch);
   });
 
 export const deleteCertificate = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
-    const { deleteRow, requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    return deleteRow(context.supabase, "certificates", data.id);
+    const { deleteRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    return deleteRow(db, "certificates", data.id);
   });
 
 // ---------- Experiences ----------
@@ -82,9 +88,11 @@ export const createExperience = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => experienceInputSchema.parse(d))
   .handler(async ({ data, context }) => {
-    const { createRow, requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    return createRow(context.supabase, "experiences", data);
+    const { createRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    return createRow(db, "experiences", data);
   });
 
 export const updateExperience = createServerFn({ method: "POST" })
@@ -93,18 +101,22 @@ export const updateExperience = createServerFn({ method: "POST" })
     z.object({ id: z.string().uuid(), patch: experienceInputSchema.partial() }).parse(d),
   )
   .handler(async ({ data, context }) => {
-    const { updateRow, requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    return updateRow(context.supabase, "experiences", data.id, data.patch);
+    const { updateRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    return updateRow(db, "experiences", data.id, data.patch);
   });
 
 export const deleteExperience = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
-    const { deleteRow, requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    return deleteRow(context.supabase, "experiences", data.id);
+    const { deleteRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    return deleteRow(db, "experiences", data.id);
   });
 
 // ---------- Skills ----------
@@ -124,9 +136,11 @@ export const createSkill = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => skillInputSchema.parse(d))
   .handler(async ({ data, context }) => {
-    const { createRow, requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    return createRow(context.supabase, "skills", data);
+    const { createRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    return createRow(db, "skills", data);
   });
 
 export const updateSkill = createServerFn({ method: "POST" })
@@ -135,18 +149,22 @@ export const updateSkill = createServerFn({ method: "POST" })
     z.object({ id: z.string().uuid(), patch: skillInputSchema.partial() }).parse(d),
   )
   .handler(async ({ data, context }) => {
-    const { updateRow, requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    return updateRow(context.supabase, "skills", data.id, data.patch);
+    const { updateRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    return updateRow(db, "skills", data.id, data.patch);
   });
 
 export const deleteSkill = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
-    const { deleteRow, requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    return deleteRow(context.supabase, "skills", data.id);
+    const { deleteRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    return deleteRow(db, "skills", data.id);
   });
 
 // ---------- Testimonials ----------
@@ -163,9 +181,11 @@ export const createTestimonial = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => testimonialInputSchema.parse(d))
   .handler(async ({ data, context }) => {
-    const { createRow, requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    return createRow(context.supabase, "testimonials", data);
+    const { createRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    return createRow(db, "testimonials", data);
   });
 
 export const updateTestimonial = createServerFn({ method: "POST" })
@@ -174,18 +194,22 @@ export const updateTestimonial = createServerFn({ method: "POST" })
     z.object({ id: z.string().uuid(), patch: testimonialInputSchema.partial() }).parse(d),
   )
   .handler(async ({ data, context }) => {
-    const { updateRow, requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    return updateRow(context.supabase, "testimonials", data.id, data.patch);
+    const { updateRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    return updateRow(db, "testimonials", data.id, data.patch);
   });
 
 export const deleteTestimonial = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
-    const { deleteRow, requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    return deleteRow(context.supabase, "testimonials", data.id);
+    const { deleteRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    return deleteRow(db, "testimonials", data.id);
   });
 
 // ---------- Blog posts ----------
@@ -214,9 +238,11 @@ export const createBlogPost = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => blogPostInputSchema.parse(d))
   .handler(async ({ data, context }) => {
-    const { createRow, requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    return createRow(context.supabase, "blog_posts", { ...data, author_id: context.userId });
+    const { createRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    return createRow(db, "blog_posts", { ...data, author_id: userId });
   });
 
 export const updateBlogPost = createServerFn({ method: "POST" })
@@ -225,18 +251,22 @@ export const updateBlogPost = createServerFn({ method: "POST" })
     z.object({ id: z.string().uuid(), patch: blogPostInputSchema.partial() }).parse(d),
   )
   .handler(async ({ data, context }) => {
-    const { updateRow, requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    return updateRow(context.supabase, "blog_posts", data.id, data.patch);
+    const { updateRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    return updateRow(db, "blog_posts", data.id, data.patch);
   });
 
 export const deleteBlogPost = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
-    const { deleteRow, requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    return deleteRow(context.supabase, "blog_posts", data.id);
+    const { deleteRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    return deleteRow(db, "blog_posts", data.id);
   });
 
 // ---------- Ideas ----------
@@ -253,9 +283,11 @@ export const createIdea = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => ideaInputSchema.parse(d))
   .handler(async ({ data, context }) => {
-    const { createRow, requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    return createRow(context.supabase, "ideas", data);
+    const { createRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    return createRow(db, "ideas", data);
   });
 
 export const updateIdea = createServerFn({ method: "POST" })
@@ -264,18 +296,22 @@ export const updateIdea = createServerFn({ method: "POST" })
     z.object({ id: z.string().uuid(), patch: ideaInputSchema.partial() }).parse(d),
   )
   .handler(async ({ data, context }) => {
-    const { updateRow, requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    return updateRow(context.supabase, "ideas", data.id, data.patch);
+    const { updateRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    return updateRow(db, "ideas", data.id, data.patch);
   });
 
 export const deleteIdea = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
-    const { deleteRow, requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    return deleteRow(context.supabase, "ideas", data.id);
+    const { deleteRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    return deleteRow(db, "ideas", data.id);
   });
 
 // ---------- Products ----------
@@ -301,9 +337,11 @@ export const createProduct = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => productInputSchema.parse(d))
   .handler(async ({ data, context }) => {
-    const { createRow, requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    return createRow(context.supabase, "products", data);
+    const { createRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    return createRow(db, "products", data);
   });
 
 export const updateProduct = createServerFn({ method: "POST" })
@@ -312,16 +350,20 @@ export const updateProduct = createServerFn({ method: "POST" })
     z.object({ id: z.string().uuid(), patch: productInputSchema.partial() }).parse(d),
   )
   .handler(async ({ data, context }) => {
-    const { updateRow, requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    return updateRow(context.supabase, "products", data.id, data.patch);
+    const { updateRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    return updateRow(db, "products", data.id, data.patch);
   });
 
 export const deleteProduct = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
-    const { deleteRow, requireAdmin } = await import("@/features/cms/repository.server");
-    await requireAdmin(context.supabase, context.userId);
-    return deleteRow(context.supabase, "products", data.id);
+    const { deleteRow, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+    const db = await getRequestContextClient(context);
+    const userId = context.userId || "anonymous";
+    await requireAdmin(db, userId);
+    return deleteRow(db, "products", data.id);
   });

@@ -94,7 +94,7 @@ export const requireSupabaseAuth = createMiddleware({ type: 'function' })
     if (token.split('.').length !== 3) {
       throw new Error('Unauthorized: Invalid token');
     }
-
+    
     const supabase = createClient<Database>(
       SUPABASE_URL,
       SUPABASE_PUBLISHABLE_KEY,
@@ -113,20 +113,18 @@ export const requireSupabaseAuth = createMiddleware({ type: 'function' })
       }
     );
 
-    const { data, error } = await supabase.auth.getClaims(token);
-    if (error || !data?.claims) {
+    const { data, error } = await supabase.auth.getUser(token);
+    if (error || !data?.user) {
       throw new Error('Unauthorized: Invalid token');
     }
 
-    if (!data.claims.sub) {
-      throw new Error('Unauthorized: No user ID found in token');
-    }
+    console.log("[auth-middleware.ts] Server middleware success, returning supabase:", !!supabase, "has from:", !!supabase.from);
 
     return next({
       context: {
         supabase,
-        userId: data.claims.sub,
-        claims: data.claims,
+        userId: data.user.id,
+        claims: { sub: data.user.id } as any,
       },
     });
   },
