@@ -209,6 +209,9 @@ export async function listRows<T extends TableName>(
 
   const order = orderBy ?? "created_at";
   query = query.order(order, { ascending: ascending ?? false, nullsFirst: false });
+  if (order !== "created_at") {
+    query = query.order("created_at", { ascending: false, nullsFirst: false });
+  }
   query = query.range(offset, offset + limit - 1);
 
   const { data, error, count } = await query;
