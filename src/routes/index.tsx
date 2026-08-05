@@ -1,7 +1,7 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { useRef, useCallback } from "react";
 import { RouteErrorBoundary, RouteNotFoundBoundary } from "@/components/layout/route-boundaries";
-import { ArrowLeft, ArrowUpRight, ExternalLink } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, ExternalLink, Code2, LayoutTemplate } from "lucide-react";
 
 import { Reveal } from "@/components/motion/reveal";
 import { buildMeta } from "@/features/seo/build-meta";
@@ -13,8 +13,6 @@ import {
   CertificateCard,
   CTA,
   DSButton,
-  DSCard,
-  DSBadge,
   Grid,
   TestimonialQuote,
   Timeline,
@@ -23,57 +21,18 @@ import {
 } from "@/components/ds";
 import { site } from "@/config/site";
 import { projects as staticProjects } from "@/data/projects";
-import { testimonials } from "@/data/testimonials";
+import { testimonials as staticTestimonials } from "@/data/testimonials";
 import { BrowserFrame } from "@/components/mockups/devices";
 import { DashboardUI, StoreUI, EditorUI } from "@/components/mockups/ui-samples";
 import { useHomeContent, getHomeText, getHomeList } from "@/lib/cms/home-content";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { listPublicProjects } from "@/lib/cms/projects-public.functions";
-import { listTestimonials } from "@/lib/cms/simple.functions";
+import { listTestimonials, listSkills, listCertificates, listExperiences } from "@/lib/cms/simple.functions";
+import { listServices } from "@/lib/cms/services.functions";
 import { toProject } from "@/lib/project-adapter";
 
-/* ---------------- Home-only data ---------------- */
-
-const homeServices = [
-  {
-    slug: "web-development",
-    title: "مواقع أعمال",
-    outcome: "مواقع حديثة تحوّل الزوّار إلى عملاء — سريعة ومصممة للتحويل.",
-    tags: ["React", "Next.js", "TanStack"],
-    metric: "+40 مشروع",
-    size: "lg" as const,
-    iconPath: "M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5",
-  },
-  {
-    slug: "ecommerce",
-    title: "متاجر إلكترونية",
-    outcome: "متاجر مكتملة، جاهزة للنموّ من اليوم الأول.",
-    tags: ["Shopify", "WooCommerce", "Stripe"],
-    metric: "Stripe + WooCommerce",
-    size: "sm" as const,
-    iconPath: "M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0",
-  },
-  {
-    slug: "ui-ux-design",
-    title: "تصميم واجهات",
-    outcome: "تجارب رقمية يستمتع المستخدمون باستخدامها.",
-    tags: ["Figma", "أنظمة تصميم", "UX"],
-    metric: "Figma + Research",
-    size: "sm" as const,
-    iconPath: "M12 2a5 5 0 100 10A5 5 0 0012 2zM2 20s1-3 10-3 10 3 10 3",
-  },
-  {
-    slug: "wordpress",
-    title: "ووردبريس",
-    outcome: "مواقع سريعة، قابلة للتوسّع، وسهلة الإدارة من قِبل فريقك.",
-    tags: ["WordPress", "WooCommerce", "SEO"],
-    metric: "أمان + سرعة",
-    size: "lg" as const,
-    iconPath: "M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zM7 12h10M12 7v10",
-  },
-];
-
+/* ---------------- Hardcoded Fallbacks ---------------- */
 const workflow = [
   { step: "01", title: "اكتشاف", description: "أفهم أهدافك وجمهورك ومنافسيك قبل أي خط." },
   { step: "02", title: "استراتيجية", description: "نُحدّد النطاق والنتائج وخارطة الطريق." },
@@ -83,48 +42,26 @@ const workflow = [
   { step: "06", title: "دعم", description: "متابعة بعد الإطلاق، وتحديثات، وقياس النتائج." },
 ];
 
-const certificates: Certificate[] = [
+const staticCertificates: Certificate[] = [
   { title: "مطوّر واجهات أمامية — Meta", issuer: "Meta", issuedAt: "2025" },
   { title: "تصميم تجربة المستخدم — Google", issuer: "Google", issuedAt: "2024" },
-  { title: "شهادة شريك Shopify", issuer: "Shopify", issuedAt: "2024" },
-  { title: "أنماط React المتقدمة", issuer: "Frontend Masters", issuedAt: "2024" },
 ];
 
-const timeline: TimelineItem[] = [
+const staticTimeline: TimelineItem[] = [
   {
     date: "2025 — حتى الآن",
     title: "مهندس منتجات مستقل",
     meta: "عمل حر · عن بُعد",
-    description:
-      "شراكات مع رواد الأعمال لتصميم وإطلاق منتجات ويب متميزة، ومتاجر إلكترونية، وأنظمة تصميم.",
-  },
-  {
-    date: "2024",
-    title: "مهندس تصميم",
-    meta: "استوديوهات منتجات متخصصة",
-    description:
-      "قدت أعمال الواجهات عبر لوحات التحكم والمحرّرات والصفحات التسويقية لفرق SaaS في مراحلها المبكرة.",
-  },
-  {
-    date: "2023",
-    title: "مطوّر واجهات أمامية",
-    meta: "عقود مع وكالات",
-    description:
-      "أطلقت متاجر Shopify وHeadless لعلامات نمط الحياة والعلامات التجارية المباشرة للمستهلك.",
-  },
+    description: "شراكات مع رواد الأعمال لتصميم وإطلاق منتجات ويب متميزة.",
+  }
 ];
 
-/* Slot component for the featured case studies. Users can later
-   swap `<UI />` with `<img src="..." />` to replace the placeholder. */
 const featuredMockups: Record<string, React.ComponentType> = {
   "northwind-analytics": DashboardUI,
   "lumen-payments": DashboardUI,
   "atelier-cms": EditorUI,
   "haven-storefront": StoreUI,
 };
-
-/* ---------------- Route ---------------- */
-
 
 export const Route = createFileRoute("/")({
   errorComponent: ({ reset }) => <RouteErrorBoundary reset={reset} />,
@@ -139,49 +76,45 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
-  const listFn = useServerFn(listPublicProjects);
-  const testFn = useServerFn(listTestimonials);
-  const featuredQ = useQuery({
-    queryKey: ["home", "featured"],
-    queryFn: () => listFn({ data: { featured: true, limit: 3 } }),
-    staleTime: 60_000,
-  });
-  const testimonialsQ = useQuery({
-    queryKey: ["home", "testimonials"],
-    queryFn: () =>
-      testFn({ data: { featured: true, limit: 3, orderBy: "sort_order", ascending: true } }),
-    staleTime: 60_000,
-  });
+  const listProjectsFn = useServerFn(listPublicProjects);
+  const listTestimonialsFn = useServerFn(listTestimonials);
+  const listSkillsFn = useServerFn(listSkills);
+  const listServicesFn = useServerFn(listServices);
+  const listExperiencesFn = useServerFn(listExperiences);
+  const listCertificatesFn = useServerFn(listCertificates);
+
+  const featuredQ = useQuery({ queryKey: ["home", "featured"], queryFn: () => listProjectsFn({ data: { featured: true, limit: 3 } }), staleTime: 60000 });
+  const testimonialsQ = useQuery({ queryKey: ["home", "testimonials"], queryFn: () => listTestimonialsFn({ data: { featured: true, limit: 3, orderBy: "sort_order", ascending: true } }), staleTime: 60000 });
+  const skillsQ = useQuery({ queryKey: ["home", "skills"], queryFn: () => listSkillsFn({ data: { limit: 20, orderBy: "sort_order", ascending: true } }), staleTime: 60000 });
+  const servicesQ = useQuery({ queryKey: ["home", "services"], queryFn: () => listServicesFn({ data: { limit: 4, orderBy: "sort_order", ascending: true } }), staleTime: 60000 });
+  const experiencesQ = useQuery({ queryKey: ["home", "experiences"], queryFn: () => listExperiencesFn({ data: { limit: 5, orderBy: "sort_order", ascending: true } }), staleTime: 60000 });
+  const certificatesQ = useQuery({ queryKey: ["home", "certificates"], queryFn: () => listCertificatesFn({ data: { limit: 4, orderBy: "sort_order", ascending: true } }), staleTime: 60000 });
+
   const cmsFeatured = (featuredQ.data?.rows ?? []).map(toProject);
-  const featured = cmsFeatured.length
-    ? cmsFeatured
-    : staticProjects.filter((p) => p.featured).slice(0, 3);
+  const featured = cmsFeatured.length ? cmsFeatured : staticProjects.filter((p) => p.featured).slice(0, 3);
+  
   const cmsTestimonials = (testimonialsQ.data?.rows ?? []).map((r: any) => ({
-    id: r.id,
-    quote: r.quote,
-    author: r.author_name,
-    role: r.author_role ?? "",
-    company: r.author_company ?? undefined,
-    avatar: r.avatar_url ?? undefined,
+    id: r.id, quote: r.quote, author: r.author_name, role: r.author_role ?? "", company: r.author_company ?? undefined, avatar: r.avatar_url ?? undefined,
   }));
-  const featuredTestimonials = cmsTestimonials.length ? cmsTestimonials : testimonials.slice(0, 3);
+  const featuredTestimonials = cmsTestimonials.length ? cmsTestimonials : staticTestimonials.slice(0, 3);
+
+  const skills = skillsQ.data?.rows ?? [];
+  const services = servicesQ.data?.rows ?? [];
+  
+  const cmsExperiences = (experiencesQ.data?.rows ?? []).map((r: any) => ({
+    date: `${r.start_date ? new Date(r.start_date).getFullYear() : ""} — ${r.end_date ? new Date(r.end_date).getFullYear() : "حتى الآن"}`,
+    title: r.title, meta: r.company, description: r.description ?? ""
+  }));
+  const experiences = cmsExperiences.length ? cmsExperiences : staticTimeline;
+  
+  const cmsCertificates = (certificatesQ.data?.rows ?? []).map((r: any) => ({
+    title: r.title, issuer: r.issuer, issuedAt: r.issue_date ? new Date(r.issue_date).getFullYear().toString() : "", link: r.credential_url ?? undefined
+  }));
+  const liveCertificates = cmsCertificates.length ? cmsCertificates : staticCertificates;
+
   const { data: homeRows } = useHomeContent();
   const t = (k: string, fb: string) => getHomeText(homeRows, k, fb);
-  const homeServicesLive = getHomeList<(typeof homeServices)[number]>(
-    homeRows,
-    "home.services.items",
-    homeServices,
-  );
-  const workflowLive = getHomeList<(typeof workflow)[number]>(
-    homeRows,
-    "home.process.steps",
-    workflow,
-  );
-  const certsLive = getHomeList<Certificate>(
-    homeRows,
-    "home.certificates.items",
-    certificates,
-  );
+  const workflowLive = getHomeList<(typeof workflow)[number]>(homeRows, "home.process.steps", workflow);
 
   return (
     <>
@@ -193,10 +126,7 @@ function Home() {
           <SectionTitle
             eyebrow={t("home.featured.eyebrow", "أعمال مختارة")}
             title={t("home.featured.title", "مختـــــــارات من شغـــــــــلي.")}
-            description={t(
-              "home.featured.description",
-              "مشاريع وانظمة برمجية صُممت لتحقيق أهداف فعلية، لا مجرد مظهر جميل.",
-            )}
+            description={t("home.featured.description", "مشاريع وانظمة برمجية صُممت لتحقيق أهداف فعلية، لا مجرد مظهر جميل.")}
             actions={
               <DSButton asChild variant="ghost" size="sm">
                 <Link to="/work">
@@ -214,74 +144,33 @@ function Home() {
             return (
               <Reveal key={project.slug}>
                 <article className="mx-auto max-w-7xl">
-
-
-                  {/* Screenshot — the hero of the section */}
-                  <Link
-                    to="/work/$slug"
-                    params={{ slug: project.slug }}
-                    className="group relative block"
-                    aria-label={project.title}
-                  >
-                    <div
-                      aria-hidden
-                      className="pointer-events-none absolute -inset-10 -z-10 rounded-[3rem] bg-linear-to-br from-primary/12 via-accent/8 to-transparent blur-3xl"
-                    />
-                    {/* Replace this <BrowserFrame> content with <img src="..." /> when a real screenshot exists. */}
+                  <Link to="/work/$slug" params={{ slug: project.slug }} className="group relative block" aria-label={project.title}>
+                    <div aria-hidden className="pointer-events-none absolute -inset-10 -z-10 rounded-[3rem] bg-linear-to-br from-primary/12 via-accent/8 to-transparent blur-3xl" />
                     {project.cover?.src ? (
-                      <BrowserFrame
-                        url={
-                          project.liveDemo
-                            ? new URL(project.liveDemo).host
-                            : `${project.slug}.app`
-                        }
-                        className="transition-transform duration-700 ease-out group-hover:-translate-y-1"
-                      >
-                        <img
-                          src={project.cover.src}
-                          alt={project.cover.alt}
-                          className="size-full object-cover"
-                        />
+                      <BrowserFrame url={project.liveDemo ? new URL(project.liveDemo).host : `${project.slug}.app`} className="transition-transform duration-700 ease-out group-hover:-translate-y-1">
+                        <img src={project.cover.src} alt={project.cover.alt} className="size-full object-cover" />
                       </BrowserFrame>
                     ) : (
-                      <BrowserFrame
-                        url={
-                          project.liveDemo
-                            ? new URL(project.liveDemo).host
-                            : `${project.slug}.app`
-                        }
-                        className="transition-transform duration-700 ease-out group-hover:-translate-y-1"
-                      >
+                      <BrowserFrame url={project.liveDemo ? new URL(project.liveDemo).host : `${project.slug}.app`} className="transition-transform duration-700 ease-out group-hover:-translate-y-1">
                         <MockupUI />
                       </BrowserFrame>
                     )}
                   </Link>
 
-                  {/* Minimal caption */}
                   <div className="mt-14 grid gap-8 md:mt-20 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] md:items-end md:gap-16">
                     <div className="min-w-0">
-                      <h3 className="text-3xl font-semibold tracking-tight text-foreground text-balance md:text-5xl">
-                        {project.title}
-                      </h3>
-                      <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
-                        {project.summary}
-                      </p>
+                      <h3 className="text-3xl font-semibold tracking-tight text-foreground text-balance md:text-5xl">{project.title}</h3>
+                      <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">{project.summary}</p>
                     </div>
                     <div className="flex flex-wrap items-center gap-3 md:justify-end">
                       <DSButton asChild variant="primary" size="md">
-                        <Link to="/work/$slug" params={{ slug: project.slug }}>
-                          دراسة الحالة
-                          <ArrowLeft />
-                        </Link>
+                        <Link to="/work/$slug" params={{ slug: project.slug }}>دراسة الحالة<ArrowLeft /></Link>
                       </DSButton>
-                      {project.liveDemo ? (
+                      {project.liveDemo && (
                         <DSButton asChild variant="ghost" size="md">
-                          <a href={project.liveDemo} target="_blank" rel="noreferrer">
-                            <ExternalLink />
-                            معاينة حيّة
-                          </a>
+                          <a href={project.liveDemo} target="_blank" rel="noreferrer"><ExternalLink /> معاينة حيّة</a>
                         </DSButton>
-                      ) : null}
+                      )}
                     </div>
                   </div>
                 </article>
@@ -291,48 +180,59 @@ function Home() {
         </div>
       </Section>
 
+      {/* ================= SKILLS ================= */}
+      <Section id="skills" className="border-t border-border/60 relative overflow-hidden">
+        <div aria-hidden className="absolute -left-[20%] top-[-10%] -z-10 h-[50%] w-[50%] rounded-full bg-primary/10 blur-[120px] pointer-events-none" />
+        <Reveal>
+          <SectionTitle
+            eyebrow={t("home.skills.eyebrow", "المهارات والتقنيات")}
+            title={t("home.skills.title", "الأدوات التي أبدع بها.")}
+            description={t("home.skills.description", "مجموعة من أحدث التقنيات واللغات التي أستخدمها لبناء تجارب رقمية فائقة السرعة والقوة.")}
+          />
+        </Reveal>
+        
+        <Reveal delay={0.1}>
+          <div className="mt-16 flex flex-wrap gap-4">
+            {skills.length > 0 ? (
+              skills.map((skill: any, i: number) => (
+                <div key={skill.id} className="group flex items-center gap-3 rounded-full border border-border/50 bg-background/50 px-5 py-3 text-sm font-medium text-foreground backdrop-blur-md transition-all hover:border-primary/50 hover:bg-primary/5 motion-safe:hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/5">
+                  <div className="flex size-7 items-center justify-center rounded-full bg-muted/50 text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary transition-colors">
+                    {skill.icon_url ? <img src={skill.icon_url} alt="" className="size-4" /> : <Code2 className="size-4" />}
+                  </div>
+                  {skill.name}
+                </div>
+              ))
+            ) : (
+              <div className="text-muted-foreground text-sm">لا توجد مهارات مضافة حالياً. قم بإضافتها من لوحة التحكم.</div>
+            )}
+          </div>
+        </Reveal>
+      </Section>
+
       {/* ================= SERVICES ================= */}
-      <Section id="services" className="border-t border-border/60">
+      <Section id="services" className="border-t border-border/60 relative">
         <Reveal>
           <SectionTitle
             eyebrow={t("home.services.eyebrow", "الخدمات")}
             title={t("home.services.title", "ما الذي أُقدّمه.")}
-            description={t(
-              "home.services.description",
-              "خدمات قصيرة الوصف، واضحة النتيجة — لا مصطلحات، ولا وعود مفتوحة.",
-            )}
+            description={t("home.services.description", "خدمات قصيرة الوصف، واضحة النتيجة — لا مصطلحات، ولا وعود مفتوحة.")}
             actions={
               <DSButton asChild variant="ghost" size="sm">
-                <Link to="/services">
-                  {t("home.services.view_all", "كل الخدمات")}
-                  <ArrowUpRight />
-                </Link>
+                <Link to="/services">{t("home.services.view_all", "كل الخدمات")}<ArrowUpRight /></Link>
               </DSButton>
             }
           />
         </Reveal>
 
         <Reveal delay={0.05}>
-          {/* Bento Grid — 2-col on mobile, asymmetric 2x2 on desktop */}
-          <div className="mt-12 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-2">
-            {/* Row 1: lg card + sm card */}
-            {homeServicesLive.slice(0, 2).map((s, i) => (
-              <ServiceBentoCard
-                key={s.slug}
-                service={s as ServiceItem}
-                delay={i * 0.07}
-                prominent={i === 0}
-              />
-            ))}
-            {/* Row 2: sm card + lg card */}
-            {homeServicesLive.slice(2, 4).map((s, i) => (
-              <ServiceBentoCard
-                key={s.slug}
-                service={s as ServiceItem}
-                delay={(i + 2) * 0.07}
-                prominent={i === 1}
-              />
-            ))}
+          <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {services.length > 0 ? (
+              services.map((s: any, i: number) => (
+                <ServiceBentoCard key={s.slug || s.id} service={s} prominent={i % 3 === 0} />
+              ))
+            ) : (
+              <div className="text-muted-foreground text-sm">لا توجد خدمات مضافة حالياً. قم بإضافتها من لوحة التحكم.</div>
+            )}
           </div>
         </Reveal>
       </Section>
@@ -340,28 +240,15 @@ function Home() {
       {/* ================= HOW I WORK ================= */}
       <Section id="process" className="border-t border-border/60" size="lg">
         <Reveal>
-          <SectionTitle
-            eyebrow={t("home.process.eyebrow", "طريقة العمل")}
-            title={t("home.process.title", "من فكرة إلى منتج مُطلَق.")}
-            description={t(
-              "home.process.description",
-              "عملية مُنظّمة من ستّ مراحل، مُصمّمة للوضوح وسرعة اتّخاذ القرار.",
-            )}
-          />
+          <SectionTitle eyebrow={t("home.process.eyebrow", "طريقة العمل")} title={t("home.process.title", "من فكرة إلى منتج مُطلَق.")} description={t("home.process.description", "عملية مُنظّمة من ستّ مراحل، مُصمّمة للوضوح وسرعة اتّخاذ القرار.")} />
         </Reveal>
         <Reveal delay={0.05}>
-          <ol className="mt-16 grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-border/60 bg-border/60 md:grid-cols-2 lg:grid-cols-3">
+          <ol className="mt-16 grid grid-cols-1 gap-px overflow-hidden rounded-3xl border border-border/60 bg-border/60 md:grid-cols-2 lg:grid-cols-3 shadow-sm">
             {workflowLive.map((w) => (
               <li key={w.step} className="group flex flex-col bg-background p-8 transition-colors hover:bg-muted/40 md:p-10">
-                <div className="text-xs font-medium tracking-[0.2em] text-muted-foreground">
-                  {w.step}
-                </div>
-                <h3 className="mt-4 text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
-                  {w.title}
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  {w.description}
-                </p>
+                <div className="text-xs font-medium tracking-[0.2em] text-primary/70">{w.step}</div>
+                <h3 className="mt-4 text-2xl font-semibold tracking-tight text-foreground md:text-3xl">{w.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{w.description}</p>
               </li>
             ))}
           </ol>
@@ -374,23 +261,17 @@ function Home() {
           <SectionTitle
             eyebrow={t("home.experience.eyebrow", "المسيرة")}
             title={t("home.experience.title", "محطات مختصرة.")}
-            description={t(
-              "home.experience.description",
-              "نظرة سريعة على الأدوار التي شكّلت طريقتي في العمل.",
-            )}
+            description={t("home.experience.description", "نظرة سريعة على الأدوار التي شكّلت طريقتي في العمل.")}
             actions={
               <DSButton asChild variant="ghost" size="sm">
-                <Link to="/career">
-                  {t("home.experience.view_all", "السيرة الكاملة")}
-                  <ArrowUpRight />
-                </Link>
+                <Link to="/career">{t("home.experience.view_all", "السيرة الكاملة")}<ArrowUpRight /></Link>
               </DSButton>
             }
           />
         </Reveal>
         <Reveal delay={0.05}>
           <div className="mt-12 max-w-3xl">
-            <Timeline items={timeline} />
+            <Timeline items={experiences} />
           </div>
         </Reveal>
       </Section>
@@ -401,15 +282,12 @@ function Home() {
           <SectionTitle
             eyebrow={t("home.certificates.eyebrow", "الشهادات")}
             title={t("home.certificates.title", "تعلُّم مُستمر.")}
-            description={t(
-              "home.certificates.description",
-              "شهادات مختارة من برامج تُواكب صناعة المنتجات الرقمية.",
-            )}
+            description={t("home.certificates.description", "شهادات مختارة من برامج تُواكب صناعة المنتجات الرقمية.")}
           />
         </Reveal>
         <Reveal delay={0.05}>
           <Grid cols={{ base: 1, sm: 2, lg: 4 }} gap="md" className="mt-12">
-            {certsLive.map((c) => (
+            {liveCertificates.map((c: any) => (
               <CertificateCard key={c.title} certificate={c} />
             ))}
           </Grid>
@@ -419,14 +297,11 @@ function Home() {
       {/* ================= TESTIMONIALS ================= */}
       <Section id="testimonials" className="border-t border-border/60">
         <Reveal>
-          <SectionTitle
-            eyebrow={t("home.testimonials.eyebrow", "شهادات")}
-            title={t("home.testimonials.title", "بكلمات من عملت معهم.")}
-          />
+          <SectionTitle eyebrow={t("home.testimonials.eyebrow", "شهادات")} title={t("home.testimonials.title", "بكلمات من عملت معهم.")} />
         </Reveal>
         <Reveal delay={0.05}>
           <Grid cols={{ base: 1, md: 3 }} gap="md" className="mt-12">
-            {featuredTestimonials.map((t) => (
+            {featuredTestimonials.map((t: any) => (
               <TestimonialQuote key={t.author} testimonial={t} />
             ))}
           </Grid>
@@ -439,23 +314,14 @@ function Home() {
           className="border-t border-border/60"
           eyebrow={t("home.cta.eyebrow", "لنبدأ")}
           title={t("home.cta.title", "لنُطلق معًا شيئًا يستحقّ.")}
-          description={t(
-            "home.cta.description",
-            "محادثة قصيرة تكفي لنعرف إن كنّا الشريكين المناسبين لهذا المشروع.",
-          )}
+          description={t("home.cta.description", "محادثة قصيرة تكفي لنعرف إن كنّا الشريكين المناسبين لهذا المشروع.")}
           actions={
             <>
               <DSButton asChild size="lg" variant="primary">
-                <Link to="/contact">
-                  {t("home.cta.primary_label", "تواصل معي")}
-                  <ArrowLeft />
-                </Link>
+                <Link to="/contact">{t("home.cta.primary_label", "تواصل معي")}<ArrowLeft /></Link>
               </DSButton>
               <DSButton asChild size="lg" variant="outline">
-                <Link to="/work">
-                  {t("home.cta.secondary_label", "استعرض الأعمال")}
-                  <ArrowUpRight />
-                </Link>
+                <Link to="/work">{t("home.cta.secondary_label", "استعرض الأعمال")}<ArrowUpRight /></Link>
               </DSButton>
             </>
           }
@@ -465,29 +331,7 @@ function Home() {
   );
 }
 
-/* ============================================================
-   ServiceItem type & ServiceBentoCard
-   ============================================================ */
-
-type ServiceItem = {
-  slug: string;
-  title: string;
-  outcome: string;
-  tags: string[];
-  metric?: string;
-  size?: "lg" | "sm";
-  iconPath?: string;
-};
-
-function ServiceBentoCard({
-  service,
-  delay = 0,
-  prominent = false,
-}: {
-  service: ServiceItem;
-  delay?: number;
-  prominent?: boolean;
-}) {
+function ServiceBentoCard({ service, prominent = false }: { service: any; prominent?: boolean }) {
   const cardRef = useRef<HTMLAnchorElement>(null);
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -511,138 +355,47 @@ function ServiceBentoCard({
     <Link
       ref={cardRef}
       to="/services/$slug"
-      params={{ slug: service.slug }}
+      params={{ slug: service.slug || service.id }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       aria-label={service.title}
-      style={
-        {
-          "--spotlight-x": "50%",
-          "--spotlight-y": "50%",
-        } as React.CSSProperties
-      }
+      style={{ "--spotlight-x": "50%", "--spotlight-y": "50%" } as React.CSSProperties}
       className={[
-        "group relative flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-card",
-        "transition-all duration-300 ease-out",
-        /* touch feedback */
-        "active:scale-[0.985]",
-        /* desktop hover lift + border */
-        "hover:border-primary/40 hover:shadow-lg motion-safe:hover:-translate-y-1",
-        /* spotlight via CSS custom props */
-        "[background-image:radial-gradient(circle_at_var(--spotlight-x)_var(--spotlight-y),color-mix(in_oklab,var(--color-primary)_6%,transparent)_0%,transparent_65%)]",
-        /* prominent cards taller on desktop */
-        prominent ? "lg:row-span-1 min-h-72 lg:min-h-80" : "min-h-60 lg:min-h-64",
-        /* padding */
-        "p-7 sm:p-8",
+        "group relative flex flex-col overflow-hidden rounded-[2rem] border border-border/50 bg-background/40 backdrop-blur-md",
+        "transition-all duration-500 ease-out",
+        "hover:border-primary/30 hover:shadow-2xl hover:shadow-primary/5 hover:bg-card motion-safe:hover:-translate-y-2",
+        "[background-image:radial-gradient(circle_at_var(--spotlight-x)_var(--spotlight-y),color-mix(in_oklab,var(--color-primary)_4%,transparent)_0%,transparent_65%)]",
+        prominent ? "lg:row-span-1 lg:col-span-2 min-h-[22rem]" : "min-h-[18rem]",
+        "p-8 sm:p-10",
       ].join(" ")}
     >
-      {/* Top row: icon + metric badge */}
-      <div className="flex items-start justify-between gap-3">
-        {/* Animated SVG icon */}
-        {service.iconPath ? (
-          <div
-            aria-hidden
-            className={[
-              "flex size-11 shrink-0 items-center justify-center rounded-xl",
-              "border border-border/60 bg-background/70 backdrop-blur-sm",
-              "transition-all duration-300 ease-out",
-              "group-hover:border-primary/30 group-hover:bg-primary/8",
-              "motion-safe:group-hover:rotate-6 motion-safe:group-hover:scale-110",
-            ].join(" ")}
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="size-5 text-muted-foreground transition-colors duration-300 group-hover:text-primary"
-              aria-hidden
-            >
-              <path d={service.iconPath} />
-            </svg>
+      <div className="flex items-start justify-between gap-4">
+        {service.icon_url ? (
+          <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl border border-border/50 bg-background/50 shadow-sm transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3 group-hover:border-primary/30 group-hover:bg-primary/5">
+            <img src={service.icon_url} alt="" className="size-6 object-contain" />
           </div>
-        ) : null}
-
-        {/* Metric badge */}
-        {service.metric ? (
-          <span
-            className={[
-              "rounded-full border border-border/60 bg-background/60 px-3 py-1",
-              "text-[10px] font-medium tracking-wide text-muted-foreground backdrop-blur-sm",
-              "transition-colors duration-300 group-hover:border-primary/30 group-hover:text-foreground",
-            ].join(" ")}
-          >
-            {service.metric}
-          </span>
-        ) : null}
+        ) : (
+          <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl border border-border/50 bg-background/50 shadow-sm transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3 group-hover:border-primary/30 group-hover:bg-primary/5">
+            <LayoutTemplate className="size-6 text-muted-foreground group-hover:text-primary transition-colors" />
+          </div>
+        )}
       </div>
 
-      {/* Content */}
-      <div className="mt-6 flex-1">
-        {/* Title with animated underline */}
-        <h3 className="relative inline-block text-xl font-semibold tracking-tight text-foreground">
+      <div className="mt-8 flex-1">
+        <h3 className="relative inline-block text-2xl font-bold tracking-tight text-foreground">
           {service.title}
-          {/* Slide-in underline on hover */}
-          <span
-            aria-hidden
-            className={[
-              "absolute inset-x-0 -bottom-0.5 h-px origin-left scale-x-0 rounded-full",
-              "bg-primary transition-transform duration-300 ease-out",
-              "group-hover:scale-x-100",
-            ].join(" ")}
-          />
+          <span aria-hidden className="absolute inset-x-0 -bottom-1 h-[2px] origin-left scale-x-0 rounded-full bg-primary transition-transform duration-500 ease-out group-hover:scale-x-100" />
         </h3>
-        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-          {service.outcome}
+        <p className="mt-4 text-base leading-relaxed text-muted-foreground line-clamp-3">
+          {service.excerpt || service.description || "خدمة مميزة من خدماتنا المصممة لتلبية احتياجاتك الرقمية."}
         </p>
       </div>
 
-      {/* Bottom row: tags + arrow */}
-      <div className="mt-6 flex items-end justify-between gap-3">
-        <div className="flex flex-wrap gap-1.5">
-          {service.tags.slice(0, 3).map((tag) => (
-            <span
-              key={tag}
-              className={[
-                "rounded-full border border-border/60 bg-background/50 px-2.5 py-0.5",
-                "text-[10px] font-medium text-muted-foreground backdrop-blur-sm",
-                "transition-colors duration-200 group-hover:border-primary/20",
-              ].join(" ")}
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-
-        {/* Arrow icon — animates on hover */}
-        <div
-          aria-hidden
-          className={[
-            "flex size-8 shrink-0 items-center justify-center rounded-full",
-            "border border-border/60 bg-background/60 text-muted-foreground backdrop-blur-sm",
-            "transition-all duration-300 ease-out",
-            "group-hover:border-primary/40 group-hover:bg-primary/10 group-hover:text-primary",
-            "motion-safe:group-hover:-translate-y-0.5 motion-safe:group-hover:translate-x-0.5",
-          ].join(" ")}
-        >
-          <ArrowUpRight className="size-3.5" />
+      <div className="mt-8 flex items-center justify-end">
+        <div className="flex size-10 items-center justify-center rounded-full border border-border/50 bg-background/50 text-muted-foreground shadow-sm transition-all duration-300 group-hover:border-primary/30 group-hover:bg-primary group-hover:text-primary-foreground group-hover:-rotate-45">
+          <ArrowLeft className="size-4" />
         </div>
       </div>
-
-      {/* Mobile: subtle bottom accent line */}
-      <div
-        aria-hidden
-        className={[
-          "absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0 rounded-full",
-          "bg-linear-to-r from-primary/60 via-primary/30 to-transparent",
-          "transition-transform duration-500 ease-out",
-          "group-hover:scale-x-100",
-          /* always visible on touch devices (mobile) */
-          "@media(hover:none){scale-x-100 opacity-40}",
-        ].join(" ")}
-      />
     </Link>
   );
 }
