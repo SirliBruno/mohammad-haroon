@@ -98,10 +98,20 @@ export async function requireAdmin(supabase: Db | undefined, userId: string): Pr
     throw new Error("Role check failed: Invalid database client.");
   }
 
+  let actualUserId = userId;
+  if (!actualUserId || actualUserId === "anonymous") {
+    const { data: authData, error: authError } = await supabase.auth.getUser();
+    if (authError || !authData?.user?.id) {
+      console.error("[requireAdmin] Failed to fetch actual user ID:", authError?.message);
+      throw new Error("Unauthorized: Invalid user session.");
+    }
+    actualUserId = authData.user.id;
+  }
+
   const { data, error } = await supabase
     .from("user_roles")
     .select("role")
-    .eq("user_id", userId)
+    .eq("user_id", actualUserId)
     .eq("role", "admin")
     .maybeSingle();
   if (error) throw new Error(`Role check failed: ${error.message}`);
