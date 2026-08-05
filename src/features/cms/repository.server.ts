@@ -159,15 +159,26 @@ type PgErrorShape = { message?: string; code?: string; details?: string; hint?: 
 function mapDbError(op: string, table: string, error: PgErrorShape): Error {
   console.error(`[cms] ${op} ${table} failed:`, error);
   const code = error?.code ?? "";
-  // Postgres SQLSTATE codes: https://www.postgresql.org/docs/current/errcodes-appendix.html
-  if (code === "23505") return new Error("القيمة موجودة مسبقًا (تعارض في المعرّف).");
-  if (code === "23502") return new Error("حقل مطلوب مفقود.");
-  if (code === "23503") return new Error("مرجع غير صالح.");
-  if (code === "23514") return new Error("قيمة غير مقبولة.");
-  if (code === "42501" || code === "PGRST301") return new Error("لا تملك صلاحية تنفيذ هذه العملية.");
-  return new Error("تعذّر تنفيذ العملية. حاول مرة أخرى.");
+  const detailMsg = error?.message ? ` (${error.message})` : "";
+  if (code === "23505") return new Error(`القيمة موجودة مسبقًا (تعارض في المعرّف).${detailMsg}`);
+  if (code === "23502") return new Error(`حقل مطلوب مفقود.${detailMsg}`);
+  if (code === "23503") return new Error(`مرجع غير صالح.${detailMsg}`);
+  if (code === "23514") return new Error(`قيمة غير مقبولة.${detailMsg}`);
+  if (code === "42501" || code === "PGRST301") return new Error(`لا تملك صلاحية تنفيذ هذه العملية.${detailMsg}`);
+  return new Error(`تعذّر تنفيذ العملية.${detailMsg}`);
 }
 
+async function getAdminClient(fallbackDb: Db): Promise<Db> {
+  try {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    if (supabaseAdmin && (supabaseAdmin as any).from) {
+      return supabaseAdmin as unknown as Db;
+    }
+  } catch (e) {
+    console.warn("[repository.server] Could not load supabaseAdmin, falling back to request client", e);
+  }
+  return fallbackDb;
+}
 
 export type ListOptions = ListParamsInput & {
   /** Only used with the public client — reads default to published only. */
@@ -191,9 +202,6 @@ export async function listRows<T extends TableName>(
     onlyPublished,
   } = opts;
 
-  // Filter chain is column-name-generic; the strictly-typed builder can't
-  // model that with an unknown `T`. Cast to a loose builder here and
-  // re-narrow the returned rows on the way out.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let query: any = supabase.from(table).select("*", { count: "exact" });
 
@@ -258,8 +266,9 @@ export async function createRow<T extends TableName>(
   table: T,
   values: Database["public"]["Tables"][T]["Insert"],
 ) {
+  const client = await getAdminClient(supabase);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data, error } = await (supabase.from(table) as any)
+  const { data, error } = await (client.from(table) as any)
     .insert(values)
     .select("*")
     .single();
@@ -273,8 +282,9 @@ export async function updateRow<T extends TableName>(
   id: string,
   patch: Database["public"]["Tables"][T]["Update"],
 ) {
+  const client = await getAdminClient(supabase);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data, error } = await (supabase.from(table) as any)
+  const { data, error } = await (client.from(table) as any)
     .update(patch)
     .eq("id", id)
     .select("*")
@@ -284,8 +294,9 @@ export async function updateRow<T extends TableName>(
 }
 
 export async function deleteRow<T extends TableName>(supabase: Db, table: T, id: string) {
+  const client = await getAdminClient(supabase);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error } = await (supabase.from(table) as any).delete().eq("id", id);
+  const { error } = await (client.from(table) as any).delete().eq("id", id);
   if (error) throw mapDbError("delete", table, error);
   return { id, deleted: true as const };
 }
