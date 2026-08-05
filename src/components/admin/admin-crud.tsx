@@ -250,10 +250,13 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
     const msg = friendlyError(e, fallback, fields);
     toast.error(msg);
     const raw = e instanceof Error ? e.message : String(e);
-    if (/unauthorized/i.test(raw) || msg.includes("الجلسة انتهت")) {
+    if (/unauthorized|jwt|unverifiable|keyfunc/i.test(raw) || msg.includes("الجلسة انتهت") || msg.includes("غير مصرح")) {
+      try {
+        localStorage.clear();
+      } catch {}
       setTimeout(() => {
         window.location.href = "/auth";
-      }, 2000);
+      }, 1500);
     }
   };
 
