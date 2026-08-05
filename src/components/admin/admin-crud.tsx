@@ -237,8 +237,14 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
   const loading = listQuery.isLoading;
   const refetching = listQuery.isFetching && !listQuery.isLoading;
 
-  const invalidateList = () =>
-    qc.invalidateQueries({ queryKey: ["admin-crud", cacheKey] });
+  const invalidateList = () => {
+    void qc.invalidateQueries({ queryKey: ["admin-crud"] });
+    void qc.invalidateQueries({ queryKey: ["home"] });
+    void qc.invalidateQueries({ queryKey: ["services"] });
+    void qc.invalidateQueries({ queryKey: ["testimonials"] });
+    void qc.invalidateQueries({ queryKey: ["work"] });
+    void qc.invalidateQueries({ queryKey: ["skills"] });
+  };
 
   const handleMutationError = (e: unknown, fallback: string) => {
     const msg = friendlyError(e, fallback, fields);
