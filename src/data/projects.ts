@@ -38,10 +38,26 @@ export const projects: Project[] = [
     result:
       "إطلاق المنصة بنجاح وإدارة أكثر من 8 معسكرات رياضية بكفاءة تامة، مع إشادة من المدربين بسرعة النظام وسهولة اعتماده اليومي.",
     designProcess: [
-      { title: "فهم الاحتياج والمسارات", description: "جلسات استكشافية مع مدربي ومشرفي المعسكرات لتحديد أهم المهام اليومية ونقاط الاختناق." },
-      { title: "تصميم الواجهات والنظام", description: "بناء Design System متكامل يركز على سهولة القراءة السريعة وأزرار الحضور التفاعلية." },
-      { title: "التطوير والربط السحابي", description: "برمجة الواجهات وقاعدة البيانات بنظام صلاحيات متقدم (مدير، مدرب، متدرب)." },
-      { title: "الاختبار والإطلاق الميداني", description: "تجربة النظام الميدانية في معسكر تجريبي قبل الإطلاق الرسمي للجمهور." },
+      {
+        title: "فهم الاحتياج والمسارات",
+        description:
+          "جلسات استكشافية مع مدربي ومشرفي المعسكرات لتحديد أهم المهام اليومية ونقاط الاختناق.",
+      },
+      {
+        title: "تصميم الواجهات والنظام",
+        description:
+          "بناء Design System متكامل يركز على سهولة القراءة السريعة وأزرار الحضور التفاعلية.",
+      },
+      {
+        title: "التطوير والربط السحابي",
+        description:
+          "برمجة الواجهات وقاعدة البيانات بنظام صلاحيات متقدم (مدير، مدرب، متدرب).",
+      },
+      {
+        title: "الاختبار والإطلاق الميداني",
+        description:
+          "تجربة النظام الميدانية في معسكر تجريبي قبل الإطلاق الرسمي للجمهور.",
+      },
     ],
     development:
       "تطوير الواجهة الأمامية باستخدام React وTypeScript وTailwind CSS، مع بنية خادم سريعة مبنية على Supabase وPostgreSQL لضمان أمان البيانات واستقرار التزامن اللحظي.",
@@ -52,196 +68,6 @@ export const projects: Project[] = [
       "نظام مصادقة آمن متعدد الأدوار والصلاحيات",
     ],
     featured: true,
-    status: "live",
-  },
-  {
-    id: "northwind-analytics",
-    slug: "northwind-analytics",
-    title: "Northwind — لوحة تحليلات ذكية لصناع القرار",
-    summary:
-      "لوحة تحليلات وتقارير مالية تفاعلية تحوّل البيانات المعقدة إلى قرارات واضحة وسريعة.",
-    shortDescription:
-      "لوحة تحليلات وقرارات مصممة للوضوح وسرعة الوصول للمؤشرات الحيوية.",
-    description:
-      "إعادة ابتكار تجربة التقارير المالية للشركات الناشئة؛ تقليل زمن الوصول للرؤية من دقائق إلى ثوانٍ معدودة.",
-    role: "مهندس واجهات ومصمم منتج",
-    client: "Northwind",
-    year: 2025,
-    timeline: "8 أسابيع",
-    category: "أنظمة",
-    tags: ["SaaS", "تحليلات", "Dashboards"],
-    services: ["UI/UX", "Frontend", "Dashboards", "Design Systems"],
-    stack: ["React", "TypeScript", "Tailwind CSS", "Recharts"],
-    technologies: ["React", "TypeScript", "Tailwind", "PostgreSQL"],
-    cover: { src: "", alt: "غلاف لوحة Northwind" },
-    gallery: [],
-    metrics: [
-      { label: "زمن الوصول للمؤشرات", value: "< 30s" },
-      { label: "زيادة التفاعل الأسبوعي", value: "+210%" },
-    ],
-    liveDemo: "https://northwind.example.com",
-    problem: "صعوبة قراءة تقارير البيانات المزدحمة وضياع صانع القرار في الرسوم البيانية غير المترابطة.",
-    solution: "تصميم واجهة تركز على الأرقام الحرجة أولاً مع فلاتر ذكية وإمكانية استخراج التقارير بنقرة واحدة.",
-    result: "تجربة استخدام فائقة الهدوء والسرعة اعتمدتها الفرق التنفيذية بشكل يومي.",
-    featured: true,
-    status: "live",
-  },
-  {
-    id: "haven-storefront",
-    slug: "haven-storefront",
-    title: "Haven — متجر إلكتروني فاخر للتجزئة",
-    summary:
-      "متجر إلكتروني مخصص بتجربة شراء تحريرية وصفحات منتجات مصممة لرفع معدل التحويل.",
-    shortDescription:
-      "متجر إلكتروني أنيق بتجربة شراء انسيابية وصفحة دفع سريعة.",
-    description:
-      "تصميم وتطوير متجر تجارة إلكترونية متكامل يجمع بين الطابع الفاخر والسرعة الفائقة لرفع معدلات التحويل.",
-    role: "مصمم ومطور متجر إلكتروني",
-    client: "Haven Co.",
-    year: 2025,
-    timeline: "4 أسابيع",
-    category: "متاجر",
-    tags: ["تجارة إلكترونية", "تحسين تحويل", "متاجر سلة / ووكومرس"],
-    services: ["E-commerce", "UI/UX", "Frontend", "Conversion Optimization"],
-    stack: ["Shopify / WooCommerce", "React", "Tailwind CSS", "Stripe"],
-    technologies: ["React", "Tailwind", "WooCommerce", "Stripe"],
-    cover: { src: "", alt: "متجر Haven" },
-    gallery: [],
-    metrics: [
-      { label: "ارتفاع معدل التحويل", value: "+38%" },
-      { label: "سرعة تحميل الصفحات", value: "0.8s" },
-    ],
-    problem: "القوالب الجاهزة كانت بطيئة وغير معبرة عن هوية العلامة التجارية الفاخرة.",
-    solution: "بناء واجهات مخصصة وصفحة منتج تحريرية تعزز ثقة المشتري وتسهل عملية الدفع.",
-    result: "زيادة مبيعات المتجر وتقليل نسبة التخلي عن سلة الشراء بشكل ملحوظ.",
-    featured: true,
-    status: "live",
-  },
-  {
-    id: "meridian-agency",
-    slug: "meridian-agency",
-    title: "Meridian — موقع منصة رقمية وهوية حديثة",
-    summary:
-      "موقع شركة عصري يجمع بين التايبوجرافي الجريء، السرعة الفائقة، وتوليد العملاء المحتملين.",
-    shortDescription:
-      "موقع تعريفي احترافي مصمم لجذب العملاء وعكس الهوية التقنية.",
-    description:
-      "موقع تعريفي متكامل لشركة خدمات رقمية، مصمم بأسلوب بصري فاخر يركز على إقناع الزائر وتحويله لعميل.",
-    role: "تصميم وتطوير كامل",
-    client: "Meridian Studio",
-    year: 2025,
-    timeline: "3 أسابيع",
-    category: "مواقع",
-    tags: ["Landing Page", "مواقع شركات", "هوية"],
-    services: ["UI/UX", "Web Development", "Branding", "SEO"],
-    stack: ["React", "TypeScript", "Tailwind CSS", "Motion"],
-    technologies: ["React", "TypeScript", "Tailwind", "Vercel"],
-    cover: { src: "", alt: "موقع Meridian" },
-    gallery: [],
-    metrics: [
-      { label: "معدل التحويل للاتصال", value: "+45%" },
-      { label: "تقييم أداء Lighthouse", value: "99/100" },
-    ],
-    featured: true,
-    status: "live",
-  },
-  {
-    id: "kite-mobile-banking",
-    slug: "kite-mobile-banking",
-    title: "Kite — تجربة واجهات لتطبيق تقنية مالية",
-    summary:
-      "تصميم واجهات وتجربة استخدام لتطبيق مالي يركز على بساطة المعاملات اليومية.",
-    shortDescription:
-      "تصميم UI/UX متقدم لتطبيق جوال مالي بأسلوب مينيمال.",
-    description:
-      "دراسة وتصميم واجهات تطبيق جوال مبتكر يقدم حلول إدارة المصاريف والمدفوعات السريعة.",
-    role: "مصمم تجربة وواجهات المستخدم (Product Designer)",
-    year: 2024,
-    timeline: "4 أسابيع",
-    category: "UI/UX",
-    tags: ["UI/UX", "تطبيقات الجوال", "تقنية مالية"],
-    services: ["UI/UX Design", "Wireframing", "Design System", "Prototyping"],
-    stack: ["Figma", "Design System", "Prototyping"],
-    technologies: ["Figma", "Tokens Studio"],
-    cover: { src: "", alt: "تطبيق Kite" },
-    gallery: [],
-    metrics: [
-      { label: "عدد الشاشات المصممة", value: "35+" },
-      { label: "اختبار سهولة الاستخدام", value: "96%" },
-    ],
-    featured: false,
-    status: "live",
-  },
-  {
-    id: "prism-identity",
-    slug: "prism-identity",
-    title: "Prism — نظام هوية بصرية رقمية متكاملة",
-    summary:
-      "تصميم هوية بصرية، شعارات، ودليل إرشادي رقمي لشركة تقنية ناشئة.",
-    shortDescription:
-      "هوية بصرية رقمية ودليل استخدام متكامل للعلامة التجارية.",
-    description:
-      "بناء هوية بصرية معاصرة تشمل الشعار، لوحة الألوان، الخطوط، وقوالب النشر الرقمي.",
-    role: "مصمم هوية بصرية ورقمية",
-    client: "Prism",
-    year: 2024,
-    timeline: "2 أسبوعين",
-    category: "هوية",
-    tags: ["هوية", "تصميم رقمي", "Branding"],
-    services: ["Branding", "Visual Identity", "Design System", "Guidelines"],
-    stack: ["Figma", "Illustrator", "Brand Guide"],
-    technologies: ["Figma", "Adobe Illustrator"],
-    cover: { src: "", alt: "هوية Prism" },
-    gallery: [],
-    featured: false,
-    status: "live",
-  },
-  {
-    id: "sable-restaurant",
-    slug: "sable-restaurant",
-    title: "Sable — صفحة هبوط ونظام حجز لمطعم فاخر",
-    summary:
-      "موقع تسويقي سريع من صفحة واحدة مع نظام حجز طاولات متكامل وقائمة طعام تفاعلية.",
-    shortDescription:
-      "صفحة هبوط مع نظام حجز وتجربة استخدام سريعة على الهواتف.",
-    description:
-      "تصميم موقع عصري عالي التحميل والسرعة مع تكامل حجوزات سهل للعملاء من الجوال.",
-    role: "تصميم وتطوير ويب",
-    client: "Sable",
-    year: 2024,
-    timeline: "10 أيام",
-    category: "مواقع",
-    tags: ["مواقع", "Landing Pages", "نظام حجز"],
-    services: ["Landing Page", "Booking System", "UI/UX", "Speed Optimization"],
-    stack: ["React", "Tailwind CSS", "OpenTable API"],
-    technologies: ["React", "Tailwind"],
-    cover: { src: "", alt: "موقع Sable" },
-    gallery: [],
-    featured: false,
-    status: "live",
-  },
-  {
-    id: "orbit-apparel",
-    slug: "orbit-apparel",
-    title: "Orbit — متجر ملابس رقمي مع عدادات إطلاق",
-    summary:
-      "تصميم وتطوير متجر إلكتروني عالي الكفاءة لتحمل آلاف الزوار في أوقات الإطلاق الحصري.",
-    shortDescription:
-      "متجر إلكتروني متخصص للإصدارات المحدودة مع عد تنازلي.",
-    description:
-      "متجر إلكتروني متقدم مع نظام مخزون حي، صفحات ترويجية، وتجربة شراء سلسة.",
-    role: "مطور واجهات ومصمم متجر",
-    client: "Orbit",
-    year: 2024,
-    timeline: "3 أسابيع",
-    category: "متاجر",
-    tags: ["متاجر", "Shopify", "سلة", "دفع فوري"],
-    services: ["E-commerce", "Performance", "UI/UX"],
-    stack: ["Shopify", "Liquid", "Tailwind CSS"],
-    technologies: ["Shopify", "Tailwind"],
-    cover: { src: "", alt: "متجر Orbit" },
-    gallery: [],
-    featured: false,
     status: "live",
   },
 ];

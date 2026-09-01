@@ -166,35 +166,31 @@ export const services: Service[] = [
 
 const showcaseBySlug: Record<string, ServiceShowcase> = {
   "website-development": {
-    phoneImage: "https://picsum.photos/seed/website-development/540/1080",
+    phoneImage: "/images/services/service-web.webp",
     logoLabel: "React",
     featuredProjects: [
-      { slug: "meridian-agency", title: "Meridian Agency" },
-      { slug: "sable-restaurant", title: "Sable Restaurant" },
+      { slug: "campflow", title: "منصة CampFlow" },
     ],
   },
   "woocommerce": {
-    phoneImage: "https://picsum.photos/seed/woocommerce/540/1080",
+    phoneImage: "/images/services/service-store.webp",
     logoLabel: "E-Commerce",
     featuredProjects: [
-      { slug: "haven-storefront", title: "Haven Storefront" },
-      { slug: "orbit-apparel", title: "Orbit Apparel" },
+      { slug: "campflow", title: "منصة CampFlow" },
     ],
   },
   "systems-solutions": {
-    phoneImage: "https://picsum.photos/seed/systems-solutions/540/1080",
+    phoneImage: "/images/services/service-systems.webp",
     logoLabel: "SaaS",
     featuredProjects: [
-      { slug: "campflow", title: "CampFlow Platform" },
-      { slug: "northwind-analytics", title: "Northwind Analytics" },
+      { slug: "campflow", title: "منصة CampFlow الرياضية" },
     ],
   },
   "ui-ux-design": {
-    phoneImage: "https://picsum.photos/seed/ui-ux-design/540/1080",
+    phoneImage: "/images/services/service-uiux.webp",
     logoLabel: "Figma",
     featuredProjects: [
-      { slug: "kite-mobile-banking", title: "Kite Mobile Banking" },
-      { slug: "prism-identity", title: "Prism Identity" },
+      { slug: "campflow", title: "تصميم واجهات CampFlow" },
     ],
   },
 };
