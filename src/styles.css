@@ -4,28 +4,143 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ==========================================================================
+   Thmanyah Typeface (خط ثمانية) — Full Suite (Exclusive Font Family)
+   ========================================================================== */
+
+/* 1. Thmanyah Serif Display (خط ثمانية للعناوين الكبيرة البارزة) */
+@font-face {
+  font-family: "Thmanyah Display";
+  src: url("/fonts/thmanyah/display/thmanyahserifdisplay-Light.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Thmanyah Display";
+  src: url("/fonts/thmanyah/display/thmanyahserifdisplay-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Thmanyah Display";
+  src: url("/fonts/thmanyah/display/thmanyahserifdisplay-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Thmanyah Display";
+  src: url("/fonts/thmanyah/display/thmanyahserifdisplay-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Thmanyah Display";
+  src: url("/fonts/thmanyah/display/thmanyahserifdisplay-Black.woff2") format("woff2");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 2. Thmanyah Serif Text (خط ثمانية للنصوص والمقالات) */
+@font-face {
+  font-family: "Thmanyah Text";
+  src: url("/fonts/thmanyah/text/thmanyahseriftext-Light.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Thmanyah Text";
+  src: url("/fonts/thmanyah/text/thmanyahseriftext-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Thmanyah Text";
+  src: url("/fonts/thmanyah/text/thmanyahseriftext-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Thmanyah Text";
+  src: url("/fonts/thmanyah/text/thmanyahseriftext-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Thmanyah Text";
+  src: url("/fonts/thmanyah/text/thmanyahseriftext-Black.woff2") format("woff2");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 3. Thmanyah Sans (خط ثمانية الرقمي / واجهات المستخدم والبطاقات والأزرار) */
+@font-face {
+  font-family: "Thmanyah Sans";
+  src: url("/fonts/thmanyah/sans/thmanyahsans-Light.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Thmanyah Sans";
+  src: url("/fonts/thmanyah/sans/thmanyahsans-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Thmanyah Sans";
+  src: url("/fonts/thmanyah/sans/thmanyahsans-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Thmanyah Sans";
+  src: url("/fonts/thmanyah/sans/thmanyahsans-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Thmanyah Sans";
+  src: url("/fonts/thmanyah/sans/thmanyahsans-Black.woff2") format("woff2");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 /*
  * Mohammad Haroon — Design System Foundation
  *
- * Palette (fixed):
- *   Primary  #2563EB   Accent   #7C3AED
- *   Light bg #FFFFFF   Dark bg  #09090B
- *   Card lt  #F8FAFC   Card dk  #111114
- *
- * Typography: Inter (loaded via <link> in __root.tsx).
- * Radius: subtle (0.5rem base). Shadows: minimal.
- * Motion: 150 / 250 / 400ms with cubic-bezier(0.22, 1, 0.36, 1).
+ * Typography: Exclusive Thmanyah Typeface across 100% of website.
+ *   Display: Thmanyah Display (Selective for H1, H2 Hero & Main Section Headings)
+ *   Sans (Core): Thmanyah Sans (UI, Nav, Buttons, Cards, Forms, Badges, Numbers, Latin terms)
+ *   Text: Thmanyah Text (Editorial articles & narrative blocks)
  */
 
 @theme inline {
-  --font-sans: "IBM Plex Sans Arabic", "Noto Kufi Arabic", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-display: "IBM Plex Sans Arabic", "Noto Kufi Arabic", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Thmanyah Sans", sans-serif;
+  --font-display: "Thmanyah Display", "Thmanyah Sans", sans-serif;
+  --font-text: "Thmanyah Text", "Thmanyah Sans", serif;
+  --font-serif: "Thmanyah Display", "Thmanyah Text", serif;
+  --font-mono: "Thmanyah Sans", monospace;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 14px);
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -62,10 +177,10 @@
   --color-sidebar-ring: var(--sidebar-ring);
 
   --shadow-xs: 0 1px 2px 0 rgb(9 9 11 / 0.04);
-  --shadow-sm: 0 1px 3px 0 rgb(9 9 11 / 0.06), 0 1px 2px -1px rgb(9 9 11 / 0.04);
-  --shadow-md: 0 4px 12px -2px rgb(9 9 11 / 0.06), 0 2px 6px -2px rgb(9 9 11 / 0.04);
-  --shadow-lg: 0 12px 32px -8px rgb(9 9 11 / 0.10), 0 4px 12px -4px rgb(9 9 11 / 0.05);
-  --shadow-glow: 0 0 0 1px color-mix(in oklab, var(--primary) 12%, transparent), 0 8px 24px -8px color-mix(in oklab, var(--primary) 25%, transparent);
+  --shadow-sm: 0 1px 3px 0 rgb(9 9 11 / 0.05), 0 1px 2px -1px rgb(9 9 11 / 0.03);
+  --shadow-md: 0 4px 14px -2px rgb(9 9 11 / 0.06), 0 2px 6px -2px rgb(9 9 11 / 0.04);
+  --shadow-lg: 0 12px 32px -8px rgb(9 9 11 / 0.09), 0 4px 12px -4px rgb(9 9 11 / 0.04);
+  --shadow-glow: 0 0 0 1px color-mix(in oklab, var(--accent) 20%, transparent), 0 12px 32px -8px color-mix(in oklab, var(--accent) 30%, transparent);
 
   --ease-out-quart: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -99,97 +214,102 @@
   }
 }
 
-
 :root {
-  --radius: 0.5rem;
+  --radius: 0.625rem;
 
-  --background: #f7fbfa;
-  --foreground: #1f2a2a;
+  /* Off-White Clean Background */
+  --background: #fbfbfc;
+  --foreground: #09090b;
 
   --card: #ffffff;
-  --card-foreground: #1f2a2a;
+  --card-foreground: #09090b;
 
   --popover: #ffffff;
-  --popover-foreground: #1f2a2a;
+  --popover-foreground: #09090b;
 
-  --primary: #365e6a;
+  /* Deep Charcoal / Solid Black */
+  --primary: #09090b;
   --primary-foreground: #ffffff;
 
-  --secondary: #e5f3f1;
-  --secondary-foreground: #1f2a2a;
+  --secondary: #f4f4f6;
+  --secondary-foreground: #09090b;
 
-  --muted: #e5f3f1;
-  --muted-foreground: #4a5c60;
+  --muted: #f4f4f6;
+  --muted-foreground: #64748b;
 
-  --accent: #7fb3b8;
-  --accent-foreground: #1f2a2a;
+  /* Turquoise Accent */
+  --accent: #0d9488;
+  --accent-foreground: #ffffff;
 
-  --destructive: #b91c1c;
+  --destructive: #dc2626;
   --destructive-foreground: #ffffff;
 
-  --border: #cadbd9;
-  --input: #cadbd9;
-  --ring: #365e6a;
+  --border: #e4e4e7;
+  --input: #e4e4e7;
+  --ring: #0d9488;
 
-  --chart-1: #365e6a;
-  --chart-2: #7fb3b8;
-  --chart-3: #a9cdd1;
-  --chart-4: #4a8a8a;
-  --chart-5: #2b3838;
+  --chart-1: #0d9488;
+  --chart-2: #14b8a6;
+  --chart-3: #09090b;
+  --chart-4: #64748b;
+  --chart-5: #cbd5e1;
 
   --sidebar: #ffffff;
-  --sidebar-foreground: #1f2a2a;
-  --sidebar-primary: #365e6a;
+  --sidebar-foreground: #09090b;
+  --sidebar-primary: #09090b;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #e5f3f1;
-  --sidebar-accent-foreground: #1f2a2a;
-  --sidebar-border: #cadbd9;
-  --sidebar-ring: #365e6a;
+  --sidebar-accent: #f4f4f6;
+  --sidebar-accent-foreground: #09090b;
+  --sidebar-border: #e4e4e7;
+  --sidebar-ring: #0d9488;
 }
 
 .dark {
-  --background: #1a2222;
-  --foreground: #e5f3f1;
+  /* Deep Charcoal Dark Background */
+  --background: #09090b;
+  --foreground: #f8fafc;
 
-  --card: #232d2e;
-  --card-foreground: #e5f3f1;
+  --card: #121215;
+  --card-foreground: #f8fafc;
 
-  --popover: #232d2e;
-  --popover-foreground: #e5f3f1;
+  --popover: #121215;
+  --popover-foreground: #f8fafc;
 
-  --primary: #a9cdd1;
-  --primary-foreground: #1a2222;
+  /* Crisp light primary in dark mode */
+  --primary: #14b8a6;
+  --primary-foreground: #09090b;
 
-  --secondary: #2b3838;
-  --secondary-foreground: #e5f3f1;
+  --secondary: #18181b;
+  --secondary-foreground: #f8fafc;
 
-  --muted: #2b3838;
-  --muted-foreground: #a9c0c0;
+  --muted: #18181b;
+  --muted-foreground: #a1a1aa;
 
-  --accent: #7fb3b8;
-  --accent-foreground: #1a2222;
+  /* Turquoise Accent in Dark Mode */
+  --accent: #14b8a6;
+  --accent-foreground: #09090b;
 
-  --destructive: #f87171;
-  --destructive-foreground: #1a2222;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
 
-  --border: rgb(169 205 209 / 0.16);
-  --input: rgb(169 205 209 / 0.20);
-  --ring: #a9cdd1;
+  --border: rgb(255 255 255 / 0.1);
+  --input: rgb(255 255 255 / 0.12);
+  --ring: #14b8a6;
 
-  --chart-1: #a9cdd1;
-  --chart-2: #7fb3b8;
-  --chart-3: #365e6a;
-  --chart-4: #4a8a8a;
-  --chart-5: #e5f3f1;
+  --chart-1: #14b8a6;
+  --chart-2: #2dd4bf;
+  --chart-3: #38bdf8;
+  --chart-4: #a1a1aa;
+  --chart-5: #18181b;
 
-  --sidebar: #1a2222;
-  --sidebar-foreground: #e5f3f1;
-  --sidebar-primary: #a9cdd1;
-  --sidebar-primary-foreground: #1a2222;
-  --sidebar-accent: #232d2e;
-  --sidebar-accent-foreground: #e5f3f1;
-  --sidebar-border: rgb(169 205 209 / 0.16);
-  --sidebar-ring: #a9cdd1;
+  --sidebar: #09090b;
+  --sidebar-foreground: #f8fafc;
+  --sidebar-primary: #14b8a6;
+  --sidebar-primary-foreground: #09090b;
+  --sidebar-accent: #18181b;
+  --sidebar-accent-foreground: #f8fafc;
+  --sidebar-border: rgb(255 255 255 / 0.1);
+  --sidebar-ring: #14b8a6;
 }
 
 @layer base {
@@ -201,6 +321,9 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+    font-family: var(--font-sans);
+    font-feature-settings: "calt" 1;
   }
 
   html[dir="rtl"] {
@@ -210,146 +333,89 @@
   html,
   body {
     overflow-x: clip;
+    font-family: var(--font-sans);
   }
 
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
-    font-feature-settings: "kern";
-    line-height: 1.7;
+    font-feature-settings: "calt" 1;
+    line-height: 1.6;
   }
 
-  /* Arabic typography refinements */
+  /* Headings: Only H1 and H2 use Display font for clean punchy titles */
+  h1,
+  h2 {
+    font-family: var(--font-display);
+    font-feature-settings: "calt" 1;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+  }
+
+  /* Card titles, subheadings, buttons, inputs and labels stay clean and legible with Thmanyah Sans */
+  h3,
+  h4,
+  h5,
+  h6,
+  button,
+  input,
+  textarea,
+  select {
+    font-family: var(--font-sans);
+    font-feature-settings: "calt" 1;
+    letter-spacing: 0;
+  }
+
   html[dir="rtl"] body {
     letter-spacing: 0;
-    line-height: 1.8;
-  }
-  html[dir="rtl"] h1,
-  html[dir="rtl"] h2,
-  html[dir="rtl"] h3,
-  html[dir="rtl"] h4 {
-    letter-spacing: 0;
-    line-height: 1.4;
+    line-height: 1.65;
   }
 
-  /* Keep Latin technical terms readable inline */
+  html[dir="rtl"] h1,
+  html[dir="rtl"] h2 {
+    letter-spacing: 0;
+    line-height: 1.25;
+    font-family: var(--font-display);
+  }
+
+  /* Exclusively Thmanyah Sans for Latin technical terms and code */
   [lang="en"],
   code,
   kbd,
   samp,
   pre {
-    font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+    font-family: "Thmanyah Sans", sans-serif;
     direction: ltr;
     unicode-bidi: isolate;
   }
-
-  ::selection {
-    background: color-mix(in oklab, var(--color-primary) 22%, transparent);
-    color: var(--color-foreground);
-  }
-
-  :focus-visible {
-    outline: 2px solid var(--color-ring);
-    outline-offset: 2px;
-    border-radius: 4px;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-      animation-duration: 0.001ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.001ms !important;
-      scroll-behavior: auto !important;
-    }
-  }
 }
 
-@utility container-page {
+/* Container Utilities */
+.container-page {
   width: 100%;
-  margin-inline: auto;
-  padding-inline: 1.25rem;
-  max-width: 80rem;
-  @media (min-width: 768px) {
-    padding-inline: 2rem;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 72rem;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .container-page {
+    padding-left: 2rem;
+    padding-right: 2rem;
   }
 }
 
-@utility story-link {
-  position: relative;
-  display: inline-block;
-}
-@utility story-link {
-  &::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -2px;
-    height: 1px;
-    width: 100%;
-    background: currentColor;
-    transform: scaleX(0);
-    transform-origin: right center;
-    transition: transform var(--duration-base) var(--ease-out-quart);
-  }
-  &:hover::after {
-    transform: scaleX(1);
-    transform-origin: left center;
+@media (min-width: 1024px) {
+  .container-page {
+    padding-left: 3rem;
+    padding-right: 3rem;
   }
 }
 
-@utility text-balance {
-  text-wrap: balance;
-}
-
-@utility text-gradient-brand {
-  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-}
-
-@utility shimmer-bg {
-  background: linear-gradient(
-    90deg,
-    color-mix(in oklab, var(--color-muted) 60%, transparent) 0%,
-    color-mix(in oklab, var(--color-muted-foreground) 12%, transparent) 50%,
-    color-mix(in oklab, var(--color-muted) 60%, transparent) 100%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 1.6s linear infinite;
-}
-
-/* Marquee (Infinite Photo Gallery) --------------------------------- */
-/* Track holds items duplicated once; translating -50% loops seamlessly. */
-@keyframes marquee-x {
-  from { transform: translate3d(0, 0, 0); }
-  to   { transform: translate3d(-50%, 0, 0); }
-}
-.marquee-track {
-  animation-name: marquee-x;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  will-change: transform;
-}
-.marquee-mask:hover .marquee-track,
-.marquee-mask:focus-within .marquee-track,
-.marquee-row:hover .marquee-track {
-  animation-play-state: paused;
-}
-.marquee-mask {
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
-          mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
-}
-@media (prefers-reduced-motion: reduce) {
-  .marquee-row { overflow-x: auto; }
-  .marquee-track { animation: none !important; transform: none !important; }
-}
-
-/* Accessibility: honor prefers-reduced-motion globally. */
+/* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -361,8 +427,16 @@
   }
 }
 
-/* Consistent focus ring across custom interactive elements. */
-:focus-visible {
-  outline: 2px solid var(--color-ring, currentColor);
-  outline-offset: 2px;
+/* Print styles */
+@media print {
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  header,
+  footer,
+  nav,
+  .no-print {
+    display: none !important;
+  }
 }

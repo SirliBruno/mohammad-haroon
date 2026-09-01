@@ -1,35 +1,29 @@
-export type NavItem = { label: string; to: string };
+export type NavItem = { label: string; to: string; href?: string };
 
 export const primaryNav: NavItem[] = [
-  { label: "الرئيسية", to: "/" },
-  { label: "من أنا", to: "/about" },
-  { label: "المشاريع", to: "/work" },
-  { label: "الخدمات", to: "/services" },
-  { label: "المسيرة", to: "/career" },
-  { label: "المدوّنة", to: "/blog" },
-  { label: "تواصل", to: "/contact" },
+  { label: "الخدمات", to: "/#what-i-build" },
+  { label: "الأعمال", to: "/#work" },
+  { label: "كيف أعمل", to: "/#how-it-works" },
+  { label: "عرض 300 ريال", to: "/#offer" },
+  { label: "عني", to: "/#about" },
+  { label: "الأسئلة", to: "/#faq" },
 ];
 
 export const footerNav: { title: string; items: NavItem[] }[] = [
   {
-    title: "الأعمال",
+    title: "التنقل",
     items: [
-      { label: "المشاريع", to: "/work" },
-      { label: "الخدمات", to: "/services" },
+      { label: "الخدمات", to: "/#what-i-build" },
+      { label: "الأعمال", to: "/#work" },
+      { label: "كيف أعمل", to: "/#how-it-works" },
     ],
   },
   {
-    title: "التعريف",
+    title: "عني والتواصل",
     items: [
-      { label: "من أنا", to: "/about" },
-      { label: "تواصل", to: "/contact" },
-    ],
-  },
-  {
-    title: "مصادر",
-    items: [
-      { label: "المدوّنة", to: "/blog" },
-      { label: "المسيرة", to: "/career" },
+      { label: "عني", to: "/#about" },
+      { label: "الأسئلة الشائعة", to: "/#faq" },
+      { label: "ابدأ مشروعك", to: "/#contact-form" },
     ],
   },
 ];

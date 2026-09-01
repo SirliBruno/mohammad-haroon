@@ -1,163 +1,116 @@
-import { Link } from "@tanstack/react-router";
 import { motion, useReducedMotion } from "motion/react";
-import { ArrowLeft, ArrowUpRight, Github, Linkedin, Mail, Twitter } from "lucide-react";
-import { DSButton } from "@/components/ds";
+import { ArrowLeft, ArrowUpRight, ShieldCheck, Zap, Sparkles } from "lucide-react";
 import { Container } from "@/components/layout/container";
-import { HeroWorkspace } from "@/components/sections/hero-workspace";
-import { HeroMobile } from "@/components/sections/hero-mobile";
-import { RotatingWord } from "@/components/sections/rotating-word";
-import { socials } from "@/config/socials";
-import { trackEvent } from "@/lib/analytics";
-import { useHomeContent, getHomeText } from "@/lib/cms/home-content";
-
-const socialIcon: Record<string, typeof Github> = {
-  LinkedIn: Linkedin,
-  GitHub: Github,
-  X: Twitter,
-  "البريد الإلكتروني": Mail,
-};
-
-// Minimal drifting particles — pure decoration, disabled under reduced motion.
-function Particles() {
-  const dots = [
-    { top: "22%", left: "16%", d: 14 },
-    { top: "62%", left: "78%", d: 16 },
-    { top: "78%", left: "28%", d: 18 },
-  ];
-  return (
-    <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-      {dots.map((p, i) => (
-        <motion.span
-          key={i}
-          className="absolute size-1 rounded-full bg-primary/25"
-          style={{ top: p.top, left: p.left }}
-          animate={{ y: [0, -10, 0], opacity: [0.15, 0.4, 0.15] }}
-          transition={{ duration: p.d, repeat: Infinity, ease: "easeInOut", delay: i * 1.2 }}
-        />
-      ))}
-    </div>
-  );
-}
+import { HeroWorkspace } from "./hero-workspace";
+import { HeroMobile } from "./hero-mobile";
+import { site } from "@/config/site";
 
 export function Hero() {
   const reduce = useReducedMotion();
-  const { data: homeRows } = useHomeContent();
-  const badge = getHomeText(homeRows, "home.hero.badge", "متاح لمشاريع جديدة");
-  const heroDesc = getHomeText(
-    homeRows,
-    "home.hero.description",
-    "مواقع وأنظمة رقمية تجمع تصميمًا هادئًا بأداءٍ سريع.\nنبنيها معك لتخدم عملك وتليق باسمك.",
-  );
-  const ctaPrimaryLabel = getHomeText(homeRows, "home.hero.cta_primary_label", "استعرض الأعمال");
-  const ctaSecondaryLabel = getHomeText(homeRows, "home.hero.cta_secondary_label", "عندك فكرة ؟");
-  const heroDescLines = heroDesc.split("\n");
 
+  const scrollToSection = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
     <section
       aria-labelledby="hero-heading"
-      className="relative isolate overflow-hidden pt-24 pb-20 md:pt-28 md:pb-24"
+      className="relative overflow-hidden pt-10 pb-16 sm:pt-14 sm:pb-24 lg:pt-18 lg:pb-28"
     >
-      {/* Background — fine grid + radial + particles */}
+      {/* Subtle Background Lighting */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 [mask-image:radial-gradient(75%_65%_at_50%_20%,black,transparent)]"
-      >
-        <div
-          className="absolute inset-0 opacity-[0.12] dark:opacity-[0.08]"
-          style={{
-            backgroundImage:
-              "linear-gradient(to right, var(--color-border) 1px, transparent 1px), linear-gradient(to bottom, var(--color-border) 1px, transparent 1px)",
-            backgroundSize: "64px 64px",
-          }}
-        />
-        <div className="absolute -top-40 left-1/2 size-[820px] -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
-        <div className="absolute bottom-[-20%] right-[-10%] size-[520px] rounded-full bg-accent/10 blur-3xl" />
-      </div>
-      {!reduce && <Particles />}
+        className="pointer-events-none absolute -top-32 left-1/2 -z-10 size-[650px] -translate-x-1/2 rounded-full bg-accent/8 blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute top-1/3 -right-20 -z-10 size-[420px] rounded-full bg-accent/5 blur-3xl"
+      />
 
       <Container>
-        <div className="grid items-center gap-16 sm:gap-20 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.35fr)] lg:gap-16 xl:gap-20">
-          {/* Copy (right side in RTL) */}
+        <div className="grid gap-10 lg:grid-cols-12 lg:items-center">
+          {/* Text & Pitch Side */}
           <motion.div
             initial={reduce ? false : { opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="min-w-0 text-center lg:text-start"
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="lg:col-span-6 text-center lg:text-right"
           >
-            <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/70 px-3 py-1 text-xs text-muted-foreground backdrop-blur-md">
-              <span className="relative flex size-2">
-                <span className="absolute inset-0 animate-ping rounded-full bg-emerald-500/60" />
-                <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
-              </span>
-              <span>{badge}</span>
+            {/* Top Badge: 300 SAR Starter & Availability */}
+            <div className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-3.5 py-1 text-xs font-semibold text-accent shadow-2xs">
+              <span className="size-2 rounded-full bg-accent animate-pulse" />
+              <span>مشاريع تبدأ من {site.startingPrice}</span>
+              <span className="text-accent/50">·</span>
+              <span className="text-foreground/80 font-normal">{site.availabilityLabel}</span>
             </div>
 
+            {/* Main Headline */}
             <h1
               id="hero-heading"
-              className="mt-8 font-semibold tracking-tight text-foreground leading-[1.18] text-[1.75rem] sm:text-4xl md:text-5xl lg:text-[3.5rem]"
+              className="mt-5 text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground text-balance leading-[1.25]"
             >
-              <span className="block whitespace-nowrap">أعـــــطِ الخبز لخبــــــازه.</span>
-              <span className="block whitespace-nowrap mt-[6px]">
-                واتـــرك <RotatingWord /> لي.
-              </span>
+              من <span className="text-accent relative inline-block">فكرة</span> في بالك
+              <br />
+              إلى <span className="text-foreground">مشروع</span> تقدر تستخدمه.
             </h1>
 
-            <p className="mt-8 max-w-md mx-auto lg:mx-0 text-base leading-[1.9] text-muted-foreground md:text-lg">
-              {heroDescLines.map((line, i) => (
-                <span key={i}>
-                  {line}
-                  {i < heroDescLines.length - 1 ? <br /> : null}
-                </span>
-              ))}
+            {/* Subtitle */}
+            <p className="mt-4 max-w-xl mx-auto lg:mx-0 text-sm sm:text-base leading-relaxed text-muted-foreground">
+              أصمم وأطوّر مواقع، متاجر وأنظمة إلكترونية مخصصة تخدم هدفك وتزيد مبيعاتك — من الفكرة إلى الإطلاق.
             </p>
 
-            <div className="mt-12 flex flex-wrap items-center justify-center lg:justify-start gap-3">
-              <DSButton asChild size="lg" variant="primary">
-                <Link to="/work">
-                  {ctaPrimaryLabel}
-                  <ArrowLeft />
-                </Link>
-              </DSButton>
-              <DSButton asChild size="lg" variant="outline">
-                <Link to="/contact" onClick={() => trackEvent("cta_click", { source: "hero_contact" })}>
-                  {ctaSecondaryLabel}
-                  <ArrowUpRight />
-                </Link>
-              </DSButton>
+            {/* CTA Buttons */}
+            <div className="mt-7 flex flex-wrap items-center justify-center lg:justify-start gap-3">
+              <button
+                type="button"
+                onClick={() => scrollToSection("contact-form")}
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground shadow-md transition-all hover:opacity-95 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.99] cursor-pointer"
+              >
+                ابدأ مشروعك الآن
+                <ArrowLeft className="size-4" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => scrollToSection("work")}
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-background px-5 py-3 text-sm font-medium text-foreground transition-all hover:bg-muted hover:border-foreground/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer"
+              >
+                شاهد أعمالي
+                <ArrowUpRight className="size-4 text-muted-foreground" />
+              </button>
             </div>
 
-            {/* Social links */}
-            <div className="mt-14 flex items-center justify-center lg:justify-start gap-3">
-              <span className="text-xs text-muted-foreground">تواصل:</span>
-              <div className="h-px flex-1 max-w-16 bg-border/60" />
-              <ul className="flex items-center gap-2">
-                {socials.map((s) => {
-                  const Icon = socialIcon[s.label] ?? Mail;
-                  return (
-                    <li key={s.label}>
-                      <a
-                        href={s.href}
-                        target={s.href.startsWith("http") ? "_blank" : undefined}
-                        rel="noreferrer noopener"
-                        aria-label={s.label}
-                        className="grid size-11 sm:size-9 place-items-center rounded-full border border-border/60 bg-background/60 text-foreground/80 backdrop-blur-sm transition-colors hover:border-primary/40 hover:text-primary"
-                      >
-                        <Icon className="size-4" aria-hidden />
-                      </a>
-                    </li>
-                  );
-                })}
-              </ul>
+            {/* Microcopy */}
+            <p className="mt-3 text-xs text-muted-foreground max-w-md mx-auto lg:mx-0">
+              لا تعرف بالضبط وش تحتاج؟ أرسل فكرتك ونحدد الحل المناسب لها معًا.
+            </p>
+
+            {/* Trust Points */}
+            <div className="mt-8 flex flex-wrap items-center justify-center lg:justify-start gap-4 border-t border-border/60 pt-5 text-xs text-muted-foreground">
+              <div className="flex items-center gap-1.5 font-medium">
+                <ShieldCheck className="size-3.5 text-accent" />
+                <span>تسعير واضح قبل البدء</span>
+              </div>
+              <div className="flex items-center gap-1.5 font-medium">
+                <Zap className="size-3.5 text-accent" />
+                <span>تسليم سريع وجودة عالية</span>
+              </div>
+              <div className="flex items-center gap-1.5 font-medium">
+                <Sparkles className="size-3.5 text-accent" />
+                <span>تصميم وتطوير مخصص</span>
+              </div>
             </div>
           </motion.div>
 
-          {/* Showcase — bespoke mobile layout, floating windows on desktop */}
+          {/* Visual Side */}
           <motion.div
-            initial={reduce ? false : { opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-            className="min-w-0"
+            initial={reduce ? false : { opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            className="lg:col-span-6 min-w-0"
           >
             <div className="lg:hidden">
               <HeroMobile />

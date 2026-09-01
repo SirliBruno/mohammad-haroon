@@ -3,10 +3,8 @@ import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 /**
- * Shared scroll-reveal wrapper. Single source of truth — do NOT redefine
- * per-route. Honors prefers-reduced-motion and uses a consistent
- * viewport margin so reveals fire at the same distance from the fold
- * on every page.
+ * Shared scroll-reveal wrapper. Single source of truth.
+ * Honors prefers-reduced-motion and triggers smoothly.
  */
 export function Reveal({
   children,
@@ -31,7 +29,7 @@ export function Reveal({
       className={cn(className)}
       initial={{ opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
+      viewport={{ once: true, amount: 0.05 }}
       transition={{ duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}

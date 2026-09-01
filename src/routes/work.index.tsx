@@ -1,13 +1,14 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { ArrowUpRight, Search, X, Sparkles, ChevronRight, ChevronLeft } from "lucide-react";
+import { ArrowUpRight, Search, X, Sparkles, ChevronRight, ChevronLeft, ArrowLeft } from "lucide-react";
 import { buildMeta } from "@/features/seo/build-meta";
 import { PageHeader } from "@/components/layout/page-header";
 import { Section } from "@/components/layout/section";
 import { Grid, EmptyState, DSButton, DSCard } from "@/components/ds";
-import { projectCategories, type Project, type ProjectCategory } from "@/features/projects/schema";
+import { type Project } from "@/features/projects/schema";
+import { projects as staticProjects } from "@/data/projects";
 import { cn } from "@/lib/utils";
 import { statusMeta } from "@/lib/project-status";
 import { toProject } from "@/lib/project-adapter";
@@ -16,21 +17,20 @@ import {
   getProjectFacets,
 } from "@/lib/cms/projects-public.functions";
 import { usePageContent, getPageText } from "@/lib/cms/home-content";
+import { RouteErrorBoundary, RouteNotFoundBoundary } from "@/components/layout/route-boundaries";
 
 const PAGE_SIZE = 6;
-const CATEGORY_FILTERS = ["الكل", ...projectCategories] as const;
+const CATEGORY_FILTERS = ["الكل", "أنظمة", "مواقع", "متاجر", "UI/UX", "هوية"] as const;
 type CategoryFilter = (typeof CATEGORY_FILTERS)[number];
-
-import { RouteErrorBoundary, RouteNotFoundBoundary } from "@/components/layout/route-boundaries";
 
 export const Route = createFileRoute("/work/")({
   errorComponent: ({ reset }) => <RouteErrorBoundary reset={reset} eyebrow="المشاريع" />,
   notFoundComponent: () => <RouteNotFoundBoundary eyebrow="المشاريع" />,
   head: () => ({
     meta: buildMeta({
-      title: "المشاريع",
+      title: "أعمالي | مشاريع وأنظمة رقمية",
       description:
-        "أعمال مختارة — مواقع، ومتاجر إلكترونيّة، وواجهات، وهويّات بصريّة، وحملات، وصور.",
+        "مشاريع فعلية جمعت فيها بين التصميم، التطوير، وحل المشكلة — مواقع، أنظمة، ومتاجر إلكترونية.",
       path: "/work",
     }),
     links: [{ rel: "canonical", href: "/work" }],
@@ -52,12 +52,6 @@ function WorkIndex() {
     staleTime: 60_000,
   });
 
-  const featuredQ = useQuery({
-    queryKey: ["work", "featured"],
-    queryFn: () => listFn({ data: { featured: true, limit: 3 } }),
-    staleTime: 60_000,
-  });
-
   const listQ = useQuery({
     queryKey: ["work", "list", { query, category, page }],
     queryFn: () =>
@@ -72,63 +66,48 @@ function WorkIndex() {
     placeholderData: keepPreviousData,
   });
 
-  const featured = (featuredQ.data?.rows ?? []).map(toProject);
-  const paginated = (listQ.data?.rows ?? []).map(toProject);
-  const total = listQ.data?.count ?? 0;
+  const fromDb = (listQ.data?.rows ?? []).map(toProject);
+
+  const staticFiltered = useMemo(() => {
+    return staticProjects.filter((p) => {
+      const matchCat =
+        category === "الكل" ||
+        p.category === category ||
+        (category === "مواقع" && p.category === "مواقع إلكترونية") ||
+        (category === "متاجر" && p.category === "تجارة إلكترونية") ||
+        (category === "UI/UX" && p.category === "تصميم واجهات") ||
+        (category === "هوية" && p.category === "تصميم جرافيكي");
+
+      const matchQuery =
+        !query.trim() ||
+        p.title.toLowerCase().includes(query.toLowerCase()) ||
+        p.summary.toLowerCase().includes(query.toLowerCase()) ||
+        p.tags.some((t) => t.toLowerCase().includes(query.toLowerCase()));
+
+      return matchCat && matchQuery;
+    });
+  }, [category, query]);
+
+  const projectsToDisplay = fromDb.length > 0 ? fromDb : staticFiltered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const total = fromDb.length > 0 ? listQ.data?.count ?? 0 : staticFiltered.length;
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
   const safePage = Math.min(page, totalPages);
-  const categoryCounts = facetsQ.data?.counts ?? {};
-  const grandTotal = facetsQ.data?.total ?? 0;
-
-  function updateQuery(v: string) {
-    setQuery(v);
-    setPage(1);
-  }
-  function updateCategory(v: CategoryFilter) {
-    setCategory(v);
-    setPage(1);
-  }
 
   const { data: workRows } = usePageContent("work");
   const tt = (k: string, fb: string) => getPageText(workRows, k, fb);
+
   return (
     <>
       <PageHeader
-        eyebrow={tt("work.header.eyebrow", "المشاريع")}
-        title={tt("work.header.title", "أعمال أفتخر بها")}
-        description={tt(
-          "work.header.description",
-          "أرشيف حيّ لأعمالي مع العملاء ومشاريعي الخاصّة — منتجات، وتجارة إلكترونيّة، وهويّات، وصور.",
-        )}
+        eyebrow="أعمالي"
+        title="مشاريع فعلية ذات أثر حقيقي"
+        description="مجموعة مختارة من المواقع والأنظمة والمتاجر الإلكترونية التي صممتها وطورتها — من الفكرة إلى الإطلاق."
       />
-
-
-      {featured.length ? (
-        <Section>
-          <div className="flex items-end justify-between gap-4">
-            <div>
-              <p className="inline-flex items-center gap-1.5 text-xs font-medium tracking-[0.14em] text-muted-foreground">
-                <Sparkles className="size-3.5 text-primary" aria-hidden /> مميّز
-              </p>
-              <h2 className="mt-2 text-2xl font-semibold tracking-tight md:text-3xl">
-                أبرز الأعمال
-              </h2>
-            </div>
-          </div>
-          <div className="mt-8">
-            <Grid cols={{ base: 1, md: 2, lg: 3 }} gap="lg">
-              {featured.slice(0, 3).map((p) => (
-                <PremiumProjectCard key={p.slug} project={p} featured />
-              ))}
-            </Grid>
-          </div>
-        </Section>
-      ) : null}
 
       <Section className="border-t border-border/60">
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">
+            <h2 className="text-2xl font-bold tracking-tight text-foreground md:text-3xl">
               جميع المشاريع
             </h2>
             <div className="relative w-full md:max-w-sm">
@@ -139,24 +118,31 @@ function WorkIndex() {
               <input
                 type="search"
                 value={query}
-                onChange={(e) => updateQuery(e.target.value)}
-                placeholder="ابحث بالعنوان أو الوسم أو التقنيّة…"
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  setPage(1);
+                }}
+                placeholder="ابحث بالعنوان أو الوسم أو التقنية…"
                 aria-label="ابحث في المشاريع"
-                className="h-10 w-full rounded-full border border-border/60 bg-card pr-9 pl-9 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring/40"
+                className="h-11 w-full rounded-2xl border border-border/80 bg-card pr-9 pl-9 text-sm text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30"
               />
-              {query ? (
+              {query && (
                 <button
                   type="button"
-                  onClick={() => updateQuery("")}
+                  onClick={() => {
+                    setQuery("");
+                    setPage(1);
+                  }}
                   aria-label="مسح البحث"
                   className="absolute left-2 top-1/2 grid size-6 -translate-y-1/2 place-items-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
                 >
                   <X className="size-3.5" />
                 </button>
-              ) : null}
+              )}
             </div>
           </div>
 
+          {/* Filter Pills */}
           <div
             role="radiogroup"
             aria-label="تصفية حسب الفئة"
@@ -164,54 +150,44 @@ function WorkIndex() {
           >
             {CATEGORY_FILTERS.map((c) => {
               const active = category === c;
-              const count = c === "الكل" ? grandTotal : categoryCounts[c] ?? 0;
               return (
                 <button
                   key={c}
                   type="button"
                   role="radio"
                   aria-checked={active}
-                  onClick={() => updateCategory(c)}
+                  onClick={() => {
+                    setCategory(c);
+                    setPage(1);
+                  }}
                   className={cn(
-                    "inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-xs font-medium transition-all",
+                    "inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs sm:text-sm font-semibold transition-all",
                     active
-                      ? "border-foreground bg-foreground text-background shadow-sm"
-                      : "border-border/60 bg-card text-muted-foreground hover:border-foreground/40 hover:text-foreground",
+                      ? "bg-foreground text-background shadow-xs"
+                      : "border border-border/70 bg-card text-muted-foreground hover:border-foreground/40 hover:text-foreground",
                   )}
                 >
                   {c}
-                  <span
-                    className={cn(
-                      "rounded-full px-1.5 py-0.5 text-[10px] font-medium tabular-nums",
-                      active
-                        ? "bg-background/15 text-background"
-                        : "bg-muted text-muted-foreground",
-                    )}
-                  >
-                    {count}
-                  </span>
                 </button>
               );
             })}
           </div>
 
           <p className="text-xs text-muted-foreground" aria-live="polite">
-            {listQ.isLoading
-              ? "جارِ التحميل…"
-              : total === 0
-                ? "لا توجد مشاريع تُطابق الفلترة."
-                : `يظهر ${(safePage - 1) * PAGE_SIZE + 1}–${Math.min(
-                    safePage * PAGE_SIZE,
-                    total,
-                  )} من أصل ${total}`}
+            {total === 0
+              ? "لا توجد مشاريع مطابقة للبحث."
+              : `يظهر ${(safePage - 1) * PAGE_SIZE + 1}–${Math.min(
+                  safePage * PAGE_SIZE,
+                  total,
+                )} من أصل ${total} مشروع`}
           </p>
         </div>
 
-        <div className="mt-8">
-          {!listQ.isLoading && total === 0 ? (
+        <div className="mt-10">
+          {total === 0 ? (
             <EmptyState
-              title="لا نتائج مُطابقة"
-              description="جرّب كلمة بحث أخرى، أو أعد ضبط الفلترة."
+              title="لا توجد نتائج مطابقة"
+              description="جرب البحث بكلمة أخرى، أو أعد ضبط الفلترة."
               action={
                 <DSButton
                   variant="outline"
@@ -228,14 +204,14 @@ function WorkIndex() {
             />
           ) : (
             <Grid cols={{ base: 1, md: 2, lg: 3 }} gap="lg">
-              {paginated.map((p) => (
-                <PremiumProjectCard key={p.slug} project={p} />
+              {projectsToDisplay.map((p) => (
+                <WorkProjectCard key={p.slug} project={p} />
               ))}
             </Grid>
           )}
         </div>
 
-        {totalPages > 1 ? (
+        {totalPages > 1 && (
           <nav
             aria-label="التنقل بين الصفحات"
             className="mt-12 flex items-center justify-center gap-2"
@@ -245,7 +221,7 @@ function WorkIndex() {
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={safePage === 1}
               aria-label="الصفحة السابقة"
-              className="grid size-9 place-items-center rounded-full border border-border/60 bg-card text-muted-foreground transition-colors hover:border-foreground/40 hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
+              className="grid size-9 place-items-center rounded-xl border border-border bg-card text-muted-foreground transition-colors hover:text-foreground disabled:opacity-40"
             >
               <ChevronRight className="size-4" />
             </button>
@@ -258,10 +234,10 @@ function WorkIndex() {
                   onClick={() => setPage(n)}
                   aria-current={active ? "page" : undefined}
                   className={cn(
-                    "min-w-9 rounded-full px-3 py-1.5 text-xs font-medium tabular-nums transition-colors",
+                    "min-w-9 rounded-xl px-3 py-1.5 text-xs font-semibold tabular-nums transition-colors",
                     active
                       ? "bg-foreground text-background"
-                      : "border border-border/60 bg-card text-muted-foreground hover:border-foreground/40 hover:text-foreground",
+                      : "border border-border bg-card text-muted-foreground hover:text-foreground",
                   )}
                 >
                   {n}
@@ -273,167 +249,65 @@ function WorkIndex() {
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={safePage === totalPages}
               aria-label="الصفحة التالية"
-              className="grid size-9 place-items-center rounded-full border border-border/60 bg-card text-muted-foreground transition-colors hover:border-foreground/40 hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
+              className="grid size-9 place-items-center rounded-xl border border-border bg-card text-muted-foreground transition-colors hover:text-foreground disabled:opacity-40"
             >
               <ChevronLeft className="size-4" />
             </button>
           </nav>
-        ) : null}
+        )}
       </Section>
     </>
   );
 }
 
-
-function categoryGradient(category: ProjectCategory) {
-  switch (category) {
-    case "مواقع إلكترونية":
-      return "from-sky-500/25 via-indigo-500/15 to-transparent";
-    case "تجارة إلكترونية":
-      return "from-emerald-500/25 via-teal-500/15 to-transparent";
-    case "تصميم واجهات":
-      return "from-fuchsia-500/25 via-purple-500/15 to-transparent";
-    case "تصميم جرافيكي":
-      return "from-orange-500/25 via-rose-500/15 to-transparent";
-    case "تسويق":
-      return "from-amber-500/25 via-yellow-500/15 to-transparent";
-    case "تصوير":
-      return "from-slate-500/25 via-zinc-500/15 to-transparent";
-  }
-}
-
-function PremiumProjectCard({
-  project,
-  featured = false,
-}: {
-  project: Project;
-  featured?: boolean;
-}) {
-  const status = statusMeta(project.status);
+function WorkProjectCard({ project }: { project: Project }) {
   return (
-    <DSCard
-      variant="surface"
-      interactive
-      padding="none"
-      className="group relative overflow-hidden transition-[transform,box-shadow,border-color] duration-300 ease-out will-change-transform hover:border-foreground/20 hover:shadow-xl motion-safe:hover:-translate-y-1"
-    >
-      <Link
-        to="/work/$slug"
-        params={{ slug: project.slug }}
-        className="block focus-visible:outline-none"
-      >
-        <div className="relative aspect-[16/10] overflow-hidden bg-muted">
-          {project.cover?.src ? (
-            <img
-              src={project.cover.src}
-              alt={project.cover.alt}
-              className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-              loading="lazy"
-            />
-          ) : (
-            <div
-              className={cn(
-                "relative size-full bg-linear-to-br",
-                categoryGradient(project.category),
-              )}
-            >
-              <div
-                aria-hidden
-                className="absolute inset-0 opacity-40"
-                style={{
-                  backgroundImage:
-                    "radial-gradient(circle at 1px 1px, hsl(var(--foreground) / 0.08) 1px, transparent 0)",
-                  backgroundSize: "22px 22px",
-                }}
-              />
-              <div className="absolute inset-0 grid place-items-center">
-                <span className="text-4xl font-semibold tracking-tight text-foreground/80 md:text-5xl">
-                  {project.title.split(" — ")[0]}
-                </span>
-              </div>
-            </div>
-          )}
-
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 bg-linear-to-t from-background/60 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-          />
-
-          <div className="absolute left-4 top-4 flex items-center gap-2">
-            <span className="rounded-full border border-border/60 bg-background/80 px-2.5 py-1 text-[10px] font-medium tracking-wider text-foreground backdrop-blur">
-              {project.category}
-            </span>
-            {featured ? (
-              <span className="inline-flex items-center gap-1 rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-[10px] font-medium tracking-wider text-primary backdrop-blur">
-                <Sparkles className="size-3" /> مميّز
-              </span>
-            ) : null}
-          </div>
-
-          <div className="absolute right-4 top-4">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/80 px-2.5 py-1 text-[10px] font-medium text-foreground backdrop-blur">
-              <span className={cn("size-1.5 rounded-full", status.dot)} aria-hidden />
-              {status.label}
-            </span>
-          </div>
-
-          <div className="absolute bottom-4 right-4 grid size-10 place-items-center rounded-full border border-border/60 bg-background/90 text-foreground opacity-0 backdrop-blur transition-[opacity,transform] duration-300 ease-out group-hover:opacity-100 motion-safe:translate-y-2 motion-safe:group-hover:translate-y-0">
-            <ArrowUpRight className="size-4" />
-          </div>
+    <article className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-border/70 bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-foreground/30 hover:shadow-xl">
+      <div>
+        <div className="flex items-center justify-between text-xs text-muted-foreground mb-3">
+          <span className="font-semibold text-accent">{project.category}</span>
+          <span>{project.year}</span>
         </div>
 
-        <div className="p-6">
-          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <span className="tabular-nums">{project.year}</span>
-            {project.client ? (
-              <>
-                <span aria-hidden>·</span>
-                <span className="truncate">{project.client}</span>
-              </>
-            ) : null}
-          </div>
-          <h3 className="mt-2 text-lg font-semibold tracking-tight text-foreground">
-            {project.title}
-          </h3>
-          <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
-            {project.summary}
-          </p>
+        <h3 className="text-xl font-bold tracking-tight text-foreground">
+          {project.title}
+        </h3>
 
-          {project.tags.length ? (
-            <div className="mt-4 flex flex-wrap gap-1.5">
-              {project.tags.slice(0, 3).map((t) => (
-                <span
-                  key={t}
-                  className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground"
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
-          ) : null}
+        <p className="mt-2 text-xs sm:text-sm text-muted-foreground line-clamp-3 leading-relaxed">
+          {project.summary}
+        </p>
 
-          {project.stack.length ? (
-            <div className="mt-4 flex flex-wrap items-center gap-1.5 border-t border-border/60 pt-4">
-              <span className="text-[10px] font-medium tracking-wider text-muted-foreground">
-                التقنيات
+        {project.services && (
+          <div className="mt-4 flex flex-wrap gap-1">
+            {project.services.slice(0, 3).map((s) => (
+              <span
+                key={s}
+                className="rounded-md bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground"
+              >
+                {s}
               </span>
-              {project.stack.slice(0, 4).map((s) => (
-                <span
-                  key={s}
-                  className="rounded-md border border-border/60 bg-card px-1.5 py-0.5 text-[10px] font-medium text-foreground/70"
-                >
-                  {s}
-                </span>
-              ))}
-              {project.stack.length > 4 ? (
-                <span className="text-[10px] text-muted-foreground">
-                  +{project.stack.length - 4}
-                </span>
-              ) : null}
-            </div>
-          ) : null}
-        </div>
-      </Link>
-    </DSCard>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="mt-6 pt-4 border-t border-border/50 flex items-center justify-between">
+        <Link
+          to="/work/$slug"
+          params={{ slug: project.slug }}
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-foreground transition-colors hover:text-accent"
+        >
+          عرض المشروع
+          <ArrowLeft className="size-3.5" />
+        </Link>
+        <Link
+          to="/work/$slug"
+          params={{ slug: project.slug }}
+          className="flex size-7 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors group-hover:text-foreground"
+        >
+          <ArrowUpRight className="size-3.5" />
+        </Link>
+      </div>
+    </article>
   );
 }

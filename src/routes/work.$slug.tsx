@@ -5,15 +5,18 @@ import {
   ArrowUpRight,
   Calendar,
   Check,
+  CheckCircle2,
   ExternalLink,
   Github,
   Layers,
-  Quote,
   Sparkles,
   Tag,
   Target,
   User,
   Wrench,
+  HelpCircle,
+  Lightbulb,
+  Award,
 } from "lucide-react";
 import { useEffect } from "react";
 import { buildMeta } from "@/features/seo/build-meta";
@@ -24,34 +27,55 @@ import { Reveal } from "@/components/motion/reveal";
 import { DSButton, Grid, TagGroup } from "@/components/ds";
 import { MarqueeGallery } from "@/components/ds/marquee-gallery";
 import type { Project } from "@/features/projects/schema";
+import { projects as staticProjects } from "@/data/projects";
 import { site } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { statusMeta } from "@/lib/project-status";
 import { toProject } from "@/lib/project-adapter";
-import { normalizeSectionOrder, type ProjectSectionKey } from "@/lib/project-sections";
+import { BrowserFrame } from "@/components/mockups/devices";
+import { DashboardUI, StoreUI, EditorUI } from "@/components/mockups/ui-samples";
 import {
   getPublicProjectBySlug,
   listPublicProjects,
 } from "@/lib/cms/projects-public.functions";
 
+const mockupBySlug: Record<string, React.ComponentType> = {
+  campflow: DashboardUI,
+  "northwind-analytics": DashboardUI,
+  "haven-storefront": StoreUI,
+  "meridian-agency": EditorUI,
+  "sable-restaurant": StoreUI,
+  "orbit-apparel": StoreUI,
+};
+
 export const Route = createFileRoute("/work/$slug")({
   loader: async ({ params }) => {
-    const row = await getPublicProjectBySlug({ data: { slug: params.slug } });
-    if (!row) throw notFound();
-    const project = toProject(row);
-    const [relatedRes, siblingsRes] = await Promise.all([
-      listPublicProjects({ data: { category: project.category, limit: 4 } }),
-      listPublicProjects({ data: { limit: 12 } }),
-    ]);
-    const related = relatedRes.rows
-      .filter((r) => r.slug !== project.slug)
-      .slice(0, 3)
-      .map(toProject);
-    const siblings = siblingsRes.rows.map(toProject);
-    const currentIndex = siblings.findIndex((p) => p.slug === project.slug);
-    const next = siblings.length
-      ? siblings[(currentIndex + 1) % siblings.length] ?? null
-      : null;
+    let project: Project | null = null;
+    try {
+      const row = await getPublicProjectBySlug({ data: { slug: params.slug } });
+      if (row) {
+        project = toProject(row);
+      }
+    } catch {
+      // ignore db error, fallback to static
+    }
+
+    if (!project) {
+      project = staticProjects.find((p) => p.slug === params.slug) ?? null;
+    }
+
+    if (!project) throw notFound();
+
+    const related = staticProjects
+      .filter((p) => p.slug !== project?.slug && (p.category === project?.category || p.featured))
+      .slice(0, 3);
+
+    const currentIndex = staticProjects.findIndex((p) => p.slug === project?.slug);
+    const next =
+      staticProjects.length > 0
+        ? staticProjects[(currentIndex + 1) % staticProjects.length] ?? null
+        : null;
+
     return { project, related, next };
   },
   head: ({ params, loaderData }) => {
@@ -67,34 +91,19 @@ export const Route = createFileRoute("/work/$slug")({
     const { project } = loaderData;
     return {
       meta: buildMeta({
-        title: project.title,
+        title: `${project.title} | دراسة حالة`,
         description: project.summary,
         path: `/work/${project.slug}`,
         type: "article",
         image: project.cover?.src || undefined,
       }),
       links: [{ rel: "canonical", href: `/work/${project.slug}` }],
-      scripts: [
-        {
-          type: "application/ld+json",
-          children: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "CreativeWork",
-            name: project.title,
-            description: project.summary,
-            author: { "@type": "Person", name: site.name },
-            datePublished: String(project.year),
-          }),
-        },
-      ],
     };
   },
   notFoundComponent: ProjectNotFound,
   errorComponent: ProjectError,
   component: CaseStudy,
 });
-
-
 
 function CaseStudy() {
   const { project, related, next } = Route.useLoaderData() as {
@@ -103,464 +112,367 @@ function CaseStudy() {
     next: Project | null;
   };
   const status = statusMeta(project.status);
-
+  const Mockup = mockupBySlug[project.slug] ?? DashboardUI;
 
   return (
     <>
+      {/* 1. Project Hero */}
       <header className="relative overflow-hidden border-b border-border/60 pt-28 pb-16 md:pt-36 md:pb-20">
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10 bg-linear-to-b from-primary/5 via-transparent to-transparent"
+          className="pointer-events-none absolute inset-0 -z-10 bg-linear-to-b from-accent/5 via-transparent to-transparent"
         />
         <Container>
           <nav aria-label="مسار التنقل" className="text-sm text-muted-foreground">
-            <Link to="/work" className="inline-flex items-center gap-1 hover:text-foreground">
+            <Link to="/work" className="inline-flex items-center gap-1.5 hover:text-foreground">
               <ArrowRight className="size-3.5" /> جميع المشاريع
             </Link>
           </nav>
+
           <Reveal>
             <div className="mt-6 flex flex-wrap items-center gap-2">
-              <span className="rounded-full border border-border/60 bg-background/80 px-2.5 py-1 text-[10px] font-medium tracking-wider text-foreground backdrop-blur">
+              <span className="rounded-full border border-border/80 bg-background/80 px-3 py-1 text-xs font-semibold text-accent backdrop-blur">
                 {project.category}
               </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/80 px-2.5 py-1 text-[10px] font-medium text-foreground backdrop-blur">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/80 px-2.5 py-1 text-[11px] font-medium text-foreground backdrop-blur">
                 <span className={cn("size-1.5 rounded-full", status.dot)} aria-hidden />
                 {status.label}
               </span>
               {project.featured ? (
-                <span className="inline-flex items-center gap-1 rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-[10px] font-medium tracking-wider text-primary backdrop-blur">
+                <span className="inline-flex items-center gap-1 rounded-full border border-accent/30 bg-accent/10 px-2.5 py-1 text-[11px] font-medium text-accent backdrop-blur">
                   <Sparkles className="size-3" /> مميّز
                 </span>
               ) : null}
             </div>
           </Reveal>
+
           <Reveal delay={0.05}>
-            <h1 className="mt-5 max-w-4xl text-4xl font-semibold tracking-tight text-foreground text-balance md:text-5xl lg:text-6xl">
+            <h1 className="mt-5 max-w-4xl text-3xl font-bold tracking-tight text-foreground text-balance sm:text-5xl lg:text-6xl">
               {project.title}
             </h1>
           </Reveal>
+
           <Reveal delay={0.1}>
-            <p className="mt-5 max-w-2xl text-lg text-muted-foreground md:text-xl">
+            <p className="mt-5 max-w-3xl text-base text-muted-foreground leading-relaxed sm:text-lg">
               {project.summary}
             </p>
           </Reveal>
+
           <Reveal delay={0.15}>
-            <div className="mt-8 flex flex-wrap gap-3">
-              {project.liveDemo ? (
-                <DSButton asChild size="lg">
-                  <a href={project.liveDemo} target="_blank" rel="noreferrer">
-                    عرض مباشر <ExternalLink />
-                  </a>
-                </DSButton>
-              ) : null}
-              {project.github ? (
-                <DSButton asChild size="lg" variant="outline">
-                  <a href={project.github} target="_blank" rel="noreferrer">
-                    <Github /> الكود المصدري
-                  </a>
-                </DSButton>
-              ) : null}
-              <DSButton asChild size="lg" variant="ghost">
-                <Link to="/contact">
-                  ابدأ مشروعك <ArrowLeft />
-                </Link>
-              </DSButton>
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              {project.liveDemo && (
+                <a
+                  href={project.liveDemo}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-md transition-opacity hover:opacity-90"
+                >
+                  زيارة المشروع
+                  <ExternalLink className="size-4" />
+                </a>
+              )}
+              <a
+                href="/#contact-form"
+                className="inline-flex items-center gap-2 rounded-xl border border-border bg-card px-5 py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+              >
+                عندك مشروع مشابه؟ ابدأ الآن
+                <ArrowLeft className="size-4" />
+              </a>
             </div>
           </Reveal>
         </Container>
       </header>
 
-      <Section className="pt-12 md:pt-16">
+      {/* Main Visual / Cover */}
+      <Section className="pt-10 md:pt-14">
         <Reveal>
-          <div className="relative aspect-[16/9] overflow-hidden rounded-2xl border border-border/60 bg-linear-to-br from-primary/10 via-card to-accent/10">
+          <div className="overflow-hidden rounded-2xl border border-border/70 bg-muted/20 shadow-xl">
             {project.cover?.src ? (
-              <img src={project.cover.src} alt={project.cover.alt} loading="lazy" decoding="async" className="size-full object-cover" />
+              <img
+                src={project.cover.src}
+                alt={project.cover.alt}
+                className="size-full object-cover"
+                loading="lazy"
+              />
             ) : (
-              <div className="grid size-full place-items-center">
-                <span className="text-5xl font-semibold tracking-tight text-foreground/80 md:text-6xl">
-                  {project.title.split(" — ")[0]}
-                </span>
-              </div>
+              <BrowserFrame url={project.liveDemo ? new URL(project.liveDemo).host : `${project.slug}.app`}>
+                <Mockup />
+              </BrowserFrame>
             )}
           </div>
         </Reveal>
       </Section>
 
+      {/* Case Study Content Grid */}
       <Section className="pt-0">
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_320px]">
           <div className="min-w-0 space-y-16">
+            {/* Overview */}
             <Reveal>
-              <SectionHeading eyebrow="نظرة عامة" title="المشروع في لمحة" />
-              <p className="mt-6 max-w-2xl text-lg leading-relaxed text-foreground/85">
-                {project.description}
-              </p>
+              <div>
+                <SectionTitle eyebrow="نظرة عامة" title="عن المشروع" size="sm" />
+                <p className="mt-4 text-base sm:text-lg leading-relaxed text-foreground/85">
+                  {project.description}
+                </p>
+              </div>
             </Reveal>
 
-            {normalizeSectionOrder(project.sectionOrder).map((key) => (
-              <SectionByKey key={key} sectionKey={key} project={project} />
-            ))}
-
-            {project.tags.length ? (
+            {/* 2. المشكلة (Problem / Challenge) */}
+            {(project.problem || project.challenge) && (
               <Reveal>
-                <div className="pt-2">
-                  <TagGroup items={project.tags} />
+                <div className="rounded-2xl border border-border/70 bg-card p-7 sm:p-8">
+                  <div className="flex items-center gap-2 text-accent text-xs font-semibold uppercase tracking-wider">
+                    <HelpCircle className="size-4" />
+                    المشكلة والتحدي
+                  </div>
+                  <h3 className="mt-3 text-2xl font-bold tracking-tight text-foreground">
+                    ما المشكلة التي كان المشروع يحلها؟
+                  </h3>
+                  <p className="mt-4 text-sm sm:text-base leading-relaxed text-foreground/80">
+                    {project.problem || project.challenge}
+                  </p>
                 </div>
               </Reveal>
-            ) : null}
+            )}
+
+            {/* 3. الحل (Solution) */}
+            {project.solution && (
+              <Reveal>
+                <div className="rounded-2xl border border-accent/30 bg-accent/5 p-7 sm:p-8">
+                  <div className="flex items-center gap-2 text-accent text-xs font-semibold uppercase tracking-wider">
+                    <Lightbulb className="size-4" />
+                    الحل البرمجي والتصميمي
+                  </div>
+                  <h3 className="mt-3 text-2xl font-bold tracking-tight text-foreground">
+                    كيف تم تحويل المشكلة إلى منتج رقمي؟
+                  </h3>
+                  <p className="mt-4 text-sm sm:text-base leading-relaxed text-foreground/85">
+                    {project.solution}
+                  </p>
+                </div>
+              </Reveal>
+            )}
+
+            {/* 4. ما تم تنفيذه (Executed Services Cards) */}
+            {(project.services || project.highlights) && (
+              <Reveal>
+                <div>
+                  <SectionTitle eyebrow="التنفيذ" title="ما تم تنفيذه في المشروع" size="sm" />
+                  <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    {(project.services ?? ["UI/UX", "Frontend", "Backend", "Database", "Dashboard", "Authentication"]).map((svc) => (
+                      <div
+                        key={svc}
+                        className="flex items-center gap-2 rounded-xl border border-border/70 bg-card p-4 text-sm font-semibold text-foreground shadow-2xs"
+                      >
+                        <CheckCircle2 className="size-4 text-accent shrink-0" />
+                        <span>{svc}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {project.highlights && (
+                    <ul className="mt-6 space-y-2.5">
+                      {project.highlights.map((h) => (
+                        <li key={h} className="flex items-start gap-2 text-sm text-muted-foreground">
+                          <span className="size-1.5 rounded-full bg-accent mt-2 shrink-0" />
+                          <span>{h}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </Reveal>
+            )}
+
+            {/* 5. Screenshots / Gallery */}
+            {project.gallery && project.gallery.length > 0 && (
+              <Reveal>
+                <div>
+                  <SectionTitle eyebrow="المعرض" title="شاشات وواجهات المشروع" size="sm" />
+                  <div className="mt-6">
+                    <MarqueeGallery items={project.gallery} />
+                  </div>
+                </div>
+              </Reveal>
+            )}
+
+            {/* 6. النتيجة (Result / Metrics) */}
+            {(project.result || (project.metrics && project.metrics.length > 0)) && (
+              <Reveal>
+                <div>
+                  <SectionTitle eyebrow="النتائج والأثر" title="ما تم تحقيقه بالأرقام" size="sm" />
+                  {project.result && (
+                    <p className="mt-4 text-sm sm:text-base leading-relaxed text-foreground/80">
+                      {project.result}
+                    </p>
+                  )}
+                  {project.metrics && (
+                    <dl className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-4">
+                      {project.metrics.map((m) => (
+                        <div key={m.label} className="rounded-2xl border border-border/70 bg-card p-5">
+                          <dt className="text-xs text-muted-foreground">{m.label}</dt>
+                          <dd className="mt-2 text-2xl sm:text-3xl font-bold tracking-tight text-accent">
+                            {m.value}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                  )}
+                </div>
+              </Reveal>
+            )}
+
+            {/* Stack Tags */}
+            {project.stack && project.stack.length > 0 && (
+              <Reveal>
+                <div className="border-t border-border/60 pt-8">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    التقنيات المستخدمة
+                  </p>
+                  <ul className="mt-3 flex flex-wrap gap-2">
+                    {project.stack.map((s) => (
+                      <li
+                        key={s}
+                        className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground"
+                      >
+                        <Layers className="size-3 text-accent" />
+                        <span>{s}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </Reveal>
+            )}
+
+            {/* 7. Case Study CTA Banner */}
+            <Reveal>
+              <div className="rounded-3xl border border-accent/40 bg-linear-to-br from-card via-muted/30 to-accent/10 p-8 sm:p-10 text-center space-y-4">
+                <span className="inline-flex items-center gap-1 text-xs font-bold text-accent">
+                  <Sparkles className="size-3.5" /> هل تبحث عن نتيجة مشابهة؟
+                </span>
+                <h3 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+                  عندك مشروع مشابه؟
+                </h3>
+                <p className="text-sm text-muted-foreground max-w-md mx-auto">
+                  دعنا نناقش فكرتك ونحولها إلى نظام أو موقع متكامل يحقق أهدافك بأعلى جودة.
+                </p>
+                <div className="pt-2">
+                  <a
+                    href="/#contact-form"
+                    className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3.5 text-sm font-bold text-primary-foreground shadow-md transition-opacity hover:opacity-90"
+                  >
+                    ابدأ مشروعك الآن
+                    <ArrowLeft className="size-4" />
+                  </a>
+                </div>
+              </div>
+            </Reveal>
           </div>
 
-          <aside className="lg:sticky lg:top-24 lg:self-start">
-            <div className="rounded-2xl border border-border/60 bg-card p-6">
-              <p className="text-xs font-medium tracking-wider text-muted-foreground">تفاصيل المشروع</p>
-              <dl className="mt-5 space-y-5 text-sm">
-                {project.timeline ? (
-                  <SidebarRow icon={Calendar} label="المدة الزمنية" value={project.timeline} />
-                ) : null}
-                <SidebarRow icon={User} label="الدور" value={project.role} />
-                {project.client ? (
-                  <SidebarRow icon={User} label="العميل" value={project.client} />
-                ) : null}
-                <SidebarRow icon={Tag} label="الفئة" value={project.category} />
-                <SidebarRow icon={Calendar} label="السنة" value={String(project.year)} />
-                {project.tools && project.tools.length ? (
+          {/* Sidebar */}
+          <aside className="lg:sticky lg:top-24 lg:self-start space-y-6">
+            <div className="rounded-2xl border border-border/70 bg-card p-6 shadow-xs">
+              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                بطاقة المشروع
+              </p>
+
+              <dl className="mt-5 space-y-4 text-xs sm:text-sm">
+                <div>
+                  <dt className="text-xs text-muted-foreground">التصنيف</dt>
+                  <dd className="mt-1 font-semibold text-foreground">{project.category}</dd>
+                </div>
+
+                {project.timeline && (
                   <div>
-                    <dt className="inline-flex items-center gap-2 text-xs font-medium tracking-wider text-muted-foreground">
-                      <Wrench className="size-3.5" aria-hidden /> الأدوات
-                    </dt>
-                    <dd className="mt-2 flex flex-wrap gap-1.5">
-                      {project.tools.map((t) => (
-                        <span key={t} className="rounded-md border border-border/60 bg-background px-2 py-0.5 text-[11px] font-medium text-foreground/80">
-                          {t}
-                        </span>
-                      ))}
-                    </dd>
+                    <dt className="text-xs text-muted-foreground">المدة الزمنية</dt>
+                    <dd className="mt-1 font-semibold text-foreground">{project.timeline}</dd>
                   </div>
-                ) : null}
+                )}
+
+                <div>
+                  <dt className="text-xs text-muted-foreground">الدور</dt>
+                  <dd className="mt-1 font-semibold text-foreground">{project.role}</dd>
+                </div>
+
+                {project.client && (
+                  <div>
+                    <dt className="text-xs text-muted-foreground">العميل</dt>
+                    <dd className="mt-1 font-semibold text-foreground">{project.client}</dd>
+                  </div>
+                )}
+
+                <div>
+                  <dt className="text-xs text-muted-foreground">السنة</dt>
+                  <dd className="mt-1 font-semibold text-foreground">{project.year}</dd>
+                </div>
               </dl>
 
-              {(project.liveDemo || project.github) ? (
-                <div className="mt-6 space-y-2 border-t border-border/60 pt-6">
-                  {project.liveDemo ? (
-                    <DSButton asChild className="w-full" size="sm">
-                      <a href={project.liveDemo} target="_blank" rel="noreferrer">
-                        <ExternalLink /> عرض مباشر
-                      </a>
-                    </DSButton>
-                  ) : null}
-                  {project.github ? (
-                    <DSButton asChild className="w-full" size="sm" variant="outline">
-                      <a href={project.github} target="_blank" rel="noreferrer">
-                        <Github /> عرض الكود المصدري
-                      </a>
-                    </DSButton>
-                  ) : null}
-                </div>
-              ) : null}
-
-              <div className="mt-6 border-t border-border/60 pt-6">
-                <DSButton asChild className="w-full" size="sm" variant="ghost">
-                  <Link to="/contact">
-                    ابدأ مشروعًا <ArrowLeft />
-                  </Link>
-                </DSButton>
+              <div className="mt-6 border-t border-border/60 pt-6 space-y-2.5">
+                {project.liveDemo && (
+                  <a
+                    href={project.liveDemo}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-2.5 text-xs sm:text-sm font-semibold text-primary-foreground shadow-xs transition-opacity hover:opacity-90"
+                  >
+                    <ExternalLink className="size-3.5" />
+                    زيارة المشروع الحقيقي
+                  </a>
+                )}
+                <a
+                  href="/#contact-form"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-background py-2.5 text-xs sm:text-sm font-medium text-foreground transition-colors hover:bg-muted"
+                >
+                  طلب مشروع مشابه
+                </a>
               </div>
             </div>
           </aside>
         </div>
       </Section>
 
-      {related.length ? (
+      {/* Related Projects */}
+      {related.length > 0 && (
         <Section className="border-t border-border/60">
-          <SectionHeading eyebrow="مشاريع مشابهة" title={`المزيد من أعمال ${project.category}`} />
-          <div className="mt-8">
-            <Grid cols={{ base: 1, md: related.length === 2 ? 2 : 3 }} gap="md">
-              {related.map((p) => (
-                <RelatedCard key={p.slug} project={p} />
-              ))}
-            </Grid>
+          <SectionTitle eyebrow="مشاريع أخرى" title="شاهد أيضًا" size="sm" />
+          <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {related.map((p) => (
+              <Link
+                key={p.slug}
+                to="/work/$slug"
+                params={{ slug: p.slug }}
+                className="group block rounded-2xl border border-border/70 bg-card p-5 transition-all hover:-translate-y-1 hover:border-foreground/20 hover:shadow-lg"
+              >
+                <span className="text-[11px] font-semibold text-accent">{p.category}</span>
+                <h4 className="mt-1 text-base font-bold text-foreground group-hover:text-accent transition-colors">
+                  {p.title}
+                </h4>
+                <p className="mt-2 text-xs text-muted-foreground line-clamp-2">{p.summary}</p>
+              </Link>
+            ))}
           </div>
         </Section>
-      ) : null}
-
-      {next && next.slug !== project.slug ? (
-        <Section className="border-t border-border/60">
-          <Link
-            to="/work/$slug"
-            params={{ slug: next.slug }}
-            className="group block overflow-hidden rounded-2xl border border-border/60 bg-card p-8 transition-all hover:-translate-y-0.5 hover:border-foreground/20 hover:shadow-lg md:p-12"
-          >
-            <p className="text-xs font-medium tracking-[0.14em] text-muted-foreground">
-              المشروع التالي
-            </p>
-            <div className="mt-3 flex flex-wrap items-center justify-between gap-6">
-              <div className="min-w-0">
-                <h3 className="text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
-                  {next.title}
-                </h3>
-                <p className="mt-2 max-w-xl text-sm text-muted-foreground">{next.summary}</p>
-              </div>
-              <span className="inline-flex items-center gap-2 text-sm font-medium text-foreground transition-transform group-hover:-translate-x-1">
-                متابعة <ArrowLeft className="size-4" />
-              </span>
-            </div>
-          </Link>
-        </Section>
-      ) : null}
+      )}
     </>
   );
 }
 
-function SectionHeading({ eyebrow, title }: { eyebrow: string; title: string }) {
-  return <SectionTitle eyebrow={eyebrow} title={title} size="sm" />;
-}
-
-function SidebarRow({
-  icon: Icon,
-  label,
-  value,
-}: {
-  icon: React.ComponentType<{ className?: string; "aria-hidden"?: boolean }>;
-  label: string;
-  value: string;
-}) {
-  return (
-    <div>
-      <dt className="inline-flex items-center gap-2 text-xs font-medium tracking-wider text-muted-foreground">
-        <Icon className="size-3.5" aria-hidden /> {label}
-      </dt>
-      <dd className="mt-1 text-sm text-foreground">{value}</dd>
-    </div>
-  );
-}
-
-function RelatedCard({ project }: { project: Project }) {
-  return (
-    <Link
-      to="/work/$slug"
-      params={{ slug: project.slug }}
-      className="group block overflow-hidden rounded-xl border border-border/60 bg-card transition-all hover:-translate-y-0.5 hover:border-foreground/20 hover:shadow-lg"
-    >
-      <div className="relative aspect-[16/10] overflow-hidden bg-linear-to-br from-primary/10 via-muted to-accent/10">
-        {project.cover?.src ? (
-          <img src={project.cover.src} alt={project.cover.alt} className="size-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
-        ) : (
-          <div className="grid size-full place-items-center">
-            <span className="text-2xl font-semibold tracking-tight text-foreground/70">
-              {project.title.split(" — ")[0]}
-            </span>
-          </div>
-        )}
-      </div>
-      <div className="p-5">
-        <p className="text-xs text-muted-foreground">{project.category} · {project.year}</p>
-        <h3 className="mt-1 flex items-start justify-between gap-3 text-base font-semibold tracking-tight text-foreground">
-          <span className="line-clamp-1">{project.title}</span>
-          <ArrowUpRight className="mt-1 size-4 shrink-0 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:text-foreground" />
-        </h3>
-        <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{project.summary}</p>
-      </div>
-    </Link>
-  );
-}
-
-function SectionByKey({ sectionKey, project }: { sectionKey: ProjectSectionKey; project: Project }) {
-  switch (sectionKey) {
-    case "spotlight":
-      return project.spotlight ? (
-        <Reveal>
-          <div className="relative overflow-hidden rounded-3xl border border-primary/25 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-8 sm:p-12">
-            <div
-              aria-hidden
-              className="pointer-events-none absolute -left-24 -top-24 size-64 rounded-full bg-primary/20 blur-3xl"
-            />
-            <div
-              aria-hidden
-              className="pointer-events-none absolute -bottom-24 -right-16 size-64 rounded-full bg-primary/10 blur-3xl"
-            />
-            <div className="relative">
-              <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-                <Sparkles className="size-3.5" aria-hidden /> ميزة مميّزة
-              </span>
-              <h3 className="mt-5 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl md:text-4xl">
-                {project.spotlight.title}
-              </h3>
-              <p className="mt-4 max-w-2xl whitespace-pre-line text-base leading-relaxed text-foreground/85 sm:text-lg">
-                {project.spotlight.description}
-              </p>
-            </div>
-          </div>
-        </Reveal>
-      ) : null;
-    case "problem":
-      return project.problem ? (
-        <Reveal>
-          <SectionHeading eyebrow="المشكلة" title="ما الذي كان يستدعي التغيير" />
-          <p className="mt-6 max-w-2xl text-base leading-relaxed text-foreground/85">{project.problem}</p>
-        </Reveal>
-      ) : null;
-    case "goals":
-      return project.goals && project.goals.length ? (
-        <Reveal>
-          <SectionHeading eyebrow="الأهداف" title="ما سعينا لتحقيقه" />
-          <ul className="mt-6 grid gap-3 sm:grid-cols-2">
-            {project.goals.map((g) => (
-              <li key={g} className="flex items-start gap-3 rounded-xl border border-border/60 bg-card p-5">
-                <span className="mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-primary/10 text-primary">
-                  <Target className="size-3.5" aria-hidden />
-                </span>
-                <span className="text-sm text-foreground/85">{g}</span>
-              </li>
-            ))}
-          </ul>
-        </Reveal>
-      ) : null;
-    case "research":
-      return project.research ? (
-        <Reveal>
-          <SectionHeading eyebrow="البحث" title="ما تعلّمناه أولًا" />
-          <p className="mt-6 max-w-2xl text-base leading-relaxed text-foreground/85">{project.research}</p>
-        </Reveal>
-      ) : null;
-    case "solution":
-      return project.solution ? (
-        <Reveal>
-          <SectionHeading eyebrow="الحل" title="كيف تعاملنا مع المشكلة" />
-          <p className="mt-6 max-w-2xl text-base leading-relaxed text-foreground/85">{project.solution}</p>
-        </Reveal>
-      ) : null;
-    case "designProcess":
-      return project.designProcess && project.designProcess.length ? (
-        <Reveal>
-          <SectionHeading eyebrow="عملية التصميم" title="من الفكرة حتى الإطلاق" />
-          <ol className="mt-8 grid gap-4 sm:grid-cols-2">
-            {project.designProcess.map((step, i) => (
-              <li key={step.title} className="rounded-xl border border-border/60 bg-card p-6">
-                <p className="text-xs font-medium tracking-widest text-muted-foreground" dir="ltr">
-                  {String(i + 1).padStart(2, "0")}
-                </p>
-                <h3 className="mt-3 text-base font-semibold tracking-tight">{step.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{step.description}</p>
-              </li>
-            ))}
-          </ol>
-        </Reveal>
-      ) : null;
-    case "development":
-      return project.development ? (
-        <Reveal>
-          <SectionHeading eyebrow="التطوير" title="كيف تم البناء" />
-          <p className="mt-6 max-w-2xl text-base leading-relaxed text-foreground/85">{project.development}</p>
-        </Reveal>
-      ) : null;
-    case "stack":
-      return project.stack.length ? (
-        <Reveal>
-          <SectionHeading eyebrow="التقنيات" title="ما يُشغّل المشروع" />
-          <ul className="mt-6 flex flex-wrap gap-2">
-            {project.stack.map((s) => (
-              <li key={s} className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-card px-3 py-1.5 text-xs font-medium text-foreground/85">
-                <Layers className="size-3 text-primary" aria-hidden />
-                {s}
-              </li>
-            ))}
-          </ul>
-        </Reveal>
-      ) : null;
-    case "gallery":
-      return project.gallery.length ? (
-        <Reveal>
-          <SectionHeading eyebrow="المعرض" title="شاشات مختارة" />
-          <div className="mt-8">
-            <MarqueeGallery items={project.gallery} />
-          </div>
-        </Reveal>
-      ) : null;
-    case "metrics":
-      return project.metrics?.length ? (
-        <Reveal>
-          <SectionHeading eyebrow="النتائج" title="ما تحقّق فعلًا، بالأرقام" />
-          <dl className="mt-8 grid gap-4 sm:grid-cols-3">
-            {project.metrics.map((m) => (
-              <div key={m.label} className="rounded-xl border border-border/60 bg-card p-6">
-                <dt className="text-xs tracking-wider text-muted-foreground">{m.label}</dt>
-                <dd className="mt-2 text-3xl font-semibold tracking-tight text-foreground">{m.value}</dd>
-              </div>
-            ))}
-          </dl>
-        </Reveal>
-      ) : null;
-    case "highlights":
-      return project.highlights && project.highlights.length ? (
-        <Reveal>
-          <SectionHeading eyebrow="أبرز المميزات" title="ما يميّز هذا المشروع" />
-          <ul className="mt-6 grid gap-3 sm:grid-cols-2">
-            {project.highlights.map((h) => (
-              <li key={h} className="flex items-start gap-3 rounded-lg border border-border/60 bg-card p-4">
-                <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-primary/10 text-primary">
-                  <Check className="size-3" aria-hidden />
-                </span>
-                <span className="text-sm text-foreground/85">{h}</span>
-              </li>
-            ))}
-          </ul>
-        </Reveal>
-      ) : null;
-    case "lessons":
-      return project.lessons && project.lessons.length ? (
-        <Reveal>
-          <SectionHeading eyebrow="الدروس المستفادة" title="نقاط للمرة القادمة" />
-          <ul className="mt-6 space-y-3">
-            {project.lessons.map((l) => (
-              <li key={l} className="flex items-start gap-3 rounded-lg border border-border/60 bg-card p-4">
-                <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-primary/10 text-primary">
-                  <Check className="size-3" aria-hidden />
-                </span>
-                <span className="text-sm text-foreground/85">{l}</span>
-              </li>
-            ))}
-          </ul>
-        </Reveal>
-      ) : null;
-    case "testimonial":
-      return project.testimonial ? (
-        <Reveal>
-          <SectionHeading eyebrow="رأي العميل" title="بكلماتهم" />
-          <figure className="mt-6 rounded-2xl border border-border/60 bg-card p-8 md:p-10">
-            <Quote className="size-6 text-primary" aria-hidden />
-            <blockquote className="mt-4 text-lg leading-relaxed text-foreground/90 md:text-xl">
-              «{project.testimonial.quote}»
-            </blockquote>
-            <figcaption className="mt-6 text-sm">
-              <span className="font-medium text-foreground">{project.testimonial.author}</span>
-              {project.testimonial.role ? (
-                <span className="text-muted-foreground"> — {project.testimonial.role}</span>
-              ) : null}
-            </figcaption>
-          </figure>
-        </Reveal>
-      ) : null;
-    default:
-      return null;
-  }
-}
-
-
 function ProjectNotFound() {
-  const { slug } = Route.useParams();
   return (
     <Section>
-      <div className="mx-auto max-w-md text-center">
-        <p className="text-xs font-medium tracking-[0.14em] text-muted-foreground" dir="ltr">
-          404
-        </p>
-        <h1 className="mt-3 text-3xl font-semibold tracking-tight">لم نعثر على المشروع</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          لا يوجد مشروع باسم «{slug}».
+      <div className="mx-auto max-w-md text-center py-16">
+        <p className="text-xs font-semibold tracking-wider text-accent uppercase">404</p>
+        <h1 className="mt-3 text-3xl font-bold tracking-tight text-foreground">لم نعثر على هذا المشروع</h1>
+        <p className="mt-3 text-sm text-muted-foreground">
+          المشروع الذي تبحث عنه غير متاح حاليًا أو تم نقله.
         </p>
         <div className="mt-6">
-          <DSButton asChild variant="outline">
-            <Link to="/work">العودة إلى المشاريع</Link>
-          </DSButton>
+          <Link
+            to="/work"
+            className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground"
+          >
+            العودة لجميع المشاريع
+          </Link>
         </div>
       </div>
     </Section>
@@ -568,28 +480,24 @@ function ProjectNotFound() {
 }
 
 function ProjectError({ error, reset }: { error: Error; reset: () => void }) {
-  const router = useRouter();
-  useEffect(() => {
-    console.error(error);
-  }, [error]);
   return (
     <Section>
-      <div className="mx-auto max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight">تعذّر تحميل هذا المشروع</h1>
-        <p className="mt-2 text-sm text-muted-foreground">حاول مرّة أخرى أو ارجع إلى قائمة المشاريع.</p>
-        <div className="mt-6 flex justify-center gap-2">
-          <DSButton
-            variant="outline"
-            onClick={() => {
-              router.invalidate();
-              reset();
-            }}
+      <div className="mx-auto max-w-md text-center py-16">
+        <h1 className="text-xl font-bold text-foreground">تعذّر تحميل دراسة الحالة</h1>
+        <p className="mt-2 text-sm text-muted-foreground">حاول مرة أخرى أو ارجع إلى المشاريع.</p>
+        <div className="mt-6 flex justify-center gap-3">
+          <button
+            onClick={() => reset()}
+            className="rounded-xl border border-border px-4 py-2 text-sm font-medium text-foreground hover:bg-muted"
           >
             إعادة المحاولة
-          </DSButton>
-          <DSButton asChild variant="ghost">
-            <Link to="/work">جميع المشاريع</Link>
-          </DSButton>
+          </button>
+          <Link
+            to="/work"
+            className="rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+          >
+            جميع المشاريع
+          </Link>
         </div>
       </div>
     </Section>

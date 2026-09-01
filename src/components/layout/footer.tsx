@@ -1,111 +1,127 @@
 import { Link } from "@tanstack/react-router";
-import { Download, Github, Linkedin, Mail, Twitter } from "lucide-react";
 import { Container } from "./container";
 import { Logo } from "@/components/brand/logo";
-import { footerNav } from "@/config/nav";
 import { socials } from "@/config/socials";
-import { useSite } from "@/lib/cms/home-content";
-
-const iconFor: Record<string, typeof Github> = {
-  GitHub: Github,
-  LinkedIn: Linkedin,
-  "البريد الإلكتروني": Mail,
-  X: Twitter,
-};
+import { site } from "@/config/site";
+import { ArrowUpLeft, MessageCircle, Mail, MapPin } from "lucide-react";
 
 export function Footer() {
   const year = new Date().getFullYear();
-  const site = useSite();
 
   return (
-    <footer className="relative mt-24 border-t border-border/60 bg-background">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-border to-transparent"
-      />
+    <footer className="relative border-t border-border/60 bg-card py-16">
       <Container>
-        <div className="grid gap-12 py-16 md:grid-cols-12">
-          <div className="md:col-span-5">
+        <div className="grid gap-10 md:grid-cols-12 md:items-start">
+          {/* Brand Info */}
+          <div className="md:col-span-5 space-y-4">
             <Logo />
-            <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted-foreground">
-              {site.tagline} — {site.description}
+            <p className="max-w-sm text-sm leading-relaxed text-foreground/80">
+              {site.role} — {site.tagline}
             </p>
-            <div className="mt-6 flex flex-wrap items-center gap-2">
-              <a
-                href="/resume.pdf"
-                download
-                className="inline-flex items-center gap-2 rounded-md border border-border/70 bg-background px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-muted"
-              >
-                <Download className="size-3.5" aria-hidden />
-                تحميل السيرة الذاتية
-              </a>
-              <Link
-                to="/contact"
-                className="inline-flex items-center gap-2 rounded-md bg-foreground px-3 py-1.5 text-xs font-medium text-background transition-opacity hover:opacity-90"
-              >
-                تواصل
-              </Link>
+            <div className="flex flex-wrap items-center gap-2 pt-1">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-border/80 bg-background px-3 py-1 text-xs text-foreground/80">
+                <span className="size-2 rounded-full bg-accent" />
+                مشاريع تبدأ من {site.startingPrice}
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-border/80 bg-background px-3 py-1 text-xs text-muted-foreground">
+                <MapPin className="size-3 text-accent" />
+                {site.location}
+              </span>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-8 md:col-span-5 md:grid-cols-3">
-            {footerNav.map((group) => (
-              <div key={group.title}>
-                <p className="text-xs font-medium tracking-[0.14em] text-muted-foreground">
-                  {group.title}
-                </p>
-                <ul className="mt-4 space-y-2.5">
-                  {group.items.map((item) => (
-                    <li key={item.to}>
-                      <Link
-                        to={item.to}
-                        className="text-sm text-foreground/80 transition-colors hover:text-foreground"
-                      >
-                        {item.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+          {/* Quick Links */}
+          <div className="grid grid-cols-2 gap-8 md:col-span-4">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-wider text-foreground">
+                روابط سريعة
+              </p>
+              <ul className="mt-4 space-y-2.5 text-sm">
+                <li>
+                  <a href="/#what-i-build" className="text-foreground/80 hover:text-foreground transition-colors">
+                    الخدمات والحلول
+                  </a>
+                </li>
+                <li>
+                  <a href="/#work" className="text-foreground/80 hover:text-foreground transition-colors">
+                    الأعمال المختارة
+                  </a>
+                </li>
+                <li>
+                  <a href="/#how-it-works" className="text-foreground/80 hover:text-foreground transition-colors">
+                    كيف أعمل
+                  </a>
+                </li>
+                <li>
+                  <a href="/#about" className="text-foreground/80 hover:text-foreground transition-colors">
+                    عني
+                  </a>
+                </li>
+                <li>
+                  <a href="/#faq" className="text-foreground/80 hover:text-foreground transition-colors">
+                    الأسئلة الشائعة
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <p className="text-xs font-bold uppercase tracking-wider text-foreground">
+                التواصل المباشر
+              </p>
+              <ul className="mt-4 space-y-2.5 text-sm">
+                <li>
+                  <a
+                    href="/#contact-form"
+                    className="font-semibold text-accent hover:underline inline-flex items-center gap-1"
+                  >
+                    ابدأ مشروعك
+                    <ArrowUpLeft className="size-3" />
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href={`https://wa.me/${site.whatsapp.replace(/[^0-9]/g, "")}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-foreground/80 hover:text-foreground transition-colors inline-flex items-center gap-1.5"
+                  >
+                    <MessageCircle className="size-3.5 text-accent" />
+                    واتساب
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href={`mailto:${site.email}`}
+                    className="text-foreground/80 hover:text-foreground transition-colors inline-flex items-center gap-1.5"
+                  >
+                    <Mail className="size-3.5 text-accent" />
+                    {site.email}
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
 
-          <div className="md:col-span-2">
-            <p className="text-xs font-medium tracking-[0.14em] text-muted-foreground">
-              حسابات أخرى
+          {/* Socials / Direct Notice */}
+          <div className="md:col-span-3">
+            <p className="text-xs font-bold uppercase tracking-wider text-foreground">
+              جاهزية العمل
             </p>
-            <ul className="mt-4 space-y-2.5">
-              {socials.map((s) => {
-                const Icon = iconFor[s.label] ?? Mail;
-                return (
-                  <li key={s.label}>
-                    <a
-                      href={s.href}
-                      rel="noreferrer"
-                      className="group inline-flex items-center gap-2 text-sm text-foreground/80 transition-colors hover:text-foreground"
-                      aria-label={`${s.label} — ${s.handle}`}
-                    >
-                      <Icon className="size-3.5 text-muted-foreground transition-colors group-hover:text-foreground" aria-hidden />
-                      <span>{s.label}</span>
-                    </a>
-                  </li>
-                );
-              })}
-            </ul>
+            <div className="mt-4 rounded-xl border border-border/80 bg-background/60 p-4 text-xs text-foreground/80 leading-relaxed">
+              <p className="font-semibold text-foreground">🤝 سرعة في الرد والتنفيذ</p>
+              <p className="mt-1 text-muted-foreground">
+                استقبل طلبات المشاريع والرد عليها عبر WhatsApp خلال أوقات العمل الرسمية.
+              </p>
+            </div>
           </div>
         </div>
 
-        <div className="flex flex-col items-start justify-between gap-4 border-t border-border/60 py-6 md:flex-row md:items-center">
-          <p className="text-xs text-muted-foreground">
-            © {year} {site.name}. جميع الحقوق محفوظة.
-          </p>
-          <p className="text-xs text-muted-foreground" dir="ltr">
-            Built with{" "}
-            <a href="https://react.dev" rel="noreferrer" className="text-foreground/80 transition-colors hover:text-foreground">React</a>,{" "}
-            <a href="https://tanstack.com/start" rel="noreferrer" className="text-foreground/80 transition-colors hover:text-foreground">TanStack Start</a>,{" "}
-            <a href="https://tailwindcss.com" rel="noreferrer" className="text-foreground/80 transition-colors hover:text-foreground">Tailwind</a>
-            {" & "}
-            <a href="https://motion.dev" rel="noreferrer" className="text-foreground/80 transition-colors hover:text-foreground">Motion</a>.
+        {/* Copyright */}
+        <div className="mt-14 pt-6 border-t border-border/50 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
+          <p>© {year} {site.name} ({site.nameEn}). جميع الحقوق محفوظة.</p>
+          <p dir="ltr" className="text-muted-foreground/70">
+            Handcrafted with modern web architecture.
           </p>
         </div>
       </Container>
