@@ -1,5 +1,5 @@
 import { Container } from "@/components/layout/container";
-import { Reveal } from "@/components/motion/reveal";
+import { Reveal, SectionReveal } from "@/components/motion/reveal";
 import { ShoppingCart, Server, Rocket } from "lucide-react";
 
 export function SocialProof() {
@@ -25,7 +25,7 @@ export function SocialProof() {
   ];
 
   return (
-    <section className="border-y border-border/60 bg-muted/30 py-10 sm:py-12">
+    <SectionReveal className="border-y border-border/60 bg-muted/30 py-10 sm:py-12">
       <Container>
         <Reveal>
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-border/40">
@@ -69,6 +69,6 @@ export function SocialProof() {
           })}
         </div>
       </Container>
-    </section>
+    </SectionReveal>
   );
 }

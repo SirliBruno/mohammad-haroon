@@ -1,5 +1,5 @@
 import { Container } from "@/components/layout/container";
-import { Reveal } from "@/components/motion/reveal";
+import { Reveal, SectionReveal } from "@/components/motion/reveal";
 import {
   Accordion,
   AccordionContent,
@@ -37,7 +37,7 @@ export function FaqSection() {
   ];
 
   return (
-    <section id="faq" className="border-t border-border/60 py-20 sm:py-28 bg-muted/20 relative">
+    <SectionReveal id="faq" className="border-t border-border/60 py-20 sm:py-28 bg-muted/20 relative">
       <Container>
         <div className="grid gap-12 lg:grid-cols-12">
           {/* Header */}
@@ -79,6 +79,6 @@ export function FaqSection() {
           </div>
         </div>
       </Container>
-    </section>
+    </SectionReveal>
   );
 }

@@ -1,7 +1,8 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { Container } from "@/components/layout/container";
-import { Reveal } from "@/components/motion/reveal";
+import { Reveal, SectionReveal } from "@/components/motion/reveal";
+import { smoothScrollTo } from "@/components/layout/smooth-scroll";
 import { site } from "@/config/site";
 import { cn } from "@/lib/utils";
 import {
@@ -395,23 +396,17 @@ export function WhatIBuild() {
         },
       }),
     );
-    const formEl = document.getElementById("contact-form");
-    if (formEl) {
-      setTimeout(() => {
-        formEl.scrollIntoView({ behavior: "smooth" });
-      }, 100);
-    }
+    setTimeout(() => {
+      smoothScrollTo("#contact-form");
+    }, 100);
   };
 
   const scrollToContact = () => {
-    const formEl = document.getElementById("contact-form");
-    if (formEl) {
-      formEl.scrollIntoView({ behavior: "smooth" });
-    }
+    smoothScrollTo("#contact-form");
   };
 
   return (
-    <section id="what-i-build" className="relative overflow-hidden py-16 sm:py-24 border-t border-border/60">
+    <SectionReveal id="what-i-build" className="relative overflow-hidden py-16 sm:py-24 border-t border-border/60">
       {/* Subtle Background Glow */}
       <div
         aria-hidden
@@ -692,6 +687,7 @@ export function WhatIBuild() {
           </DialogContent>
         </Dialog>
       )}
-    </section>
+    </SectionReveal>
   );
 }
+

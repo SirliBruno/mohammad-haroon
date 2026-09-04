@@ -1,11 +1,11 @@
 import { Container } from "@/components/layout/container";
-import { Reveal } from "@/components/motion/reveal";
+import { Reveal, SectionReveal } from "@/components/motion/reveal";
+import { smoothScrollTo } from "@/components/layout/smooth-scroll";
 import { Rocket, Zap, Clock, CheckCircle2, ArrowLeft } from "lucide-react";
 
 export function MvpSection() {
   const scrollToContact = () => {
-    const el = document.getElementById("contact-form");
-    if (el) el.scrollIntoView({ behavior: "smooth" });
+    smoothScrollTo("#contact-form");
   };
 
   const deliverables = [
@@ -17,7 +17,7 @@ export function MvpSection() {
   ];
 
   return (
-    <section className="relative overflow-hidden border-t border-border/60 py-20 sm:py-28 bg-gradient-to-b from-card via-background to-card">
+    <SectionReveal className="relative overflow-hidden border-t border-border/60 py-20 sm:py-28 bg-gradient-to-b from-card via-background to-card">
       <Container>
         <Reveal>
           <div className="mx-auto max-w-5xl rounded-3xl border border-accent/25 bg-linear-to-br from-card via-muted/20 to-accent/5 p-8 sm:p-14 shadow-xl">
@@ -90,6 +90,6 @@ export function MvpSection() {
           </div>
         </Reveal>
       </Container>
-    </section>
+    </SectionReveal>
   );
 }

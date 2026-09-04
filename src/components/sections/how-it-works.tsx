@@ -1,5 +1,5 @@
 import { Container } from "@/components/layout/container";
-import { Reveal } from "@/components/motion/reveal";
+import { Reveal, SectionReveal } from "@/components/motion/reveal";
 import { Lightbulb, Compass, Palette, Code2, Rocket } from "lucide-react";
 
 export function HowItWorks() {
@@ -37,7 +37,7 @@ export function HowItWorks() {
   ];
 
   return (
-    <section id="how-it-works" className="border-t border-border/60 py-20 sm:py-28 relative">
+    <SectionReveal id="how-it-works" className="border-t border-border/60 py-20 sm:py-28 relative">
       <Container>
         <Reveal>
           <div className="max-w-2xl">
@@ -92,6 +92,6 @@ export function HowItWorks() {
           </div>
         </div>
       </Container>
-    </section>
+    </SectionReveal>
   );
 }

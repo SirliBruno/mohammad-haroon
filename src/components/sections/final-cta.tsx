@@ -1,15 +1,15 @@
 import { Container } from "@/components/layout/container";
-import { Reveal } from "@/components/motion/reveal";
+import { Reveal, SectionReveal } from "@/components/motion/reveal";
+import { smoothScrollTo } from "@/components/layout/smooth-scroll";
 import { ArrowLeft, ArrowUpRight, Sparkles } from "lucide-react";
 
 export function FinalCTA() {
   const scrollTo = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
+    smoothScrollTo(`#${id}`);
   };
 
   return (
-    <section className="border-t border-border/60 py-24 sm:py-32 relative overflow-hidden bg-card">
+    <SectionReveal className="border-t border-border/60 py-24 sm:py-32 relative overflow-hidden bg-card">
       {/* Background glow */}
       <div
         aria-hidden
@@ -55,6 +55,6 @@ export function FinalCTA() {
           </div>
         </Reveal>
       </Container>
-    </section>
+    </SectionReveal>
   );
 }

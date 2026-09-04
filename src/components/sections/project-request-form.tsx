@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { Container } from "@/components/layout/container";
-import { Reveal } from "@/components/motion/reveal";
+import { Reveal, SectionReveal } from "@/components/motion/reveal";
 import { CheckCircle2, Shield, Sparkles, MessageCircle, ExternalLink } from "lucide-react";
 import { site } from "@/config/site";
 import { toast } from "sonner";
@@ -156,7 +156,7 @@ ${budget}
   };
 
   return (
-    <section id="contact-form" className="relative overflow-hidden border-t border-border/60 py-16 sm:py-24">
+    <SectionReveal id="contact-form" className="relative overflow-hidden border-t border-border/60 py-16 sm:py-24">
       {/* Background Glow */}
       <div
         aria-hidden
@@ -437,6 +437,6 @@ ${budget}
           </Reveal>
         </div>
       </Container>
-    </section>
+    </SectionReveal>
   );
 }

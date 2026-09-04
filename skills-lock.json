@@ -67,6 +67,12 @@
       "skillPath": "skills/productivity/handoff/SKILL.md",
       "computedHash": "7b03a812d5ca10fa8fe69d4cf8a34542684db51f5db0271254b96074e9f3a243"
     },
+    "icons8": {
+      "source": "icons8/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/icons8/SKILL.md",
+      "computedHash": "872ad80ec3c12ebd69853f4558df869d8f2c2da66c3c176643ee691440cf49ca"
+    },
     "implement": {
       "source": "mattpocock/skills",
       "sourceType": "github",

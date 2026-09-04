@@ -1,6 +1,7 @@
 import { motion, useReducedMotion } from "motion/react";
 import { ArrowLeft, ArrowUpRight, ShieldCheck, Zap, Sparkles } from "lucide-react";
 import { Container } from "@/components/layout/container";
+import { smoothScrollTo } from "@/components/layout/smooth-scroll";
 import { HeroWorkspace } from "./hero-workspace";
 import { HeroMobile } from "./hero-mobile";
 import { site } from "@/config/site";
@@ -9,10 +10,7 @@ export function Hero() {
   const reduce = useReducedMotion();
 
   const scrollToSection = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
-    }
+    smoothScrollTo(`#${id}`);
   };
 
   return (

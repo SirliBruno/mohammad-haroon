@@ -19,6 +19,7 @@ import { buildMeta } from "@/features/seo/build-meta";
 import { site } from "@/config/site";
 import { ScrollProgress } from "@/components/layout/scroll-progress";
 import { ScrollToTop } from "@/components/layout/scroll-to-top";
+import { SmoothScroll } from "@/components/layout/smooth-scroll";
 import { AnalyticsTracker } from "@/components/analytics-tracker";
 import { Toaster } from "sonner";
 
@@ -191,6 +192,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="system">
         <div className="flex min-h-dvh flex-col">
+          <SmoothScroll />
           <AnalyticsTracker />
           <ScrollProgress />
           <Nav />

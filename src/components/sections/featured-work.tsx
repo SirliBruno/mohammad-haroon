@@ -1,7 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowUpRight, Sparkles, ExternalLink, Layers, CheckCircle2 } from "lucide-react";
 import { Container } from "@/components/layout/container";
-import { Reveal } from "@/components/motion/reveal";
+import { Reveal, SectionReveal } from "@/components/motion/reveal";
+import { smoothScrollTo } from "@/components/layout/smooth-scroll";
 import { projects as staticProjects } from "@/data/projects";
 import { BrowserFrame } from "@/components/mockups/devices";
 import { DashboardUI, StoreUI, EditorUI } from "@/components/mockups/ui-samples";
@@ -14,8 +15,7 @@ const mockupBySlug: Record<string, React.ComponentType> = {
 
 export function FeaturedWork() {
   const scrollToContact = () => {
-    const el = document.getElementById("contact-form");
-    if (el) el.scrollIntoView({ behavior: "smooth" });
+    smoothScrollTo("#contact-form");
   };
 
   const campflow = staticProjects.find((p) => p.slug === "campflow") || staticProjects[0];
@@ -25,7 +25,7 @@ export function FeaturedWork() {
   const curatedSecondaryProjects = [haven, meridian].filter(Boolean);
 
   return (
-    <section id="work" className="relative overflow-hidden border-t border-border/60 py-16 sm:py-24">
+    <SectionReveal id="work" className="relative overflow-hidden border-t border-border/60 py-16 sm:py-24">
       <Container>
         {/* Header */}
         <Reveal>
@@ -248,6 +248,6 @@ export function FeaturedWork() {
           </div>
         </Reveal>
       </Container>
-    </section>
+    </SectionReveal>
   );
 }

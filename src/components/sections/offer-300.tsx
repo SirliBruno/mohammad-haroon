@@ -1,11 +1,11 @@
 import { Container } from "@/components/layout/container";
-import { Reveal } from "@/components/motion/reveal";
+import { Reveal, SectionReveal } from "@/components/motion/reveal";
+import { smoothScrollTo } from "@/components/layout/smooth-scroll";
 import { Check, ArrowLeft, Sparkles, Info } from "lucide-react";
 
 export function Offer300() {
   const scrollToContact = () => {
-    const el = document.getElementById("contact-form");
-    if (el) el.scrollIntoView({ behavior: "smooth" });
+    smoothScrollTo("#contact-form");
   };
 
   const startingExamples = [
@@ -17,7 +17,7 @@ export function Offer300() {
   ];
 
   return (
-    <section id="offer" className="relative overflow-hidden border-t border-border/60 py-16 sm:py-24">
+    <SectionReveal id="offer" className="relative overflow-hidden border-t border-border/60 py-16 sm:py-24">
       {/* Background glow */}
       <div
         aria-hidden
@@ -83,6 +83,6 @@ export function Offer300() {
           </div>
         </Reveal>
       </Container>
-    </section>
+    </SectionReveal>
   );
 }

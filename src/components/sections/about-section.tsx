@@ -1,5 +1,5 @@
 import { Container } from "@/components/layout/container";
-import { Reveal } from "@/components/motion/reveal";
+import { Reveal, SectionReveal } from "@/components/motion/reveal";
 import { Sparkles, Code, Palette, Layers, ShoppingBag, Eye } from "lucide-react";
 import { site } from "@/config/site";
 
@@ -13,7 +13,7 @@ export function AboutSection() {
   ];
 
   return (
-    <section id="about" className="relative overflow-hidden border-t border-border/60 py-16 sm:py-24">
+    <SectionReveal id="about" className="relative overflow-hidden border-t border-border/60 py-16 sm:py-24">
       <Container>
         <div className="grid gap-10 lg:grid-cols-12 lg:items-center">
           {/* Left / Text Side */}
@@ -93,6 +93,6 @@ export function AboutSection() {
           </div>
         </div>
       </Container>
-    </section>
+    </SectionReveal>
   );
 }

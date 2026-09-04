@@ -6,6 +6,7 @@ import { Menu, X, ArrowLeft } from "lucide-react";
 import { primaryNav } from "@/config/nav";
 import { socials } from "@/config/socials";
 import { useHydrated } from "@/hooks/use-hydrated";
+import { smoothScrollTo } from "./smooth-scroll";
 
 export function MobileNav() {
   const [open, setOpen] = useState(false);
@@ -39,12 +40,9 @@ export function MobileNav() {
     if (to.startsWith("/#") && pathname === "/") {
       e.preventDefault();
       const targetId = to.replace("/#", "");
-      const el = document.getElementById(targetId);
-      if (el) {
-        setTimeout(() => {
-          el.scrollIntoView({ behavior: "smooth" });
-        }, 150);
-      }
+      setTimeout(() => {
+        smoothScrollTo(`#${targetId}`);
+      }, 150);
     }
   };
 
@@ -52,12 +50,9 @@ export function MobileNav() {
     setOpen(false);
     if (pathname === "/") {
       e.preventDefault();
-      const el = document.getElementById("contact-form");
-      if (el) {
-        setTimeout(() => {
-          el.scrollIntoView({ behavior: "smooth" });
-        }, 150);
-      }
+      setTimeout(() => {
+        smoothScrollTo("#contact-form");
+      }, 150);
     }
   };
 

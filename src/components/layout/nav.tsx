@@ -5,6 +5,7 @@ import { MobileNav } from "./mobile-nav";
 import { Logo } from "@/components/brand/logo";
 import { ThemeToggle } from "@/features/theme/theme-toggle";
 import { primaryNav } from "@/config/nav";
+import { smoothScrollTo } from "./smooth-scroll";
 import { ArrowLeft } from "lucide-react";
 
 export function Nav() {
@@ -22,20 +23,14 @@ export function Nav() {
     if (to.startsWith("/#") && pathname === "/") {
       e.preventDefault();
       const targetId = to.replace("/#", "");
-      const el = document.getElementById(targetId);
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth" });
-      }
+      smoothScrollTo(`#${targetId}`);
     }
   };
 
   const scrollToContact = (e: React.MouseEvent) => {
     if (pathname === "/") {
       e.preventDefault();
-      const el = document.getElementById("contact-form");
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth" });
-      }
+      smoothScrollTo("#contact-form");
     }
   };
 
