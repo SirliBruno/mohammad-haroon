@@ -37,6 +37,7 @@ import {
   Search,
   LogOut,
   ArrowRight,
+  ArrowLeft,
   type LucideIcon,
 } from "lucide-react";
 
@@ -160,11 +161,18 @@ export function AdminShell({
       <div className="mx-auto flex max-w-[1400px] gap-6 px-4 py-6 md:px-8 md:py-10 lg:grid lg:grid-cols-[260px_1fr]">
         <aside className="hidden lg:flex flex-col gap-6 sticky top-6 self-start max-h-[calc(100vh-3rem)] overflow-y-auto rounded-2xl border border-border bg-white p-5 shadow-sm dark:border-border dark:bg-neutral-900">
           <div>
-            <Link to="/" className="text-sm text-muted-foreground hover:text-foreground dark:hover:text-neutral-100 inline-flex items-center gap-1">
-              <ArrowRight className="h-3.5 w-3.5" /> العودة للموقع
+            <Link
+              to="/"
+              className="mb-3 inline-flex w-full items-center justify-between rounded-xl border border-accent/40 bg-accent/10 px-3 py-2 text-xs font-bold text-accent hover:bg-accent hover:text-accent-foreground transition-all shadow-2xs"
+            >
+              <span className="flex items-center gap-1.5">
+                <Sparkles className="size-3.5" />
+                <span>الموقع والتحرير المباشر</span>
+              </span>
+              <ArrowLeft className="size-3.5" />
             </Link>
-            <h2 className="mt-3 text-lg font-semibold">لوحة الإدارة</h2>
-            <p className="text-xs text-muted-foreground mt-1">نظام إدارة المحتوى</p>
+            <h2 className="mt-1 text-lg font-semibold">لوحة الإدارة</h2>
+            <p className="text-xs text-muted-foreground mt-0.5">نظام إدارة المحتوى</p>
           </div>
           <button
             onClick={() => setPaletteOpen(true)}

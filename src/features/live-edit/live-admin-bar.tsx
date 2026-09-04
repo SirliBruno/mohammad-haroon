@@ -39,7 +39,7 @@ export function LiveAdminBar() {
     return (
       <aside
         aria-label="شريط أدوات الإدارة المباشرة"
-        className="fixed bottom-5 left-6 z-50 animate-in fade-in slide-in-from-bottom-3 duration-300"
+        className="fixed bottom-5 left-6 z-[9999] animate-in fade-in slide-in-from-bottom-3 duration-300"
       >
         <button
           type="button"
@@ -63,7 +63,7 @@ export function LiveAdminBar() {
   return (
     <aside
       aria-label="شريط التحرير المباشر"
-      className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 max-w-[95vw] animate-in fade-in slide-in-from-bottom-4 duration-300"
+      className="fixed bottom-5 left-1/2 -translate-x-1/2 z-[9999] max-w-[95vw] animate-in fade-in slide-in-from-bottom-4 duration-300"
     >
       <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 rounded-2xl border border-accent/40 bg-card/95 p-2 sm:p-2.5 text-foreground shadow-2xl backdrop-blur-xl ring-1 ring-white/10 font-sans">
         {/* Status indicator & Edit Mode Switch */}

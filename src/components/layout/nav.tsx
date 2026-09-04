@@ -6,11 +6,13 @@ import { Logo } from "@/components/brand/logo";
 import { ThemeToggle } from "@/features/theme/theme-toggle";
 import { primaryNav } from "@/config/nav";
 import { smoothScrollTo } from "./smooth-scroll";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Sparkles } from "lucide-react";
+import { useLiveEdit } from "@/features/live-edit/live-edit-context";
 
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { isAdmin, isEditMode, toggleEditMode } = useLiveEdit();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -63,6 +65,22 @@ export function Nav() {
           </nav>
 
           <div className="flex items-center gap-2.5">
+            {isAdmin && (
+              <button
+                type="button"
+                onClick={toggleEditMode}
+                className={cn(
+                  "inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-bold transition-all cursor-pointer",
+                  isEditMode
+                    ? "bg-accent text-accent-foreground shadow-sm ring-2 ring-accent/40 animate-pulse"
+                    : "border border-accent/50 bg-accent/15 text-accent hover:bg-accent/25",
+                )}
+                title={isEditMode ? "إيقاف وضع التحرير المباشر" : "تفعيل وضع التحرير المباشر"}
+              >
+                <Sparkles className="size-3.5" />
+                <span>{isEditMode ? "التحرير: مفعّل" : "وضع التحرير"}</span>
+              </button>
+            )}
             <ThemeToggle />
             <a
               href="/#contact-form"
