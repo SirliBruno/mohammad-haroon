@@ -20,15 +20,8 @@ function AuthPage() {
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data, error }) => {
-      if (error || !data.user) {
-        void supabase.auth.signOut();
-        try {
-          localStorage.clear();
-        } catch {
-          // ignore storage access issues
-        }
-      } else {
-        navigate({ to: "/admin/hero" });
+      if (!error && data?.user) {
+        navigate({ to: "/admin" });
       }
     });
   }, [navigate]);
@@ -48,7 +41,7 @@ function AuthPage() {
       } else {
         const { error: err } = await supabase.auth.signInWithPassword({ email, password });
         if (err) throw err;
-        navigate({ to: "/admin/hero" });
+        navigate({ to: "/admin" });
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "حدث خطأ");

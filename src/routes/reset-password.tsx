@@ -39,7 +39,7 @@ function ResetPasswordPage() {
       const { error: err } = await supabase.auth.updateUser({ password });
       if (err) throw err;
       setDone(true);
-      setTimeout(() => navigate({ to: "/admin/hero" }), 1500);
+      setTimeout(() => navigate({ to: "/admin" }), 1500);
     } catch (err) {
       setError(err instanceof Error ? err.message : "فشل تحديث كلمة المرور");
     } finally {
