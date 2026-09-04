@@ -1,13 +1,11 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowLeft, ArrowUpRight, Sparkles, ExternalLink, Layers, CheckCircle2, Pencil } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Sparkles, ExternalLink, Layers, CheckCircle2 } from "lucide-react";
 import { Container } from "@/components/layout/container";
 import { Reveal, SectionReveal } from "@/components/motion/reveal";
 import { smoothScrollTo } from "@/components/layout/smooth-scroll";
 import { projects as staticProjects } from "@/data/projects";
 import { BrowserFrame } from "@/components/mockups/devices";
 import { DashboardUI, StoreUI, EditorUI } from "@/components/mockups/ui-samples";
-import { EditableText } from "@/features/live-edit/editable-text";
-import { useLiveEdit } from "@/features/live-edit/live-edit-context";
 
 const mockupBySlug: Record<string, React.ComponentType> = {
   campflow: DashboardUI,
@@ -16,8 +14,6 @@ const mockupBySlug: Record<string, React.ComponentType> = {
 };
 
 export function FeaturedWork() {
-  const { isEditMode, openDrawer } = useLiveEdit();
-
   const scrollToContact = () => {
     smoothScrollTo("#contact-form");
   };
@@ -36,31 +32,21 @@ export function FeaturedWork() {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div className="max-w-2xl">
               <span className="text-xs font-bold tracking-wider text-accent uppercase">
-                <EditableText contentKey="home.work.badge" defaultText="أعمال مختارة" />
+                أعمال مختارة
               </span>
-              <EditableText
-                as="h2"
-                contentKey="home.work.title"
-                defaultText="أعمالي"
-                className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl"
-              />
-              <EditableText
-                as="p"
-                contentKey="home.work.subtitle"
-                multiline
-                defaultText="مشاريع فعلية ونماذج عملية جمعت فيها بين التصميم، التطوير، وحل المشكلة."
-                className="mt-4 text-base leading-relaxed text-foreground/80 sm:text-lg"
-              />
+              <h2 className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+                أعمالي
+              </h2>
+              <p className="mt-4 text-base leading-relaxed text-foreground/80 sm:text-lg">
+                مشاريع فعلية ونماذج عملية جمعت فيها بين التصميم، التطوير، وحل المشكلة.
+              </p>
             </div>
 
             <Link
               to="/work"
               className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:underline"
             >
-              <EditableText
-                contentKey="home.work.all_link"
-                defaultText="استكشف جميع الأعمال والدراسات"
-              />
+              استكشف جميع الأعمال والدراسات
               <ArrowLeft className="size-4" />
             </Link>
           </div>
@@ -87,44 +73,21 @@ export function FeaturedWork() {
                 {/* Info */}
                 <div className="lg:col-span-5 flex flex-col justify-between space-y-6">
                   <div>
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="inline-flex items-center gap-1 rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-xs font-bold text-accent">
-                          <Sparkles className="size-3.5" /> مشروع مميّز (Featured SaaS)
-                        </span>
-                        <span className="rounded-full border border-border bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
-                          SaaS / Web Application
-                        </span>
-                      </div>
-
-                      {isEditMode && (
-                        <button
-                          type="button"
-                          onClick={() => openDrawer("project", campflow.slug, campflow)}
-                          className="inline-flex items-center gap-1 rounded-md bg-accent/15 border border-accent/40 text-accent px-2 py-0.5 text-[11px] font-bold hover:bg-accent hover:text-accent-foreground transition-all cursor-pointer shadow-xs"
-                          title="تعديل تفاصيل هذا المشروع"
-                        >
-                          <Pencil className="size-3" />
-                          <span>تعديل</span>
-                        </button>
-                      )}
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="inline-flex items-center gap-1 rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-xs font-bold text-accent">
+                        <Sparkles className="size-3.5" /> مشروع مميّز (Featured SaaS)
+                      </span>
+                      <span className="rounded-full border border-border bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
+                        SaaS / Web Application
+                      </span>
                     </div>
 
                     <h3 className="mt-4 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-                      <EditableText
-                        contentKey={`project.${campflow.slug}.title`}
-                        defaultText={campflow.title}
-                        groupName="projects"
-                      />
+                      {campflow.title}
                     </h3>
 
                     <p className="mt-3 text-sm leading-relaxed text-foreground/80 sm:text-base">
-                      <EditableText
-                        contentKey={`project.${campflow.slug}.description`}
-                        defaultText={campflow.description}
-                        multiline
-                        groupName="projects"
-                      />
+                      {campflow.description}
                     </p>
 
                     {campflow.services && (
@@ -205,38 +168,15 @@ export function FeaturedWork() {
                           {isStore ? "نموذج متجر متكامل" : "نموذج موقع وهوية"}
                         </span>
                       </div>
-
-                      <div className="flex items-center gap-2">
-                        {isEditMode && (
-                          <button
-                            type="button"
-                            onClick={() => openDrawer("project", project.slug, project)}
-                            className="inline-flex items-center gap-1 rounded-md bg-accent/15 border border-accent/40 text-accent px-2 py-0.5 text-[11px] font-bold hover:bg-accent hover:text-accent-foreground transition-all cursor-pointer shadow-xs"
-                            title="تعديل تفاصيل هذا المشروع"
-                          >
-                            <Pencil className="size-3" />
-                            <span>تعديل</span>
-                          </button>
-                        )}
-                        <span>{project.year}</span>
-                      </div>
+                      <span>{project.year}</span>
                     </div>
 
                     <h3 className="mt-2.5 text-xl font-bold tracking-tight text-foreground">
-                      <EditableText
-                        contentKey={`project.${project.slug}.title`}
-                        defaultText={project.title}
-                        groupName="projects"
-                      />
+                      {project.title}
                     </h3>
 
                     <p className="mt-2 text-sm text-foreground/80 leading-relaxed">
-                      <EditableText
-                        contentKey={`project.${project.slug}.summary`}
-                        defaultText={project.summary}
-                        multiline
-                        groupName="projects"
-                      />
+                      {project.summary}
                     </p>
 
                     {/* Services / Tags */}

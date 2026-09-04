@@ -5,7 +5,6 @@ import { smoothScrollTo } from "@/components/layout/smooth-scroll";
 import { HeroWorkspace } from "./hero-workspace";
 import { HeroMobile } from "./hero-mobile";
 import { site } from "@/config/site";
-import { EditableText } from "@/features/live-edit/editable-text";
 
 export function Hero() {
   const reduce = useReducedMotion();
@@ -41,16 +40,9 @@ export function Hero() {
             {/* Top Badge: 300 SAR Starter & Availability */}
             <div className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-3.5 py-1 text-xs font-semibold text-accent shadow-2xs">
               <span className="size-2 rounded-full bg-accent animate-pulse" />
-              <EditableText
-                contentKey="home.hero.badge_price"
-                defaultText={`مشاريع تبدأ من ${site.startingPrice}`}
-              />
+              <span>مشاريع تبدأ من {site.startingPrice}</span>
               <span className="text-accent/50">·</span>
-              <EditableText
-                contentKey="home.hero.availability"
-                defaultText={site.availabilityLabel}
-                className="text-foreground/80 font-normal"
-              />
+              <span className="text-foreground/80 font-normal">{site.availabilityLabel}</span>
             </div>
 
             {/* Main Headline */}
@@ -58,26 +50,14 @@ export function Hero() {
               id="hero-heading"
               className="mt-5 text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground text-balance leading-[1.25]"
             >
-              <EditableText
-                contentKey="home.hero.title_p1"
-                defaultText="من فكرة في بالك"
-                className="text-accent relative inline-block"
-              />
+              من <span className="text-accent relative inline-block">فكرة</span> في بالك
               <br />
-              <EditableText
-                contentKey="home.hero.title_p2"
-                defaultText="إلى مشروع تقدر تستخدمه."
-                className="text-foreground"
-              />
+              إلى <span className="text-foreground">مشروع</span> تقدر تستخدمه.
             </h1>
 
             {/* Subtitle */}
             <p className="mt-4 max-w-xl mx-auto lg:mx-0 text-sm sm:text-base leading-relaxed text-muted-foreground">
-              <EditableText
-                contentKey="home.hero.subtitle"
-                multiline
-                defaultText="أصمم وأطوّر مواقع، متاجر وأنظمة إلكترونية مخصصة تخدم هدفك وتزيد مبيعاتك — من الفكرة إلى الإطلاق."
-              />
+              أصمم وأطوّر مواقع، متاجر وأنظمة إلكترونية مخصصة تخدم هدفك وتزيد مبيعاتك — من الفكرة إلى الإطلاق.
             </p>
 
             {/* CTA Buttons */}
@@ -87,10 +67,7 @@ export function Hero() {
                 onClick={() => scrollToSection("contact-form")}
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground shadow-md transition-all hover:opacity-95 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.99] cursor-pointer"
               >
-                <EditableText
-                  contentKey="home.hero.cta_primary"
-                  defaultText="ابدأ مشروعك الآن"
-                />
+                ابدأ مشروعك الآن
                 <ArrowLeft className="size-4" />
               </button>
 
@@ -99,20 +76,14 @@ export function Hero() {
                 onClick={() => scrollToSection("work")}
                 className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-background px-5 py-3 text-sm font-medium text-foreground transition-all hover:bg-muted hover:border-foreground/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer"
               >
-                <EditableText
-                  contentKey="home.hero.cta_secondary"
-                  defaultText="شاهد أعمالي"
-                />
+                شاهد أعمالي
                 <ArrowUpRight className="size-4 text-muted-foreground" />
               </button>
             </div>
 
             {/* Microcopy */}
             <p className="mt-3 text-xs text-muted-foreground max-w-md mx-auto lg:mx-0">
-              <EditableText
-                contentKey="home.hero.microcopy"
-                defaultText="لا تعرف بالضبط وش تحتاج؟ أرسل فكرتك ونحدد الحل المناسب لها معًا."
-              />
+              لا تعرف بالضبط وش تحتاج؟ أرسل فكرتك ونحدد الحل المناسب لها معًا.
             </p>
 
             {/* Trust Points */}

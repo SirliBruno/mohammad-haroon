@@ -136,55 +136,14 @@ export async function requireAdmin(supabase: Db | undefined, userId: string): Pr
     throw new Error("Unauthorized: No valid user identity.");
   }
 
-  try {
-    const { data, error } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", userId)
-      .eq("role", "admin")
-      .maybeSingle();
-
-    if (!error && data?.role === "admin") {
-      return;
-    }
-  } catch (err) {
-    console.warn("[requireAdmin] standard user_roles check threw:", err);
-  }
-
-  // Fallback: Use supabaseAdmin to ensure user has admin role in user_roles
-  try {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: adminRoleData } = await supabaseAdmin
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", userId)
-      .eq("role", "admin")
-      .maybeSingle();
-
-    if (adminRoleData?.role === "admin") {
-      return;
-    }
-
-    // Auto-bootstrap admin role for this authenticated user
-    console.log(`[requireAdmin] Bootstrapping admin role for authenticated user ${userId}`);
-    const { error: insertError } = await supabaseAdmin
-      .from("user_roles")
-      .upsert({ user_id: userId, role: "admin" }, { onConflict: "user_id,role" });
-
-    if (!insertError) {
-      return;
-    }
-  } catch (adminErr) {
-    console.warn("[requireAdmin] admin client fallback error:", adminErr);
-  }
-
-  // In this single-tenant portfolio with no public registrations, any authenticated user is the owner
-  if (userId && typeof userId === "string" && userId.length > 5) {
-    console.warn(`[requireAdmin] Allowing authenticated user ${userId} in single-tenant portfolio.`);
-    return;
-  }
-
-  throw new Error("Forbidden: admin role required");
+  const { data, error } = await supabase
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", userId)
+    .eq("role", "admin")
+    .maybeSingle();
+  if (error) throw new Error(`Role check failed: ${error.message}`);
+  if (!data) throw new Error("Forbidden: admin role required");
 }
 
 // ============================================================

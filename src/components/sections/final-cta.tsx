@@ -2,7 +2,6 @@ import { Container } from "@/components/layout/container";
 import { Reveal, SectionReveal } from "@/components/motion/reveal";
 import { smoothScrollTo } from "@/components/layout/smooth-scroll";
 import { ArrowLeft, ArrowUpRight, Sparkles } from "lucide-react";
-import { EditableText } from "@/features/live-edit/editable-text";
 
 export function FinalCTA() {
   const scrollTo = (id: string) => {
@@ -21,53 +20,35 @@ export function FinalCTA() {
         <Reveal>
           <div className="mx-auto max-w-3xl text-center">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-accent/10 px-3.5 py-1 text-xs font-semibold text-accent">
-              <Sparkles className="size-3.5" />
-              <EditableText contentKey="home.final_cta.badge" defaultText="الخطوة القادمة" />
+              <Sparkles className="size-3.5" /> الخطوة القادمة
             </span>
 
             <h2 className="mt-6 text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-              <EditableText
-                contentKey="home.final_cta.title_p1"
-                defaultText="عندك فكرة؟"
-              />
+              عندك فكرة؟
               <br />
-              <EditableText
-                contentKey="home.final_cta.title_p2"
-                defaultText="خلنا نبنيها."
-                className="text-accent"
-              />
+              <span className="text-accent">خلنا نبنيها.</span>
             </h2>
 
             <p className="mt-6 text-base sm:text-lg leading-relaxed text-muted-foreground max-w-xl mx-auto">
-              <EditableText
-                contentKey="home.final_cta.subtitle"
-                multiline
-                defaultText="ما تحتاج تعرف كل التفاصيل. أرسل فكرتك، وأنا أساعدك تحدد أفضل طريقة لتحويلها إلى مشروع فعلي."
-              />
+              ما تحتاج تعرف كل التفاصيل. أرسل فكرتك، وأنا أساعدك تحدد أفضل طريقة لتحويلها إلى مشروع فعلي.
             </p>
 
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
               <button
                 type="button"
                 onClick={() => scrollTo("contact-form")}
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-8 py-4 text-base font-bold text-primary-foreground shadow-lg transition-all hover:opacity-95 hover:shadow-xl cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-8 py-4 text-base font-bold text-primary-foreground shadow-lg transition-all hover:opacity-95 hover:shadow-xl"
               >
-                <EditableText
-                  contentKey="home.final_cta.cta_primary"
-                  defaultText="ابدأ مشروعك"
-                />
+                ابدأ مشروعك
                 <ArrowLeft className="size-4" />
               </button>
 
               <button
                 type="button"
                 onClick={() => scrollTo("work")}
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-background px-7 py-4 text-base font-medium text-foreground transition-all hover:bg-muted cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-background px-7 py-4 text-base font-medium text-foreground transition-all hover:bg-muted"
               >
-                <EditableText
-                  contentKey="home.final_cta.cta_secondary"
-                  defaultText="شاهد أعمالي"
-                />
+                شاهد أعمالي
                 <ArrowUpRight className="size-4 text-muted-foreground" />
               </button>
             </div>

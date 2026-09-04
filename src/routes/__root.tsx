@@ -22,9 +22,6 @@ import { ScrollToTop } from "@/components/layout/scroll-to-top";
 import { SmoothScroll } from "@/components/layout/smooth-scroll";
 import { AnalyticsTracker } from "@/components/analytics-tracker";
 import { Toaster } from "sonner";
-import { LiveEditProvider } from "@/features/live-edit/live-edit-context";
-import { LiveAdminBar } from "@/features/live-edit/live-admin-bar";
-import { QuickCardDrawer } from "@/features/live-edit/quick-card-drawer";
 
 const organizationJsonLd = {
   "@context": "https://schema.org",
@@ -194,28 +191,24 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="system">
-        <LiveEditProvider>
-          <div className="flex min-h-dvh flex-col">
-            <SmoothScroll />
-            <AnalyticsTracker />
-            <ScrollProgress />
-            <Nav />
-            <main id="main" className="flex-1">
-              <Outlet />
-            </main>
-            <Footer />
-            <ScrollToTop />
-            <LiveAdminBar />
-            <QuickCardDrawer />
-            <Toaster
-              position="top-center"
-              dir={site.direction}
-              richColors
-              closeButton
-              toastOptions={{ className: "font-sans" }}
-            />
-          </div>
-        </LiveEditProvider>
+        <div className="flex min-h-dvh flex-col">
+          <SmoothScroll />
+          <AnalyticsTracker />
+          <ScrollProgress />
+          <Nav />
+          <main id="main" className="flex-1">
+            <Outlet />
+          </main>
+          <Footer />
+          <ScrollToTop />
+          <Toaster
+            position="top-center"
+            dir={site.direction}
+            richColors
+            closeButton
+            toastOptions={{ className: "font-sans" }}
+          />
+        </div>
       </ThemeProvider>
     </QueryClientProvider>
   );

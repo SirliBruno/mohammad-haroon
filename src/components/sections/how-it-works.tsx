@@ -1,7 +1,6 @@
 import { Container } from "@/components/layout/container";
 import { Reveal, SectionReveal } from "@/components/motion/reveal";
 import { Lightbulb, Compass, Palette, Code2, Rocket } from "lucide-react";
-import { EditableText } from "@/features/live-edit/editable-text";
 
 export function HowItWorks() {
   const steps = [
@@ -43,21 +42,14 @@ export function HowItWorks() {
         <Reveal>
           <div className="max-w-2xl">
             <span className="text-xs font-semibold tracking-wider text-accent uppercase">
-              <EditableText contentKey="home.how_it_works.badge" defaultText="منهجية العمل" />
+              منهجية العمل
             </span>
-            <EditableText
-              as="h2"
-              contentKey="home.how_it_works.title"
-              defaultText="من الفكرة إلى الإطلاق."
-              className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl"
-            />
-            <EditableText
-              as="p"
-              contentKey="home.how_it_works.subtitle"
-              multiline
-              defaultText="خطوات واضحة ومنظمة تضمن لك راحة البال ومعرفة أين وصل مشروعك في كل لحظة."
-              className="mt-4 text-base leading-relaxed text-muted-foreground sm:text-lg"
-            />
+            <h2 className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+              من الفكرة إلى الإطلاق.
+            </h2>
+            <p className="mt-4 text-base leading-relaxed text-muted-foreground sm:text-lg">
+              خطوات واضحة ومنظمة تضمن لك راحة البال ومعرفة أين وصل مشروعك في كل لحظة.
+            </p>
           </div>
         </Reveal>
 
@@ -82,18 +74,11 @@ export function HowItWorks() {
                       </div>
 
                       <h3 className="mt-5 text-lg font-bold tracking-tight text-foreground">
-                        <EditableText
-                          contentKey={`home.how_it_works.step_${item.step}.title`}
-                          defaultText={item.title}
-                        />
+                        {item.title}
                       </h3>
 
                       <p className="mt-2 text-xs sm:text-sm leading-relaxed text-muted-foreground">
-                        <EditableText
-                          contentKey={`home.how_it_works.step_${item.step}.desc`}
-                          defaultText={item.description}
-                          multiline
-                        />
+                        {item.description}
                       </p>
                     </div>
 
