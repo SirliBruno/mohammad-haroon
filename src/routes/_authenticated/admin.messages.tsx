@@ -45,6 +45,8 @@ function Page() {
   const [statusFilter, setStatusFilter] = useState<Status | "all">("all");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [notes, setNotes] = useState("");
+  // Two-step delete: stores the ID pending confirmation
+  const [deletePending, setDeletePending] = useState<string | null>(null);
 
   const query = useQuery({
     queryKey: QK,
@@ -78,13 +80,18 @@ function Page() {
     onSuccess: (_r, id) => {
       qc.invalidateQueries({ queryKey: QK });
       if (selectedId === id) setSelectedId(null);
+      setDeletePending(null);
       toast.success("تم الحذف");
     },
-    onError: (e: unknown) => toast.error(e instanceof Error ? e.message : "تعذّر الحذف"),
+    onError: (e: unknown) => {
+      setDeletePending(null);
+      toast.error(e instanceof Error ? e.message : "تعذّر الحذف");
+    },
   });
 
   const openMessage = (m: Msg) => {
     setSelectedId(m.id);
+    setDeletePending(null);
     if (m.status === "new") updateMut.mutate({ id: m.id, status: "read" });
   };
 
@@ -95,9 +102,14 @@ function Page() {
     updateMut.mutate({ id: selected.id, notes });
   };
 
-  const del = (m: Msg) => {
-    if (!confirm("حذف الرسالة؟")) return;
-    deleteMut.mutate(m.id);
+  const handleDeleteClick = (id: string) => {
+    if (deletePending === id) {
+      // Second click = confirmed
+      deleteMut.mutate(id);
+    } else {
+      // First click = arm the confirmation
+      setDeletePending(id);
+    }
   };
 
   const filtered = statusFilter === "all" ? rows : rows.filter((r) => r.status === statusFilter);
@@ -206,8 +218,11 @@ function Page() {
                 {selected.message}
               </div>
               <div>
-                <label className="text-xs font-medium">ملاحظات داخلية</label>
+                <label htmlFor="msg-notes" className="text-xs font-medium">
+                  ملاحظات داخلية
+                </label>
                 <textarea
+                  id="msg-notes"
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   rows={4}
@@ -222,13 +237,32 @@ function Page() {
                 </button>
               </div>
               <div className="flex justify-end pt-2 border-t border-border dark:border-border">
-                <button
-                  onClick={() => del(selected)}
-                  disabled={deleteMut.isPending}
-                  className="rounded-md border border-red-200 bg-red-50 px-3 py-1.5 text-xs text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-300 disabled:opacity-50"
-                >
-                  حذف الرسالة
-                </button>
+                {deletePending === selected.id ? (
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-red-600">تأكيد الحذف؟</span>
+                    <button
+                      onClick={() => handleDeleteClick(selected.id)}
+                      disabled={deleteMut.isPending}
+                      className="rounded-md bg-red-600 px-3 py-1.5 text-xs text-white disabled:opacity-50"
+                    >
+                      {deleteMut.isPending ? "جارِ الحذف…" : "نعم، احذف"}
+                    </button>
+                    <button
+                      onClick={() => setDeletePending(null)}
+                      className="rounded-md border border-input px-3 py-1.5 text-xs dark:border-border"
+                    >
+                      إلغاء
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => handleDeleteClick(selected.id)}
+                    disabled={deleteMut.isPending}
+                    className="rounded-md border border-red-200 bg-red-50 px-3 py-1.5 text-xs text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-300 disabled:opacity-50"
+                  >
+                    حذف الرسالة
+                  </button>
+                )}
               </div>
             </div>
           )}

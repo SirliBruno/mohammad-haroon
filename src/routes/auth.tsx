@@ -24,7 +24,9 @@ function AuthPage() {
         void supabase.auth.signOut();
         try {
           localStorage.clear();
-        } catch {}
+        } catch {
+          // ignore storage access issues
+        }
       } else {
         navigate({ to: "/admin/hero" });
       }

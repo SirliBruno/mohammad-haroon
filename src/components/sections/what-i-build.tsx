@@ -199,7 +199,7 @@ const problemScenarios = [
 ];
 
 // Standard easing
-const standardEase = [0.4, 0, 0.2, 1];
+const standardEase = [0.4, 0, 0.2, 1] as const;
 
 export function WhatIBuild() {
   const [activeCategory, setActiveCategory] = useState<string>("all");

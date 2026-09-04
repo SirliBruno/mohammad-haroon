@@ -73,7 +73,13 @@ function Page() {
           {q.error instanceof Error ? q.error.message : "تعذّر تحميل البيانات"}
         </p>
       ) : !data ? null : (
-        <div className="flex flex-col gap-8">
+        <div className={`flex flex-col gap-8 transition-opacity duration-200 ${q.isFetching ? "opacity-50 pointer-events-none" : "opacity-100"}`}>
+          {q.isFetching && (
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <span className="inline-block h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" aria-hidden />
+              جارٍ تحديث البيانات…
+            </div>
+          )}
           <section>
             <h3 className="mb-3 text-xs uppercase tracking-wider text-muted-foreground">
               مسار التحويل (جلسات فريدة)

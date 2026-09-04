@@ -36,6 +36,7 @@ function Page() {
   const qc = useQueryClient();
 
   const [editing, setEditing] = useState<MediaRow | null>(null);
+  const [deletePending, setDeletePending] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const listQ = useQuery({
@@ -146,14 +147,20 @@ function Page() {
         </div>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-          {rows.map((r) => (
+        {rows.map((r) => (
             <div
               key={r.id}
               className="group rounded-xl overflow-hidden border border-border bg-white dark:border-border dark:bg-neutral-900"
             >
-              <div className="aspect-square bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center">
+              <div className="aspect-square bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center overflow-hidden">
                 {r.kind === "image" ? (
-                  <img src={r.url} alt={r.alt ?? ""} className="w-full h-full object-cover" />
+                  <img
+                    src={r.url}
+                    alt={r.alt ?? ""}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
+                  />
                 ) : (
                   <span className="text-xs text-muted-foreground">{r.kind}</span>
                 )}
@@ -165,7 +172,8 @@ function Page() {
                 </div>
                 <div className="mt-1 flex gap-1">
                   <button
-                    onClick={() => setEditing(r)}
+                    onClick={() => { setEditing(r); setDeletePending(null); }}
+                    aria-label={`تعديل بيانات ${r.filename ?? "الملف"}`}
                     className="flex-1 text-[11px] rounded border border-input px-2 py-0.5 hover:bg-muted dark:border-border dark:hover:bg-muted"
                   >
                     تعديل
@@ -175,18 +183,38 @@ function Page() {
                       void navigator.clipboard.writeText(r.url);
                       toast.success("تم نسخ الرابط.");
                     }}
+                    aria-label={`نسخ رابط ${r.filename ?? "الملف"}`}
                     className="flex-1 text-[11px] rounded border border-input px-2 py-0.5 hover:bg-muted dark:border-border dark:hover:bg-muted"
                   >
                     نسخ URL
                   </button>
-                  <button
-                    onClick={() => {
-                      if (confirm("حذف الملف؟")) deleteMut.mutate(r);
-                    }}
-                    className="text-[11px] rounded border border-red-200 bg-red-50 px-2 py-0.5 text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-300"
-                  >
-                    حذف
-                  </button>
+                  {deletePending === r.id ? (
+                    <div className="flex gap-1">
+                      <button
+                        onClick={() => { deleteMut.mutate(r); }}
+                        disabled={deleteMut.isPending}
+                        aria-label="تأكيد الحذف"
+                        className="text-[11px] rounded bg-red-600 px-2 py-0.5 text-white disabled:opacity-50"
+                      >
+                        تأكيد
+                      </button>
+                      <button
+                        onClick={() => setDeletePending(null)}
+                        aria-label="إلغاء الحذف"
+                        className="text-[11px] rounded border border-input px-2 py-0.5 dark:border-border"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => setDeletePending(r.id)}
+                      aria-label={`حذف ${r.filename ?? "الملف"}`}
+                      className="text-[11px] rounded border border-red-200 bg-red-50 px-2 py-0.5 text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-300"
+                    >
+                      حذف
+                    </button>
+                  )}
                 </div>
               </div>
             </div>

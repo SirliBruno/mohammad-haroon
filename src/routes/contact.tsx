@@ -105,15 +105,15 @@ const channels = [
   {
     icon: Linkedin,
     label: "لينكدإن",
-    value: "in/mharoon",
-    href: "https://linkedin.com/",
+    value: "in/mohammadharoon",
+    href: site.linkedin,
     hint: "للفرص المهنيّة والتعارف",
   },
   {
     icon: Github,
     label: "GitHub",
-    value: "@mharoon",
-    href: "https://github.com/",
+    value: "@mohammadharoon",
+    href: site.github,
     hint: "الكود والمشاريع مفتوحة المصدر",
   },
 ] as const;

@@ -253,7 +253,9 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
     if (/unauthorized|jwt|unverifiable|keyfunc/i.test(raw) || msg.includes("الجلسة انتهت") || msg.includes("غير مصرح")) {
       try {
         localStorage.clear();
-      } catch {}
+      } catch {
+        // ignore storage access issues
+      }
       setTimeout(() => {
         window.location.href = "/auth";
       }, 1500);

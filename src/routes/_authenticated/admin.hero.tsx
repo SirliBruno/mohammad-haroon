@@ -95,6 +95,8 @@ const columns: ListColumn<Row>[] = [
           src={r.cover_url}
           alt=""
           className="h-12 w-20 rounded border border-border object-cover dark:border-border"
+          loading="lazy"
+          decoding="async"
         />
       ) : (
         <div className="h-12 w-20 rounded border border-border bg-neutral-100 dark:border-border dark:bg-neutral-800" />

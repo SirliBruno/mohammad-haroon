@@ -36,7 +36,7 @@ import {
   skillGroups as staticSkillGroups,
   type ExperienceItem,
 } from "@/data/career";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import {
   experienceListOptions,
   certificateListOptions,
@@ -53,10 +53,16 @@ const CAREER_LOADER_CERT = { limit: 100 } as const;
 const CAREER_LOADER_SKILL = { limit: 200, orderBy: "sort_order", ascending: true } as const;
 
 export const Route = createFileRoute("/career")({
-  loader: ({ context }) => {
-    void context.queryClient.ensureQueryData(experienceListOptions(CAREER_LOADER_EXP));
-    void context.queryClient.ensureQueryData(certificateListOptions(CAREER_LOADER_CERT));
-    void context.queryClient.ensureQueryData(skillListOptions(CAREER_LOADER_SKILL));
+  loader: async ({ context }) => {
+    try {
+      await Promise.allSettled([
+        context.queryClient.ensureQueryData(experienceListOptions(CAREER_LOADER_EXP)),
+        context.queryClient.ensureQueryData(certificateListOptions(CAREER_LOADER_CERT)),
+        context.queryClient.ensureQueryData(skillListOptions(CAREER_LOADER_SKILL)),
+      ]);
+    } catch {
+      // Ignore network errors, page will fall back to static data seamlessly
+    }
   },
   errorComponent: () => (
     <PageHeader eyebrow="المسيرة" title="تعذّر تحميل المسيرة" description="حاول تحديث الصفحة." />
@@ -130,9 +136,9 @@ function CareerPage() {
   const linkedin = socials.find((s) => s.label.toLowerCase() === "linkedin");
   const emailContact = socials.find((s) => s.label === "البريد الإلكتروني");
 
-  const { data: expData } = useSuspenseQuery(experienceListOptions(CAREER_EXP_PARAMS));
-  const { data: certData } = useSuspenseQuery(certificateListOptions(CAREER_LIST_PARAMS));
-  const { data: skillData } = useSuspenseQuery(skillListOptions(CAREER_SKILL_PARAMS));
+  const { data: expData } = useQuery(experienceListOptions(CAREER_EXP_PARAMS));
+  const { data: certData } = useQuery(certificateListOptions(CAREER_LIST_PARAMS));
+  const { data: skillData } = useQuery(skillListOptions(CAREER_SKILL_PARAMS));
 
   const expRows = (expData?.rows ?? []).map(dbRowToExperience);
   const certRows = (certData?.rows ?? []).map(dbRowToCertificate);

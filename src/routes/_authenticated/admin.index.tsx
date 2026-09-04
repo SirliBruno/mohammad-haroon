@@ -3,6 +3,8 @@ import { AdminShell } from "@/components/admin/admin-shell";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { countNewMessages } from "@/lib/cms/messages.functions";
+import { adminListProjects } from "@/lib/cms/projects.functions";
+import { getFunnelSummary } from "@/lib/cms/analytics.functions";
 import {
   FileText,
   Sparkles,
@@ -19,6 +21,8 @@ import {
   Image as ImageIcon,
   LineChart,
   ArrowLeft,
+  FileStack,
+  ScrollText,
   type LucideIcon,
 } from "lucide-react";
 
@@ -31,6 +35,7 @@ type Card = { to: string; title: string; description: string; group: string; ico
 
 const CARDS: Card[] = [
   { to: "/admin/content", title: "نصوص وصور الموقع", description: "تحكم بعناوين ونصوص وصور الأقسام العامة.", group: "المحتوى", icon: FileText },
+  { to: "/admin/pages", title: "محتوى الصفحات", description: "ترويسات وأوصاف صفحات من أنا، تواصل، الأعمال.", group: "المحتوى", icon: FileStack },
   { to: "/admin/hero", title: "قسم الهيرو", description: "مشاريع تظهر في نوافذ الصفحة الرئيسية.", group: "الصفحة الرئيسية", icon: Sparkles },
   { to: "/admin/projects", title: "المشاريع", description: "معرض الأعمال الكامل مع الحالة والفئات.", group: "الأعمال", icon: FolderKanban },
   { to: "/admin/services", title: "الخدمات", description: "صفحات الخدمات: المزايا، الميزات، الأسعار.", group: "الأعمال", icon: Wrench },
@@ -44,14 +49,33 @@ const CARDS: Card[] = [
   { to: "/admin/messages", title: "الرسائل الواردة", description: "رسائل من نموذج التواصل.", group: "التواصل", icon: Inbox },
   { to: "/admin/analytics", title: "قياس التحويل", description: "أحداث funnel من المشاهدات حتى إرسال التواصل.", group: "التواصل", icon: LineChart },
   { to: "/admin/media", title: "مكتبة الوسائط", description: "إدارة الملفات والصور المرفوعة.", group: "التواصل", icon: ImageIcon },
+  { to: "/admin/audit", title: "سجل التدقيق", description: "سجل زمني لكل عملية إضافة أو تعديل أو حذف.", group: "المراقبة", icon: ScrollText },
 ];
 
 function AdminHomePage() {
   const countFn = useServerFn(countNewMessages);
+  const listProjectsFn = useServerFn(adminListProjects);
+  const fetchSummaryFn = useServerFn(getFunnelSummary);
+
   const messages = useQuery({
     queryKey: ["admin", "messages", "new-count"],
     queryFn: () => countFn(),
     staleTime: 30_000,
+  });
+
+  const projects = useQuery({
+    queryKey: ["admin", "projects", "count"],
+    queryFn: async () => {
+      const res = await listProjectsFn({ data: { limit: 1, offset: 0 } }) as { count?: number };
+      return (res as { count?: number }).count ?? 0;
+    },
+    staleTime: 60_000,
+  });
+
+  const analytics = useQuery({
+    queryKey: ["admin", "analytics", { days: 7 }],
+    queryFn: () => fetchSummaryFn({ data: { days: 7 } }),
+    staleTime: 60_000,
   });
 
   const groups = CARDS.reduce<Record<string, Card[]>>((acc, c) => {
@@ -60,6 +84,8 @@ function AdminHomePage() {
   }, {});
 
   const newCount = messages.data?.count ?? 0;
+  const projectCount = projects.data ?? undefined;
+  const contactSubmits = analytics.data?.uniqueSessions.contact_submit ?? undefined;
 
   return (
     <AdminShell
@@ -80,13 +106,15 @@ function AdminHomePage() {
           <QuickTile
             to="/admin/projects"
             label="المشاريع"
-            hint="أضف أو حرر معرض الأعمال"
+            value={projectCount}
+            hint={projectCount !== undefined ? "إجمالي المشاريع" : "أضف أو حرر معرض الأعمال"}
             icon={FolderKanban}
           />
           <QuickTile
             to="/admin/analytics"
-            label="التحليلات"
-            hint="تتبع تحويلات التواصل"
+            label="تحويلات (7 أيام)"
+            value={contactSubmits}
+            hint={contactSubmits !== undefined ? "إرسال نموذج التواصل" : "تتبع تحويلات التواصل"}
             icon={LineChart}
           />
         </div>

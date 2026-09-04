@@ -114,6 +114,28 @@ export function Footer() {
                 استقبل طلبات المشاريع والرد عليها عبر WhatsApp خلال أوقات العمل الرسمية.
               </p>
             </div>
+            {socials.length > 0 && (
+              <div className="mt-4">
+                <p className="text-xs font-bold uppercase tracking-wider text-foreground mb-3">
+                  تابعني
+                </p>
+                <ul className="flex flex-col gap-2">
+                  {socials.map((s) => (
+                    <li key={s.label}>
+                      <a
+                        href={s.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-2 text-sm text-foreground/70 hover:text-foreground transition-colors"
+                      >
+                        <span className="text-xs text-accent font-mono">{s.handle}</span>
+                        <span className="text-[11px] text-muted-foreground">— {s.label}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         </div>
 

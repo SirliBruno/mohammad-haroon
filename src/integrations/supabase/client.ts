@@ -68,7 +68,9 @@ function createSupabaseClient() {
         }
       }
       keysToRemove.forEach((k) => localStorage.removeItem(k));
-    } catch {}
+    } catch {
+      // ignore storage access issues
+    }
   }
 
   return createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {

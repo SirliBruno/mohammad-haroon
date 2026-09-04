@@ -19,6 +19,9 @@ export const site = {
   available: true,
   availabilityLabel: "متاح لمشاريع جديدة",
   startingPrice: "300 ريال",
+  linkedin: "https://www.linkedin.com/in/mohammadharoon",
+  github: "https://github.com/mohammadharoon",
+  twitter: "https://x.com/mohammadharoon",
 } as const;
 
 export type Site = typeof site;

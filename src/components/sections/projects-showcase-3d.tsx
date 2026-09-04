@@ -196,9 +196,29 @@ export function ProjectsShowcase3D() {
   );
   const [active, setActive] = useState(0);
 
+  const total = featured.length;
+
+  const go = useCallback(
+    (dir: 1 | -1) => {
+      if (total === 0) return;
+      setActive((a) => (a + dir + total) % total);
+    },
+    [total],
+  );
+
+  useEffect(() => {
+    if (total < 3) return;
+    const onKey = (e: KeyboardEvent) => {
+      // In RTL, ArrowRight = previous (start), ArrowLeft = next (end).
+      if (e.key === "ArrowRight") go(-1);
+      else if (e.key === "ArrowLeft") go(1);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [go, total]);
+
   if (featured.length < 3) return null;
 
-  const total = featured.length;
   const startIdx = (active - 1 + total) % total;
   const endIdx = (active + 1) % total;
 
@@ -207,21 +227,6 @@ export function ProjectsShowcase3D() {
     { project: featured[active], position: "center" as const, index: active },
     { project: featured[endIdx], position: "end" as const, index: endIdx },
   ];
-
-  const go = useCallback(
-    (dir: 1 | -1) => setActive((a) => (a + dir + total) % total),
-    [total],
-  );
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      // In RTL, ArrowRight = previous (start), ArrowLeft = next (end).
-      if (e.key === "ArrowRight") go(-1);
-      else if (e.key === "ArrowLeft") go(1);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [go]);
 
   return (
     <motion.div

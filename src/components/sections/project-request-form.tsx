@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { Container } from "@/components/layout/container";
 import { Reveal } from "@/components/motion/reveal";
 import { CheckCircle2, Shield, Sparkles, MessageCircle, ExternalLink } from "lucide-react";
 import { site } from "@/config/site";
 import { toast } from "sonner";
+import { submitProjectRequest } from "@/lib/project-request.functions";
 
 const PROJECT_TYPES = [
   "موقع",
@@ -49,6 +51,9 @@ export function ProjectRequestForm() {
   const [phone, setPhone] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [generatedUrl, setGeneratedUrl] = useState("");
+  const [saving, setSaving] = useState(false);
+
+  const saveRequest = useServerFn(submitProjectRequest);
 
   // Listen for problem card clicks from other sections
   useEffect(() => {
@@ -76,7 +81,7 @@ export function ProjectRequestForm() {
     );
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!phone.trim()) {
@@ -118,6 +123,28 @@ ${budget}
     const whatsappUrl = `https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent(messageText)}`;
 
     setGeneratedUrl(whatsappUrl);
+
+    // Save to Supabase first (non-blocking for UX — we open WhatsApp regardless)
+    setSaving(true);
+    try {
+      await saveRequest({
+        data: {
+          name: senderName,
+          phone: phone.trim(),
+          projectType,
+          currentProblem,
+          needs: selectedNeeds,
+          idea: idea.trim(),
+          budget,
+        },
+      });
+    } catch (err) {
+      // Log but don't block — WhatsApp message is the primary channel
+      console.warn("[project-request] DB save failed:", err);
+    } finally {
+      setSaving(false);
+    }
+
     setSubmitted(true);
     toast.success("تم تجهيز رسالتك! جارٍ فتح WhatsApp...");
 
@@ -384,10 +411,20 @@ ${budget}
                   <div className="pt-2">
                     <button
                       type="submit"
-                      className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary py-3.5 text-sm font-bold text-primary-foreground shadow-md transition-all hover:opacity-90 cursor-pointer"
+                      disabled={saving}
+                      className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary py-3.5 text-sm font-bold text-primary-foreground shadow-md transition-all hover:opacity-90 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                     >
-                      <MessageCircle className="size-4.5" />
-                      أرسل فكرتي عبر WhatsApp
+                      {saving ? (
+                        <>
+                          <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" aria-hidden />
+                          جارٍ الإرسال…
+                        </>
+                      ) : (
+                        <>
+                          <MessageCircle className="size-4.5" />
+                          أرسل فكرتي عبر WhatsApp
+                        </>
+                      )}
                     </button>
                     <p className="mt-2.5 flex items-center justify-center gap-1.5 text-[11px] text-muted-foreground">
                       <Shield className="size-3 text-accent" />
