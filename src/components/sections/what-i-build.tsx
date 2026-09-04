@@ -14,6 +14,7 @@ import {
   HelpCircle,
   ExternalLink,
   Sparkles,
+  Pencil,
 } from "lucide-react";
 import {
   Dialog,
@@ -22,6 +23,8 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { EditableText } from "@/features/live-edit/editable-text";
+import { useLiveEdit } from "@/features/live-edit/live-edit-context";
 
 /**
  * Icons8 icon renderer using CSS mask.
@@ -380,6 +383,7 @@ export function WhatIBuild() {
   const [activeFilter, setActiveFilter] = useState<FilterId>("all");
   const [selectedService, setSelectedService] = useState<ServiceItem | null>(null);
   const shouldReduceMotion = useReducedMotion();
+  const { isEditMode, openDrawer } = useLiveEdit();
 
   const filteredServices = useMemo(() => {
     if (activeFilter === "all") return SERVICES;
@@ -418,14 +422,22 @@ export function WhatIBuild() {
         <Reveal>
           <div className="max-w-3xl">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-accent/10 px-3 py-1 text-xs font-semibold text-accent">
-              <Sparkles className="size-3.5" /> خدماتي
+              <Sparkles className="size-3.5" />
+              <EditableText contentKey="home.services.badge" defaultText="خدماتي" />
             </span>
-            <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground font-display">
-              أحوّل أفكارك إلى منتجات رقمية حقيقية
-            </h2>
-            <p className="mt-4 text-base sm:text-lg leading-relaxed text-muted-foreground font-sans">
-              من المواقع والمتاجر إلى الأنظمة والمنصات المخصصة — أصمم وأطور حلولًا رقمية تناسب احتياج مشروعك وتُبنى لتكون قابلة للاستخدام والتوسع.
-            </p>
+            <EditableText
+              as="h2"
+              contentKey="home.services.title"
+              defaultText="أحوّل أفكارك إلى منتجات رقمية حقيقية"
+              className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground font-display"
+            />
+            <EditableText
+              as="p"
+              contentKey="home.services.subtitle"
+              multiline
+              defaultText="من المواقع والمتاجر إلى الأنظمة والمنصات المخصصة — أصمم وأطور حلولًا رقمية تناسب احتياج مشروعك وتُبنى لتكون قابلة للاستخدام والتوسع."
+              className="mt-4 text-base sm:text-lg leading-relaxed text-muted-foreground font-sans"
+            />
           </div>
         </Reveal>
 
@@ -497,28 +509,58 @@ export function WhatIBuild() {
                         </span>
                       </div>
 
-                      {svc.badge && (
-                        <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-accent/15 px-2.5 py-0.5 text-[11px] font-bold text-accent">
-                          <span className="size-1.5 rounded-full bg-accent animate-pulse" />
-                          {svc.badge}
-                        </span>
-                      )}
+                      <div className="flex items-center gap-2">
+                        {isEditMode && (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openDrawer("service", svc.id, svc);
+                            }}
+                            className="inline-flex items-center gap-1 rounded-md bg-accent/15 border border-accent/40 text-accent px-2 py-0.5 text-[11px] font-bold hover:bg-accent hover:text-accent-foreground transition-all cursor-pointer shadow-xs"
+                            title="تعديل تفاصيل هذه الخدمة"
+                          >
+                            <Pencil className="size-3" />
+                            <span>تعديل</span>
+                          </button>
+                        )}
+                        {svc.badge && (
+                          <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-accent/15 px-2.5 py-0.5 text-[11px] font-bold text-accent">
+                            <span className="size-1.5 rounded-full bg-accent animate-pulse" />
+                            {svc.badge}
+                          </span>
+                        )}
+                      </div>
                     </div>
 
                     {/* Title */}
                     <h3 className="mt-5 text-lg sm:text-xl font-bold text-foreground leading-snug font-sans group-hover:text-accent transition-colors">
-                      {svc.title}
+                      <EditableText
+                        contentKey={`service.${svc.id}.title`}
+                        defaultText={svc.title}
+                        groupName="services"
+                      />
                     </h3>
 
                     {/* Short Description */}
                     <p className="mt-2.5 text-xs sm:text-sm text-foreground/80 leading-relaxed">
-                      {svc.description}
+                      <EditableText
+                        contentKey={`service.${svc.id}.description`}
+                        defaultText={svc.description}
+                        multiline
+                        groupName="services"
+                      />
                     </p>
 
                     {/* Example Box */}
                     <div className="mt-4 rounded-xl border border-border/50 bg-muted/50 p-3 text-xs leading-relaxed text-muted-foreground">
                       <span className="font-bold text-foreground inline-block ml-1">مثال:</span>
-                      <span>{svc.example}</span>
+                      <EditableText
+                        contentKey={`service.${svc.id}.example`}
+                        defaultText={svc.example}
+                        multiline
+                        groupName="services"
+                      />
                     </div>
                   </div>
 
@@ -558,12 +600,19 @@ export function WhatIBuild() {
               <span className="inline-flex size-12 items-center justify-center rounded-2xl bg-accent/15 text-accent mb-4">
                 <HelpCircle className="size-6 stroke-[1.8]" />
               </span>
-              <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground font-display">
-                ما لقيت الخدمة اللي تبحث عنها؟
-              </h3>
-              <p className="mt-3 text-sm sm:text-base leading-relaxed text-muted-foreground font-sans">
-                إذا كانت فكرتك مختلفة أو لم تجدها ضمن القائمة، اشرحها لي وسأساعدك في تحليلها وتحويلها إلى حل رقمي مناسب لطريقة عملك.
-              </p>
+              <EditableText
+                as="h3"
+                contentKey="home.services.custom_cta_title"
+                defaultText="ما لقيت الخدمة اللي تبحث عنها؟"
+                className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground font-display"
+              />
+              <EditableText
+                as="p"
+                contentKey="home.services.custom_cta_desc"
+                multiline
+                defaultText="إذا كانت فكرتك مختلفة أو لم تجدها ضمن القائمة، اشرحها لي وسأساعدك في تحليلها وتحويلها إلى حل رقمي مناسب لطريقة عملك."
+                className="mt-3 text-sm sm:text-base leading-relaxed text-muted-foreground font-sans"
+              />
 
               <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
                 <button

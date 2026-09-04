@@ -7,6 +7,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { HelpCircle } from "lucide-react";
+import { EditableText } from "@/features/live-edit/editable-text";
 
 export function FaqSection() {
   const faqs = [
@@ -45,14 +46,21 @@ export function FaqSection() {
             <Reveal>
               <div className="flex items-center gap-2 text-accent text-xs font-semibold uppercase tracking-wider">
                 <HelpCircle className="size-4" />
-                الأسئلة الشائعة
+                <EditableText contentKey="home.faq.badge" defaultText="الأسئلة الشائعة" />
               </div>
-              <h2 className="mt-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-                إجابات على أكثر الأسئلة تكرارًا
-              </h2>
-              <p className="mt-4 text-sm sm:text-base leading-relaxed text-muted-foreground">
-                إذا كان لديك أي استفسار آخر لم تجده هنا، لا تتردد في مراسلتي وسأجيبك بكل سرور.
-              </p>
+              <EditableText
+                as="h2"
+                contentKey="home.faq.title"
+                defaultText="إجابات على أكثر الأسئلة تكرارًا"
+                className="mt-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl"
+              />
+              <EditableText
+                as="p"
+                contentKey="home.faq.subtitle"
+                multiline
+                defaultText="إذا كان لديك أي استفسار آخر لم تجده هنا، لا تتردد في مراسلتي وسأجيبك بكل سرور."
+                className="mt-4 text-sm sm:text-base leading-relaxed text-muted-foreground"
+              />
             </Reveal>
           </div>
 
@@ -67,10 +75,17 @@ export function FaqSection() {
                     className="rounded-2xl border border-border/70 bg-card px-5 shadow-2xs"
                   >
                     <AccordionTrigger className="text-right text-sm sm:text-base font-bold text-foreground hover:no-underline py-4.5">
-                      {item.q}
+                      <EditableText
+                        contentKey={`home.faq.q${i}`}
+                        defaultText={item.q}
+                      />
                     </AccordionTrigger>
                     <AccordionContent className="text-xs sm:text-sm text-muted-foreground leading-relaxed pb-5 border-t border-border/40 pt-3">
-                      {item.a}
+                      <EditableText
+                        contentKey={`home.faq.a${i}`}
+                        defaultText={item.a}
+                        multiline
+                      />
                     </AccordionContent>
                   </AccordionItem>
                 ))}

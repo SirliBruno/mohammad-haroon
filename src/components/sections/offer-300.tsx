@@ -2,6 +2,7 @@ import { Container } from "@/components/layout/container";
 import { Reveal, SectionReveal } from "@/components/motion/reveal";
 import { smoothScrollTo } from "@/components/layout/smooth-scroll";
 import { Check, ArrowLeft, Sparkles, Info } from "lucide-react";
+import { EditableText } from "@/features/live-edit/editable-text";
 
 export function Offer300() {
   const scrollToContact = () => {
@@ -29,18 +30,35 @@ export function Offer300() {
           <div className="mx-auto max-w-4xl rounded-2xl border border-accent/30 bg-card p-6 sm:p-10 shadow-lg">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-accent/10 px-3 py-0.5 text-xs font-semibold text-accent">
-                <Sparkles className="size-3.5" /> عرض البداية السريعة
+                <Sparkles className="size-3.5" />
+                <EditableText contentKey="home.offer.badge" defaultText="عرض البداية السريعة" />
               </span>
-              <span className="text-xs text-muted-foreground">تسعير شفاف وواضح قبل البدء</span>
+              <EditableText
+                contentKey="home.offer.badge_sub"
+                defaultText="تسعير شفاف وواضح قبل البدء"
+                className="text-xs text-muted-foreground"
+              />
             </div>
 
             <div className="mt-6 grid gap-8 lg:grid-cols-12 lg:items-center">
               <div className="lg:col-span-6">
                 <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-                  ابدأ من <span className="text-accent">300 ريال</span>
+                  <EditableText
+                    contentKey="home.offer.title_prefix"
+                    defaultText="ابدأ من "
+                  />
+                  <EditableText
+                    contentKey="home.offer.price"
+                    defaultText="300 ريال"
+                    className="text-accent"
+                  />
                 </h2>
                 <p className="mt-3 text-xs sm:text-sm leading-relaxed text-foreground/80">
-                  الصفحات والمشاريع البسيطة يمكن تنفيذها بالكامل بهذا السعر. أما المتاجر المتكاملة والأنظمة المخصصة فيتم تحديد تكلفتها بدقة ومسبقًا بحسب حجم العمل دون أي مبالغ مخفية.
+                  <EditableText
+                    contentKey="home.offer.description"
+                    multiline
+                    defaultText="الصفحات والمشاريع البسيطة يمكن تنفيذها بالكامل بهذا السعر. أما المتاجر المتكاملة والأنظمة المخصصة فيتم تحديد تكلفتها بدقة ومسبقًا بحسب حجم العمل دون أي مبالغ مخفية."
+                  />
                 </p>
 
                 <div className="mt-6">
@@ -49,7 +67,10 @@ export function Offer300() {
                     onClick={scrollToContact}
                     className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-xs sm:text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:opacity-90 cursor-pointer"
                   >
-                    أرسل فكرتك لتحديد السعر
+                    <EditableText
+                      contentKey="home.offer.cta"
+                      defaultText="أرسل فكرتك لتحديد السعر"
+                    />
                     <ArrowLeft className="size-4" />
                   </button>
                 </div>

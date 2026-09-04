@@ -2,6 +2,7 @@ import { Container } from "@/components/layout/container";
 import { Reveal, SectionReveal } from "@/components/motion/reveal";
 import { smoothScrollTo } from "@/components/layout/smooth-scroll";
 import { Rocket, Zap, Clock, CheckCircle2, ArrowLeft } from "lucide-react";
+import { EditableText } from "@/features/live-edit/editable-text";
 
 export function MvpSection() {
   const scrollToContact = () => {
@@ -23,36 +24,58 @@ export function MvpSection() {
           <div className="mx-auto max-w-5xl rounded-3xl border border-accent/25 bg-linear-to-br from-card via-muted/20 to-accent/5 p-8 sm:p-14 shadow-xl">
             <div className="flex flex-wrap items-center gap-3">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-accent/15 px-3.5 py-1 text-xs font-bold text-accent">
-                <Zap className="size-3.5" /> مسار الـ MVP السريع
+                <Zap className="size-3.5" />
+                <EditableText contentKey="home.mvp.badge" defaultText="مسار الـ MVP السريع" />
               </span>
               <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
-                <Clock className="size-3.5 text-accent" /> سرعة انتقال من الفكرة للتجربة
+                <Clock className="size-3.5 text-accent" />
+                <EditableText
+                  contentKey="home.mvp.badge_sub"
+                  defaultText="سرعة انتقال من الفكرة للتجربة"
+                />
               </span>
             </div>
 
             <div className="mt-8 grid gap-10 lg:grid-cols-12 lg:items-center">
               <div className="lg:col-span-7">
                 <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl leading-tight">
-                  عندك فكرة كبيرة؟
+                  <EditableText
+                    contentKey="home.mvp.title_p1"
+                    defaultText="عندك فكرة كبيرة؟"
+                  />
                   <br />
-                  <span className="text-accent">خلنا نشوفها على أرض الواقع.</span>
+                  <EditableText
+                    contentKey="home.mvp.title_p2"
+                    defaultText="خلنا نشوفها على أرض الواقع."
+                    className="text-accent"
+                  />
                 </h2>
 
                 <div className="mt-4 inline-block rounded-lg bg-accent/10 px-3 py-1.5 text-xs sm:text-sm font-semibold text-accent">
-                  MVP للمشاريع المناسبة خلال يوم واحد
+                  <EditableText
+                    contentKey="home.mvp.tag"
+                    defaultText="MVP للمشاريع المناسبة خلال يوم واحد"
+                  />
                 </div>
 
                 <p className="mt-4 text-sm sm:text-base leading-relaxed text-muted-foreground">
-                  بدل ما تنتظر أسابيع وشهور عشان تشوف فكرتك، نقدر نحولها إلى نسخة أولية عملية تساعدك تجربها، تعرضها على المستثمرين أو العملاء، وتقرر كيف تطورها لاحقًا.
+                  <EditableText
+                    contentKey="home.mvp.description"
+                    multiline
+                    defaultText="بدل ما تنتظر أسابيع وشهور عشان تشوف فكرتك، نقدر نحولها إلى نسخة أولية عملية تساعدك تجربها، تعرضها على المستثمرين أو العملاء، وتقرر كيف تطورها لاحقًا."
+                  />
                 </p>
 
                 <div className="mt-8 flex flex-wrap items-center gap-4">
                   <button
                     type="button"
                     onClick={scrollToContact}
-                    className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-md transition-all hover:opacity-90"
+                    className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-md transition-all hover:opacity-90 cursor-pointer"
                   >
-                    ابدأ بناء الـ MVP
+                    <EditableText
+                      contentKey="home.mvp.cta"
+                      defaultText="ابدأ بناء الـ MVP"
+                    />
                     <ArrowLeft className="size-4" />
                   </button>
                   <span className="text-xs text-muted-foreground">
