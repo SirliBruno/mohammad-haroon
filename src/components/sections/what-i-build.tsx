@@ -1,19 +1,28 @@
 import { useState, useMemo } from "react";
-import { Link } from "@tanstack/react-router";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { Container } from "@/components/layout/container";
 import { Reveal } from "@/components/motion/reveal";
+import { site } from "@/config/site";
 import {
-  Globe,
+  Building2,
   ShoppingBag,
+  Store,
   LayoutDashboard,
+  CalendarClock,
+  Users,
+  Workflow,
+  Layers,
+  Rocket,
   Palette,
+  Wrench,
+  Sparkles,
   ArrowLeft,
-  Check,
+  CheckCircle2,
+  Clock,
+  Target,
+  MessageCircle,
   HelpCircle,
-  ArrowUpRight,
-  FileCheck,
-  ChevronDown,
+  ExternalLink,
 } from "lucide-react";
 import {
   Dialog,
@@ -23,205 +32,354 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 
-interface ServiceData {
+export interface ServiceItem {
   id: string;
-  slug: string;
-  category: string;
-  projectType: string;
-  problemType: string;
-  icon: React.ComponentType<{ className?: string }>;
-  image: string;
-  imageAlt: string;
   number: string;
   title: string;
-  summary: string;
-  target: string;
-  bullets: string[];
+  category: "websites" | "stores" | "systems" | "design";
+  categoryLabel: string;
+  icon: React.ComponentType<{ className?: string }>;
+  description: string;
+  example: string;
+  badge?: string;
+  featured?: boolean;
+  ctaText: string;
+  projectType: string;
+  problemScenario: string;
   deliverables: string[];
   timeline: string;
-  cta: string;
+  idealFor: string;
+  detailedBenefit: string;
 }
 
-const services: ServiceData[] = [
+const SERVICES: ServiceItem[] = [
+  // Row 1: مواقع ومتاجر
   {
-    id: "websites",
-    slug: "website-development",
-    category: "مواقع ومنصات",
-    projectType: "موقع",
-    problemType: "ما عندي موقع أو صفحة واضحة",
-    icon: Globe,
-    image: "/images/services/service-web.webp",
-    imageAlt: "تصميم وتطوير مواقع ومنصات رقمية متجاوبة وسريعة",
+    id: "corporate-websites",
     number: "01",
-    title: "موقعك لازم يشتغل كموظف مبيعات — مو مجرد رابط.",
-    summary:
-      "أبني لك موقعًا احترافيًا يشرح خدماتك بوضوح، يعرض أعمالك، ويسهّل تواصل العملاء معك مباشرة.",
-    target: "أصحاب الخدمات، الشركات الناشئة، والمكاتب المهنية.",
-    bullets: [
-      "مواقع تعريفية وصفحات هبوط (Landing Pages) سريعة",
-      "تصميم متجاوب وسهل التصفح على الجوال",
-      "ربط مباشر مع WhatsApp ونماذج التواصل وتهيئة SEO",
-    ],
+    title: "مواقع الشركات والمؤسسات",
+    category: "websites",
+    categoryLabel: "مواقع",
+    icon: Building2,
+    description: "مواقع احترافية تعرّف بشركتك وخدماتك وتبني حضورًا رقميًا قويًا وموثوقًا أمام العملاء.",
+    example: "موقع لشركة مقاولات يعرض الخدمات، المشاريع السابقة، نبذة عن الشركة، وطرق التواصل.",
+    ctaText: "استكشف الخدمة",
+    projectType: "موقع",
+    problemScenario: "ما عندي موقع أو صفحة واضحة",
+    timeline: "1 – 2 أسبوع",
+    idealFor: "الشركات، مكاتب الاستشارات، والأنشطة التجارية والمهنية.",
+    detailedBenefit: "أبني لك واجهة تسويقية موثوقة تمنح عملاءك انطباعاً أولياً قوياً وتعرض سابقة أعمالك وفريقك بأسلوب احترافي متجاوب.",
     deliverables: [
-      "تصميم متجاوب وسريع على كل الشاشات",
-      "تهيئة لمحركات البحث (SEO) وسرعة تصفح عالية",
-      "ربط مباشر مع WhatsApp ونماذج التواصل",
-      "لوحة تحكم ميسرة لإدارة المحتوى عند الحاجة",
+      "تصميم واجهة متجاوب وسريع على كل الشاشات",
+      "تهيئة متقدمة لمحركات البحث (SEO)",
+      "ربط مباشر مع WhatsApp ونماذج المراسلة الفورية",
+      "صفحات مفصلة للمشاريع والشهادات والاعتمادات",
+      "لوحة تحكم مرنة لتحديث المحتوى والأخبار",
     ],
-    timeline: "5 – 14 يومًا",
-    cta: "أبغى موقع يوضح خدمتي",
   },
   {
-    id: "ecommerce",
-    slug: "woocommerce",
-    category: "متاجر إلكترونية",
-    projectType: "متجر",
-    problemType: "متجري يحتاج تحسين",
-    icon: ShoppingBag,
-    image: "/images/services/service-store.webp",
-    imageAlt: "تطوير وتخصيص متاجر إلكترونية احترافية وتسهيل الدفع",
+    id: "ecommerce-stores",
     number: "02",
-    title: "منتجاتك تستحق متجرًا يسهّل قرار الشراء.",
-    summary:
-      "أصمم أو أطور متجرًا يبرز تفاصيل المنتجات ويجعل مسار التصفح والشراء خفيفًا وسريعًا من الجوال.",
-    target: "أصحاب المتاجر والبراندات لرفع كفاءة وتجربة الشراء.",
-    bullets: [
-      "تخصيص متكامل لمتاجر سلة (Salla) أو WooCommerce",
-      "صفحات منتجات مقنعة توضح المزايا والتفاصيل",
-      "تبسيط خطوات السلة والدفع لتقليل التردد",
-    ],
-    deliverables: [
-      "تصميم صفحات منتجات توضح التفاصيل والمميزات",
-      "تبسيط خطوات السلة ومسار الدفع",
-      "تحسين سرعة التصفح وتجربة الجوال",
-      "تنسيق الأقسام والبانرات الترويجية",
-    ],
-    timeline: "1 – 3 أسابيع",
-    cta: "أبغى متجر يسهّل الشراء",
-  },
-  {
-    id: "systems",
-    slug: "systems-solutions",
-    category: "أنظمة وحلول رقمية",
-    projectType: "نظام",
-    problemType: "أتابع الشغل يدويًا بين واتساب وExcel",
-    icon: LayoutDashboard,
-    image: "/images/services/service-systems.webp",
-    imageAlt: "بناء أنظمة إدارية ولوحات تحكم سحابية وقواعد بيانات",
-    number: "03",
-    title: "لما يكبر الشغل، Excel وواتساب ما يكفون.",
-    summary:
-      "أحوّل مهامك اليومية المتكررة إلى نظام أو لوحة تحكم سحابية تجمع بياناتك وتسهّل المتابعة.",
-    target: "الأنشطة التي تعاني من ضغط المتابعة اليدوية وتشتت البيانات.",
-    bullets: [
-      "لوحات تحكم إدارية (Dashboards) تفاعلية وسريعة",
-      "أنظمة إدارة المشتركين والعملاء والحجوزات اليومية",
-      "قواعد بيانات سحابية آمنة مع صلاحيات مخصصة",
-    ],
-    deliverables: [
-      "لوحة تحكم إدارية واضحة (Dashboard)",
-      "قاعدة بيانات سحابية آمنة مع نسخ احتياطي",
-      "صلاحيات متعددة للمستخدمين والمديرين",
-      "أتمتة التقارير والمتابعة اليومية",
-    ],
-    timeline: "2 – 6 أسابيع",
-    cta: "أبغى أنظم شغلي",
-  },
-  {
-    id: "uiux",
-    slug: "ui-ux-design",
-    category: "UI/UX والتصميم والهوية",
-    projectType: "تصميم",
-    problemType: "عندي فكرة تطبيق أو منصة",
-    icon: Palette,
-    image: "/images/services/service-uiux.webp",
-    imageAlt: "تصميم واجهات وتجربة المستخدم ونماذج أولية تفاعلية Figma",
-    number: "04",
-    title: "التصميم مو زينة للمشروع — هو كيف يفهمه العميل ويستخدمه.",
-    summary:
-      "أحوّل فكرتك إلى شاشات تفاعلية ونموذج واقعي على Figma تراجعه وتختبره قبل بدء البرمجة.",
-    target: "أصحاب الأفكار والمشاريع قبل الاستثمار في مرحلة التطوير.",
-    bullets: [
-      "تصميم واجهات وتجربة تطبيقات الجوال والويب",
-      "مخططات المسارات ونماذج أولية تفاعلية (Prototypes)",
-      "نظام تصميم وهوية بصرية رقمية متناسقة",
-    ],
-    deliverables: [
-      "مخططات وهيكلة الشاشات (Wireframes)",
-      "واجهات Figma عالية الدقة وكاملة الحالات",
-      "نموذج أولي تفاعلي قابل للتجربة (Prototype)",
-      "دليل المكونات والألوان والخطوط",
-    ],
-    timeline: "1 – 3 أسابيع",
-    cta: "أبغى أشوف شكل فكرتي",
-  },
-];
-
-const filterCategories = [
-  { id: "all", label: "جميع الخدمات" },
-  { id: "websites", label: "مواقع ومنصات" },
-  { id: "ecommerce", label: "متاجر إلكترونية" },
-  { id: "systems", label: "أنظمة وحلول رقمية" },
-  { id: "uiux", label: "UI/UX والتصميم" },
-];
-
-const problemScenarios = [
-  {
-    label: "عندي نشاط أو خدمة، لكن ما عندي موقع احترافي",
-    projectType: "موقع",
-    problem: "ما عندي موقع أو صفحة واضحة",
-  },
-  {
-    label: "عندي متجر، لكن التصفح أو الشراء يحتاج تحسين",
+    title: "المتاجر الإلكترونية",
+    category: "stores",
+    categoryLabel: "متاجر",
+    icon: ShoppingBag,
+    description: "متاجر إلكترونية متكاملة مصممة لعرض المنتجات وتحويل الزوار إلى عملاء مشترين.",
+    example: "متجر لبيع العطور أو الملابس مع المنتجات، السلة، الدفع الإلكتروني، وإدارة الطلبات.",
+    ctaText: "استكشف الخدمة",
     projectType: "متجر",
-    problem: "متجري يحتاج تحسين",
+    problemScenario: "متجري يحتاج تحسين",
+    timeline: "2 – 3 أسابيع",
+    idealFor: "أصحاب البراندات والمتاجر المستقلة لرفع كفاءة ومبيعات النشاط.",
+    detailedBenefit: "متجر مصمم هندسياً لتقليل خطوات الشراء ومضاعفة معدلات التحويل من خلال تجربة تصفح سريعة وخفيفة من الجوال.",
+    deliverables: [
+      "واجهة متجر جذابة تعكس الهوية البصرية بدقة",
+      "صفحات منتجات مفصلة ومهيأة للتحويل والإقناع",
+      "سلة شراء مرنة ومسار دفع إلكتروني ميسر",
+      "لوحة إدارة المخزون، الطلبات، وكوبونات الخصم",
+      "ربط مع شركات الشحن المحلي وبوابات الدفع",
+    ],
   },
   {
-    label: "أتابع عملي بين واتساب وExcel",
+    id: "salla-stores",
+    number: "03",
+    title: "تصميم متاجر سلة",
+    category: "stores",
+    categoryLabel: "متاجر سلة",
+    badge: "10+ متاجر منفذة",
+    icon: Store,
+    description: "تصميم وتطوير واجهات متاجر احترافية على منصة سلة، جاهزة للبيع وتعكس هوية العلامة التجارية.",
+    example: "متجر قهوة أو إكسسوارات مصمم بالكامل ليكون جاهزًا لاستقبال العملاء والطلبات.",
+    ctaText: "أريد متجر سلة",
+    projectType: "متجر",
+    problemScenario: "متجري يحتاج تحسين",
+    timeline: "3 – 7 أيام",
+    idealFor: "رواد الأعمال وأصحاب المتاجر الراغبين في إطلاق متجر فوري على سلة بهوية متميزة.",
+    detailedBenefit: "أحوّل متجرك على سلة من مجرد قالب نمطي مكرر إلى متجر فريد يمنح العميل ثقة فورية تزيد من مبيعاتك وتسهل تجربة التصفح.",
+    deliverables: [
+      "تخصيص كامل لثيم سلة مع بناء أقسام وبانرات احترافية",
+      "تنسيق متناسق للألوان والخطوط والأيقونات الخاصة بالهوية",
+      "ترتيب الأقسام الرئيسية والمنتجات المميزة وعروض التوفير",
+      "ضبط مخصص لشاشات الجوال لتصفح وشراء فائق السرعة",
+      "مساعدة في ربط بوابات الدفع والشحن وإعدادات المتجر",
+    ],
+  },
+
+  // Row 2: أنظمة ولوحات تحكم
+  {
+    id: "admin-dashboards",
+    number: "04",
+    title: "الأنظمة الإدارية ولوحات التحكم",
+    category: "systems",
+    categoryLabel: "أنظمة",
+    icon: LayoutDashboard,
+    description: "أنظمة داخلية تساعد الشركات على إدارة العمليات والموظفين والبيانات من لوحة تحكم واحدة.",
+    example: "نظام لإدارة موظفي شركة صغيرة ومتابعة الحضور والبيانات والتقارير.",
+    ctaText: "استكشف الخدمة",
     projectType: "نظام",
-    problem: "أتابع الشغل يدويًا بين واتساب وExcel",
+    problemScenario: "أتابع الشغل يدويًا بين واتساب وExcel",
+    timeline: "3 – 6 أسابيع",
+    idealFor: "الشركات والأنشطة التي تعاني من فوضى الجداول الورقية وتشتت البيانات في Excel.",
+    detailedBenefit: "تجميع عملياتك اليومية في لوحة سحابية آمنة تمنحك رؤية واضحة ومباشرة لأداء العمل وتوفر ساعات العمل اليدوي المهدرة.",
+    deliverables: [
+      "لوحة تحكم تفاعلية وسريعة تجمع أهم المؤشرات",
+      "إدارة شاملة للموظفين والمهام والصلاحيات",
+      "قاعدة بيانات سحابية مركزية آمنة مع نسخ احتياطي",
+      "تقارير وإحصائيات دورية لأداء العمليات",
+      "تصدير البيانات والتقارير بضغطة زر",
+    ],
   },
   {
-    label: "عندي فكرة منصة أو تطبيق ولا أعرف كيف أبدأ",
+    id: "booking-systems",
+    number: "05",
+    title: "أنظمة الحجوزات والمواعيد",
+    category: "systems",
+    categoryLabel: "أنظمة",
+    icon: CalendarClock,
+    description: "أنظمة حجز ذكية تجعل إدارة المواعيد أسهل للعميل وصاحب النشاط دون تداخل.",
+    example: "نظام حجز مواعيد لصالون حلاقة أو عيادة مع إدارة المواعيد والعملاء.",
+    ctaText: "استكشف الخدمة",
+    projectType: "نظام",
+    problemScenario: "أتابع الشغل يدويًا بين واتساب وExcel",
+    timeline: "2 – 4 أسابيع",
+    idealFor: "العيادات، صالونات التجميل، مكاتب الاستشارات، والمرافق الرياضية والخدمية.",
+    detailedBenefit: "أتمتة جدولة المواعيد ومنع تضارب الأوقات، مع إرسال تنبيهات وتأكيدات تلقائية عبر WhatsApp أو البريد الإلكتروني.",
+    deliverables: [
+      "تقويم مواعيد تفاعلي يعرض الأوقات الشاغرة بدقة",
+      "واجهة حجز سهلة وفورية للعملاء عبر الجوال",
+      "إدارة أوقات العمل وفترات الراحة وجداول الموظفين",
+      "تنبيهات تلقائية فورية للمواعيد والتعديلات",
+      "إمكانية تفعيل الدفع المسبق أو دفع عربون لتأكيد الحجز",
+    ],
+  },
+  {
+    id: "membership-systems",
+    number: "06",
+    title: "أنظمة العضويات والاشتراكات",
+    category: "systems",
+    categoryLabel: "أنظمة",
+    icon: Users,
+    description: "منصات تعتمد على العضويات والاشتراكات الشهرية أو السنوية مع إدارة المستخدمين والصلاحيات.",
+    example: "منصة دورات تدريبية تتيح للمستخدم الاشتراك والوصول إلى المحتوى حسب الباقة.",
+    ctaText: "استكشف الخدمة",
     projectType: "منصة",
-    problem: "عندي فكرة تطبيق أو منصة",
+    problemScenario: "عندي فكرة تطبيق أو منصة",
+    timeline: "3 – 5 أسابيع",
+    idealFor: "صناع المحتوى، الأكاديميات التدريبية، والمجتمعات والنوادي الرقمية المدفوعة.",
+    detailedBenefit: "بناء بنية برمجية متكاملة لتسجيل الأعضاء، تجديد الاشتراكات الدورية، وحماية المحتوى الحصري آلياً.",
+    deliverables: [
+      "باقات اشتراك متعددة المستويات (شهرية / سنوية)",
+      "ربط مع بوابات الدفع للاشتراكات المتكررة والتجديد التلقائي",
+      "لوحة حساب شخصية لكل مشترك لإدارة باقته",
+      "حماية المحتوى المخصص حسب فئة العضوية",
+      "سجل الفواتير والدفعات وإدارة صلاحيات المشتركين",
+    ],
+  },
+
+  // Row 3: منصات وعملاء
+  {
+    id: "crm-systems",
+    number: "07",
+    title: "أنظمة إدارة العملاء والموظفين CRM",
+    category: "systems",
+    categoryLabel: "أنظمة",
+    icon: Workflow,
+    description: "حلول مخصصة لتنظيم العملاء والطلبات والموظفين ومتابعة سير العمل بدقة.",
+    example: "نظام CRM لشركة خدمات لتسجيل العملاء ومتابعة طلباتهم ومراحل تنفيذها.",
+    ctaText: "استكشف الخدمة",
+    projectType: "نظام",
+    problemScenario: "أتابع الشغل يدويًا بين واتساب وExcel",
+    timeline: "3 – 6 أسابيع",
+    idealFor: "الشركات الخدمية، وكالات التسويق، والمكاتب الاستشارية والمهنية.",
+    detailedBenefit: "تنظيم مسار تحويل العميل المحتمل إلى عقد منجز، ومتابعة سجل المحادثات والمهام الموزعة على الفريق في شاشة واحدة.",
+    deliverables: [
+      "سجل مركزي متكامل لبيانات العملاء وتاريخ التعاملات",
+      "لوحة كانبان لمتابعة مراحل الطلبات وعمليات البيع",
+      "توزيع وتعيين المهام بين الموظفين مع الإشعارات",
+      "جدولة مواعيد المتابعة والتذكير التلقائي",
+      "تقارير دورية حول إنتاجية الفريق ونسب الإغلاق",
+    ],
   },
   {
-    label: "عندي موقع موجود لكنه يحتاج تطوير",
+    id: "service-platforms",
+    number: "08",
+    title: "المنصات الإلكترونية ومواقع الخدمات",
+    category: "websites",
+    categoryLabel: "مواقع ومنصات",
+    icon: Layers,
+    description: "منصات رقمية تربط بين المستخدمين ومقدمي الخدمات أو تعرض خدمات ومنتجات بطريقة منظمة.",
+    example: "منصة لعرض خدمات المستقلين ومقدمي الخدمات وتمكين العملاء من استكشافها والتواصل معهم.",
+    ctaText: "استكشف الخدمة",
+    projectType: "منصة",
+    problemScenario: "عندي فكرة تطبيق أو منصة",
+    timeline: "4 – 8 أسابيع",
+    idealFor: "رواد الأعمال والمشاريع الناشئة الراغبة في بناء منصة وساطة أو Marketplace خدمي.",
+    detailedBenefit: "هيكلة منصة متكاملة تسمح بتعدد أطراف الاستخدام (عملاء / مقدمي خدمة / إدارة) مع نظام بحث وتصفية وتقييم دقيق.",
+    deliverables: [
+      "بوابات مستخدمين مخصصة للعملاء ومقدمي الخدمات",
+      "محرك بحث وفلاتر متقدمة للتصنيف والاستكشاف",
+      "لوحة تحكم إدارية مركزية للرقابة واعتماد الحسابات",
+      "نظام تقييمات ومراجعات لتعزيز الشفافية والموثوقية",
+      "بنية سحابية قابلة للتوسع واستيعاب آلاف المستخدمين",
+    ],
+  },
+  {
+    id: "landing-pages",
+    number: "09",
+    title: "صفحات الهبوط Landing Pages",
+    category: "websites",
+    categoryLabel: "مواقع",
+    icon: Rocket,
+    description: "صفحات Landing Page مصممة حول هدف واضح: بيع منتج، الحصول على عملاء، أو إطلاق خدمة.",
+    example: "صفحة إطلاق لتطبيق جديد تحتوي على عرض واضح، مزايا المنتج، Social Proof، وCTA قوي.",
+    ctaText: "استكشف الخدمة",
     projectType: "موقع",
-    problem: "عندي موقع أو نظام يحتاج تطوير",
+    problemScenario: "ما عندي موقع أو صفحة واضحة",
+    timeline: "3 – 7 أيام",
+    idealFor: "الحملات الإعلانية الممولة، إطلاق المنتجات الجديدة، وجمع بيانات العملاء المهتمين (Leads).",
+    detailedBenefit: "صفحة سريعة ومركزة ذات رسالة تسويقية واضحة وتصميم بصري مقنع يخاطب حاجة العميل ويدفعه لاتخاذ الإجراء فوراً.",
+    deliverables: [
+      "تصميم موجه لرفع معدلات التحويل والإقناع",
+      "سرعة تحميل فائقة لمنع ارتداد زوار الإعلانات",
+      "ربط مباشر مع أدوات التحليل وPixel الإعلانية",
+      "صياغة وترتيب العناوين والمزايا بأسلوب بيعي مقنع",
+      "تجاوب بصري كامل على كافة أحجام الشاشات",
+    ],
+  },
+
+  // Row 4: تصميم وحلول مخصصة
+  {
+    id: "ui-ux-design",
+    number: "10",
+    title: "تصميم UI/UX",
+    category: "design",
+    categoryLabel: "تصميم",
+    icon: Palette,
+    description: "تصميم واجهات وتجارب استخدام حديثة قبل بدء البرمجة، مع التركيز على سهولة الاستخدام والوضوح.",
+    example: "تصميم واجهة تطبيق توصيل من الفكرة الأولية إلى Prototype قابل للعرض.",
+    ctaText: "استكشف الخدمة",
+    projectType: "تصميم",
+    problemScenario: "عندي فكرة تطبيق أو منصة",
+    timeline: "1 – 3 أسابيع",
+    idealFor: "أصحاب الأفكار والتطبيقات قبل الاستثمار في مرحلة البرمجة لتفادي تكاليف التعديل.",
+    detailedBenefit: "أحوّل فكرتك المجردة إلى شاشات تفاعلية ونموذج واقعي عالي الدقة على Figma يمكنك مراجعته وتجربته قبل كتابة سطر كود واحد.",
+    deliverables: [
+      "مخططات وهيكلة تجربة الاستخدام (Wireframes)",
+      "واجهات Figma عالية الدقة وكاملة الحالات",
+      "نموذج أولي تفاعلي قابل للتجربة والنقر (Prototype)",
+      "دليل المكونات ونظام التصميم الخاص بالهوية",
+      "ملفات مجهزة بدقة لتسليمها للمطورين",
+    ],
   },
   {
-    label: "أحتاج تصميم واضح قبل البرمجة",
-    projectType: "تصميم",
-    problem: "عندي فكرة تطبيق أو منصة",
+    id: "modernization",
+    number: "11",
+    title: "تطوير وتحسين المواقع والأنظمة الحالية",
+    category: "websites",
+    categoryLabel: "مواقع وأنظمة",
+    icon: Wrench,
+    description: "لا تحتاج دائمًا إلى بناء مشروع جديد. أستطيع تطوير مشروعك الحالي وتحسين الأداء والتجربة والمظهر.",
+    example: "تحسين موقع بطيء، إعادة تصميم واجهته، إصلاح المشاكل، وتحسين تجربة المستخدم.",
+    ctaText: "استكشف الخدمة",
+    projectType: "موقع",
+    problemScenario: "عندي موقع أو نظام يحتاج تطوير",
+    timeline: "3 – 10 أيام",
+    idealFor: "الأنشطة التي تملك موقعاً أو نظاماً قائماً لكنه يعاني من البطء أو المشاكل التقنية أو المظهر القديم.",
+    detailedBenefit: "تحديث شاشات موقعك، رفع سرعة التصفح لـ 90+ على PageSpeed، وإصلاح العيوب البصرية والوظيفية دون الحاجة للبناء من الصفر.",
+    deliverables: [
+      "فحص شامل للأداء والسرعة ونقاط الضعف التقنية",
+      "تحسين سرعة التحميل وضغط الأصول والملفات",
+      "تحديث الواجهات القديمة وتطوير مظهرها لتواكب اليوم",
+      "إصلاح أخطاء التجاوب على شاشات الهواتف",
+      "تحديث وتأمين قواعد البيانات والمكتبات البرمجية",
+    ],
+  },
+  {
+    id: "custom-solutions",
+    number: "12",
+    title: "أنظمة مخصصة حسب فكرة مشروعك",
+    category: "systems",
+    categoryLabel: "حل مخصص",
+    badge: "لديك فكرة مختلفة؟",
+    featured: true,
+    icon: Sparkles,
+    description: "إذا كانت فكرتك لا تنتمي إلى خدمة محددة، يمكن بناء نظام مخصص بالكامل حسب طريقة عمل مشروعك واحتياجاتك.",
+    example: "نظام خاص لإدارة طلبات مطعم، مغسلة سيارات، نادي رياضي، شركة خدمات، أو أي فكرة أخرى.",
+    ctaText: "احكِ لي عن فكرتك ←",
+    projectType: "نظام",
+    problemScenario: "عندي فكرة تطبيق أو منصة",
+    timeline: "حسب متطلبات فكرتك",
+    idealFor: "أصحاب الأفكار المبتكرة والأنشطة ذات المسارات الخاصة التي لا تلائمها القوالب والبرامج الجاهزة.",
+    detailedBenefit: "هندسة برمجية متكاملة تبنى خصيصاً من الصفر لتطابق طريقة عملك اليومية وتلبي احتياجات فريقك وعملائك بدقة متناهية.",
+    deliverables: [
+      "جلسة استشارية لتحليل وهندسة متطلبات فكرتك",
+      "تصميم واجهات وتجربة استخدام تخدم خصوصية الفكرة",
+      "برمجة الواجهات والعمليات الخلفية وقاعدة البيانات بالكامل",
+      "ربط وتكامل مع بوابات الدفع، الخرائط، أو خدمات WhatsApp",
+      "دعم فني واختبار ما بعد الإطلاق لضمان ثبات النظام",
+    ],
   },
 ];
 
-// Standard easing
-const standardEase = [0.4, 0, 0.2, 1] as const;
+const FILTER_CATEGORIES = [
+  { id: "all", label: "الكل" },
+  { id: "websites", label: "مواقع" },
+  { id: "stores", label: "متاجر" },
+  { id: "systems", label: "أنظمة" },
+  { id: "design", label: "تصميم" },
+] as const;
+
+type FilterId = (typeof FILTER_CATEGORIES)[number]["id"];
 
 export function WhatIBuild() {
-  const [activeCategory, setActiveCategory] = useState<string>("all");
-  const [expandedMobileId, setExpandedMobileId] = useState<string | null>("websites");
-  const [selectedService, setSelectedService] = useState<ServiceData | null>(null);
+  const [activeFilter, setActiveFilter] = useState<FilterId>("all");
+  const [selectedService, setSelectedService] = useState<ServiceItem | null>(null);
   const shouldReduceMotion = useReducedMotion();
 
   const filteredServices = useMemo(() => {
-    if (activeCategory === "all") return services;
-    return services.filter((s) => s.id === activeCategory);
-  }, [activeCategory]);
+    if (activeFilter === "all") return SERVICES;
+    return SERVICES.filter((s) => s.category === activeFilter);
+  }, [activeFilter]);
 
-  const toggleMobileAccordion = (id: string) => {
-    setExpandedMobileId((prev) => (prev === id ? null : id));
-  };
-
-  const triggerProblemSelection = (projectType: string, problemText: string) => {
+  const triggerOrderService = (service: ServiceItem) => {
+    setSelectedService(null);
     window.dispatchEvent(
       new CustomEvent("select-problem", {
-        detail: { projectType, problem: problemText },
+        detail: {
+          projectType: service.projectType,
+          problem: service.problemScenario,
+        },
       }),
     );
+    const formEl = document.getElementById("contact-form");
+    if (formEl) {
+      setTimeout(() => {
+        formEl.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    }
+  };
+
+  const scrollToContact = () => {
     const formEl = document.getElementById("contact-form");
     if (formEl) {
       formEl.scrollIntoView({ behavior: "smooth" });
@@ -229,425 +387,288 @@ export function WhatIBuild() {
   };
 
   return (
-    <section id="what-i-build" className="relative overflow-hidden py-16 sm:py-24">
+    <section id="what-i-build" className="relative overflow-hidden py-16 sm:py-24 border-t border-border/60">
+      {/* Subtle Background Glow */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-40 right-1/4 -z-10 size-[500px] rounded-full bg-accent/5 blur-3xl"
+      />
+
       <Container>
-        {/* Section Header */}
+        {/* 1. Header */}
         <Reveal>
-          <div className="max-w-2xl">
-            <span className="text-xs font-semibold tracking-wider text-accent uppercase">
-              الخدمات والحلول
+          <div className="max-w-3xl">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-accent/10 px-3 py-1 text-xs font-semibold text-accent">
+              <Sparkles className="size-3.5" /> خدماتي
             </span>
-            <h2 className="mt-2 text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-foreground">
-              حلول عملية مبنية على مشكلتك.
+            <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground font-display">
+              أحوّل أفكارك إلى منتجات رقمية حقيقية
             </h2>
-            <p className="mt-3 text-sm sm:text-base leading-relaxed text-muted-foreground">
-              أبني حلولاً رقمية مدروسة تساعدك على تنظيم عملك وعرض خدماتك بوضوح.
+            <p className="mt-4 text-base sm:text-lg leading-relaxed text-muted-foreground font-sans">
+              من المواقع والمتاجر إلى الأنظمة والمنصات المخصصة — أصمم وأطور حلولًا رقمية تناسب احتياج مشروعك وتُبنى لتكون قابلة للاستخدام والتوسع.
             </p>
           </div>
         </Reveal>
 
-        {/* 1) Sticky Filter Tabs / Chips */}
-        <div className="sticky top-16 z-30 -mx-5 px-5 sm:-mx-8 sm:px-8 lg:-mx-12 lg:px-12 mt-8 py-3 bg-background/85 backdrop-blur-md border-y border-border/40 transition-colors">
-          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5" role="tablist">
-            {filterCategories.map((cat) => {
-              const isActive = activeCategory === cat.id;
-              return (
-                <button
-                  key={cat.id}
-                  type="button"
-                  role="tab"
-                  aria-selected={isActive}
-                  onClick={() => {
-                    setActiveCategory(cat.id);
-                    if (cat.id !== "all") {
-                      setExpandedMobileId(cat.id);
-                    }
-                  }}
-                  className={`group relative shrink-0 inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-medium transition-all duration-200 cursor-pointer select-none active:scale-[0.98] ${
-                    isActive
-                      ? "bg-primary text-primary-foreground font-semibold shadow-xs ring-1 ring-primary/20"
-                      : "border border-border/70 bg-card/80 text-muted-foreground hover:border-accent/40 hover:text-foreground hover:bg-card"
-                  }`}
-                >
-                  <span>{cat.label}</span>
-                  {isActive && (
-                    <motion.span
-                      layoutId="activeFilterIndicator"
-                      className="size-1.5 rounded-full bg-accent inline-block mr-0.5"
-                      transition={{ duration: 0.25, ease: standardEase }}
-                    />
-                  )}
-                </button>
-              );
-            })}
-          </div>
+        {/* 2. Filter Bar */}
+        <div className="mt-8 flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar" role="tablist" aria-label="تصفية الخدمات">
+          {FILTER_CATEGORIES.map((cat) => {
+            const isActive = activeFilter === cat.id;
+            return (
+              <button
+                key={cat.id}
+                type="button"
+                role="tab"
+                aria-selected={isActive}
+                onClick={() => setActiveFilter(cat.id)}
+                className={`relative shrink-0 inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer select-none ${
+                  isActive
+                    ? "bg-primary text-primary-foreground font-bold shadow-sm"
+                    : "border border-border/70 bg-card/80 text-muted-foreground hover:border-accent/40 hover:text-foreground hover:bg-card"
+                }`}
+              >
+                <span>{cat.label}</span>
+                {isActive && (
+                  <motion.span
+                    layoutId="activeServiceFilter"
+                    className="size-1.5 rounded-full bg-accent inline-block mr-0.5"
+                    transition={{ duration: 0.22 }}
+                  />
+                )}
+              </button>
+            );
+          })}
         </div>
 
-        {/* 2 & 3) Services Cards — Seamless Floating 3D Objects with Ground Shadows */}
-        <div className="mt-8">
-          {/* =========================================================
-              DESKTOP VIEW (>= 768px): Pristine 2x2 Grid Layout
-             ========================================================= */}
-          <div className="hidden md:grid md:grid-cols-2 gap-6">
-            <AnimatePresence mode="popLayout">
-              {filteredServices.map((svc, idx) => {
-                const Icon = svc.icon;
-                return (
-                  <motion.article
-                    key={svc.id}
-                    layout={!shouldReduceMotion}
-                    initial={shouldReduceMotion ? false : { opacity: 0, y: 12, scale: 0.98 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.98 }}
-                    transition={{
-                      duration: 0.25,
-                      delay: idx * 0.05,
-                      ease: standardEase,
-                    }}
-                    className="group relative flex flex-col justify-between rounded-2xl border border-border/70 bg-card p-6 sm:p-7 transition-all duration-300 hover:border-accent/40 hover:shadow-xl h-full overflow-hidden"
-                  >
-                    <div>
-                      {/* Top Visual Object Stage: Floating 3D Object with Soft Contact Shadow */}
-                      <div className="relative w-full h-44 sm:h-52 flex items-center justify-center mb-4 select-none overflow-visible">
-                        {/* Soft Ground Contact Shadow */}
-                        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-[72%] h-4 rounded-[100%] bg-black/45 blur-md pointer-events-none transition-all duration-500 group-hover:scale-90 group-hover:opacity-40" />
+        {/* 3. Services 12-Grid */}
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+          <AnimatePresence mode="popLayout">
+            {filteredServices.map((svc, idx) => {
+              const Icon = svc.icon;
+              const isFeatured = svc.featured;
 
-                        {/* Floating Transparent 3D Device */}
-                        <img
-                          src={svc.image}
-                          alt={svc.imageAlt}
-                          loading="lazy"
-                          decoding="async"
-                          className="relative z-10 max-h-full max-w-full object-contain drop-shadow-[0_14px_20px_rgba(0,0,0,0.35)] transition-all duration-500 ease-out group-hover:-translate-y-2 group-hover:scale-[1.04]"
-                        />
-                      </div>
-
-                      {/* Category Pill & Number */}
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <div className="flex size-8 items-center justify-center rounded-lg bg-accent/10 text-accent">
-                            <Icon className="size-4 stroke-[1.75]" />
-                          </div>
-                          <span className="rounded-lg border border-border/70 bg-background/80 px-2.5 py-0.5 text-xs font-medium text-foreground">
-                            {svc.category}
-                          </span>
+              return (
+                <motion.article
+                  key={svc.id}
+                  layout={!shouldReduceMotion}
+                  initial={shouldReduceMotion ? false : { opacity: 0, y: 14, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 0.25, delay: idx * 0.03 }}
+                  className={`group relative flex flex-col justify-between rounded-2xl p-6 sm:p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${
+                    isFeatured
+                      ? "border-2 border-accent/60 bg-gradient-to-br from-accent/[0.07] via-card to-card shadow-lg shadow-accent/5 hover:border-accent"
+                      : "border border-border/70 bg-card/90 hover:border-accent/50 dark:bg-card/70"
+                  }`}
+                >
+                  <div>
+                    {/* Top Row: Number, Icon, and Optional Badge */}
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-3">
+                        <div
+                          className={`flex size-10 items-center justify-center rounded-xl transition-colors duration-300 ${
+                            isFeatured
+                              ? "bg-accent text-accent-foreground shadow-sm"
+                              : "bg-accent/10 text-accent group-hover:bg-accent group-hover:text-accent-foreground"
+                          }`}
+                        >
+                          <Icon className="size-5 stroke-[1.8]" />
                         </div>
-                        <span className="font-mono text-xs font-semibold text-muted-foreground/60" dir="ltr">
+                        <span className="font-mono text-xs font-bold text-accent tracking-wider" dir="ltr">
                           {svc.number}
                         </span>
                       </div>
 
-                      {/* Title */}
-                      <h3 className="mt-4 text-lg sm:text-xl font-bold text-foreground leading-snug">
-                        {svc.title}
-                      </h3>
-
-                      {/* Summary */}
-                      <p className="mt-2.5 text-xs sm:text-sm text-foreground/80 leading-relaxed">
-                        {svc.summary}
-                      </p>
-
-                      {/* Bullets (3 items) */}
-                      <ul className="mt-4 space-y-2 border-t border-border/40 pt-3 text-xs sm:text-sm">
-                        {svc.bullets.map((b) => (
-                          <li key={b} className="flex items-center gap-2 text-foreground/85">
-                            <Check className="size-3.5 text-accent shrink-0 stroke-2" />
-                            <span>{b}</span>
-                          </li>
-                        ))}
-                      </ul>
-
-                      {/* Target Single Line */}
-                      <p className="mt-4 text-[11px] sm:text-xs text-muted-foreground">
-                        <strong className="text-foreground/80 font-semibold">يناسب:</strong> {svc.target}
-                      </p>
+                      {svc.badge && (
+                        <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-accent/15 px-2.5 py-0.5 text-[11px] font-bold text-accent">
+                          <span className="size-1.5 rounded-full bg-accent animate-pulse" />
+                          {svc.badge}
+                        </span>
+                      )}
                     </div>
 
-                    {/* Action Buttons */}
-                    <div className="mt-6 pt-4 border-t border-border/40 flex items-center justify-between gap-3">
-                      <button
-                        type="button"
-                        onClick={() => triggerProblemSelection(svc.projectType, svc.problemType)}
-                        className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-4 py-2.5 text-xs font-semibold text-primary-foreground transition-all duration-150 hover:opacity-90 active:scale-[0.98] cursor-pointer"
-                      >
-                        {svc.cta}
-                        <ArrowLeft className="size-3.5 stroke-2" />
-                      </button>
+                    {/* Title */}
+                    <h3 className="mt-5 text-lg sm:text-xl font-bold text-foreground leading-snug font-sans group-hover:text-accent transition-colors">
+                      {svc.title}
+                    </h3>
 
-                      <button
-                        type="button"
-                        onClick={() => setSelectedService(svc)}
-                        className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors duration-150 active:scale-[0.98] cursor-pointer py-1"
-                      >
-                        تفاصيل الخدمة
-                        <ArrowUpRight className="size-3 text-accent stroke-2" />
-                      </button>
+                    {/* Short Description */}
+                    <p className="mt-2.5 text-xs sm:text-sm text-foreground/80 leading-relaxed">
+                      {svc.description}
+                    </p>
+
+                    {/* Example Box */}
+                    <div className="mt-4 rounded-xl border border-border/50 bg-muted/50 p-3 text-xs leading-relaxed text-muted-foreground">
+                      <span className="font-bold text-foreground inline-block ml-1">مثال:</span>
+                      <span>{svc.example}</span>
                     </div>
-                  </motion.article>
-                );
-              })}
-            </AnimatePresence>
-          </div>
+                  </div>
 
-          {/* =========================================================
-              MOBILE ACCORDION VIEW (< 768px): Compact Collapsible Cards
-             ========================================================= */}
-          <div className="md:hidden space-y-3">
-            <AnimatePresence mode="popLayout">
-              {filteredServices.map((svc, idx) => {
-                const Icon = svc.icon;
-                const isExpanded = expandedMobileId === svc.id;
-
-                return (
-                  <motion.div
-                    key={svc.id}
-                    layout={!shouldReduceMotion}
-                    initial={shouldReduceMotion ? false : { opacity: 0, y: 10, scale: 0.98 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.98 }}
-                    transition={{
-                      duration: 0.25,
-                      delay: idx * 0.04,
-                      ease: standardEase,
-                    }}
-                    className={`rounded-2xl border transition-all duration-200 overflow-hidden ${
-                      isExpanded
-                        ? "border-accent/50 bg-card shadow-md ring-1 ring-accent/20"
-                        : "border-border/70 bg-card/90 hover:border-border"
-                    }`}
-                  >
-                    {/* Collapsed Header / Toggle Trigger */}
+                  {/* Card Bottom CTA */}
+                  <div className="mt-6 pt-4 border-t border-border/40 flex items-center justify-between gap-3">
                     <button
                       type="button"
-                      onClick={() => toggleMobileAccordion(svc.id)}
-                      aria-expanded={isExpanded}
-                      className="w-full flex items-center justify-between p-4 text-right cursor-pointer select-none active:scale-[0.99] transition-transform"
+                      onClick={() => setSelectedService(svc)}
+                      className="inline-flex items-center gap-1.5 text-xs font-bold text-accent transition-colors hover:underline cursor-pointer"
                     >
-                      <div className="flex items-start gap-3 min-w-0 pr-1">
-                        <div
-                          className={`flex size-9 shrink-0 items-center justify-center rounded-xl transition-colors ${
-                            isExpanded ? "bg-accent text-white" : "bg-accent/10 text-accent"
-                          }`}
-                        >
-                          <Icon className="size-4.5 stroke-[1.75]" />
-                        </div>
-
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="rounded-md border border-border/60 bg-background/80 px-2 py-0.5 text-[11px] font-medium text-foreground">
-                              {svc.category}
-                            </span>
-                            <span className="font-mono text-[11px] font-semibold text-muted-foreground/60" dir="ltr">
-                              {svc.number}
-                            </span>
-                          </div>
-                          <h3 className="text-sm font-bold text-foreground leading-snug line-clamp-2">
-                            {svc.title}
-                          </h3>
-                        </div>
-                      </div>
-
-                      {/* Animated Chevron 180° rotation */}
-                      <div
-                        className={`flex size-8 shrink-0 items-center justify-center rounded-lg mr-2 transition-transform duration-300 ${
-                          isExpanded ? "rotate-180 bg-accent/15 text-accent" : "text-muted-foreground bg-muted/40"
-                        }`}
-                      >
-                        <ChevronDown className="size-4 stroke-2" />
-                      </div>
+                      <span>تفاصيل الخدمة</span>
+                      <ArrowLeft className="size-3.5 transition-transform duration-300 group-hover:-translate-x-1" />
                     </button>
 
-                    {/* Expandable Body with Floating Object */}
-                    <AnimatePresence initial={false}>
-                      {isExpanded && (
-                        <motion.div
-                          key="accordion-content"
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{
-                            height: { duration: 0.3, ease: standardEase },
-                            opacity: { duration: 0.25, ease: standardEase },
-                          }}
-                          className="overflow-hidden"
-                        >
-                          <div className="px-4 pb-5 pt-1 border-t border-border/40 space-y-4">
-                            {/* Floating Object Stage on Expanded Mobile */}
-                            <div className="relative w-full h-40 flex items-center justify-center my-2 select-none overflow-visible">
-                              <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-[70%] h-3.5 rounded-[100%] bg-black/40 blur-md pointer-events-none" />
-                              <img
-                                src={svc.image}
-                                alt={svc.imageAlt}
-                                loading="lazy"
-                                decoding="async"
-                                className="relative z-10 max-h-full max-w-full object-contain drop-shadow-[0_10px_14px_rgba(0,0,0,0.35)]"
-                              />
-                            </div>
-
-                            {/* Summary */}
-                            <p className="text-xs text-foreground/85 leading-relaxed">
-                              {svc.summary}
-                            </p>
-
-                            {/* Bullets (3 items) */}
-                            <ul className="space-y-2 border-t border-border/40 pt-3 text-xs">
-                              {svc.bullets.map((b) => (
-                                <li key={b} className="flex items-center gap-2 text-foreground/90">
-                                  <Check className="size-3.5 text-accent shrink-0 stroke-2" />
-                                  <span>{b}</span>
-                                </li>
-                              ))}
-                            </ul>
-
-                            {/* Target */}
-                            <div className="rounded-xl border border-border/50 bg-background/60 p-2.5 text-[11px] text-muted-foreground">
-                              <strong className="text-foreground/90 font-semibold">يناسب:</strong> {svc.target}
-                            </div>
-
-                            {/* CTA Action Buttons */}
-                            <div className="pt-2 flex items-center justify-between gap-2">
-                              <button
-                                type="button"
-                                onClick={() => triggerProblemSelection(svc.projectType, svc.problemType)}
-                                className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-primary py-2.5 px-3 text-xs font-semibold text-primary-foreground shadow-xs active:scale-[0.98] transition-transform"
-                              >
-                                {svc.cta}
-                                <ArrowLeft className="size-3.5 stroke-2" />
-                              </button>
-
-                              <button
-                                type="button"
-                                onClick={() => setSelectedService(svc)}
-                                className="inline-flex items-center justify-center gap-1 rounded-xl border border-border/70 bg-card py-2.5 px-3 text-xs font-medium text-foreground hover:bg-muted active:scale-[0.98] transition-transform"
-                              >
-                                تفاصيل
-                                <ArrowUpRight className="size-3 text-accent stroke-2" />
-                              </button>
-                            </div>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.div>
-                );
-              })}
-            </AnimatePresence>
-          </div>
+                    <button
+                      type="button"
+                      onClick={() => triggerOrderService(svc)}
+                      className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer ${
+                        isFeatured
+                          ? "bg-accent text-accent-foreground hover:opacity-90 shadow-sm"
+                          : "border border-border/80 bg-background text-foreground hover:bg-accent hover:text-accent-foreground hover:border-accent"
+                      }`}
+                    >
+                      <span>{isFeatured ? "احكِ لي عن فكرتك →" : "أريد هذا النوع"}</span>
+                    </button>
+                  </div>
+                </motion.article>
+              );
+            })}
+          </AnimatePresence>
         </div>
 
-        {/* Problem-First Selector Section */}
-        <Reveal delay={0.12}>
-          <div className="mt-12 rounded-2xl border border-border/70 bg-muted/20 p-6 sm:p-8">
-            <div className="max-w-xl">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-3 py-0.5 text-xs font-medium text-foreground">
-                <HelpCircle className="size-3.5 text-accent stroke-2" /> مسار البداية السريع
+        {/* 4. Bottom CTA Section */}
+        <Reveal delay={0.1}>
+          <div className="mt-14 rounded-3xl border border-border/80 bg-gradient-to-br from-card via-card to-accent/5 p-8 sm:p-12 text-center shadow-lg">
+            <div className="mx-auto max-w-2xl">
+              <span className="inline-flex size-12 items-center justify-center rounded-2xl bg-accent/15 text-accent mb-4">
+                <HelpCircle className="size-6 stroke-[1.8]" />
               </span>
-              <h3 className="mt-3 text-xl sm:text-2xl font-bold text-foreground">
-                مو متأكد وش تحتاج؟ ابدأ من مشكلتك.
+              <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground font-display">
+                ما لقيت الخدمة اللي تبحث عنها؟
               </h3>
-              <p className="mt-1.5 text-xs sm:text-sm text-muted-foreground">
-                اختر الحالة الأقرب لمشروعك، وسنوجهك مباشرة للحل الأنسب.
+              <p className="mt-3 text-sm sm:text-base leading-relaxed text-muted-foreground font-sans">
+                إذا كانت فكرتك مختلفة أو لم تجدها ضمن القائمة، اشرحها لي وسأساعدك في تحليلها وتحويلها إلى حل رقمي مناسب لطريقة عملك.
               </p>
-            </div>
 
-            <div className="mt-6 grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
-              {problemScenarios.map((scenario) => (
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
                 <button
-                  key={scenario.label}
                   type="button"
-                  onClick={() => triggerProblemSelection(scenario.projectType, scenario.problem)}
-                  className="group flex items-center justify-between rounded-xl border border-border/70 bg-background/80 p-3.5 text-right transition-all duration-150 hover:border-accent/50 hover:bg-card active:scale-[0.98] cursor-pointer"
+                  onClick={scrollToContact}
+                  className="inline-flex items-center gap-2 rounded-xl bg-primary px-7 py-3.5 text-sm font-bold text-primary-foreground shadow-md transition-all hover:opacity-90 cursor-pointer"
                 >
-                  <span className="text-xs sm:text-sm text-foreground group-hover:text-accent transition-colors">
-                    {scenario.label}
-                  </span>
-                  <ArrowLeft className="size-3.5 shrink-0 text-muted-foreground transition-transform duration-200 group-hover:-translate-x-1 group-hover:text-accent mr-2 stroke-2" />
+                  <span>ابدأ مشروعك</span>
+                  <ArrowLeft className="size-4" />
                 </button>
-              ))}
+
+                <a
+                  href={`https://wa.me/${site.whatsapp.replace(/[^0-9]/g, "")}?text=${encodeURIComponent("السلام عليكم محمد، عندي فكرة مشروع وأود استشارتك فيها.")}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 rounded-xl border border-border/80 bg-background px-6 py-3.5 text-sm font-bold text-foreground transition-colors hover:bg-muted"
+                >
+                  <MessageCircle className="size-4 text-accent" />
+                  <span>تواصل معي عبر WhatsApp</span>
+                  <ExternalLink className="size-3.5 text-muted-foreground" />
+                </a>
+              </div>
             </div>
           </div>
         </Reveal>
+      </Container>
 
-        {/* Minimal Service Modal Dialog */}
-        <Dialog open={!!selectedService} onOpenChange={(open) => !open && setSelectedService(null)}>
-          <DialogContent className="max-w-lg bg-card border-border/80 p-6 sm:p-7 max-h-[85vh] overflow-y-auto rounded-2xl">
-            {selectedService && (
+      {/* 5. Service Detail Modal */}
+      {selectedService && (
+        <Dialog open={Boolean(selectedService)} onOpenChange={(open) => !open && setSelectedService(null)}>
+          <DialogContent className="max-w-2xl sm:rounded-2xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
+            <DialogHeader className="text-right">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="rounded-full bg-accent/10 px-2.5 py-0.5 text-xs font-bold text-accent">
+                  {selectedService.categoryLabel}
+                </span>
+                <span className="font-mono text-xs text-muted-foreground" dir="ltr">
+                  #{selectedService.number}
+                </span>
+                {selectedService.badge && (
+                  <span className="rounded-full border border-accent/30 bg-accent/15 px-2.5 py-0.5 text-[11px] font-bold text-accent">
+                    {selectedService.badge}
+                  </span>
+                )}
+              </div>
+              <DialogTitle className="text-xl sm:text-2xl font-bold font-display text-foreground">
+                {selectedService.title}
+              </DialogTitle>
+              <DialogDescription className="text-sm text-foreground/80 mt-1 leading-relaxed">
+                {selectedService.detailedBenefit}
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="mt-6 space-y-6">
+              {/* Deliverables Checklist */}
               <div>
-                <DialogHeader className="text-right pb-3 border-b border-border/50">
-                  <div className="relative w-full h-36 flex items-center justify-center my-2 select-none">
-                    <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-[65%] h-3 rounded-[100%] bg-black/40 blur-md pointer-events-none" />
-                    <img
-                      src={selectedService.image}
-                      alt={selectedService.imageAlt}
-                      className="relative z-10 max-h-full max-w-full object-contain drop-shadow-[0_10px_14px_rgba(0,0,0,0.35)]"
-                    />
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="rounded-md border border-border bg-background px-2.5 py-0.5 text-xs font-semibold text-accent">
-                      {selectedService.category}
-                    </span>
-                    <span className="text-xs text-muted-foreground">{selectedService.timeline}</span>
-                  </div>
-                  <DialogTitle className="mt-2 text-lg sm:text-xl font-bold text-foreground">
-                    {selectedService.title}
-                  </DialogTitle>
-                  <DialogDescription className="mt-1 text-xs sm:text-sm text-foreground/80 leading-relaxed">
-                    {selectedService.summary}
-                  </DialogDescription>
-                </DialogHeader>
-
-                <div className="mt-5 space-y-4">
-                  <div>
-                    <h4 className="text-xs font-bold text-foreground mb-2 flex items-center gap-1.5">
-                      <FileCheck className="size-3.5 text-accent stroke-2" /> ما يتم تنفيذه في المشروع:
-                    </h4>
-                    <ul className="space-y-2">
-                      {selectedService.deliverables.map((item) => (
-                        <li
-                          key={item}
-                          className="flex items-start gap-2 text-xs text-foreground/85 bg-muted/30 p-2.5 rounded-xl border border-border/50"
-                        >
-                          <Check className="size-3.5 text-accent shrink-0 mt-0.5 stroke-2" />
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div className="rounded-xl border border-border/60 bg-muted/20 p-3 text-xs text-muted-foreground">
-                    <strong className="text-foreground">لمن تناسب:</strong> {selectedService.target}
-                  </div>
-
-                  <div className="pt-3 border-t border-border/60 flex items-center justify-between gap-3">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const s = selectedService;
-                        setSelectedService(null);
-                        triggerProblemSelection(s.projectType, s.problemType);
-                      }}
-                      className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-4 py-2.5 text-xs font-semibold text-primary-foreground transition-opacity hover:opacity-90 active:scale-[0.98]"
-                    >
-                      {selectedService.cta}
-                      <ArrowLeft className="size-3.5 stroke-2" />
-                    </button>
-
-                    <Link
-                      to="/services/$slug"
-                      params={{ slug: selectedService.slug }}
-                      className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors active:scale-[0.98]"
-                      onClick={() => setSelectedService(null)}
-                    >
-                      صفحة الخدمة الكاملة
-                      <ArrowUpRight className="size-3 stroke-2" />
-                    </Link>
-                  </div>
+                <h4 className="text-xs font-bold tracking-wider text-muted-foreground uppercase mb-3">
+                  ماذا تستلم في هذا المشروع؟
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  {selectedService.deliverables.map((item) => (
+                    <div key={item} className="flex items-start gap-2.5 rounded-xl border border-border/50 bg-muted/40 p-3 text-xs leading-relaxed text-foreground/90">
+                      <CheckCircle2 className="size-4 text-accent shrink-0 mt-0.5" />
+                      <span>{item}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
-            )}
+
+              {/* Example & Target */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="rounded-xl border border-border/60 bg-background p-4">
+                  <div className="flex items-center gap-2 text-xs font-bold text-foreground mb-1">
+                    <Target className="size-3.5 text-accent" />
+                    <span>الأنسب لمين؟</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    {selectedService.idealFor}
+                  </p>
+                </div>
+
+                <div className="rounded-xl border border-border/60 bg-background p-4">
+                  <div className="flex items-center gap-2 text-xs font-bold text-foreground mb-1">
+                    <Clock className="size-3.5 text-accent" />
+                    <span>المدة المتوقعة:</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    {selectedService.timeline}
+                  </p>
+                </div>
+              </div>
+
+              {/* Real World Example Box */}
+              <div className="rounded-xl border border-accent/30 bg-accent/5 p-4 text-xs leading-relaxed">
+                <span className="font-bold text-accent block mb-1">💡 مثال واقعي:</span>
+                <span className="text-foreground/85">{selectedService.example}</span>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="pt-4 border-t border-border/60 flex flex-col sm:flex-row items-center justify-end gap-3">
+                <a
+                  href={`https://wa.me/${site.whatsapp.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`السلام عليكم محمد، أود الاستفسار عن خدمة: ${selectedService.title}`)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border border-border/80 px-4 py-2.5 text-xs font-bold text-foreground hover:bg-muted transition-colors"
+                >
+                  <MessageCircle className="size-3.5 text-accent" />
+                  <span>محادثة واتساب</span>
+                </a>
+
+                <button
+                  type="button"
+                  onClick={() => triggerOrderService(selectedService)}
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-2.5 text-xs font-bold text-primary-foreground shadow-sm hover:opacity-90 transition-opacity cursor-pointer"
+                >
+                  <span>طلب هذه الخدمة الآن</span>
+                  <ArrowLeft className="size-3.5" />
+                </button>
+              </div>
+            </div>
           </DialogContent>
         </Dialog>
-      </Container>
+      )}
     </section>
   );
 }
