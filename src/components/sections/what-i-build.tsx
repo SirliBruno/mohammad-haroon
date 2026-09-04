@@ -3,19 +3,8 @@ import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { Container } from "@/components/layout/container";
 import { Reveal } from "@/components/motion/reveal";
 import { site } from "@/config/site";
+import { cn } from "@/lib/utils";
 import {
-  Building2,
-  ShoppingBag,
-  Store,
-  LayoutDashboard,
-  CalendarClock,
-  Users,
-  Workflow,
-  Layers,
-  Rocket,
-  Palette,
-  Wrench,
-  Sparkles,
   ArrowLeft,
   CheckCircle2,
   Clock,
@@ -23,6 +12,7 @@ import {
   MessageCircle,
   HelpCircle,
   ExternalLink,
+  Sparkles,
 } from "lucide-react";
 import {
   Dialog,
@@ -32,13 +22,47 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 
+/**
+ * Icons8 icon renderer using CSS mask.
+ * Renders genuine Icons8 assets (Fluent Systems Regular pack) at 2x resolution
+ * with full currentColor inheritance, supporting dark/light mode and hover states seamlessly.
+ */
+function Icons8Icon({
+  id,
+  className = "size-5",
+  alt = "",
+}: {
+  id: string;
+  className?: string;
+  alt?: string;
+}) {
+  const url = `https://img.icons8.com/?id=${id}&format=png&size=48`;
+  return (
+    <span
+      role="img"
+      aria-label={alt}
+      className={cn("inline-block shrink-0 bg-current transition-colors", className)}
+      style={{
+        maskImage: `url(${url})`,
+        WebkitMaskImage: `url(${url})`,
+        maskSize: "contain",
+        WebkitMaskSize: "contain",
+        maskRepeat: "no-repeat",
+        WebkitMaskRepeat: "no-repeat",
+        maskPosition: "center",
+        WebkitMaskPosition: "center",
+      }}
+    />
+  );
+}
+
 export interface ServiceItem {
   id: string;
   number: string;
   title: string;
   category: "websites" | "stores" | "systems" | "design";
   categoryLabel: string;
-  icon: React.ComponentType<{ className?: string }>;
+  iconId: string;
   description: string;
   example: string;
   badge?: string;
@@ -60,7 +84,7 @@ const SERVICES: ServiceItem[] = [
     title: "مواقع الشركات والمؤسسات",
     category: "websites",
     categoryLabel: "مواقع",
-    icon: Building2,
+    iconId: "Jole6qi4QB3h", // Icons8: company
     description: "مواقع احترافية تعرّف بشركتك وخدماتك وتبني حضورًا رقميًا قويًا وموثوقًا أمام العملاء.",
     example: "موقع لشركة مقاولات يعرض الخدمات، المشاريع السابقة، نبذة عن الشركة، وطرق التواصل.",
     ctaText: "استكشف الخدمة",
@@ -83,7 +107,7 @@ const SERVICES: ServiceItem[] = [
     title: "المتاجر الإلكترونية",
     category: "stores",
     categoryLabel: "متاجر",
-    icon: ShoppingBag,
+    iconId: "zhda2EVBCvHY", // Icons8: shopping-cart
     description: "متاجر إلكترونية متكاملة مصممة لعرض المنتجات وتحويل الزوار إلى عملاء مشترين.",
     example: "متجر لبيع العطور أو الملابس مع المنتجات، السلة، الدفع الإلكتروني، وإدارة الطلبات.",
     ctaText: "استكشف الخدمة",
@@ -107,7 +131,7 @@ const SERVICES: ServiceItem[] = [
     category: "stores",
     categoryLabel: "متاجر سلة",
     badge: "10+ متاجر منفذة",
-    icon: Store,
+    iconId: "sx8jgVIf8D8i", // Icons8: online-store
     description: "تصميم وتطوير واجهات متاجر احترافية على منصة سلة، جاهزة للبيع وتعكس هوية العلامة التجارية.",
     example: "متجر قهوة أو إكسسوارات مصمم بالكامل ليكون جاهزًا لاستقبال العملاء والطلبات.",
     ctaText: "أريد متجر سلة",
@@ -132,7 +156,7 @@ const SERVICES: ServiceItem[] = [
     title: "الأنظمة الإدارية ولوحات التحكم",
     category: "systems",
     categoryLabel: "أنظمة",
-    icon: LayoutDashboard,
+    iconId: "sUJRwjfnGwbJ", // Icons8: dashboard-layout
     description: "أنظمة داخلية تساعد الشركات على إدارة العمليات والموظفين والبيانات من لوحة تحكم واحدة.",
     example: "نظام لإدارة موظفي شركة صغيرة ومتابعة الحضور والبيانات والتقارير.",
     ctaText: "استكشف الخدمة",
@@ -155,7 +179,7 @@ const SERVICES: ServiceItem[] = [
     title: "أنظمة الحجوزات والمواعيد",
     category: "systems",
     categoryLabel: "أنظمة",
-    icon: CalendarClock,
+    iconId: "vwGXRtPWrZSn", // Icons8: calendar
     description: "أنظمة حجز ذكية تجعل إدارة المواعيد أسهل للعميل وصاحب النشاط دون تداخل.",
     example: "نظام حجز مواعيد لصالون حلاقة أو عيادة مع إدارة المواعيد والعملاء.",
     ctaText: "استكشف الخدمة",
@@ -178,7 +202,7 @@ const SERVICES: ServiceItem[] = [
     title: "أنظمة العضويات والاشتراكات",
     category: "systems",
     categoryLabel: "أنظمة",
-    icon: Users,
+    iconId: "OmlOXb8PLdmy", // Icons8: membership-card
     description: "منصات تعتمد على العضويات والاشتراكات الشهرية أو السنوية مع إدارة المستخدمين والصلاحيات.",
     example: "منصة دورات تدريبية تتيح للمستخدم الاشتراك والوصول إلى المحتوى حسب الباقة.",
     ctaText: "استكشف الخدمة",
@@ -203,7 +227,7 @@ const SERVICES: ServiceItem[] = [
     title: "أنظمة إدارة العملاء والموظفين CRM",
     category: "systems",
     categoryLabel: "أنظمة",
-    icon: Workflow,
+    iconId: "vmcbGnMtRqEX", // Icons8: workflow
     description: "حلول مخصصة لتنظيم العملاء والطلبات والموظفين ومتابعة سير العمل بدقة.",
     example: "نظام CRM لشركة خدمات لتسجيل العملاء ومتابعة طلباتهم ومراحل تنفيذها.",
     ctaText: "استكشف الخدمة",
@@ -226,7 +250,7 @@ const SERVICES: ServiceItem[] = [
     title: "المنصات الإلكترونية ومواقع الخدمات",
     category: "websites",
     categoryLabel: "مواقع ومنصات",
-    icon: Layers,
+    iconId: "8kvDToFaCkmL", // Icons8: layers
     description: "منصات رقمية تربط بين المستخدمين ومقدمي الخدمات أو تعرض خدمات ومنتجات بطريقة منظمة.",
     example: "منصة لعرض خدمات المستقلين ومقدمي الخدمات وتمكين العملاء من استكشافها والتواصل معهم.",
     ctaText: "استكشف الخدمة",
@@ -249,7 +273,7 @@ const SERVICES: ServiceItem[] = [
     title: "صفحات الهبوط Landing Pages",
     category: "websites",
     categoryLabel: "مواقع",
-    icon: Rocket,
+    iconId: "UOXsWpsgfxq5", // Icons8: rocket
     description: "صفحات Landing Page مصممة حول هدف واضح: بيع منتج، الحصول على عملاء، أو إطلاق خدمة.",
     example: "صفحة إطلاق لتطبيق جديد تحتوي على عرض واضح، مزايا المنتج، Social Proof، وCTA قوي.",
     ctaText: "استكشف الخدمة",
@@ -274,7 +298,7 @@ const SERVICES: ServiceItem[] = [
     title: "تصميم UI/UX",
     category: "design",
     categoryLabel: "تصميم",
-    icon: Palette,
+    iconId: "yeigAyDNo2GO", // Icons8: design
     description: "تصميم واجهات وتجارب استخدام حديثة قبل بدء البرمجة، مع التركيز على سهولة الاستخدام والوضوح.",
     example: "تصميم واجهة تطبيق توصيل من الفكرة الأولية إلى Prototype قابل للعرض.",
     ctaText: "استكشف الخدمة",
@@ -297,7 +321,7 @@ const SERVICES: ServiceItem[] = [
     title: "تطوير وتحسين المواقع والأنظمة الحالية",
     category: "websites",
     categoryLabel: "مواقع وأنظمة",
-    icon: Wrench,
+    iconId: "VuNO5eSHIj35", // Icons8: wrench
     description: "لا تحتاج دائمًا إلى بناء مشروع جديد. أستطيع تطوير مشروعك الحالي وتحسين الأداء والتجربة والمظهر.",
     example: "تحسين موقع بطيء، إعادة تصميم واجهته، إصلاح المشاكل، وتحسين تجربة المستخدم.",
     ctaText: "استكشف الخدمة",
@@ -322,7 +346,7 @@ const SERVICES: ServiceItem[] = [
     categoryLabel: "حل مخصص",
     badge: "لديك فكرة مختلفة؟",
     featured: true,
-    icon: Sparkles,
+    iconId: "YxCw7An8DYqf", // Icons8: sparkling
     description: "إذا كانت فكرتك لا تنتمي إلى خدمة محددة، يمكن بناء نظام مخصص بالكامل حسب طريقة عمل مشروعك واحتياجاتك.",
     example: "نظام خاص لإدارة طلبات مطعم، مغسلة سيارات، نادي رياضي، شركة خدمات، أو أي فكرة أخرى.",
     ctaText: "احكِ لي عن فكرتك ←",
@@ -330,7 +354,7 @@ const SERVICES: ServiceItem[] = [
     problemScenario: "عندي فكرة تطبيق أو منصة",
     timeline: "حسب متطلبات فكرتك",
     idealFor: "أصحاب الأفكار المبتكرة والأنشطة ذات المسارات الخاصة التي لا تلائمها القوالب والبرامج الجاهزة.",
-    detailedBenefit: "هندسة برمجية متكاملة تبنى خصيصاً من الصفر لتطابق طريقة عملك اليومية وتلبي احتياجات فريقك وعملائك بدقة متناهية.",
+    detailedBenefit: "هندسة برمجية متكاملة تبنى خصصياً من الصفر لتطابق طريقة عملك اليومية وتلبي احتياجات فريقك وعملائك بدقة متناهية.",
     deliverables: [
       "جلسة استشارية لتحليل وهندسة متطلبات فكرتك",
       "تصميم واجهات وتجربة استخدام تخدم خصوصية الفكرة",
@@ -444,7 +468,6 @@ export function WhatIBuild() {
         <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
           <AnimatePresence mode="popLayout">
             {filteredServices.map((svc, idx) => {
-              const Icon = svc.icon;
               const isFeatured = svc.featured;
 
               return (
@@ -472,7 +495,7 @@ export function WhatIBuild() {
                               : "bg-accent/10 text-accent group-hover:bg-accent group-hover:text-accent-foreground"
                           }`}
                         >
-                          <Icon className="size-5 stroke-[1.8]" />
+                          <Icons8Icon id={svc.iconId} className="size-5" alt={svc.title} />
                         </div>
                         <span className="font-mono text-xs font-bold text-accent tracking-wider" dir="ltr">
                           {svc.number}

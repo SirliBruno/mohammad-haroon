@@ -1,0 +1,67 @@
+{
+  "pack": "fluent-systems-regular",
+  "size": 24,
+  "color": "0d9488",
+  "icons": {
+    "corporate-websites": {
+      "id": "Jole6qi4QB3h",
+      "commonName": "company",
+      "description": "مواقع الشركات والمؤسسات"
+    },
+    "ecommerce-stores": {
+      "id": "zhda2EVBCvHY",
+      "commonName": "shopping-cart",
+      "description": "المتاجر الإلكترونية"
+    },
+    "salla-stores": {
+      "id": "sx8jgVIf8D8i",
+      "commonName": "online-store",
+      "description": "تصميم متاجر سلة"
+    },
+    "admin-dashboards": {
+      "id": "sUJRwjfnGwbJ",
+      "commonName": "dashboard-layout",
+      "description": "الأنظمة الإدارية ولوحات التحكم"
+    },
+    "booking-systems": {
+      "id": "vwGXRtPWrZSn",
+      "commonName": "calendar",
+      "description": "أنظمة الحجوزات والمواعيد"
+    },
+    "membership-systems": {
+      "id": "OmlOXb8PLdmy",
+      "commonName": "membership-card",
+      "description": "أنظمة العضويات والاشتراكات"
+    },
+    "crm-systems": {
+      "id": "vmcbGnMtRqEX",
+      "commonName": "workflow",
+      "description": "أنظمة إدارة العملاء والموظفين CRM"
+    },
+    "service-platforms": {
+      "id": "8kvDToFaCkmL",
+      "commonName": "layers",
+      "description": "المنصات الإلكترونية ومواقع الخدمات"
+    },
+    "landing-pages": {
+      "id": "UOXsWpsgfxq5",
+      "commonName": "rocket",
+      "description": "صفحات الهبوط Landing Pages"
+    },
+    "ui-ux-design": {
+      "id": "yeigAyDNo2GO",
+      "commonName": "design",
+      "description": "تصميم UI/UX"
+    },
+    "modernization": {
+      "id": "VuNO5eSHIj35",
+      "commonName": "wrench",
+      "description": "تطوير وتحسين المواقع والأنظمة الحالية"
+    },
+    "custom-solutions": {
+      "id": "YxCw7An8DYqf",
+      "commonName": "sparkling",
+      "description": "أنظمة مخصصة حسب فكرة مشروعك"
+    }
+  }
+}
