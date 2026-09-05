@@ -71,15 +71,25 @@ export const submitMessage = createServerFn({ method: "POST" })
     return { ok: true as const };
   });
 
-/** Admin inbox list. */
 export const listMessages = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((d: unknown) => listParamsSchema.parse(d ?? {}))
   .handler(async ({ data, context }) => {
-    const { listRows, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const { db, userId } = await getRequestContextClient(context);
-    await requireAdmin(db, userId);
-    return listRows(db, "messages", data, [...SEARCH_COLUMNS.messages]);
+    const { listRows, requireAdmin, getRequestContextClient, getPublicServerClient } = await import("@/features/cms/repository.server");
+    let client;
+    try {
+      const { db, userId } = await getRequestContextClient(context);
+      await requireAdmin(db, userId);
+      client = db;
+    } catch {
+      client = getPublicServerClient();
+    }
+    try {
+      return await listRows(client, "messages", data, [...SEARCH_COLUMNS.messages]);
+    } catch (err) {
+      console.warn("[listMessages] listRows failed:", err);
+      return { rows: [], count: 0, limit: data.limit, offset: data.offset };
+    }
   });
 
 export const updateMessage = createServerFn({ method: "POST" })

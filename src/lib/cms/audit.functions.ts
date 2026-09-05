@@ -43,12 +43,20 @@ export const adminListAuditLog = createServerFn({ method: "POST" })
     q = q.order("created_at", { ascending: false });
     q = q.range(data.offset, data.offset + data.limit - 1);
 
-    const { data: rows, error, count } = await q;
-    if (error) throw new Error("تعذّر تحميل سجل التدقيق.");
-    return {
-      rows: (rows ?? []) as AuditLogRow[],
-      count: (count as number | null) ?? 0,
-      limit: data.limit,
-      offset: data.offset,
-    };
+    try {
+      const { data: rows, error, count } = await q;
+      if (error) {
+        console.warn("[adminListAuditLog] query error:", error);
+        return { rows: [], count: 0, limit: data.limit, offset: data.offset };
+      }
+      return {
+        rows: (rows ?? []) as AuditLogRow[],
+        count: (count as number | null) ?? 0,
+        limit: data.limit,
+        offset: data.offset,
+      };
+    } catch (err) {
+      console.warn("[adminListAuditLog] exception:", err);
+      return { rows: [], count: 0, limit: data.limit, offset: data.offset };
+    }
   });

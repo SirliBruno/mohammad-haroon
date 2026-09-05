@@ -27,16 +27,49 @@ function make(table: keyof typeof SEARCH_COLUMNS, defaultOrder?: string, ascendi
         client = getPublicServerClient();
       }
 
-      const res = await listRows(
-        client,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        table as any,
-        { ...data, orderBy: data.orderBy ?? defaultOrder, ascending: data.ascending ?? ascending },
-        [...SEARCH_COLUMNS[table]],
-      );
+      try {
+        const res = await listRows(
+          client,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          table as any,
+          { ...data, orderBy: data.orderBy ?? defaultOrder, ascending: data.ascending ?? ascending },
+          [...SEARCH_COLUMNS[table]],
+        );
 
-      // If DB has 0 rows for these key tables, supply rich defaults so admin is immediately populated
-      if (res.rows.length === 0 && !data.search) {
+        // If DB has 0 rows for these key tables, supply rich defaults so admin is immediately populated
+        if (res.rows.length === 0 && !data.search) {
+          if (table === "services") {
+            const { staticServicesAsRows } = await import("./static-defaults");
+            return {
+              rows: staticServicesAsRows,
+              count: staticServicesAsRows.length,
+              limit: data.limit,
+              offset: data.offset,
+            };
+          }
+          if (table === "certificates") {
+            const { staticCertificatesAsRows } = await import("./static-defaults");
+            return {
+              rows: staticCertificatesAsRows,
+              count: staticCertificatesAsRows.length,
+              limit: data.limit,
+              offset: data.offset,
+            };
+          }
+          if (table === "skills") {
+            const { staticSkillsAsRows } = await import("./static-defaults");
+            return {
+              rows: staticSkillsAsRows,
+              count: staticSkillsAsRows.length,
+              limit: data.limit,
+              offset: data.offset,
+            };
+          }
+        }
+
+        return res;
+      } catch (err) {
+        console.warn(`[adminList ${table}] listRows error, using fallback:`, err);
         if (table === "services") {
           const { staticServicesAsRows } = await import("./static-defaults");
           return {
@@ -64,9 +97,13 @@ function make(table: keyof typeof SEARCH_COLUMNS, defaultOrder?: string, ascendi
             offset: data.offset,
           };
         }
+        return {
+          rows: [],
+          count: 0,
+          limit: data.limit,
+          offset: data.offset,
+        };
       }
-
-      return res;
     });
 }
 

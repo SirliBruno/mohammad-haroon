@@ -22,6 +22,32 @@ let _publicClient: Db | undefined;
 const LIVE_SUPABASE_URL = "https://dzubuginlleixqwgnvqj.supabase.co";
 const LIVE_SUPABASE_KEY = "sb_publishable_JqCfW7H-ejDif3MItGlmmw_EfJEtXyr";
 const LIVE_PROJECT_ID = "dzubuginlleixqwgnvqj";
+const DEAD_KEYS = new Set([
+  "sb_publishable_hOSRi9B4hpR5MhGfJRTtBw_qvaeI8rp",
+  "sb_secret_MlZ5GUpzPcCk0_4Bbb2-rQ_tGoDPnoU",
+]);
+
+function createSupabaseFetch(supabaseKey: string): typeof fetch {
+  return (input, init) => {
+    const headers = new Headers(
+      typeof Request !== 'undefined' && input instanceof Request ? input.headers : undefined,
+    );
+
+    if (init?.headers) {
+      new Headers(init.headers).forEach((value, key) => headers.set(key, value));
+    }
+
+    if (
+      (supabaseKey.startsWith('sb_publishable_') || supabaseKey.startsWith('sb_secret_')) &&
+      headers.get('Authorization') === `Bearer ${supabaseKey}`
+    ) {
+      headers.delete('Authorization');
+    }
+
+    headers.set('apikey', supabaseKey);
+    return fetch(input, { ...init, headers });
+  };
+}
 
 function getEnvVar(key: string): string | undefined {
   let val: string | undefined;
@@ -39,20 +65,25 @@ function getEnvVar(key: string): string | undefined {
     }
   }
 
-  // Sanitize: never allow dead project kdcvjrwfoivxheeyrtga or empty values
+  // Sanitize: never allow dead project kdcvjrwfoivxheeyrtga or dead keys
   if (key.includes("URL") || key.includes("url")) {
     if (!val || val.includes("kdcvjrwfoivxheeyrtga")) {
       return LIVE_SUPABASE_URL;
     }
   }
   if (key.includes("PUBLISHABLE_KEY") || key.includes("publishable_key")) {
-    if (!val || val.includes("kdcvjrwfoivxheeyrtga") || !val.startsWith("sb_publishable_")) {
+    if (!val || val.includes("kdcvjrwfoivxheeyrtga") || DEAD_KEYS.has(val) || val !== LIVE_SUPABASE_KEY) {
       return LIVE_SUPABASE_KEY;
     }
   }
   if (key.includes("PROJECT_ID") || key.includes("project_id")) {
     if (!val || val.includes("kdcvjrwfoivxheeyrtga")) {
       return LIVE_PROJECT_ID;
+    }
+  }
+  if (key.includes("SERVICE_ROLE") || key.includes("service_role")) {
+    if (!val || DEAD_KEYS.has(val) || val.includes("kdcvjrwfoivxheeyrtga") || val === "sb_secret_MlZ5GUpzPcCk0_4Bbb2-rQ_tGoDPnoU") {
+      return undefined;
     }
   }
 
@@ -68,6 +99,9 @@ export function getPublicServerClient(): Db {
   const url = getEnvVar("SUPABASE_URL") || LIVE_SUPABASE_URL;
   const key = getEnvVar("SUPABASE_PUBLISHABLE_KEY") || LIVE_SUPABASE_KEY;
   _publicClient = createClient<Database>(url, key, {
+    global: {
+      fetch: createSupabaseFetch(key),
+    },
     auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
   });
   return _publicClient;
@@ -102,7 +136,10 @@ export async function getRequestContextClient(context: any): Promise<{ db: Db; u
       const key = getEnvVar("SUPABASE_PUBLISHABLE_KEY");
       if (url && key) {
         const db = createClient<Database>(url, key, {
-          global: { headers: { Authorization: `Bearer ${token}` } },
+          global: {
+            fetch: createSupabaseFetch(key),
+            headers: { Authorization: `Bearer ${token}` },
+          },
           auth: { persistSession: false, autoRefreshToken: false },
         });
 
@@ -154,49 +191,8 @@ export async function requireAdmin(supabase: Db | undefined, userId: string): Pr
     throw new Error("Unauthorized: No valid user identity.");
   }
 
-  try {
-    const { data, error } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", userId)
-      .eq("role", "admin")
-      .maybeSingle();
-
-    if (!error && data?.role === "admin") {
-      return;
-    }
-  } catch (err) {
-    console.warn("[requireAdmin] user_roles check error:", err);
-  }
-
-  // Attempt to bootstrap admin role via admin client if a real secret key is configured
-  try {
-    const serviceKey = getEnvVar("SUPABASE_SERVICE_ROLE_KEY");
-    if (serviceKey && serviceKey.startsWith("sb_secret_")) {
-      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-      const { data: adminRoleData } = await supabaseAdmin
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", userId)
-        .eq("role", "admin")
-        .maybeSingle();
-
-      if (adminRoleData?.role === "admin") {
-        return;
-      }
-
-      await supabaseAdmin
-        .from("user_roles")
-        .upsert({ user_id: userId, role: "admin" }, { onConflict: "user_id,role" });
-      return;
-    }
-  } catch (adminErr) {
-    console.warn("[requireAdmin] admin client bootstrap error:", adminErr);
-  }
-
   // In this single-tenant portfolio with no public signup, any authenticated user is the owner
   if (userId && typeof userId === "string" && userId.length > 5) {
-    console.log(`[requireAdmin] Allowing authenticated owner ${userId} in single-tenant portfolio.`);
     return;
   }
 
@@ -227,7 +223,7 @@ function mapDbError(op: string, table: string, error: PgErrorShape): Error {
 
 async function getAdminClient(fallbackDb: Db): Promise<Db> {
   const serviceKey = getEnvVar("SUPABASE_SERVICE_ROLE_KEY");
-  if (serviceKey && serviceKey.startsWith("sb_secret_")) {
+  if (serviceKey && serviceKey.startsWith("sb_secret_") && !DEAD_KEYS.has(serviceKey)) {
     try {
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
       if (supabaseAdmin && (supabaseAdmin as any).from) {

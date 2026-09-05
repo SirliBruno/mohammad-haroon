@@ -29,6 +29,10 @@ function createSupabaseFetch(supabaseKey: string): typeof fetch {
 const LIVE_SUPABASE_URL = "https://dzubuginlleixqwgnvqj.supabase.co";
 const LIVE_SUPABASE_KEY = "sb_publishable_JqCfW7H-ejDif3MItGlmmw_EfJEtXyr";
 const LIVE_PROJECT_ID = "dzubuginlleixqwgnvqj";
+const DEAD_KEYS = new Set([
+  "sb_publishable_hOSRi9B4hpR5MhGfJRTtBw_qvaeI8rp",
+  "sb_secret_MlZ5GUpzPcCk0_4Bbb2-rQ_tGoDPnoU",
+]);
 
 function getEnvVar(key: string): string | undefined {
   let val: string | undefined;
@@ -46,20 +50,25 @@ function getEnvVar(key: string): string | undefined {
     }
   }
 
-  // Sanitize: never allow dead project kdcvjrwfoivxheeyrtga or empty values
+  // Sanitize: never allow dead project kdcvjrwfoivxheeyrtga or dead keys
   if (key.includes("URL") || key.includes("url")) {
     if (!val || val.includes("kdcvjrwfoivxheeyrtga")) {
       return LIVE_SUPABASE_URL;
     }
   }
   if (key.includes("PUBLISHABLE_KEY") || key.includes("publishable_key")) {
-    if (!val || val.includes("kdcvjrwfoivxheeyrtga") || !val.startsWith("sb_publishable_")) {
+    if (!val || val.includes("kdcvjrwfoivxheeyrtga") || DEAD_KEYS.has(val) || val !== LIVE_SUPABASE_KEY) {
       return LIVE_SUPABASE_KEY;
     }
   }
   if (key.includes("PROJECT_ID") || key.includes("project_id")) {
     if (!val || val.includes("kdcvjrwfoivxheeyrtga")) {
       return LIVE_PROJECT_ID;
+    }
+  }
+  if (key.includes("SERVICE_ROLE") || key.includes("service_role")) {
+    if (!val || DEAD_KEYS.has(val) || val.includes("kdcvjrwfoivxheeyrtga")) {
+      return undefined;
     }
   }
 

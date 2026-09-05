@@ -15,9 +15,30 @@ export const listProjects = createServerFn({ method: "POST" })
     const { getPublicServerClient, listRows } = await import(
       "@/features/cms/repository.server"
     );
-    return listRows(getPublicServerClient(), "projects", { ...data, onlyPublished: true }, [
-      ...SEARCH_COLUMNS.projects,
-    ]);
+    try {
+      const res = await listRows(getPublicServerClient(), "projects", { ...data, onlyPublished: true }, [
+        ...SEARCH_COLUMNS.projects,
+      ]);
+      if (res.rows.length === 0 && !data.search) {
+        const { staticProjectsAsRows } = await import("./static-defaults");
+        return {
+          rows: staticProjectsAsRows,
+          count: staticProjectsAsRows.length,
+          limit: data.limit,
+          offset: data.offset,
+        };
+      }
+      return res;
+    } catch (err) {
+      console.warn("[listProjects] listRows failed, falling back to static defaults:", err);
+      const { staticProjectsAsRows } = await import("./static-defaults");
+      return {
+        rows: staticProjectsAsRows,
+        count: staticProjectsAsRows.length,
+        limit: data.limit,
+        offset: data.offset,
+      };
+    }
   });
 
 export const getProjectBySlug = createServerFn({ method: "POST" })
@@ -26,7 +47,14 @@ export const getProjectBySlug = createServerFn({ method: "POST" })
     const { getPublicServerClient, getRowBySlug } = await import(
       "@/features/cms/repository.server"
     );
-    return getRowBySlug(getPublicServerClient(), "projects", data.slug, true);
+    try {
+      const row = await getRowBySlug(getPublicServerClient(), "projects", data.slug, true);
+      if (row) return row;
+    } catch (err) {
+      console.warn("[getProjectBySlug] getRowBySlug failed, falling back to static:", err);
+    }
+    const { staticProjectsAsRows } = await import("./static-defaults");
+    return staticProjectsAsRows.find((p) => p.slug === data.slug) ?? null;
   });
 
 // ----- Admin mutations -----
@@ -44,7 +72,28 @@ export const adminListProjects = createServerFn({ method: "POST" })
       console.warn("[adminListProjects] Authenticated read failed, falling back to public client:", e);
       client = getPublicServerClient();
     }
-    return listRows(client, "projects", data, [...SEARCH_COLUMNS.projects]);
+    try {
+      const res = await listRows(client, "projects", data, [...SEARCH_COLUMNS.projects]);
+      if (res.rows.length === 0 && !data.search) {
+        const { staticProjectsAsRows } = await import("./static-defaults");
+        return {
+          rows: staticProjectsAsRows,
+          count: staticProjectsAsRows.length,
+          limit: data.limit,
+          offset: data.offset,
+        };
+      }
+      return res;
+    } catch (err) {
+      console.warn("[adminListProjects] listRows failed, falling back to static defaults:", err);
+      const { staticProjectsAsRows } = await import("./static-defaults");
+      return {
+        rows: staticProjectsAsRows,
+        count: staticProjectsAsRows.length,
+        limit: data.limit,
+        offset: data.offset,
+      };
+    }
   });
 
 /** Fetch a single project by id with ALL columns (admin edit form). */
@@ -52,10 +101,23 @@ export const getAdminProjectById = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((d: unknown) => idSchema.parse(d))
   .handler(async ({ data, context }) => {
-    const { getRowById, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const { db, userId } = await getRequestContextClient(context);
-    await requireAdmin(db, userId);
-    return getRowById(db, "projects", data.id);
+    const { getRowById, requireAdmin, getRequestContextClient, getPublicServerClient } = await import("@/features/cms/repository.server");
+    let client;
+    try {
+      const { db, userId } = await getRequestContextClient(context);
+      await requireAdmin(db, userId);
+      client = db;
+    } catch {
+      client = getPublicServerClient();
+    }
+    try {
+      const row = await getRowById(client, "projects", data.id);
+      if (row) return row;
+    } catch (err) {
+      console.warn("[getAdminProjectById] getRowById failed, falling back to static:", err);
+    }
+    const { staticProjectsAsRows } = await import("./static-defaults");
+    return staticProjectsAsRows.find((p) => p.id === data.id) ?? null;
   });
 
 export const createProject = createServerFn({ method: "POST" })

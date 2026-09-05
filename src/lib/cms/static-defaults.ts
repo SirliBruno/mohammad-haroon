@@ -571,3 +571,349 @@ export const staticSkillsAsRows: SkillRow[] = [
   { id: "sk-05", name: "Supabase & PostgreSQL", category: "الأنظمة وقواعد البيانات", level: 88, years_experience: 3, featured: true, sort_order: 5, color: "emerald", icon: "Database", content_status: "published", created_at: "2026-08-01T00:00:00.000Z", updated_at: "2026-08-01T00:00:00.000Z" },
   { id: "sk-06", name: "متاجر سلة وWooCommerce", category: "التجارة الإلكترونية", level: 90, years_experience: 4, featured: true, sort_order: 6, color: "amber", icon: "ShoppingBag", content_status: "published", created_at: "2026-08-01T00:00:00.000Z", updated_at: "2026-08-01T00:00:00.000Z" },
 ];
+
+type ProjectRow = Database["public"]["Tables"]["projects"]["Row"];
+
+export const staticProjectsAsRows: ProjectRow[] = [
+  {
+    "id": "2ad2e3d4-07b4-425f-b5d4-21c2b770d1c8",
+    "slug": "speakup",
+    "title": "SpeakUp - Build a daily speaking habit in just 3 min",
+    "summary": "منصة SaaS تساعد متعلمي اللغة الإنجليزية على اكتساب الثقة في التحدث من خلال جلسات مواضيع عشوائية على شكل روليت ، تحديات يومية، وتحليلات ذكية توضح تطور المستخدم مع مرور الوقت.",
+    "description": null,
+    "category": "مشروع SaaS",
+    "tags": [],
+    "technologies": [
+      "React",
+      "TypeScript",
+      "Vite",
+      "Tailwind CSS",
+      "Shadcn UI",
+      "Supabase",
+      "React Query",
+      "React Router",
+      "Framer Motion"
+    ],
+    "cover_url": "https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/projects/241f11bb-6090-4d21-9d7f-7ff4c9a67357.svg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9wcm9qZWN0cy8yNDFmMTFiYi02MDkwLTRkMjEtOWQ3Zi03ZmY0YzlhNjczNTcuc3ZnIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4NDY3Nzc3NywiZXhwIjoyMTAwMDM3Nzc3fQ.faoSWdUyf20OyLU-SeC2BPyBMwKefu94q9-o-XlYii0",
+    "gallery": [
+      {
+        "alt": "",
+        "src": "https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/projects/gallery/78c8ecd0-6272-4cf1-a136-5121259386f7.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9wcm9qZWN0cy9nYWxsZXJ5Lzc4YzhlY2QwLTYyNzItNGNmMS1hMTM2LTUxMjEyNTkzODZmNy5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg0NjgwNDYyLCJleHAiOjIxMDAwNDA0NjJ9.pC2eqTfM3ZRNKiTI9Q1ynjky-FTkVdksDyrM0Ua7HZQ"
+      },
+      {
+        "alt": "",
+        "src": "https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/projects/gallery/d8b5644b-03f4-40a7-afed-dc1eee605c57.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9wcm9qZWN0cy9nYWxsZXJ5L2Q4YjU2NDRiLTAzZjQtNDBhNy1hZmVkLWRjMWVlZTYwNWM1Ny5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg0NjgwNDYzLCJleHAiOjIxMDAwNDA0NjN9.u2xob01cJO8wTejnrTKu40MJ7KnH6saoNlqW8gO1mxA"
+      },
+      {
+        "alt": "",
+        "src": "https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/projects/gallery/68fdeb43-bbbf-4e1c-b90f-624ff50634ab.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9wcm9qZWN0cy9nYWxsZXJ5LzY4ZmRlYjQzLWJiYmYtNGUxYy1iOTBmLTYyNGZmNTA2MzRhYi5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg0NjgwNDY0LCJleHAiOjIxMDAwNDA0NjR9.S45IVB-b9lR7ZP66I7oIXUwOf43bpN2Tumg-mHKyiI4"
+      },
+      {
+        "alt": "",
+        "src": "https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/projects/gallery/f9c538e1-ad9b-4fb4-9c79-00ea30ffd1fd.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9wcm9qZWN0cy9nYWxsZXJ5L2Y5YzUzOGUxLWFkOWItNGZiNC05Yzc5LTAwZWEzMGZmZDFmZC5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg0NjgwNDY2LCJleHAiOjIxMDAwNDA0NjZ9.G8Jh55o10HNGRyRw9RGt2fXkqxjMHBdF5qBi0Bv_vbA"
+      },
+      {
+        "alt": "",
+        "src": "https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/projects/gallery/14e28556-63b8-4587-ba58-213d4433396e.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9wcm9qZWN0cy9nYWxsZXJ5LzE0ZTI4NTU2LTYzYjgtNDU4Ny1iYTU4LTIxM2Q0NDMzMzk2ZS5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg0NjgwNDY1LCJleHAiOjIxMDAwNDA0NjV9.K96KTN5h3gr57q_fHUgiOQea8LTes7h_Mf76JxLqJn8"
+      },
+      {
+        "alt": "",
+        "src": "https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/projects/gallery/645eacb8-c1a7-48e6-8d3c-e03d97cc7eb8.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9wcm9qZWN0cy9nYWxsZXJ5LzY0NWVhY2I4LWMxYTctNDhlNi04ZDNjLWUwM2Q5N2NjN2ViOC5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg0NjgwNDY3LCJleHAiOjIxMDAwNDA0Njd9.vcV5sthvSjuJG8Zm7RnJmUQ7XRZzIV5cpBAD8NRlftg"
+      },
+      {
+        "alt": "",
+        "src": "https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/projects/gallery/230ec6ee-87f6-40f1-a35b-f0e1ada85c28.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9wcm9qZWN0cy9nYWxsZXJ5LzIzMGVjNmVlLTg3ZjYtNDBmMS1hMzViLWYwZTFhZGE4NWMyOC5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg0NjgwNDY2LCJleHAiOjIxMDAwNDA0NjZ9.znI8lP77tdt_d9bIRUH_P9iLopbwUi9O_aM6maQXdW8"
+      },
+      {
+        "alt": "",
+        "src": "https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/projects/gallery/8c214e3e-89da-4fa8-a994-a973b03b0324.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9wcm9qZWN0cy9nYWxsZXJ5LzhjMjE0ZTNlLTg5ZGEtNGZhOC1hOTk0LWE5NzNiMDNiMDMyNC5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg0NjgwNDY4LCJleHAiOjIxMDAwNDA0Njh9.i6QiQ8NMlDDcRJpioDpySAA6GbmYbpF_5V3QfRszIsM"
+      }
+    ],
+    "role": null,
+    "client": null,
+    "timeline": null,
+    "year": 2026,
+    "featured": true,
+    "status": "live",
+    "content_status": "published",
+    "live_url": "https://speak-up-en.lovable.app/",
+    "github_url": null,
+    "problem": "الكثير من متعلمي اللغة الإنجليزية يمتلكون حصيلة جيدة من المفردات والقواعد، لكنهم يفتقدون للممارسة المستمرة في التحدث.\n\nتعتمد أغلب التطبيقات على الحفظ والاختبارات، بينما يحتاج المستخدم إلى بيئة تحفزه على التحدث الفعلي، وتمنحه مؤشرات واضحة عن تطوره دون الشعور بالضغط أو الخوف من ارتكاب الأخطاء.",
+    "goals": [
+      "زيادة ممارسة التحدث بشكل يومي.",
+      "تشجيع المستخدم على الاستمرار من خلال نظام التحفيز.",
+      "قياس تقدم المستخدم بطريقة مفهومة.",
+      "توفير تجربة تعليمية ممتعة وليست مملة.",
+      "تقديم نموذج SaaS قابل للاشتراك والتوسع."
+    ],
+    "research": null,
+    "solution": null,
+    "design_process": "بدأ المشروع بتحديد رحلة المستخدم بالكامل منذ أول زيارة وحتى الاشتراك.\n\nتم تصميم الواجهة بحيث تقلل عدد الخطوات المطلوبة لبدء التحدث، مع التركيز على:\n\nواجهات بسيطة.\nتقليل التشتت.\nإبراز عناصر التحفيز.\nعرض الإحصائيات بشكل بصري.\nتصميم متجاوب لجميع الأجهزة.",
+    "development": "تم بناء المشروع باستخدام بنية Frontend حديثة تعتمد على React مع فصل المكونات وإعادة استخدامها.\n\nيشمل النظام:\n\nAuthentication\nإدارة المستخدمين\nإدارة الاشتراكات\nDashboard\nAnalytics\nPremium System\nحماية الصفحات\nإدارة الحالة\nواجهات قابلة لإعادة الاستخدام\nنظام تنقل سلس بين الصفحات",
+    "lessons": [],
+    "testimonial": null,
+    "metrics": [],
+    "published_at": null,
+    "sort_order": 0,
+    "created_at": "2026-07-21T23:28:08.213738+00:00",
+    "updated_at": "2026-07-22T02:19:47.796319+00:00",
+    "highlights": [
+      "جلسات تحدث مباشرة.",
+      "عجلة مواضيع عشوائية.",
+      "أكثر من 100 موضوع للمحادثة.",
+      "تحديات يومية.",
+      "نظام Streak.",
+      "لوحة تحكم للإحصائيات.",
+      "تحليلات الأداء.",
+      "AI Coach.",
+      "تجربة مجانية.",
+      "Achievement System.",
+      "Progress Tracking.",
+      "إشعارات ذكية.",
+      "PWA قابل للتثبيت.",
+      "لوحة تحكم للإدارة.",
+      "نظام Premium."
+    ],
+    "section_order": [
+      "gallery",
+      "problem",
+      "goals",
+      "research",
+      "designProcess",
+      "solution",
+      "highlights",
+      "development",
+      "stack",
+      "metrics",
+      "lessons",
+      "testimonial"
+    ],
+    "spotlight": null,
+    "tools": []
+  },
+  {
+    "id": "bddf9c08-9952-475c-941c-8aa3ddf5d1e8",
+    "slug": "rent-right",
+    "title": "Rent Right - إستاجر صح",
+    "summary": "بدل ما تشتري أداة راح تستخدمها مرة أو مرتين فقط، تقدر تستأجرها من شخص قريب منك. Rent Right يحول الأدوات غير المستخدمة إلى مصدر دخل لأصحابها، ويوفر للمستأجرين طريقة أسهل وأوفر للوصول إلى ما يحتاجونه.",
+    "description": null,
+    "category": "مشروع تجاري",
+    "tags": [],
+    "technologies": [
+      "Client–Server Architecture",
+      "Web Application",
+      "Authentication",
+      "Booking System",
+      "Messaging",
+      "Reviews & Ratings",
+      "Insurance Management",
+      "Location Services",
+      "Database Management"
+    ],
+    "cover_url": "https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/projects/7d26df9d-a18f-4c68-9ccd-ea13421ba811.svg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9wcm9qZWN0cy83ZDI2ZGY5ZC1hMThmLTRjNjgtOWNjZC1lYTEzNDIxYmE4MTEuc3ZnIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4NDY4NjAxMSwiZXhwIjoyMTAwMDQ2MDExfQ.drQw1b78nbPLD8fiRTDM_m7k-JVBf8upWKb5-SHEBY8",
+    "gallery": [
+      {
+        "alt": "",
+        "src": "https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/projects/gallery/dacbd550-a222-43cf-8ec1-a60ac2a9b25b.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9wcm9qZWN0cy9nYWxsZXJ5L2RhY2JkNTUwLWEyMjItNDNjZi04ZWMxLWE2MGFjMmE5YjI1Yi5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg0Njg2MDczLCJleHAiOjIxMDAwNDYwNzN9.AkMwXaHhV0XrOGG_LBoJ1emjohvmqVCjuzxjQ_OYJ4I"
+      },
+      {
+        "alt": "",
+        "src": "https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/projects/gallery/60b350bb-2f18-4586-9baf-fb02f3923719.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9wcm9qZWN0cy9nYWxsZXJ5LzYwYjM1MGJiLTJmMTgtNDU4Ni05YmFmLWZiMDJmMzkyMzcxOS5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg0Njg2MDc3LCJleHAiOjIxMDAwNDYwNzd9.mkqXCBn2p-3dCFC-DyENkrIqhfemTlcbD0fhOwhJ9Mw"
+      },
+      {
+        "alt": "",
+        "src": "https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/projects/gallery/9481f6ad-1ca6-4959-9632-4f2502956b46.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9wcm9qZWN0cy9nYWxsZXJ5Lzk0ODFmNmFkLTFjYTYtNDk1OS05NjMyLTRmMjUwMjk1NmI0Ni5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg0Njg2MDc0LCJleHAiOjIxMDAwNDYwNzR9.ANzvTxbV5LSPSu3hM3AjcIATKuVLCoJgvZlfH4TQAfU"
+      },
+      {
+        "alt": "",
+        "src": "https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/projects/gallery/e7e6260f-3794-4cf1-bda6-9b6ad2800a97.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9wcm9qZWN0cy9nYWxsZXJ5L2U3ZTYyNjBmLTM3OTQtNGNmMS1iZGE2LTliNmFkMjgwMGE5Ny5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg0Njg2MDgwLCJleHAiOjIxMDAwNDYwODB9.yNOuJ8b9Y2s2sWbqi8Zfd7tbwtkY25JE_l7HCKt33D4"
+      },
+      {
+        "alt": "",
+        "src": "https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/projects/gallery/22d77ffd-6103-4d9c-8fa8-2e84b3655a3e.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9wcm9qZWN0cy9nYWxsZXJ5LzIyZDc3ZmZkLTYxMDMtNGQ5Yy04ZmE4LTJlODRiMzY1NWEzZS5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg0Njg2MDc1LCJleHAiOjIxMDAwNDYwNzV9.2leCWigVaHB9dhktzXdIKX3uIAoAzZponFpUTWSO-0k"
+      },
+      {
+        "alt": "",
+        "src": "https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/projects/gallery/885f0664-091b-4a54-bf8a-f5ea44d6d001.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9wcm9qZWN0cy9nYWxsZXJ5Lzg4NWYwNjY0LTA5MWItNGE1NC1iZjhhLWY1ZWE0NGQ2ZDAwMS5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg0Njg2MDc1LCJleHAiOjIxMDAwNDYwNzV9.tonWFnnM9b76b_VEl4V_F2d5oeTiThSWNCI6lv24nsc"
+      },
+      {
+        "alt": "",
+        "src": "https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/projects/gallery/6a07c102-0a36-4aef-8520-4f482b576882.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9wcm9qZWN0cy9nYWxsZXJ5LzZhMDdjMTAyLTBhMzYtNGFlZi04NTIwLTRmNDgyYjU3Njg4Mi5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg0Njg2MDc4LCJleHAiOjIxMDAwNDYwNzh9.ibBJTLPTIVl5B7uY5Hbcp16kmPeY7SDlfqkhnP39_BA"
+      },
+      {
+        "alt": "",
+        "src": "https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/projects/gallery/4ef9bb81-55d5-4ee2-9588-7b04fd5d1cb6.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9wcm9qZWN0cy9nYWxsZXJ5LzRlZjliYjgxLTU1ZDUtNGVlMi05NTg4LTdiMDRmZDVkMWNiNi5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg0Njg2MDc5LCJleHAiOjIxMDAwNDYwNzl9.zFuFRUsSqb9CK1yDk1ZvAAtz2LrGpfs_DIgLwlhU2N8"
+      }
+    ],
+    "role": null,
+    "client": "مشروع خاص",
+    "timeline": null,
+    "year": 2026,
+    "featured": true,
+    "status": "live",
+    "content_status": "published",
+    "live_url": "https://rent-right-xz.lovable.app",
+    "github_url": null,
+    "problem": "ليش تشتري شيء راح تستخدمه مرة أو مرتين فقط؟\n\nتخيل إن عندك رحلة نهاية الأسبوع، وتحتاج خيمة، أو شواية، أو ماكينة غسيل ضغط، أو كاميرا احترافية.\n\nأول شيء يخطر ببالك؟ تشتريها.\n\nلكن بعد انتهاء الرحلة... غالبًا بترجع للمستودع أو المخزن ويمكن ما تطلع مرة ثانية إلا بعد شهور، أو حتى سنوات.\n\nالمشكلة مو إن الناس ما يقدرون يشترونها.\n\nالمشكلة إنهم يضطرون يشترون شيء احتياجهم له مؤقت جدًا.\n\nوفي المقابل، فيه آلاف الأدوات موجودة أصلًا عند أشخاص آخرين، لكنها جالسة تجمع غبار بدون أي استخدام.\n\nهنا بدأ السؤال...\n\nليش ما نخلي الناس يستفيدون من الأشياء اللي عندهم، بدل ما كل شخص يشتري نفس الأداة من جديد؟\n\nومن هنا بدأت فكرة Rent Right.",
+    "goals": [
+      "تقليل المصاريف غير الضرورية على المستخدم.",
+      "مساعدة أصحاب الأدوات على تحقيق دخل إضافي.",
+      "توفير منصة آمنة للطرفين.",
+      "بناء تجربة استخدام بسيطة تشجع الناس على استخدام الخدمة بشكل متكرر.",
+      "دعم فكرة الاقتصاد التشاركي بطريقة عملية."
+    ],
+    "research": "هل فعلًا الناس يحتاجون يمتلكون كل شيء؟\n\nقبل التفكير في الشاشات أو البرمجة، كان لازم نفهم المشكلة نفسها.\n\nلاحظنا إن فيه أنواع كثيرة من الأدوات تُستخدم لفترات قصيرة جدًا.\n\nمثل:\n\nأدوات التخييم.\nمعدات التصوير.\nالسلالم.\nالعدد الكهربائية.\nأدوات المناسبات.\nأجهزة التنظيف.\n\nوفي أغلب الحالات، المستخدم ما يحتاج هذه الأدوات بشكل دائم.\n\nهو فقط يحتاجها اليوم... أو نهاية الأسبوع... وبعدها تنتهي حاجته لها.\n\nمن هنا بدأنا نبني تجربة تعتمد على مفهوم:\n\nAccess over Ownership\n\nالوصول للأداة أهم من امتلاكها.\n\nوبناءً على هذا المفهوم ركزنا على ثلاث نقاط رئيسية:\n\nالوصول السريع للأدوات.\nسهولة التواصل مع المالك.\nبناء الثقة بين الطرفين من خلال التقييمات والتأمين.",
+    "solution": "كل شيء تحتاجه... ممكن يكون عند جارك.\n\nصممنا Rent Right بحيث يخلي رحلة الاستئجار بسيطة جدًا.\n\nبدل ما يبحث المستخدم في أكثر من مكان أو يضطر يشتري الأداة، يقدر يدخل المنصة، يبحث عن الأداة، يشوف الأقرب له، ويرسل طلب الحجز خلال دقائق.\n\nولأن الثقة تعتبر أهم جزء في أي منصة مشاركة، أضفنا مجموعة من الخصائص تساعد الطرفين على الشعور بالأمان أثناء عملية التأجير، مثل:\n\nالتقييمات.\nالرسائل المباشرة.\nنظام التأمين.\nمتابعة الحجوزات.\nإدارة الطلبات.\n\nالهدف كان إن المستخدم يحس إن الاستئجار أسهل من الشراء.",
+    "design_process": null,
+    "development": "واجهة بسيطة... لكن خلفها نظام متكامل.\n\nاعتمد المشروع على معمارية Client–Server لفصل واجهة المستخدم عن منطق النظام، مما يجعل تطوير الخدمات وإضافة مزايا جديدة أسهل مع مرور الوقت.\n\nتم تقسيم النظام إلى عدة خدمات مستقلة، بحيث يكون لكل جزء مسؤولية واضحة، مثل:\n\nإدارة الحسابات.\nإدارة الإعلانات.\nنظام الحجوزات.\nالرسائل.\nالمدفوعات والتأمين.\nالتقييمات.\nإدارة النزاعات.\n\nهذا التنظيم يجعل المشروع أكثر قابلية للصيانة والتوسع مستقبلًا.",
+    "lessons": [],
+    "testimonial": null,
+    "metrics": [],
+    "published_at": null,
+    "sort_order": 1,
+    "created_at": "2026-07-22T00:55:03.316674+00:00",
+    "updated_at": "2026-07-22T03:06:01.288948+00:00",
+    "highlights": [
+      "📍 البحث حسب الموقع للوصول إلى الأدوات القريبة.",
+      "📦 إضافة أدوات للإيجار بسهولة.",
+      "📅 نظام حجز متكامل.",
+      "💬 رسائل مباشرة بين المستأجر والمالك.",
+      "🛡 نظام تأمين لحماية الطرفين.",
+      "⭐ تقييمات بعد انتهاء عملية التأجير.",
+      "📋 إدارة الحجوزات الحالية والسابقة.",
+      "👤 حسابات وصلاحيات مختلفة للمستخدمين والإدارة."
+    ],
+    "section_order": [
+      "spotlight",
+      "gallery",
+      "problem",
+      "goals",
+      "research",
+      "solution",
+      "designProcess",
+      "development",
+      "stack",
+      "metrics",
+      "highlights",
+      "lessons",
+      "testimonial"
+    ],
+    "spotlight": {
+      "title": "مساعد الإيجار الذكي",
+      "description": "بدل ما يبحث المستخدم عن المنتجات يدويًا، يستطيع وصف احتياجه بلغة طبيعية مثل: \"بكرة عندي كشتة\" أو \"بغسل السيارة\"، ليقوم المساعد الذكي بتحليل الطلب واقتراح الأدوات المناسبة والمتوفرة بالقرب منه."
+    },
+    "tools": []
+  },
+  {
+    "id": "98f3a3cf-72f7-4726-a777-6f430a858f9a",
+    "slug": "fitness-camp-management",
+    "title": "نظام إدارة معسكر اللياقة البدنية",
+    "summary": "منصة ويب متكاملة لإدارة معسكرات اللياقة البدنية، تجمع بين لوحة تحكم إدارية وموقع تعريفي للأكاديمية. يساعد النظام في إدارة المشتركين والاشتراكات والحضور والمدفوعات، مع توفير أدوات لإدارة المحتوى واستقبال طلبات التسجيل عبر الموقع.",
+    "description": "تم تنفيذ هذا المشروع بهدف إنشاء نظام موحد يغطي الجانبين الإداري والتسويقي لمعسكرات اللياقة البدنية. بدلاً من الاعتماد على ملفات Excel والإجراءات اليدوية، أصبح بإمكان الإدارة متابعة جميع العمليات من لوحة تحكم واحدة تشمل إدارة الأعضاء، الاشتراكات، الحضور، المدفوعات، والتقارير.\n\nكما يتضمن المشروع موقعًا تعريفيًا لعرض البرامج والباقات والمدربين، مع إمكانية استقبال طلبات التسجيل وربطها مباشرة بلوحة الإدارة. روعي في تصميم النظام أن يكون سهل الاستخدام، سريع الاستجابة، وقابلًا للتطوير مع توسع احتياجات الأكاديمية مستقبلًا.",
+    "category": "انظمة",
+    "tags": [
+      "إدارة",
+      "أكاديمية",
+      "معسكر",
+      "رياضة",
+      "لوحة تحكم",
+      "SaaS",
+      "نظام عضويات"
+    ],
+    "technologies": [
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "Supabase",
+      "PostgreSQL",
+      "Vite",
+      "TanStack Query",
+      "Framer Motion"
+    ],
+    "cover_url": "https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/projects/47536a47-f2f6-4950-b9c7-fed45d94c322.svg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9wcm9qZWN0cy80NzUzNmE0Ny1mMmY2LTQ5NTAtYjljNy1mZWQ0NWQ5NGMzMjIuc3ZnIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4NDYyNTQxMSwiZXhwIjoyMDk5OTg1NDExfQ.zec4IRE-DqkzpQajKwjfc2P9hHihSoSRSh2d2YsPs28",
+    "gallery": [
+      {
+        "alt": "",
+        "src": "https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/projects/gallery/75878dcd-1385-425c-9a34-8f846338cf4d.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9wcm9qZWN0cy9nYWxsZXJ5Lzc1ODc4ZGNkLTEzODUtNDI1Yy05YTM0LThmODQ2MzM4Y2Y0ZC5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg0NjE2ODgyLCJleHAiOjIwOTk5NzY4ODJ9.3Y65jAn1auHjUaPlqb1LfeyWeRSqO6DqaL9ahLaEMNk"
+      },
+      {
+        "alt": "",
+        "src": "https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/projects/gallery/1fe12ca6-0c67-4434-aa5e-bb2094ec7421.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9wcm9qZWN0cy9nYWxsZXJ5LzFmZTEyY2E2LTBjNjctNDQzNC1hYTVlLWJiMjA5NGVjNzQyMS5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg0NjE2ODgzLCJleHAiOjIwOTk5NzY4ODN9.zNXbrvsf5twUL-7DHQvEJNDGnLIXA4UmaZECLb-OfA4"
+      },
+      {
+        "alt": "",
+        "src": "https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/projects/gallery/b303905b-9aac-4321-9d49-68257f8a2fe6.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9wcm9qZWN0cy9nYWxsZXJ5L2IzMDM5MDViLTlhYWMtNDMyMS05ZDQ5LTY4MjU3ZjhhMmZlNi5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg0NjE2ODg0LCJleHAiOjIwOTk5NzY4ODR9.Z2tC_azTMGiRY4jneg_JaFUWxWwn-K233nB4EEIwFnY"
+      },
+      {
+        "alt": "",
+        "src": "https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/projects/gallery/0e6bb80d-44f4-4a34-80c9-4f70264bd4bc.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9wcm9qZWN0cy9nYWxsZXJ5LzBlNmJiODBkLTQ0ZjQtNGEzNC04MGM5LTRmNzAyNjRiZDRiYy5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg0NjE2ODg0LCJleHAiOjIwOTk5NzY4ODR9.3dxthAhi4S9Je3T4gj0lDvjpTRRRmSe-0zjD_j--9bg"
+      },
+      {
+        "alt": "",
+        "src": "https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/projects/gallery/dac6f8b7-1147-4d06-8bbf-1867de14ece2.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9wcm9qZWN0cy9nYWxsZXJ5L2RhYzZmOGI3LTExNDctNGQwNi04YmJmLTE4NjdkZTE0ZWNlMi5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg0NjE2ODg1LCJleHAiOjIwOTk5NzY4ODV9.w_efjtBVFuqytJ4gjuYEjYuU1epv5sZOtbXdf_5jVUA"
+      }
+    ],
+    "role": "تحليل المتطلبات، تصميم تجربة المستخدم، تصميم قاعدة البيانات، تطوير الواجهة الأمامية والخلفية، ربط الخدمات، الاختبار، وتحسين الأداء حتى مرحلة النشر.",
+    "client": "مشروع خاص",
+    "timeline": "اسبوعان",
+    "year": 2026,
+    "featured": true,
+    "status": "live",
+    "content_status": "published",
+    "live_url": null,
+    "github_url": null,
+    "problem": "كانت إدارة بيانات المشتركين تتم عبر ملفات متفرقة وعمليات يدوية، مما جعل متابعة الاشتراكات وتجديدها وتسجيل الحضور عملية تستغرق وقتًا وتزيد من احتمالية حدوث أخطاء. كما لم يكن هناك موقع يربط الجانب التسويقي بالإدارة أو يسهّل استقبال طلبات التسجيل الجديدة.",
+    "goals": [
+      "توحيد جميع عمليات الإدارة داخل نظام واحد.",
+      "تقليل الوقت المستغرق في تسجيل وإدارة المشتركين.",
+      "تسهيل متابعة الاشتراكات والمدفوعات.",
+      "إنشاء موقع احترافي يعرض خدمات الأكاديمية.",
+      "تمكين الإدارة من تحديث المحتوى دون الحاجة إلى تعديل الكود.",
+      "توفير تجربة استخدام بسيطة وسريعة للإدارة والعملاء."
+    ],
+    "research": null,
+    "solution": "تم تطوير منصة ويب تتكون من لوحة تحكم إدارية وموقع إلكتروني مترابطين، حيث يمكن للإدارة إدارة الأعضاء والاشتراكات والمدفوعات والحضور من مكان واحد، بينما يتيح الموقع للزوار استعراض البرامج والباقات وإرسال طلبات التسجيل التي تصل مباشرة إلى لوحة التحكم.",
+    "design_process": null,
+    "development": null,
+    "lessons": [],
+    "testimonial": null,
+    "metrics": [],
+    "published_at": null,
+    "sort_order": 2,
+    "created_at": "2026-07-21T06:27:53.688341+00:00",
+    "updated_at": "2026-07-22T02:20:14.998453+00:00",
+    "highlights": [
+      "إدارة الاشتراكات.",
+      "إدارة الباقات.",
+      "نظام حضور بالباركود.",
+      "استيراد وتصدير Excel.",
+      "إدارة المدفوعات.",
+      "لوحة إحصائيات.",
+      "إدارة المدربين.",
+      "إدارة البرامج.",
+      "إدارة المحتوى.",
+      "صفحة هبوط تسويقية.",
+      "نموذج تسجيل.",
+      "معرض صور.",
+      "آراء العملاء.",
+      "تصميم متجاوب.",
+      "واجهة عربية بالكامل."
+    ],
+    "section_order": [
+      "gallery",
+      "problem",
+      "goals",
+      "research",
+      "solution",
+      "highlights",
+      "designProcess",
+      "development",
+      "stack",
+      "metrics",
+      "lessons",
+      "testimonial"
+    ],
+    "spotlight": null,
+    "tools": []
+  }
+];
