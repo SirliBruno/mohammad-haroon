@@ -1,16 +1,26 @@
+import { useMemo } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowLeft, ArrowUpRight, Sparkles, ExternalLink, Layers, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Sparkles, ExternalLink } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { Container } from "@/components/layout/container";
 import { Reveal, SectionReveal } from "@/components/motion/reveal";
 import { smoothScrollTo } from "@/components/layout/smooth-scroll";
 import { projects as staticProjects } from "@/data/projects";
 import { BrowserFrame } from "@/components/mockups/devices";
 import { DashboardUI, StoreUI, EditorUI } from "@/components/mockups/ui-samples";
+import { useHomeContent, getHomeText } from "@/lib/cms/home-content";
+import { listPublicProjects } from "@/lib/cms/projects-public.functions";
+import { toProject } from "@/lib/project-adapter";
+import type { Project } from "@/features/projects/schema";
 
 const mockupBySlug: Record<string, React.ComponentType> = {
   campflow: DashboardUI,
   "haven-storefront": StoreUI,
   "meridian-agency": EditorUI,
+  "fitness-camp-management": DashboardUI,
+  speakup: EditorUI,
+  "rent-right": StoreUI,
 };
 
 export function FeaturedWork() {
@@ -18,11 +28,55 @@ export function FeaturedWork() {
     smoothScrollTo("#contact-form");
   };
 
-  const campflow = staticProjects.find((p) => p.slug === "campflow") || staticProjects[0];
-  const haven = staticProjects.find((p) => p.slug === "haven-storefront") || staticProjects[2];
-  const meridian = staticProjects.find((p) => p.slug === "meridian-agency") || staticProjects[3];
+  const { data: homeContent } = useHomeContent();
+  const t = (key: string, fallback: string) => getHomeText(homeContent, key, fallback);
 
-  const curatedSecondaryProjects = [haven, meridian].filter(Boolean);
+  const fetchProjects = useServerFn(listPublicProjects);
+  const { data: projectsData } = useQuery({
+    queryKey: ["public-featured-projects"],
+    queryFn: () => fetchProjects({ data: { featured: true, limit: 12 } }),
+    staleTime: 60_000,
+  });
+
+  const allProjects: Project[] = useMemo(() => {
+    if (projectsData?.rows && projectsData.rows.length > 0) {
+      return projectsData.rows.map(toProject);
+    }
+    return staticProjects;
+  }, [projectsData]);
+
+  // Read custom overrides from CMS if configured in /admin/home
+  const customFlagshipSlug = t("home.featured.flagship_slug", "").trim();
+  const customSecondarySlugs = t("home.featured.secondary_slugs", "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  const campflow: Project | undefined = useMemo(() => {
+    if (customFlagshipSlug) {
+      const found =
+        allProjects.find((p) => p.slug === customFlagshipSlug) ||
+        staticProjects.find((p) => p.slug === customFlagshipSlug);
+      if (found) return found;
+    }
+    return allProjects.find((p) => p.featured) || allProjects[0] || staticProjects[0];
+  }, [allProjects, customFlagshipSlug]);
+
+  const curatedSecondaryProjects: Project[] = useMemo(() => {
+    if (customSecondarySlugs.length > 0) {
+      const list = customSecondarySlugs
+        .map(
+          (slug) =>
+            allProjects.find((p) => p.slug === slug) ||
+            staticProjects.find((p) => p.slug === slug),
+        )
+        .filter((p): p is Project => Boolean(p));
+      if (list.length > 0) return list;
+    }
+    const remaining = allProjects.filter((p) => p.slug !== campflow?.slug);
+    if (remaining.length >= 2) return remaining.slice(0, 2);
+    return staticProjects.filter((p) => p.slug !== campflow?.slug).slice(0, 2);
+  }, [allProjects, campflow, customSecondarySlugs]);
 
   return (
     <SectionReveal id="work" className="relative overflow-hidden border-t border-border/60 py-16 sm:py-24">
@@ -32,13 +86,13 @@ export function FeaturedWork() {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div className="max-w-2xl">
               <span className="text-xs font-bold tracking-wider text-accent uppercase">
-                أعمال مختارة
+                {t("home.featured.eyebrow", "أعمال مختارة")}
               </span>
               <h2 className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
-                أعمالي
+                {t("home.featured.title", "أعمالي")}
               </h2>
               <p className="mt-4 text-base leading-relaxed text-foreground/80 sm:text-lg">
-                مشاريع فعلية ونماذج عملية جمعت فيها بين التصميم، التطوير، وحل المشكلة.
+                {t("home.featured.description", "مشاريع فعلية ونماذج عملية جمعت فيها بين التصميم، التطوير، وحل المشكلة.")}
               </p>
             </div>
 
@@ -46,7 +100,7 @@ export function FeaturedWork() {
               to="/work"
               className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:underline"
             >
-              استكشف جميع الأعمال والدراسات
+              {t("home.featured.view_all", "استكشف جميع الأعمال والدراسات")}
               <ArrowLeft className="size-4" />
             </Link>
           </div>
@@ -64,8 +118,17 @@ export function FeaturedWork() {
                     params={{ slug: campflow.slug }}
                     className="group block overflow-hidden rounded-2xl border border-border/80 bg-muted/40 shadow-md transition-transform duration-500 hover:-translate-y-1"
                   >
-                    <BrowserFrame url="campflow.app">
-                      <DashboardUI />
+                    <BrowserFrame url={campflow.liveDemo ? campflow.liveDemo.replace(/^https?:\/\//, '') : `${campflow.slug}.app`}>
+                      {campflow.cover?.src ? (
+                        <img
+                          src={campflow.cover.src}
+                          alt={campflow.cover.alt || campflow.title}
+                          className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <DashboardUI />
+                      )}
                     </BrowserFrame>
                   </Link>
                 </div>
@@ -75,11 +138,13 @@ export function FeaturedWork() {
                   <div>
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="inline-flex items-center gap-1 rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-xs font-bold text-accent">
-                        <Sparkles className="size-3.5" /> مشروع مميّز (Featured SaaS)
+                        <Sparkles className="size-3.5" /> مشروع مميّز (Featured)
                       </span>
-                      <span className="rounded-full border border-border bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
-                        SaaS / Web Application
-                      </span>
+                      {campflow.category && (
+                        <span className="rounded-full border border-border bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
+                          {campflow.category}
+                        </span>
+                      )}
                     </div>
 
                     <h3 className="mt-4 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
@@ -87,12 +152,12 @@ export function FeaturedWork() {
                     </h3>
 
                     <p className="mt-3 text-sm leading-relaxed text-foreground/80 sm:text-base">
-                      {campflow.description}
+                      {campflow.description || campflow.summary}
                     </p>
 
-                    {campflow.services && (
+                    {(campflow.services || campflow.stack || campflow.tags) && (
                       <div className="mt-5 flex flex-wrap gap-1.5">
-                        {campflow.services.map((svc) => (
+                        {(campflow.services || campflow.stack || campflow.tags).slice(0, 6).map((svc) => (
                           <span
                             key={svc}
                             className="rounded-md border border-border/80 bg-background px-2.5 py-1 text-xs font-medium text-foreground/90"
@@ -221,10 +286,10 @@ export function FeaturedWork() {
         <Reveal delay={0.2}>
           <div className="mt-12 rounded-3xl border border-border/80 bg-gradient-to-br from-card via-muted/30 to-card p-8 sm:p-10 text-center space-y-4">
             <h3 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-              شفت شغلي؟ عندك فكرة مشابهة؟
+              {t("home.featured.callout_title", "شفت شغلي؟ عندك فكرة مشابهة؟")}
             </h3>
             <p className="text-sm text-foreground/80 max-w-md mx-auto leading-relaxed">
-              أرسل فكرتك وسأساعدك في تحديد أنسب مسار لتنفيذها بأعلى كفاءة وبسعر عادل.
+              {t("home.featured.callout_description", "أرسل فكرتك وسأساعدك في تحديد أنسب مسار لتنفيذها بأعلى كفاءة وبسعر عادل.")}
             </p>
 
             <div className="pt-2 flex flex-wrap items-center justify-center gap-4">
@@ -233,7 +298,7 @@ export function FeaturedWork() {
                 onClick={scrollToContact}
                 className="inline-flex items-center gap-2 rounded-xl bg-primary px-7 py-3.5 text-sm font-bold text-primary-foreground shadow-md transition-all hover:opacity-95 hover:shadow-lg"
               >
-                خلنا نبنيها
+                {t("home.featured.callout_cta_primary", "خلنا نبنيها")}
                 <ArrowLeft className="size-4" />
               </button>
 
@@ -241,7 +306,7 @@ export function FeaturedWork() {
                 to="/work"
                 className="inline-flex items-center gap-2 rounded-xl border border-border bg-background px-6 py-3.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
               >
-                استكشف جميع الأعمال
+                {t("home.featured.callout_cta_secondary", "استكشف جميع الأعمال")}
                 <ArrowUpRight className="size-4 text-muted-foreground" />
               </Link>
             </div>
