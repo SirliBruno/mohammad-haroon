@@ -2,8 +2,12 @@ import { Container } from "@/components/layout/container";
 import { Reveal, SectionReveal } from "@/components/motion/reveal";
 import { smoothScrollTo } from "@/components/layout/smooth-scroll";
 import { ArrowLeft, ArrowUpRight, Sparkles } from "lucide-react";
+import { useHomeContent, getHomeText } from "@/lib/cms/home-content";
 
 export function FinalCTA() {
+  const { data: homeContent } = useHomeContent();
+  const t = (key: string, fallback: string) => getHomeText(homeContent, key, fallback);
+
   const scrollTo = (id: string) => {
     smoothScrollTo(`#${id}`);
   };
@@ -24,31 +28,32 @@ export function FinalCTA() {
             </span>
 
             <h2 className="mt-6 text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-              عندك فكرة؟
-              <br />
-              <span className="text-accent">خلنا نبنيها.</span>
+              {t("home.cta.title", "جاهز تحوّل فكرتك إلى مشروع فعلي؟")}
             </h2>
 
             <p className="mt-6 text-base sm:text-lg leading-relaxed text-muted-foreground max-w-xl mx-auto">
-              ما تحتاج تعرف كل التفاصيل. أرسل فكرتك، وأنا أساعدك تحدد أفضل طريقة لتحويلها إلى مشروع فعلي.
+              {t(
+                "home.cta.description",
+                "تواصل معي اليوم، ونحدد موعد لمناقشة فكرتك والحل الأنسب لها مجانًا وبدون أي التزام.",
+              )}
             </p>
 
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
               <button
                 type="button"
                 onClick={() => scrollTo("contact-form")}
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-8 py-4 text-base font-bold text-primary-foreground shadow-lg transition-all hover:opacity-95 hover:shadow-xl"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-8 py-4 text-base font-bold text-primary-foreground shadow-lg transition-all hover:opacity-95 hover:shadow-xl cursor-pointer"
               >
-                ابدأ مشروعك
+                {t("home.cta.primary_label", "ابدأ مشروعك الآن")}
                 <ArrowLeft className="size-4" />
               </button>
 
               <button
                 type="button"
                 onClick={() => scrollTo("work")}
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-background px-7 py-4 text-base font-medium text-foreground transition-all hover:bg-muted"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-background px-7 py-4 text-base font-medium text-foreground transition-all hover:bg-muted cursor-pointer"
               >
-                شاهد أعمالي
+                {t("home.cta.secondary_label", "شاهد أعمالي")}
                 <ArrowUpRight className="size-4 text-muted-foreground" />
               </button>
             </div>

@@ -57,7 +57,7 @@ function Page() {
             onClick={() => setDays(d)}
             className={`rounded-md border px-3 py-1.5 text-sm transition-colors ${
               days === d
-                ? "border-neutral-900 bg-neutral-900 text-white dark:border-border dark:bg-neutral-100 dark:text-foreground"
+                ? "border-neutral-900 bg-neutral-900 text-white dark:border-white dark:bg-white dark:text-neutral-950 font-semibold shadow-xs"
                 : "border-border bg-white text-foreground hover:border-neutral-400 dark:border-border dark:bg-neutral-900 dark:text-muted-foreground"
             }`}
           >

@@ -26,8 +26,8 @@ const FIELDS: FieldDef[] = [
   { name: "overview", label: "نظرة عامة", type: "richtext", colSpan: 2, rows: 8 },
   { name: "technologies", label: "التقنيات", type: "tags", colSpan: 2 },
   { name: "deliverables", label: "المخرجات", type: "tags", colSpan: 2 },
-  { name: "starting_price_cents", label: "السعر يبدأ من (بالسنت)", type: "number", min: 0 },
-  { name: "currency", label: "العملة", type: "text", dir: "ltr" },
+  { name: "starting_price_cents", label: "السعر يبدأ من (ريال)", type: "number", min: 0, help: "مثال: 300 أو 500 ريال" },
+  { name: "currency", label: "العملة", type: "text", dir: "ltr", placeholder: "SAR" },
   { name: "benefits", label: "المزايا (JSON)", type: "json", colSpan: 2, help: '["فائدة 1","فائدة 2"] أو [{"title":"...","description":"..."}]' },
   { name: "features", label: "الميزات (JSON)", type: "json", colSpan: 2 },
   { name: "workflow", label: "خطوات العمل (JSON)", type: "json", colSpan: 2, help: '[{"step":"البحث","description":"..."}]' },
@@ -48,7 +48,7 @@ function Page() {
         entityName="خدمة"
         entityNamePlural="خدمات"
         fields={FIELDS}
-        emptyValues={{ title: "", slug: "", currency: "USD", featured: false, content_status: "published", technologies: [], deliverables: [], benefits: [], features: [], workflow: [], faq: [], sort_order: 0, featured_project_slugs: [] }}
+        emptyValues={{ title: "", slug: "", currency: "SAR", featured: false, content_status: "published", technologies: [], deliverables: [], benefits: [], features: [], workflow: [], faq: [], sort_order: 0, featured_project_slugs: [] }}
         listFn={adminListServices}
         createFn={createService}
         updateFn={updateService}

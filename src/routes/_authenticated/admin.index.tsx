@@ -23,6 +23,7 @@ import {
   ArrowLeft,
   FileStack,
   ScrollText,
+  LayoutDashboard,
   type LucideIcon,
 } from "lucide-react";
 
@@ -34,9 +35,10 @@ export const Route = createFileRoute("/_authenticated/admin/")({
 type Card = { to: string; title: string; description: string; group: string; icon: LucideIcon };
 
 const CARDS: Card[] = [
+  { to: "/admin/home", title: "أقسام الصفحة الرئيسية", description: "نصوص وعناوين وأزرار كافة أقسام الصفحة الرئيسية.", group: "الصفحة الرئيسية", icon: LayoutDashboard },
+  { to: "/admin/hero", title: "قسم الهيرو التفاعلي", description: "مشاريع تظهر في نوافذ الهيرو التفاعلية.", group: "الصفحة الرئيسية", icon: Sparkles },
   { to: "/admin/content", title: "نصوص وصور الموقع", description: "تحكم بعناوين ونصوص وصور الأقسام العامة.", group: "المحتوى", icon: FileText },
   { to: "/admin/pages", title: "محتوى الصفحات", description: "ترويسات وأوصاف صفحات من أنا، تواصل، الأعمال.", group: "المحتوى", icon: FileStack },
-  { to: "/admin/hero", title: "قسم الهيرو", description: "مشاريع تظهر في نوافذ الصفحة الرئيسية.", group: "الصفحة الرئيسية", icon: Sparkles },
   { to: "/admin/projects", title: "المشاريع", description: "معرض الأعمال الكامل مع الحالة والفئات.", group: "الأعمال", icon: FolderKanban },
   { to: "/admin/services", title: "الخدمات", description: "صفحات الخدمات: المزايا، الميزات، الأسعار.", group: "الأعمال", icon: Wrench },
   { to: "/admin/testimonials", title: "التوصيات", description: "شهادات العملاء والتقييمات.", group: "الأعمال", icon: MessagesSquare },

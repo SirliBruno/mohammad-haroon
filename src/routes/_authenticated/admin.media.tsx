@@ -132,7 +132,7 @@ function Page() {
           <button
             onClick={() => fileRef.current?.click()}
             disabled={busy}
-            className="rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-white dark:text-foreground"
+            className="rounded-md bg-neutral-900 px-4 py-2 text-sm font-semibold text-white disabled:opacity-50 dark:bg-white dark:text-neutral-950 dark:hover:bg-neutral-200 shadow-xs"
           >
             {busy ? "جارِ الرفع…" : "+ رفع ملف"}
           </button>
@@ -248,7 +248,7 @@ function Page() {
               <button
                 onClick={() => saveMetaMut.mutate(editing)}
                 disabled={saveMetaMut.isPending}
-                className="rounded-md bg-neutral-900 px-4 py-1.5 text-sm text-white disabled:opacity-50 dark:bg-white dark:text-foreground"
+                className="rounded-md bg-neutral-900 px-4 py-1.5 text-sm font-semibold text-white disabled:opacity-50 dark:bg-white dark:text-neutral-950 dark:hover:bg-neutral-200 shadow-xs"
               >
                 {saveMetaMut.isPending ? "جارِ الحفظ…" : "حفظ"}
               </button>

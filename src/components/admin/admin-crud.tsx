@@ -438,7 +438,7 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
         <button
           type="button"
           onClick={openCreate}
-          className="rounded-md bg-neutral-900 px-4 py-1.5 text-sm font-medium text-white hover:bg-neutral-800 dark:bg-white dark:text-foreground dark:hover:bg-neutral-200"
+          className="rounded-md bg-neutral-900 px-4 py-1.5 text-sm font-semibold text-white hover:bg-neutral-800 dark:bg-white dark:text-neutral-950 dark:hover:bg-neutral-200 shadow-xs"
         >
           + إضافة {entityName}
         </button>
@@ -464,7 +464,7 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
                 className={cn(
                   "rounded-full px-3 py-1 border transition",
                   active
-                    ? "bg-neutral-900 text-white border-neutral-900 dark:bg-white dark:text-foreground dark:border-white"
+                    ? "bg-neutral-900 text-white border-neutral-900 dark:bg-white dark:text-neutral-950 dark:border-white font-semibold"
                     : "bg-white text-foreground border-input hover:bg-muted dark:bg-neutral-900 dark:text-muted-foreground dark:border-border dark:hover:bg-muted",
                 )}
               >
@@ -516,7 +516,7 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
                         <button
                           type="button"
                           onClick={openCreate}
-                          className="rounded-md bg-neutral-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-neutral-800 dark:bg-white dark:text-foreground dark:hover:bg-neutral-200"
+                          className="rounded-md bg-neutral-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-neutral-800 dark:bg-white dark:text-neutral-950 dark:hover:bg-neutral-200 shadow-xs"
                         >
                           إضافة {entityName}
                         </button>
@@ -664,10 +664,10 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
                 <button
                   type="submit"
                   disabled={busy}
-                  className="inline-flex items-center gap-2 rounded-md bg-neutral-900 px-5 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-white dark:text-foreground"
+                  className="inline-flex items-center gap-2 rounded-md bg-neutral-900 px-5 py-2 text-sm font-semibold text-white disabled:opacity-50 dark:bg-white dark:text-neutral-950 dark:hover:bg-neutral-200 shadow-xs"
                 >
                   {busy ? "جارِ الحفظ…" : editingId ? "حفظ التعديلات" : "إضافة"}
-                  <kbd className="hidden sm:inline-flex rounded border border-white/30 px-1.5 py-0.5 text-[10px] font-mono text-white/70 dark:border-neutral-900/30 dark:text-foreground/60">⌘S</kbd>
+                  <kbd className="hidden sm:inline-flex rounded border border-white/30 px-1.5 py-0.5 text-[10px] font-mono text-white/70 dark:border-neutral-900/30 dark:text-neutral-950/70">⌘S</kbd>
                 </button>
 
               </div>

@@ -174,16 +174,34 @@ function Page() {
             <div className="p-10 text-center text-muted-foreground">اختر رسالة لعرض تفاصيلها.</div>
           ) : (
             <div className="p-6 flex flex-col gap-4">
-              <div className="flex items-start justify-between gap-4">
+              <div className="flex items-start justify-between gap-4 border-b border-border pb-4 dark:border-border">
                 <div>
-                  <h3 className="text-lg font-semibold">{selected.name}</h3>
-                  <a
-                    href={`mailto:${selected.email}`}
-                    className="text-sm text-blue-600 hover:underline"
-                    dir="ltr"
-                  >
-                    {selected.email}
-                  </a>
+                  <h3 className="font-semibold text-lg">{selected.name}</h3>
+                  {selected.email.startsWith("wa:") ? (
+                    <div className="mt-1 flex items-center gap-2">
+                      <span className="text-sm font-mono text-emerald-600 dark:text-emerald-400" dir="ltr">
+                        {selected.email.replace(/^wa:/, "").replace(/@whatsapp$/, "")}
+                      </span>
+                      <a
+                        href={`https://wa.me/${selected.email.replace(/[^0-9]/g, "")}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1 rounded-md bg-emerald-600 px-2.5 py-1 text-xs font-medium text-white hover:bg-emerald-700 transition"
+                      >
+                        فتح في واتساب ↗
+                      </a>
+                    </div>
+                  ) : (
+                    <div className="mt-1 flex items-center gap-2">
+                      <a
+                        href={`mailto:${selected.email}`}
+                        className="text-sm text-blue-600 hover:underline dark:text-blue-400"
+                        dir="ltr"
+                      >
+                        {selected.email}
+                      </a>
+                    </div>
+                  )}
                 </div>
                 <div className="flex gap-1">
                   {(["read", "replied", "archived", "spam"] as Status[]).map((s) => (
@@ -227,11 +245,12 @@ function Page() {
                   onChange={(e) => setNotes(e.target.value)}
                   rows={4}
                   className="mt-1 w-full rounded-md border border-input bg-white px-3 py-2 text-sm dark:border-border dark:bg-neutral-900"
+                  placeholder="اكتب ملاحظاتك عن هذه الرسالة هنا…"
                 />
                 <button
                   onClick={saveNotes}
                   disabled={updateMut.isPending}
-                  className="mt-2 rounded-md bg-neutral-900 px-3 py-1.5 text-xs text-white dark:bg-white dark:text-foreground disabled:opacity-50"
+                  className="mt-2 rounded-md bg-neutral-900 px-3.5 py-1.5 text-xs font-semibold text-white dark:bg-white dark:text-neutral-950 dark:hover:bg-neutral-200 disabled:opacity-50 shadow-xs"
                 >
                   {updateMut.isPending ? "جارِ الحفظ…" : "حفظ الملاحظات"}
                 </button>
@@ -274,9 +293,9 @@ function Page() {
 
 function pill(active: boolean) {
   return cn(
-    "rounded-full px-3 py-1 text-xs border",
+    "rounded-full px-3 py-1 text-xs border transition",
     active
-      ? "bg-neutral-900 text-white border-neutral-900 dark:bg-white dark:text-foreground dark:border-white"
+      ? "bg-neutral-900 text-white border-neutral-900 dark:bg-white dark:text-neutral-950 dark:border-white font-semibold"
       : "bg-white text-muted-foreground border-border hover:bg-muted dark:bg-neutral-900 dark:text-muted-foreground dark:border-border dark:hover:bg-muted",
   );
 }

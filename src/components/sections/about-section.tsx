@@ -2,8 +2,12 @@ import { Container } from "@/components/layout/container";
 import { Reveal, SectionReveal } from "@/components/motion/reveal";
 import { Sparkles, Code, Palette, Layers, ShoppingBag, Eye } from "lucide-react";
 import { site } from "@/config/site";
+import { useHomeContent, getHomeText } from "@/lib/cms/home-content";
 
 export function AboutSection() {
+  const { data: homeContent } = useHomeContent();
+  const t = (key: string, fallback: string) => getHomeText(homeContent, key, fallback);
+
   const skills = [
     { name: "Web Development", icon: Code, desc: "تطوير مواقع وتطبيقات حديثة وسريعة" },
     { name: "UI/UX Design", icon: Palette, desc: "تصميم واجهات وتجربة استخدام بديهية" },
@@ -20,10 +24,10 @@ export function AboutSection() {
           <div className="lg:col-span-7">
             <Reveal>
               <span className="text-xs font-semibold tracking-wider text-accent uppercase">
-                عني
+                {t("home.about.eyebrow", "عني")}
               </span>
               <h2 className="mt-2 text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-foreground">
-                وراء كل مشروع شخص يهتم بالتفاصيل.
+                {t("home.about.title", "وراء كل مشروع شخص يهتم بالتفاصيل.")}
               </h2>
 
               <div className="mt-5 space-y-3 text-xs sm:text-sm leading-relaxed text-foreground/85">
@@ -31,7 +35,10 @@ export function AboutSection() {
                   أنا <strong className="text-foreground">{site.name}</strong>، طالب IT ومطور ومصمم مهتم ببناء المنتجات الرقمية وتحويل الأفكار إلى حلول عملية.
                 </p>
                 <p className="text-muted-foreground">
-                  أجمع بين التصميم والتطوير لتكون النتيجة سهلة الاستخدام، سريعة، وقابلة للتطوير المستقبلي، لتستلم منتجًا تفخر باستخدامه وعرضه على عملائك.
+                  {t(
+                    "home.about.description",
+                    "أجمع بين التصميم والتطوير لتكون النتيجة سهلة الاستخدام، سريعة، وقابلة للتطوير المستقبلي، لتستلم منتجًا تفخر باستخدامه وعرضه على عملائك.",
+                  )}
                 </p>
               </div>
 

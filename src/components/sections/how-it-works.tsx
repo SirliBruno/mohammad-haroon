@@ -1,8 +1,12 @@
 import { Container } from "@/components/layout/container";
 import { Reveal, SectionReveal } from "@/components/motion/reveal";
 import { Lightbulb, Compass, Palette, Code2, Rocket } from "lucide-react";
+import { useHomeContent, getHomeText } from "@/lib/cms/home-content";
 
 export function HowItWorks() {
+  const { data: homeContent } = useHomeContent();
+  const t = (key: string, fallback: string) => getHomeText(homeContent, key, fallback);
+
   const steps = [
     {
       step: "01",
@@ -42,13 +46,16 @@ export function HowItWorks() {
         <Reveal>
           <div className="max-w-2xl">
             <span className="text-xs font-semibold tracking-wider text-accent uppercase">
-              منهجية العمل
+              {t("home.process.eyebrow", "منهجية العمل")}
             </span>
             <h2 className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
-              من الفكرة إلى الإطلاق.
+              {t("home.process.title", "من الفكرة إلى الإطلاق.")}
             </h2>
             <p className="mt-4 text-base leading-relaxed text-muted-foreground sm:text-lg">
-              خطوات واضحة ومنظمة تضمن لك راحة البال ومعرفة أين وصل مشروعك في كل لحظة.
+              {t(
+                "home.process.description",
+                "خطوات واضحة ومنظمة تضمن لك راحة البال ومعرفة أين وصل مشروعك في كل لحظة.",
+              )}
             </p>
           </div>
         </Reveal>

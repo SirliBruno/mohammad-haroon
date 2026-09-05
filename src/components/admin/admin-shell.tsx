@@ -129,7 +129,7 @@ export function AdminShell({
                 className={cn(
                   "flex items-center justify-between gap-2 rounded-lg px-3 py-2 transition-colors",
                   active
-                    ? "bg-neutral-900 text-white dark:bg-white dark:text-foreground"
+                    ? "bg-neutral-900 text-white dark:bg-white dark:text-neutral-950 font-medium"
                     : "text-foreground hover:bg-neutral-100 dark:text-muted-foreground dark:hover:bg-muted",
                 )}
               >

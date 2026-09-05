@@ -7,8 +7,12 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { HelpCircle } from "lucide-react";
+import { useHomeContent, getHomeText } from "@/lib/cms/home-content";
 
 export function FaqSection() {
+  const { data: homeContent } = useHomeContent();
+  const t = (key: string, fallback: string) => getHomeText(homeContent, key, fallback);
+
   const faqs = [
     {
       q: "هل كل المشاريع بـ300 ريال؟",
@@ -45,10 +49,10 @@ export function FaqSection() {
             <Reveal>
               <div className="flex items-center gap-2 text-accent text-xs font-semibold uppercase tracking-wider">
                 <HelpCircle className="size-4" />
-                الأسئلة الشائعة
+                {t("home.faq.eyebrow", "الأسئلة الشائعة")}
               </div>
               <h2 className="mt-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-                إجابات على أكثر الأسئلة تكرارًا
+                {t("home.faq.title", "إجابات على أكثر الأسئلة تكرارًا")}
               </h2>
               <p className="mt-4 text-sm sm:text-base leading-relaxed text-muted-foreground">
                 إذا كان لديك أي استفسار آخر لم تجده هنا، لا تتردد في مراسلتي وسأجيبك بكل سرور.

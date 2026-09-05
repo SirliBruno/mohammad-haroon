@@ -46,7 +46,7 @@ function getEnvVar(key: string): string | undefined {
 function createSupabaseClient() {
   const SUPABASE_URL = getEnvVar('SUPABASE_URL');
   const SUPABASE_PUBLISHABLE_KEY = getEnvVar('SUPABASE_PUBLISHABLE_KEY');
-  const SUPABASE_PROJECT_ID = getEnvVar('SUPABASE_PROJECT_ID') || 'kdcvjrwfoivxheeyrtga';
+  const SUPABASE_PROJECT_ID = getEnvVar('SUPABASE_PROJECT_ID') || 'dzubuginlleixqwgnvqj';
 
   if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
     const missing = [

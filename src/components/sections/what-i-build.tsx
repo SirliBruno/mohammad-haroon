@@ -5,6 +5,7 @@ import { Reveal, SectionReveal } from "@/components/motion/reveal";
 import { smoothScrollTo } from "@/components/layout/smooth-scroll";
 import { site } from "@/config/site";
 import { cn } from "@/lib/utils";
+import { useHomeContent, getHomeText } from "@/lib/cms/home-content";
 import {
   ArrowLeft,
   CheckCircle2,
@@ -380,6 +381,8 @@ export function WhatIBuild() {
   const [activeFilter, setActiveFilter] = useState<FilterId>("all");
   const [selectedService, setSelectedService] = useState<ServiceItem | null>(null);
   const shouldReduceMotion = useReducedMotion();
+  const { data: homeContent } = useHomeContent();
+  const t = (key: string, fallback: string) => getHomeText(homeContent, key, fallback);
 
   const filteredServices = useMemo(() => {
     if (activeFilter === "all") return SERVICES;
@@ -418,13 +421,16 @@ export function WhatIBuild() {
         <Reveal>
           <div className="max-w-3xl">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-accent/10 px-3 py-1 text-xs font-semibold text-accent">
-              <Sparkles className="size-3.5" /> خدماتي
+              <Sparkles className="size-3.5" /> {t("home.services.eyebrow", "خدماتي")}
             </span>
             <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground font-display">
-              أحوّل أفكارك إلى منتجات رقمية حقيقية
+              {t("home.services.title", "أحوّل أفكارك إلى منتجات رقمية حقيقية")}
             </h2>
             <p className="mt-4 text-base sm:text-lg leading-relaxed text-muted-foreground font-sans">
-              من المواقع والمتاجر إلى الأنظمة والمنصات المخصصة — أصمم وأطور حلولًا رقمية تناسب احتياج مشروعك وتُبنى لتكون قابلة للاستخدام والتوسع.
+              {t(
+                "home.services.description",
+                "من المواقع والمتاجر إلى الأنظمة والمنصات المخصصة — أصمم وأطور حلولًا رقمية تناسب احتياج مشروعك وتُبنى لتكون قابلة للاستخدام والتوسع.",
+              )}
             </p>
           </div>
         </Reveal>
