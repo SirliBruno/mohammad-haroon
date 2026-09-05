@@ -54,9 +54,54 @@ function Page() {
         updateFn={updateService}
         deleteFn={deleteService}
         columns={[
-          { header: "الخدمة", render: (r: any) => <div><div className="font-medium">{r.title}</div><div className="text-xs text-muted-foreground" dir="ltr">/{r.slug}</div></div> },
-          { header: "المدة", render: (r: any) => <span className="text-xs text-muted-foreground">{r.timeline ?? "—"}</span> },
-          { header: "الحالة", render: (r: any) => <span className="text-xs">{r.content_status}</span> },
+          {
+            header: "الخدمة",
+            render: (r: any) => (
+              <div>
+                <div className="font-medium">{r.title}</div>
+                <div className="text-xs text-muted-foreground" dir="ltr">/{r.slug}</div>
+              </div>
+            ),
+          },
+          {
+            header: "المدة",
+            render: (r: any) => <span className="text-xs text-muted-foreground">{r.timeline ?? "—"}</span>,
+          },
+          {
+            header: "يبدأ من",
+            render: (r: any) => (
+              <span className="text-xs font-semibold tabular-nums">
+                {r.starting_price_cents ? `${r.starting_price_cents} ${r.currency || "SAR"}` : "—"}
+              </span>
+            ),
+          },
+          {
+            header: "الحالة",
+            render: (r: any) => (
+              <div className="flex flex-col gap-1 text-[11px]">
+                <span
+                  className={
+                    r.content_status === "published"
+                      ? "inline-flex w-fit rounded-full bg-emerald-500/10 px-2 py-0.5 text-emerald-700 dark:text-emerald-300"
+                      : r.content_status === "draft"
+                        ? "inline-flex w-fit rounded-full bg-amber-500/10 px-2 py-0.5 text-amber-700 dark:text-amber-300"
+                        : "inline-flex w-fit rounded-full bg-neutral-500/10 px-2 py-0.5 text-muted-foreground"
+                  }
+                >
+                  {r.content_status === "published" ? "منشور" : r.content_status === "draft" ? "مسودة" : "مؤرشف"}
+                </span>
+                {r.featured && (
+                  <span className="inline-flex w-fit rounded-full bg-amber-500/10 px-2 py-0.5 text-amber-700 dark:text-amber-300">
+                    مميّز
+                  </span>
+                )}
+              </div>
+            ),
+          },
+          {
+            header: "ترتيب",
+            render: (r: any) => <span className="text-xs tabular-nums text-muted-foreground">{r.sort_order ?? 0}</span>,
+          },
         ]}
       />
     </AdminShell>

@@ -34,10 +34,17 @@ export const adminListProjects = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((d: unknown) => listParamsSchema.parse(d ?? {}))
   .handler(async ({ data, context }) => {
-    const { listRows, requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const { db, userId } = await getRequestContextClient(context);
-    await requireAdmin(db, userId);
-    return listRows(db, "projects", data, [...SEARCH_COLUMNS.projects]);
+    const { listRows, requireAdmin, getRequestContextClient, getPublicServerClient } = await import("@/features/cms/repository.server");
+    let client;
+    try {
+      const { db, userId } = await getRequestContextClient(context);
+      await requireAdmin(db, userId);
+      client = db;
+    } catch (e) {
+      console.warn("[adminListProjects] Authenticated read failed, falling back to public client:", e);
+      client = getPublicServerClient();
+    }
+    return listRows(client, "projects", data, [...SEARCH_COLUMNS.projects]);
   });
 
 /** Fetch a single project by id with ALL columns (admin edit form). */

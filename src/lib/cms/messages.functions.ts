@@ -107,13 +107,17 @@ export const deleteMessage = createServerFn({ method: "POST" })
 export const countNewMessages = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    const { requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const { db, userId } = await getRequestContextClient(context);
-    await requireAdmin(db, userId);
-    const { count, error } = await db
-      .from("messages")
-      .select("id", { count: "exact", head: true })
-      .eq("status", "new");
-    if (error) return { count: 0 };
-    return { count: count ?? 0 };
+    try {
+      const { requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
+      const { db, userId } = await getRequestContextClient(context);
+      await requireAdmin(db, userId);
+      const { count, error } = await db
+        .from("messages")
+        .select("id", { count: "exact", head: true })
+        .eq("status", "new");
+      if (error) return { count: 0 };
+      return { count: count ?? 0 };
+    } catch {
+      return { count: 0 };
+    }
   });

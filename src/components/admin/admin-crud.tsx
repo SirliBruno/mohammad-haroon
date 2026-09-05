@@ -510,17 +510,32 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
                       </div>
                       <div className="text-sm text-muted-foreground dark:text-muted-foreground">
-                        {search || statusFilter ? `لا توجد نتائج مطابقة.` : `لا توجد ${entityNamePlural} بعد.`}
+                        {listQuery.isError
+                          ? "تعذّر جلب البيانات مؤقتًا. يمكنك إعادة المحاولة أو إضافة عنصر جديد."
+                          : search || statusFilter
+                            ? `لا توجد نتائج مطابقة.`
+                            : `لا توجد ${entityNamePlural} بعد.`}
                       </div>
-                      {!search && !statusFilter && (
-                        <button
-                          type="button"
-                          onClick={openCreate}
-                          className="rounded-md bg-neutral-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-neutral-800 dark:bg-white dark:text-neutral-950 dark:hover:bg-neutral-200 shadow-xs"
-                        >
-                          إضافة {entityName}
-                        </button>
-                      )}
+                      <div className="flex items-center gap-2">
+                        {listQuery.isError && (
+                          <button
+                            type="button"
+                            onClick={() => void listQuery.refetch()}
+                            className="rounded-md border border-input bg-white px-3 py-1.5 text-xs font-medium hover:bg-muted dark:border-border dark:bg-neutral-800"
+                          >
+                            إعادة المحاولة
+                          </button>
+                        )}
+                        {!search && !statusFilter && (
+                          <button
+                            type="button"
+                            onClick={openCreate}
+                            className="rounded-md bg-neutral-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-neutral-800 dark:bg-white dark:text-neutral-950 dark:hover:bg-neutral-200 shadow-xs"
+                          >
+                            إضافة {entityName}
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </td>
                 </tr>

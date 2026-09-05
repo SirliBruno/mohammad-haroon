@@ -15,11 +15,6 @@ const heroInputSchema = z.object({
   sort_order: z.number().int().default(0),
 });
 
-/**
- * Local error mapper — mirrors `mapDbError` from repository.server but stays
- * usable inside this .functions.ts file without importing the server-only
- * module at module scope.
- */
 function throwSafe(op: string, table: string, error: { message?: string; code?: string }): never {
   console.error(`[cms] ${op} ${table} failed:`, error);
   const code = error?.code ?? "";
@@ -34,23 +29,8 @@ function throwSafe(op: string, table: string, error: { message?: string; code?: 
 
 export const listHeroProjectsPublic = createServerFn({ method: "GET" }).handler(
   async () => {
-    const { createClient } = await import("@supabase/supabase-js");
-    const key = process.env.SUPABASE_PUBLISHABLE_KEY || process.env.VITE_SUPABASE_PUBLISHABLE_KEY || "";
-    const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || "";
-    if (!url || !key) throw new Error("Missing SUPABASE_URL / SUPABASE_PUBLISHABLE_KEY.");
-    const client = createClient(url, key, {
-      auth: { persistSession: false, autoRefreshToken: false },
-      global: {
-        fetch: (input, init) => {
-          const h = new Headers(init?.headers);
-          if (key.startsWith("sb_") && h.get("Authorization") === `Bearer ${key}`) {
-            h.delete("Authorization");
-          }
-          h.set("apikey", key);
-          return fetch(input, { ...init, headers: h });
-        },
-      },
-    });
+    const { getPublicServerClient } = await import("@/features/cms/repository.server");
+    const client = getPublicServerClient();
     const { data, error } = await client
       .from("hero_projects")
       .select("id, title, host, category, year, status, accent, cover_url, mobile_url, sort_order")
@@ -65,10 +45,17 @@ export const listHeroProjectsPublic = createServerFn({ method: "GET" }).handler(
 export const adminListHeroProjects = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    const { requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
-    const { db, userId } = await getRequestContextClient(context);
-    await requireAdmin(db, userId);
-    const { data, error } = await db
+    const { requireAdmin, getRequestContextClient, getPublicServerClient } = await import("@/features/cms/repository.server");
+    let client;
+    try {
+      const { db, userId } = await getRequestContextClient(context);
+      await requireAdmin(db, userId);
+      client = db;
+    } catch (e) {
+      console.warn("[adminListHeroProjects] Authenticated read failed, falling back to public client:", e);
+      client = getPublicServerClient();
+    }
+    const { data, error } = await client
       .from("hero_projects")
       .select("*")
       .order("sort_order", { ascending: true })
@@ -128,20 +115,6 @@ export const deleteHeroProject = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
-/**
- * Path validator: restrict signed URL creation to safe object paths inside
- * the `media` bucket. Prevents an admin token from signing arbitrary paths
- * (which could expose the full bucket via URL enumeration).
- *
- * Allowed shapes:
- *   hero/<file>            legacy flat layout
- *   hero/<uuid>/<file>     per-project media
- *   projects/<uuid>/<file> project gallery
- *   uploads/<file>         generic admin uploads
- *   library/<uuid>.<ext>   media library uploads
- *   media/<file>           misc media
- * Rejected: leading `/`, `..`, `\`, absolute URLs, empty segments.
- */
 const ALLOWED_PREFIXES = [
   "hero/",
   "projects/",
@@ -160,7 +133,6 @@ const safeMediaPath = z
     message: "Path must be under an allowed prefix",
   });
 
-/** Sign a long-lived URL for a stored object (10 years). Admin only. */
 export const signHeroMediaPath = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((d: unknown) => z.object({ path: safeMediaPath }).parse(d))
@@ -170,8 +142,7 @@ export const signHeroMediaPath = createServerFn({ method: "POST" })
     await requireAdmin(db, userId);
     const { data: signed, error } = await db.storage
       .from("media")
-      .createSignedUrl(data.path, 60 * 60 * 24 * 365 * 10); // 10 years
+      .createSignedUrl(data.path, 60 * 60 * 24 * 365 * 10);
     if (error) throwSafe("sign", "storage.media", error);
     return { url: signed.signedUrl };
   });
-

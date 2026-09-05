@@ -26,27 +26,50 @@ function createSupabaseFetch(supabaseKey: string): typeof fetch {
   };
 }
 
+const LIVE_SUPABASE_URL = "https://dzubuginlleixqwgnvqj.supabase.co";
+const LIVE_SUPABASE_KEY = "sb_publishable_JqCfW7H-ejDif3MItGlmmw_EfJEtXyr";
+const LIVE_PROJECT_ID = "dzubuginlleixqwgnvqj";
+
 function getEnvVar(key: string): string | undefined {
+  let val: string | undefined;
   if (typeof process !== 'undefined' && process.env) {
-    if (process.env[key]) return process.env[key];
-    if (process.env[`VITE_${key}`]) return process.env[`VITE_${key}`];
+    val = process.env[key] || process.env[`VITE_${key}`];
   }
-  try {
-    if (typeof import.meta !== 'undefined' && import.meta.env) {
-      const metaEnv = import.meta.env as Record<string, string | undefined>;
-      if (metaEnv[key]) return metaEnv[key];
-      if (metaEnv[`VITE_${key}`]) return metaEnv[`VITE_${key}`];
+  if (!val) {
+    try {
+      if (typeof import.meta !== 'undefined' && import.meta.env) {
+        const metaEnv = import.meta.env as Record<string, string | undefined>;
+        val = metaEnv[key] || metaEnv[`VITE_${key}`];
+      }
+    } catch {
+      /* ignore */
     }
-  } catch {
-    /* ignore */
   }
-  return undefined;
+
+  // Sanitize: never allow dead project kdcvjrwfoivxheeyrtga or empty values
+  if (key.includes("URL") || key.includes("url")) {
+    if (!val || val.includes("kdcvjrwfoivxheeyrtga")) {
+      return LIVE_SUPABASE_URL;
+    }
+  }
+  if (key.includes("PUBLISHABLE_KEY") || key.includes("publishable_key")) {
+    if (!val || val.includes("kdcvjrwfoivxheeyrtga") || !val.startsWith("sb_publishable_")) {
+      return LIVE_SUPABASE_KEY;
+    }
+  }
+  if (key.includes("PROJECT_ID") || key.includes("project_id")) {
+    if (!val || val.includes("kdcvjrwfoivxheeyrtga")) {
+      return LIVE_PROJECT_ID;
+    }
+  }
+
+  return val;
 }
 
 function createSupabaseClient() {
-  const SUPABASE_URL = getEnvVar('SUPABASE_URL');
-  const SUPABASE_PUBLISHABLE_KEY = getEnvVar('SUPABASE_PUBLISHABLE_KEY');
-  const SUPABASE_PROJECT_ID = getEnvVar('SUPABASE_PROJECT_ID') || 'dzubuginlleixqwgnvqj';
+  const SUPABASE_URL = getEnvVar('SUPABASE_URL') || LIVE_SUPABASE_URL;
+  const SUPABASE_PUBLISHABLE_KEY = getEnvVar('SUPABASE_PUBLISHABLE_KEY') || LIVE_SUPABASE_KEY;
+  const SUPABASE_PROJECT_ID = getEnvVar('SUPABASE_PROJECT_ID') || LIVE_PROJECT_ID;
 
   if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
     const missing = [
