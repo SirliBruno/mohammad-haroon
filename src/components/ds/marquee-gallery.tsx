@@ -103,19 +103,9 @@ export function MarqueeGallery({
   return (
     <div
       ref={containerRef}
-      className={cn("relative group/marquee-container overflow-hidden py-4 select-none", className)}
+      className={cn("relative group/marquee-container overflow-hidden py-2 select-none", className)}
       aria-label="معرض شاشات وواجهات المشروع التفاعلي"
     >
-      {/* Soft gradient edge fade overlays (fallback and enhancer for mask-image) */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-y-0 left-0 w-16 sm:w-28 md:w-36 bg-linear-to-r from-background via-background/85 to-transparent z-20"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-y-0 right-0 w-16 sm:w-28 md:w-36 bg-linear-to-l from-background via-background/85 to-transparent z-20"
-      />
-
       {/* Dual Row Marquee Stack with CSS mask */}
       <div
         className="marquee-mask flex flex-col gap-4 md:gap-6 relative z-10"
@@ -261,33 +251,25 @@ function MarqueeRow({
               type="button"
               onClick={() => onOpen(m)}
               aria-label={m.alt || `عرض الشاشة ${i + 1}`}
-              className="group/card relative block h-[200px] sm:h-[240px] md:h-[280px] lg:h-[310px] overflow-hidden rounded-2xl border border-border/70 bg-card/80 p-1.5 shadow-md backdrop-blur-sm transition-all duration-300 hover:scale-[1.025] hover:border-accent/60 hover:shadow-xl hover:shadow-accent/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              className="group/card relative block h-[210px] sm:h-[250px] md:h-[290px] lg:h-[320px] overflow-hidden rounded-2xl transition-transform duration-300 hover:scale-[1.03] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
             >
-              <div className="relative h-full w-auto overflow-hidden rounded-xl bg-muted">
-                <img
-                  src={m.src}
-                  alt={m.alt || "شاشة واجهة"}
-                  loading="lazy"
-                  decoding="async"
-                  draggable={false}
-                  className="h-full w-auto max-w-none object-cover transition-transform duration-500 group-hover/card:scale-105"
-                />
+              <img
+                src={m.src}
+                alt={m.alt || "شاشة واجهة"}
+                loading="lazy"
+                decoding="async"
+                draggable={false}
+                className="h-full w-auto max-w-none rounded-2xl object-cover transition-transform duration-500 group-hover/card:scale-105"
+              />
 
-                {/* Specular glass highlight on card */}
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 bg-linear-to-b from-white/10 via-transparent to-black/10 dark:from-white/5 dark:to-black/30"
-                />
-
-                {/* Hover zoom indicator pill */}
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 group-hover/card:opacity-100 transition-opacity duration-200 bg-background/30 backdrop-blur-[2px]"
-                >
-                  <span className="flex items-center gap-1.5 rounded-full border border-border/80 bg-background/90 px-3 py-1.5 text-xs font-semibold text-foreground shadow-lg backdrop-blur-md">
-                    <Maximize2 className="size-3.5 text-accent" /> تكبير الشاشة
-                  </span>
-                </div>
+              {/* Hover zoom indicator badge */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 group-hover/card:opacity-100 transition-opacity duration-200 bg-black/25 rounded-2xl backdrop-blur-[1px]"
+              >
+                <span className="flex items-center gap-1.5 rounded-full border border-white/25 bg-black/75 px-3 py-1.5 text-xs font-semibold text-white shadow-lg backdrop-blur-md">
+                  <Maximize2 className="size-3.5 text-accent" /> تكبير الشاشة
+                </span>
               </div>
             </button>
           </li>
