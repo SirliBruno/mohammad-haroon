@@ -576,6 +576,18 @@ html.lenis body {
   position: relative;
 }
 
+.glass-specular.fixed,
+.fixed.glass-specular,
+.glass-modal.fixed,
+.fixed.glass-modal {
+  position: fixed !important;
+}
+
+.glass-specular.absolute,
+.absolute.glass-specular {
+  position: absolute !important;
+}
+
 .glass-specular::before {
   content: "";
   position: absolute;
