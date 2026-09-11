@@ -93,7 +93,7 @@ export function MobileNav() {
                   exit={{ opacity: 0 }}
                 />
                 <motion.aside
-                  className="absolute inset-y-0 right-0 flex w-[85%] max-w-sm flex-col border-l border-border/80 glass-modal shadow-2xl"
+                  className="absolute inset-y-0 right-0 flex w-[85%] max-w-sm flex-col border-l border-border/80 glass-modal glass-specular-eased shadow-2xl"
                   initial={{ x: "100%" }}
                   animate={{ x: 0 }}
                   exit={{ x: "100%" }}
@@ -143,7 +143,7 @@ export function MobileNav() {
                     <a
                       href="/#contact-form"
                       onClick={scrollToContact}
-                      className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground shadow-md transition-opacity hover:opacity-90"
+                      className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-accent-eased hover:bg-gradient-accent-hover px-4 py-3 text-sm font-bold text-accent-foreground shadow-glow shadow-accent/25 transition-all hover:shadow-[0_0_24px_rgba(6,182,212,0.45)]"
                     >
                       ابدأ مشروعك
                       <ArrowLeft className="size-4" />

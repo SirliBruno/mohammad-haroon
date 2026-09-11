@@ -13,7 +13,7 @@ export function FinalCTA() {
   };
 
   return (
-    <SectionReveal className="border-t border-border/60 py-24 sm:py-32 relative overflow-hidden bg-card">
+    <SectionReveal className="border-t border-border/60 py-24 sm:py-32 relative overflow-hidden bg-card/75 backdrop-blur-md transition-colors duration-300">
       {/* Background glow */}
       <div
         aria-hidden
@@ -23,12 +23,14 @@ export function FinalCTA() {
       <Container>
         <Reveal>
           <div className="mx-auto max-w-3xl text-center">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-accent/10 px-3.5 py-1 text-xs font-semibold text-accent">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-gradient-accent-subtle px-3.5 py-1 text-xs font-semibold text-accent">
               <Sparkles className="size-3.5" /> الخطوة القادمة
             </span>
 
-            <h2 className="mt-6 text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-              {t("home.cta.title", "جاهز تحوّل فكرتك إلى مشروع فعلي؟")}
+            <h2 className="mt-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl font-display">
+              <span className="text-gradient-heading">
+                {t("home.cta.title", "جاهز تحوّل فكرتك إلى مشروع فعلي؟")}
+              </span>
             </h2>
 
             <p className="mt-6 text-base sm:text-lg leading-relaxed text-muted-foreground max-w-xl mx-auto">
@@ -42,7 +44,7 @@ export function FinalCTA() {
               <button
                 type="button"
                 onClick={() => scrollTo("contact-form")}
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-8 py-4 text-base font-bold text-primary-foreground shadow-lg transition-all hover:opacity-95 hover:shadow-xl cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-accent-eased hover:bg-gradient-accent-hover px-8 py-4 text-base font-bold text-accent-foreground shadow-glow shadow-accent/25 transition-all hover:shadow-[0_0_28px_rgba(6,182,212,0.5)] cursor-pointer"
               >
                 {t("home.cta.primary_label", "ابدأ مشروعك الآن")}
                 <ArrowLeft className="size-4" />

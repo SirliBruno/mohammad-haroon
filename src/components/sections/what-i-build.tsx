@@ -426,8 +426,10 @@ export function WhatIBuild() {
             <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-accent/10 px-3 py-1 text-xs font-semibold text-accent">
               <Sparkles className="size-3.5" /> {t("home.services.eyebrow", "خدماتي")}
             </span>
-            <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground font-display">
-              {t("home.services.title", "أحوّل أفكارك إلى منتجات رقمية حقيقية")}
+            <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight font-display">
+              <span className="text-gradient-heading">
+                {t("home.services.title", "أحوّل أفكارك إلى منتجات رقمية حقيقية")}
+              </span>
             </h2>
             <p className="mt-4 text-base sm:text-lg leading-relaxed text-muted-foreground font-sans">
               {t(
@@ -451,7 +453,7 @@ export function WhatIBuild() {
                 onClick={() => setActiveFilter(cat.id)}
                 className={`relative shrink-0 inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer select-none ${
                   isActive
-                    ? "bg-primary text-primary-foreground font-bold shadow-sm"
+                    ? "bg-gradient-accent-eased text-accent-foreground font-bold shadow-glow shadow-accent/20"
                     : "border border-border/70 bg-card/80 text-muted-foreground hover:border-accent/40 hover:text-foreground hover:bg-card"
                 }`}
               >
@@ -495,7 +497,7 @@ export function WhatIBuild() {
                   onClick={() => setSelectedService(svc)}
                   className={cn(
                     "snap-center w-[85vw] max-w-[320px] shrink-0 p-5 rounded-2xl flex flex-col justify-between select-none cursor-pointer",
-                    "glass-card glass-specular",
+                    "glass-card glass-specular-eased",
                     "border transition-all duration-300 active:scale-[0.98]",
                     isFeatured
                       ? "border-2 border-accent/70 shadow-lg shadow-accent/10"
@@ -511,7 +513,7 @@ export function WhatIBuild() {
                           className={cn(
                             "flex size-11 items-center justify-center rounded-xl transition-colors",
                             isFeatured
-                              ? "bg-accent text-accent-foreground shadow-md shadow-accent/20"
+                              ? "bg-gradient-accent-eased text-accent-foreground shadow-md shadow-accent/20"
                               : "bg-accent/10 text-accent",
                           )}
                         >
@@ -523,7 +525,7 @@ export function WhatIBuild() {
                       </div>
 
                       {svc.badge ? (
-                        <span className="inline-flex items-center gap-1 rounded-full border border-accent/40 bg-accent/15 px-2.5 py-0.5 text-[11px] font-bold text-accent">
+                        <span className="inline-flex items-center gap-1 rounded-full border border-accent/40 bg-gradient-accent-subtle px-2.5 py-0.5 text-[11px] font-bold text-accent">
                           <span className="size-1.5 rounded-full bg-accent animate-pulse" />
                           {svc.badge}
                         </span>
@@ -569,8 +571,8 @@ export function WhatIBuild() {
                         "inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-2 text-xs font-bold transition-all cursor-pointer",
                         "active:scale-95",
                         isFeatured
-                          ? "bg-accent text-accent-foreground shadow-sm shadow-accent/20"
-                          : "border border-accent/40 bg-accent/15 text-accent hover:bg-accent hover:text-accent-foreground",
+                          ? "bg-gradient-accent-eased hover:bg-gradient-accent-hover text-accent-foreground shadow-glow shadow-accent/25"
+                          : "border border-accent/40 bg-accent/15 text-accent hover:bg-gradient-accent-eased hover:text-accent-foreground hover:shadow-glow",
                       )}
                     >
                       <span>{isFeatured ? "احكِ فكرتك" : "طلب الخدمة"}</span>
@@ -598,7 +600,7 @@ export function WhatIBuild() {
                   transition={{ duration: 0.25, delay: idx * 0.03 }}
                   className={cn(
                     "group relative flex flex-col justify-between rounded-2xl p-5 sm:p-6",
-                    "glass-card glass-specular",
+                    "glass-card glass-specular-eased",
                     "transition-all duration-300 ease-out",
                     "hover:-translate-y-1.5 hover:border-accent/60 hover:shadow-[0_12px_36px_rgba(6,182,212,0.18)]",
                     "active:scale-[0.99]",
@@ -614,8 +616,8 @@ export function WhatIBuild() {
                         <div
                           className={`flex size-11 items-center justify-center rounded-xl transition-all duration-300 ${
                             isFeatured
-                              ? "bg-accent text-accent-foreground shadow-md shadow-accent/20"
-                              : "bg-accent/10 text-accent group-hover:bg-accent group-hover:text-accent-foreground group-hover:shadow-sm"
+                              ? "bg-gradient-accent-eased text-accent-foreground shadow-md shadow-accent/20"
+                              : "bg-accent/10 text-accent group-hover:bg-gradient-accent-eased group-hover:text-accent-foreground group-hover:shadow-sm"
                           }`}
                         >
                           <Icons8Icon id={svc.iconId} className="size-5" alt={svc.title} />
@@ -626,7 +628,7 @@ export function WhatIBuild() {
                       </div>
 
                       {svc.badge ? (
-                        <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-accent/15 px-2.5 py-0.5 text-[11px] font-bold text-accent">
+                        <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-gradient-accent-subtle px-2.5 py-0.5 text-[11px] font-bold text-accent">
                           <span className="size-1.5 rounded-full bg-accent animate-pulse" />
                           {svc.badge}
                         </span>
@@ -684,11 +686,11 @@ export function WhatIBuild() {
                         "inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer",
                         "active:scale-95",
                         isFeatured
-                          ? "bg-accent text-accent-foreground hover:opacity-95 shadow-sm shadow-accent/20"
-                          : "border border-accent/40 bg-accent/10 text-accent hover:bg-accent hover:text-accent-foreground hover:shadow-xs",
+                          ? "bg-gradient-accent-eased hover:bg-gradient-accent-hover text-accent-foreground hover:opacity-95 shadow-glow shadow-accent/25"
+                          : "border border-accent/40 bg-accent/10 text-accent hover:bg-gradient-accent-eased hover:text-accent-foreground hover:shadow-glow",
                       )}
                     >
-                      <span>{isFeatured ? "احكِ لي عن فكرتك →" : "طلب الخدمة"}</span>
+                      <span>{isFeatured ? "احكِ لي عن فكرتك ←" : "طلب الخدمة"}</span>
                     </button>
                   </div>
                 </motion.article>
@@ -699,13 +701,15 @@ export function WhatIBuild() {
 
         {/* 4. Bottom CTA Section */}
         <Reveal delay={0.1}>
-          <div className="mt-14 rounded-3xl border border-border/80 bg-gradient-to-br from-card via-card to-accent/5 p-8 sm:p-12 text-center shadow-lg">
+          <div className="mt-14 rounded-3xl border border-border/80 bg-gradient-to-br from-card via-card to-accent/5 p-8 sm:p-12 text-center shadow-lg glass-specular-eased">
             <div className="mx-auto max-w-2xl">
               <span className="inline-flex size-12 items-center justify-center rounded-2xl bg-accent/15 text-accent mb-4">
                 <HelpCircle className="size-6 stroke-[1.8]" />
               </span>
-              <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground font-display">
-                ما لقيت الخدمة اللي تبحث عنها؟
+              <h3 className="text-2xl sm:text-3xl font-bold tracking-tight font-display">
+                <span className="text-gradient-heading">
+                  ما لقيت الخدمة اللي تبحث عنها؟
+                </span>
               </h3>
               <p className="mt-3 text-sm sm:text-base leading-relaxed text-muted-foreground font-sans">
                 إذا كانت فكرتك مختلفة أو لم تجدها ضمن القائمة، اشرحها لي وسأساعدك في تحليلها وتحويلها إلى حل رقمي مناسب لطريقة عملك.
@@ -715,7 +719,7 @@ export function WhatIBuild() {
                 <button
                   type="button"
                   onClick={scrollToContact}
-                  className="inline-flex items-center gap-2 rounded-xl bg-primary px-7 py-3.5 text-sm font-bold text-primary-foreground shadow-md transition-all hover:opacity-90 cursor-pointer"
+                  className="inline-flex items-center gap-2 rounded-xl bg-gradient-accent-eased hover:bg-gradient-accent-hover px-7 py-3.5 text-sm font-bold text-accent-foreground shadow-glow shadow-accent/25 transition-all hover:shadow-[0_0_24px_rgba(6,182,212,0.45)] cursor-pointer"
                 >
                   <span>ابدأ مشروعك</span>
                   <ArrowLeft className="size-4" />
@@ -750,7 +754,7 @@ export function WhatIBuild() {
       {/* 5b. Desktop Service Detail Modal (Tablet & Desktop Viewports) */}
       {!isMobile && selectedService && (
         <Dialog open={Boolean(selectedService)} onOpenChange={(open) => !open && setSelectedService(null)}>
-          <DialogContent className="w-[calc(100%-2rem)] sm:w-full max-w-[780px] rounded-3xl p-5 sm:p-7 max-h-[88vh] overflow-y-auto glass-modal glass-specular shadow-2xl">
+          <DialogContent className="w-[calc(100%-2rem)] sm:w-full max-w-[780px] rounded-3xl p-5 sm:p-7 max-h-[88vh] overflow-y-auto glass-modal glass-specular-eased shadow-2xl">
             <DialogHeader className="text-right">
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3.5 mb-2.5">
                 <div className="flex size-12 sm:size-13 shrink-0 items-center justify-center rounded-2xl border border-accent/30 bg-accent/10 text-accent shadow-xs backdrop-blur-md">
@@ -765,7 +769,7 @@ export function WhatIBuild() {
                       #{selectedService.number}
                     </span>
                     {selectedService.badge && (
-                      <span className="rounded-full border border-accent/30 bg-accent/15 px-2.5 py-0.5 text-[11px] font-bold text-accent">
+                      <span className="rounded-full border border-accent/30 bg-gradient-accent-subtle px-2.5 py-0.5 text-[11px] font-bold text-accent">
                         {selectedService.badge}
                       </span>
                     )}
@@ -847,7 +851,7 @@ export function WhatIBuild() {
                 <button
                   type="button"
                   onClick={() => triggerOrderService(selectedService)}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-xs font-bold text-primary-foreground shadow-md hover:opacity-95 hover:shadow-lg transition-all cursor-pointer"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-accent-eased hover:bg-gradient-accent-hover px-5 py-2.5 text-xs font-bold text-accent-foreground shadow-glow shadow-accent/25 hover:shadow-lg transition-all cursor-pointer"
                 >
                   <span>طلب هذه الخدمة الآن</span>
                   <ArrowLeft className="size-3.5" />

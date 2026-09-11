@@ -167,11 +167,11 @@ ${budget}
         <div className="mx-auto max-w-2xl">
           <Reveal>
             <div className="text-center">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-accent/10 px-3 py-0.5 text-xs font-semibold text-accent">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-gradient-accent-subtle px-3 py-0.5 text-xs font-semibold text-accent">
                 <Sparkles className="size-3.5" /> نبدأ مباشرة
               </span>
-              <h2 className="mt-3 text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-foreground">
-                خلنا نبدأ بفكرتك
+              <h2 className="mt-3 text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight font-display">
+                <span className="text-gradient-heading">خلنا نبدأ بفكرتك</span>
               </h2>
               <p className="mt-2 text-xs sm:text-sm text-muted-foreground">
                 املأ التفاصيل وسنتواصل معك فورًا عبر WhatsApp لمناقشة الفكرة والبدء بالتنفيذ.
@@ -180,7 +180,7 @@ ${budget}
           </Reveal>
 
           <Reveal delay={0.06}>
-            <div className="mt-8 rounded-3xl glass-card glass-specular p-6 sm:p-8 shadow-xl">
+            <div className="mt-8 rounded-3xl glass-card glass-specular-eased p-6 sm:p-8 shadow-xl">
               {submitted ? (
                 <div className="py-6 text-center space-y-4">
                   <div className="mx-auto flex size-14 items-center justify-center rounded-full bg-accent/15 text-accent">
@@ -198,7 +198,7 @@ ${budget}
                       href={generatedUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-2 rounded-xl bg-primary px-7 py-3.5 text-sm font-bold text-primary-foreground shadow-md transition-all hover:opacity-90"
+                      className="inline-flex items-center gap-2 rounded-xl bg-gradient-accent-eased hover:bg-gradient-accent-hover px-7 py-3.5 text-sm font-bold text-accent-foreground shadow-glow shadow-accent/25 transition-all hover:shadow-[0_0_24px_rgba(6,182,212,0.45)]"
                     >
                       <MessageCircle className="size-4.5" />
                       فتح المحادثة في WhatsApp
@@ -332,7 +332,7 @@ ${budget}
                       value={idea}
                       onChange={(e) => setIdea(e.target.value)}
                       placeholder="اشرح فكرتك باختصار (مثال: متجر عطور، أو نظام لإدارة الحجوزات والمواعيد)..."
-                      className="w-full rounded-xl border border-border/80 bg-background px-3.5 py-2.5 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30 leading-relaxed"
+                      className="w-full rounded-xl border border-border/80 bg-background px-3.5 py-2.5 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground input-gradient-focus leading-relaxed"
                     />
                   </div>
 
@@ -381,7 +381,7 @@ ${budget}
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder="05XXXXXXXX"
-                        className="h-10 w-full rounded-lg border border-border/80 bg-background px-3 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30 text-left"
+                        className="h-10 w-full rounded-lg border border-border/80 bg-background px-3 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground input-gradient-focus text-left"
                         dir="ltr"
                       />
                     </div>
@@ -402,7 +402,7 @@ ${budget}
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="مثال: عبد الله"
-                        className="h-10 w-full rounded-lg border border-border/80 bg-background px-3 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30"
+                        className="h-10 w-full rounded-lg border border-border/80 bg-background px-3 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground input-gradient-focus"
                       />
                     </div>
                   </div>
@@ -412,7 +412,7 @@ ${budget}
                     <button
                       type="submit"
                       disabled={saving}
-                      className="w-full flex items-center justify-center gap-2 rounded-xl bg-accent py-3.5 text-sm font-bold text-accent-foreground shadow-md shadow-accent/20 transition-all hover:opacity-95 hover:shadow-[0_0_24px_rgba(6,182,212,0.4)] active:scale-[0.99] cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+                      className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-accent-eased hover:bg-gradient-accent-hover py-3.5 text-sm font-bold text-accent-foreground shadow-glow shadow-accent/25 transition-all hover:shadow-[0_0_26px_rgba(6,182,212,0.45)] active:scale-[0.99] cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                     >
                       {saving ? (
                         <>

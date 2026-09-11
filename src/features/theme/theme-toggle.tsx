@@ -50,6 +50,7 @@ export function ThemeToggle({ className }: { className?: string }) {
         strokeLinecap="round"
         strokeLinejoin="round"
         className="size-[18px]"
+        initial={false}
         animate={{
           rotate: isDark ? 40 : 0,
         }}
@@ -58,8 +59,11 @@ export function ThemeToggle({ className }: { className?: string }) {
         <mask id={maskId}>
           <rect x="0" y="0" width="100%" height="100%" fill="white" />
           <motion.circle
+            cx={isDark ? 16 : 28}
+            cy={isDark ? 6 : -4}
             r="8"
             fill="black"
+            initial={false}
             animate={{
               cx: isDark ? 16 : 28,
               cy: isDark ? 6 : -4,
@@ -72,9 +76,11 @@ export function ThemeToggle({ className }: { className?: string }) {
         <motion.circle
           cx="12"
           cy="12"
+          r={isDark ? 8.5 : 5}
           fill="currentColor"
           stroke="currentColor"
           mask={`url(#${maskId})`}
+          initial={false}
           animate={{
             r: isDark ? 8.5 : 5,
           }}
@@ -85,6 +91,7 @@ export function ThemeToggle({ className }: { className?: string }) {
         <motion.g
           stroke="currentColor"
           style={{ transformOrigin: "12px 12px" }}
+          initial={false}
           animate={{
             scale: isDark ? 0 : 1,
             opacity: isDark ? 0 : 1,

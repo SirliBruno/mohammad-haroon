@@ -41,7 +41,7 @@ export function Hero() {
             className="lg:col-span-6 text-center lg:text-right"
           >
             {/* Top Badge: 300 SAR Starter & Availability */}
-            <div className="inline-flex items-center gap-2 rounded-full glass-pill border border-accent/40 px-3.5 py-1 text-xs font-semibold text-accent shadow-xs">
+            <div className="inline-flex items-center gap-2 rounded-full glass-pill border border-accent/40 bg-gradient-accent-subtle px-3.5 py-1 text-xs font-semibold text-accent shadow-xs">
               <span className="size-2 rounded-full bg-accent animate-pulse" />
               <span>{t("home.hero.badge", `مشاريع تبدأ من ${site.startingPrice} · ${site.availabilityLabel}`)}</span>
             </div>
@@ -49,11 +49,11 @@ export function Hero() {
             {/* Main Headline */}
             <h1
               id="hero-heading"
-              className="mt-5 text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground text-balance leading-[1.25]"
+              className="mt-5 text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-balance leading-[1.25]"
             >
-              {t("home.hero.headline_start", "من فكرة في بالك")}
+              <span className="text-gradient-heading">{t("home.hero.headline_start", "من فكرة في بالك")}</span>
               <br />
-              {t("home.hero.headline_end", "إلى مشروع تقدر تستخدمه.")}
+              <span className="text-gradient-heading">{t("home.hero.headline_end", "إلى مشروع تقدر تستخدمه.")}</span>
             </h1>
 
             {/* Subtitle */}
@@ -69,7 +69,7 @@ export function Hero() {
               <button
                 type="button"
                 onClick={() => scrollToSection("contact-form")}
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-accent px-6 py-3 text-sm font-bold text-accent-foreground shadow-md shadow-accent/20 transition-all hover:opacity-95 hover:shadow-[0_0_24px_rgba(6,182,212,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent active:scale-[0.99] cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-accent-eased hover:bg-gradient-accent-hover px-6 py-3 text-sm font-bold text-accent-foreground shadow-glow shadow-accent/25 transition-all hover:shadow-[0_0_28px_rgba(6,182,212,0.5)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent active:scale-[0.99] cursor-pointer"
               >
                 {t("home.hero.cta_primary", "ابدأ مشروعك الآن")}
                 <ArrowLeft className="size-4" />

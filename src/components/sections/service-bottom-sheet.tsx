@@ -133,7 +133,7 @@ export function ServiceBottomSheet({ service, open, onClose, onOrder }: ServiceB
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
             transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-x-0 bottom-0 z-50 flex max-h-[85vh] flex-col rounded-t-[28px] border-t border-x border-border/80 bg-background/85 dark:bg-[#080c16]/90 shadow-2xl glass-specular overflow-hidden"
+            className="fixed inset-x-0 bottom-0 z-50 flex max-h-[85vh] flex-col rounded-t-[28px] border-t border-x border-border/80 bg-background/85 dark:bg-[#080c16]/90 shadow-2xl glass-specular-eased overflow-hidden"
             style={{
               backdropFilter: "blur(20px) saturate(180%)",
               WebkitBackdropFilter: "blur(20px) saturate(180%)",
@@ -177,7 +177,7 @@ export function ServiceBottomSheet({ service, open, onClose, onOrder }: ServiceB
                       </span>
                     )}
                     {service.badge && (
-                      <span className="rounded-full border border-accent/30 bg-accent/15 px-2 py-0.5 text-[11px] font-bold text-accent">
+                      <span className="rounded-full border border-accent/30 bg-gradient-accent-subtle px-2.5 py-0.5 text-[11px] font-bold text-accent">
                         {service.badge}
                       </span>
                     )}
@@ -312,7 +312,7 @@ export function ServiceBottomSheet({ service, open, onClose, onOrder }: ServiceB
                     }
                   }
                 }}
-                className="inline-flex min-h-[48px] h-12 w-full sm:flex-1 items-center justify-center gap-2 rounded-xl bg-accent text-accent-foreground px-5 text-xs sm:text-sm font-bold shadow-md hover:opacity-95 hover:shadow-lg transition-all cursor-pointer"
+                className="inline-flex min-h-[48px] h-12 w-full sm:flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-accent-eased hover:bg-gradient-accent-hover text-accent-foreground px-5 text-xs sm:text-sm font-bold shadow-glow shadow-accent/25 hover:shadow-[0_0_24px_rgba(6,182,212,0.45)] transition-all cursor-pointer"
               >
                 <span>طلب هذه الخدمة الآن</span>
                 <ArrowLeft className="size-4 shrink-0" />

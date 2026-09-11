@@ -30,9 +30,9 @@ export function Offer300() {
 
       <Container>
         <Reveal>
-          <div className="mx-auto max-w-4xl rounded-2xl border border-accent/30 bg-card p-6 sm:p-10 shadow-lg">
+          <div className="mx-auto max-w-4xl rounded-2xl border border-accent/30 bg-card/85 backdrop-blur-md glass-specular-eased p-6 sm:p-10 shadow-lg">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-accent/10 px-3 py-0.5 text-xs font-semibold text-accent">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-gradient-accent-subtle px-3 py-0.5 text-xs font-semibold text-accent">
                 <Sparkles className="size-3.5" /> {t("home.offer.badge", "عرض البداية السريعة")}
               </span>
               <span className="text-xs text-muted-foreground">تسعير شفاف وواضح قبل البدء</span>
@@ -40,8 +40,10 @@ export function Offer300() {
 
             <div className="mt-6 grid gap-8 lg:grid-cols-12 lg:items-center">
               <div className="lg:col-span-6">
-                <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-                  {t("home.offer.title", "ابدأ من 300 ريال")}
+                <h2 className="text-2xl sm:text-3xl font-bold tracking-tight font-display">
+                  <span className="text-gradient-heading">
+                    {t("home.offer.title", "ابدأ من 300 ريال")}
+                  </span>
                 </h2>
                 <p className="mt-3 text-xs sm:text-sm leading-relaxed text-foreground/80">
                   {t(
@@ -54,7 +56,7 @@ export function Offer300() {
                   <button
                     type="button"
                     onClick={scrollToContact}
-                    className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-xs sm:text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:opacity-90 cursor-pointer"
+                    className="inline-flex items-center gap-2 rounded-xl bg-gradient-accent-eased hover:bg-gradient-accent-hover px-6 py-3 text-xs sm:text-sm font-bold text-accent-foreground shadow-glow shadow-accent/25 transition-all hover:shadow-[0_0_22px_rgba(6,182,212,0.45)] cursor-pointer"
                   >
                     {t("home.offer.cta", "أرسل فكرتك لتحديد السعر")}
                     <ArrowLeft className="size-4" />

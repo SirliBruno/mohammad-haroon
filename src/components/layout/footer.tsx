@@ -108,7 +108,7 @@ export function Footer() {
             <p className="text-xs font-bold uppercase tracking-wider text-foreground">
               جاهزية العمل
             </p>
-            <div className="mt-4 rounded-xl glass-card glass-specular p-4 text-xs text-foreground/80 leading-relaxed">
+            <div className="mt-4 rounded-xl glass-card glass-specular-eased p-4 text-xs text-foreground/80 leading-relaxed">
               <p className="font-semibold text-foreground">🤝 سرعة في الرد والتنفيذ</p>
               <p className="mt-1 text-muted-foreground">
                 استقبل طلبات المشاريع والرد عليها عبر WhatsApp خلال أوقات العمل الرسمية.

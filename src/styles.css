@@ -1,5 +1,6 @@
 @import "tailwindcss" source(none);
 @source "../src";
+@config "../tailwind.config.js";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
@@ -240,7 +241,7 @@
 
   /* Vibrant Turquoise Accent Color Palette (WCAG AA Compliant) */
   --accent: #0d9488;
-  --accent-foreground: #ffffff;
+  --accent-foreground: #09090b;
   --turquoise-primary: #0d9488;
   --turquoise-hover: #0f766e;
   --turquoise-glow: #22d3ee;
@@ -282,6 +283,18 @@
   --glass-shadow-ambient: 0 8px 32px 0 rgba(31, 38, 135, 0.07), 0 2px 6px -1px rgba(9, 9, 11, 0.03);
   --glass-shadow-elevated: 0 16px 36px -8px rgba(31, 38, 135, 0.12), 0 6px 14px -4px rgba(9, 9, 11, 0.05);
   --glass-specular-grad: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.25) 45%, rgba(226, 232, 240, 0.35) 100%);
+
+  /* Multi-Stop Eased Gradient System (Light Mode — Better-Gradient Non-Linear Interpolation) */
+  --gradient-ambient: linear-gradient(180deg, #f8fafc 0%, rgba(248, 250, 252, 0.98) 8.5%, rgba(246, 249, 252, 0.94) 17%, rgba(244, 248, 253, 0.88) 25.5%, rgba(241, 246, 253, 0.80) 34%, rgba(239, 245, 254, 0.71) 42.5%, rgba(236, 244, 254, 0.61) 51%, rgba(234, 243, 254, 0.50) 60%, rgba(232, 242, 254, 0.38) 70%, rgba(235, 243, 255, 0.26) 80%, rgba(239, 246, 255, 0.50) 90%, #eff6ff 100%);
+  --gradient-ambient-mesh: radial-gradient(at 10% 10%, rgba(6, 182, 212, 0.16) 0%, rgba(6, 182, 212, 0.14) 12%, rgba(6, 182, 212, 0.10) 26%, rgba(6, 182, 212, 0.05) 42%, rgba(6, 182, 212, 0.02) 60%, transparent 75%), radial-gradient(at 90% 20%, rgba(20, 184, 166, 0.14) 0%, rgba(20, 184, 166, 0.12) 14%, rgba(20, 184, 166, 0.08) 30%, rgba(20, 184, 166, 0.03) 48%, transparent 70%), radial-gradient(at 50% 85%, rgba(14, 165, 233, 0.12) 0%, rgba(14, 165, 233, 0.09) 16%, rgba(14, 165, 233, 0.05) 35%, rgba(14, 165, 233, 0.02) 55%, transparent 75%);
+  --gradient-specular: linear-gradient(135deg, rgba(255, 255, 255, 0.90) 0%, rgba(255, 255, 255, 0.78) 12%, rgba(255, 255, 255, 0.58) 25%, rgba(255, 255, 255, 0.38) 39%, rgba(255, 255, 255, 0.22) 54%, rgba(255, 255, 255, 0.12) 70%, rgba(226, 232, 240, 0.20) 85%, rgba(226, 232, 240, 0.35) 100%);
+  --gradient-glass-card: linear-gradient(145deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.81) 14%, rgba(255, 255, 255, 0.76) 28%, rgba(255, 255, 255, 0.72) 44%, rgba(255, 255, 255, 0.69) 60%, rgba(248, 250, 252, 0.67) 76%, rgba(241, 245, 249, 0.65) 100%);
+  --gradient-accent-eased: linear-gradient(135deg, #0d9488 0%, #0da094 10%, #0cae9f 22%, #0abda9 36%, #08cbb3 50%, #06d6bd 64%, #0ee0c8 78%, #22d3ee 100%);
+  --gradient-accent-hover: linear-gradient(135deg, #0f766e 0%, #0d847c 10%, #0b938a 22%, #09a39a 36%, #08b4aa 50%, #07c5bb 64%, #06d6cd 78%, #06b6d4 100%);
+  --gradient-accent-subtle: linear-gradient(135deg, rgba(13, 148, 136, 0.16) 0%, rgba(13, 148, 136, 0.13) 14%, rgba(13, 148, 136, 0.09) 28%, rgba(6, 182, 212, 0.06) 45%, rgba(6, 182, 212, 0.04) 62%, rgba(6, 182, 212, 0.02) 80%, rgba(6, 182, 212, 0.01) 100%);
+  --gradient-accent-pill: linear-gradient(135deg, rgba(13, 148, 136, 0.95) 0%, rgba(12, 160, 148, 0.95) 15%, rgba(10, 175, 162, 0.95) 32%, rgba(8, 192, 178, 0.95) 50%, rgba(6, 208, 193, 0.95) 68%, rgba(6, 182, 212, 0.95) 85%, rgba(34, 211, 238, 0.95) 100%);
+  --gradient-heading: linear-gradient(180deg, #09090b 0%, #11141a 16%, #19202a 34%, #212c3b 52%, #29384b 70%, #304157 85%, #334155 100%);
+  --gradient-accent-text: linear-gradient(135deg, #0f766e 0%, #0d847c 15%, #0c948b 32%, #0aa49b 50%, #07aeb2 68%, #0369a1 85%, #075985 100%);
 }
 
 .dark {
@@ -350,6 +363,18 @@
   --glass-shadow-ambient: 0 8px 32px 0 rgba(0, 0, 0, 0.45), 0 2px 8px -2px rgba(0, 0, 0, 0.25);
   --glass-shadow-elevated: 0 24px 48px -12px rgba(0, 0, 0, 0.65), 0 10px 20px -4px rgba(0, 0, 0, 0.40);
   --glass-specular-grad: linear-gradient(135deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.05) 45%, rgba(255, 255, 255, 0.02) 100%);
+
+  /* Multi-Stop Eased Gradient System (Dark Mode — Better-Gradient Non-Linear Interpolation) */
+  --gradient-ambient: linear-gradient(180deg, #02040a 0%, rgba(2, 4, 10, 0.98) 8.5%, rgba(1, 3, 8, 0.94) 17%, rgba(1, 2, 6, 0.88) 25.5%, rgba(0, 1, 4, 0.80) 34%, rgba(0, 0, 0, 0.71) 42.5%, rgba(1, 2, 7, 0.61) 51%, rgba(2, 4, 11, 0.50) 60%, rgba(3, 5, 14, 0.62) 70%, rgba(4, 7, 16, 0.78) 80%, rgba(5, 8, 17, 0.92) 90%, #050811 100%);
+  --gradient-ambient-mesh: radial-gradient(at 10% 10%, rgba(6, 182, 212, 0.22) 0%, rgba(6, 182, 212, 0.18) 12%, rgba(6, 182, 212, 0.12) 26%, rgba(6, 182, 212, 0.06) 42%, rgba(6, 182, 212, 0.02) 60%, transparent 75%), radial-gradient(at 90% 20%, rgba(20, 184, 166, 0.18) 0%, rgba(20, 184, 166, 0.14) 14%, rgba(20, 184, 166, 0.09) 30%, rgba(20, 184, 166, 0.03) 48%, transparent 70%), radial-gradient(at 50% 85%, rgba(14, 165, 233, 0.16) 0%, rgba(14, 165, 233, 0.11) 16%, rgba(14, 165, 233, 0.06) 35%, rgba(14, 165, 233, 0.02) 55%, transparent 75%);
+  --gradient-specular: linear-gradient(135deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0.18) 12%, rgba(255, 255, 255, 0.11) 25%, rgba(255, 255, 255, 0.06) 39%, rgba(255, 255, 255, 0.03) 54%, rgba(255, 255, 255, 0.01) 70%, rgba(255, 255, 255, 0.03) 85%, rgba(255, 255, 255, 0.05) 100%);
+  --gradient-glass-card: linear-gradient(145deg, rgba(30, 41, 59, 0.65) 0%, rgba(26, 36, 53, 0.68) 14%, rgba(21, 30, 46, 0.71) 28%, rgba(18, 26, 41, 0.73) 44%, rgba(15, 23, 42, 0.75) 60%, rgba(12, 19, 36, 0.77) 76%, rgba(10, 16, 31, 0.80) 100%);
+  --gradient-accent-eased: linear-gradient(135deg, #14b8a6 0%, #16c2b0 10%, #19cdba 22%, #1dd9c4 36%, #22e3ce 50%, #1ae8d8 64%, #12ede3 78%, #22d3ee 100%);
+  --gradient-accent-hover: linear-gradient(135deg, #2dd4bf 0%, #29ddc8 10%, #25e5d1 22%, #22eedb 36%, #25f4e6 50%, #2df7f0 64%, #35f5fa 78%, #38bdf8 100%);
+  --gradient-accent-subtle: linear-gradient(135deg, rgba(20, 184, 166, 0.22) 0%, rgba(20, 184, 166, 0.17) 14%, rgba(20, 184, 166, 0.12) 28%, rgba(6, 182, 212, 0.08) 45%, rgba(6, 182, 212, 0.05) 62%, rgba(6, 182, 212, 0.02) 80%, rgba(6, 182, 212, 0.01) 100%);
+  --gradient-accent-pill: linear-gradient(135deg, rgba(20, 184, 166, 0.95) 0%, rgba(22, 194, 176, 0.95) 15%, rgba(25, 205, 186, 0.95) 32%, rgba(29, 217, 196, 0.95) 50%, rgba(34, 227, 206, 0.95) 68%, rgba(26, 232, 216, 0.95) 85%, rgba(34, 211, 238, 0.95) 100%);
+  --gradient-heading: linear-gradient(180deg, #ffffff 0%, #f4f6f8 15%, #e5e9ee 32%, #d2d8e0 50%, #bcc4cf 68%, #a7b2bf 85%, #94a3b8 100%);
+  --gradient-accent-text: linear-gradient(135deg, #2dd4bf 0%, #2ee0ce 15%, #30ebdd 32%, #33f3eb 50%, #35eef4 68%, #36daf7 85%, #38bdf8 100%);
 }
 
 @layer base {
@@ -638,7 +663,9 @@ body,
 .glass-card,
 .glass-modal,
 .glass-popover,
-.glass-pill {
+.glass-pill,
+.glass-specular-eased,
+.input-gradient-focus {
   transition: background-color 300ms cubic-bezier(0.4, 0, 0.2, 1),
               border-color 300ms cubic-bezier(0.4, 0, 0.2, 1),
               box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1),
@@ -652,7 +679,9 @@ body,
   .glass-card,
   .glass-modal,
   .glass-popover,
-  .glass-pill {
+  .glass-pill,
+  .glass-specular-eased,
+  .input-gradient-focus {
     transition: none !important;
   }
 }
@@ -878,6 +907,181 @@ html:not(.dark) .orb-luminous-white {
     transform: none !important;
   }
 }
+
+/* ==========================================================================
+   Multi-Stop Eased Gradient Utilities (Better-Gradient Easing Curves)
+   Hardware Accelerated: transform: translateZ(0), contain: paint
+   Theme Transition: 300ms cubic-bezier(0.4, 0, 0.2, 1)
+   ========================================================================== */
+
+/* 1. Background Gradient Utilities */
+@utility bg-gradient-accent-eased {
+  background-image: var(--gradient-accent-eased);
+  transform: translateZ(0);
+  contain: paint;
+}
+
+@utility bg-gradient-accent-hover {
+  background-image: var(--gradient-accent-hover);
+}
+
+@utility bg-gradient-accent-subtle {
+  background-image: var(--gradient-accent-subtle);
+}
+
+/* 2. Text Gradient Utilities */
+@utility text-gradient-heading {
+  background-image: var(--gradient-heading);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  display: inline-block;
+}
+
+@utility text-gradient-accent {
+  background-image: var(--gradient-accent-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  display: inline-block;
+}
+
+/* 3. Glass Specular Eased Utility */
+@utility glass-specular-eased {
+  position: relative;
+  transform: translateZ(0);
+  contain: paint;
+}
+
+/* 4. Input Gradient Focus Utility */
+@utility input-gradient-focus {
+  transition: border-color 300ms cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1),
+              outline 300ms cubic-bezier(0.4, 0, 0.2, 1),
+              background 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+  transform: translateZ(0);
+}
+
+/* Direct CSS Classes for Complete Interoperability & Pseudo-elements */
+.bg-gradient-accent-eased {
+  background-image: var(--gradient-accent-eased);
+  transform: translateZ(0);
+  contain: paint;
+}
+
+.hover\:bg-gradient-accent-hover:hover,
+[hover\:bg-gradient-accent-hover]:hover {
+  background-image: var(--gradient-accent-hover);
+}
+
+.bg-gradient-accent-subtle {
+  background-image: var(--gradient-accent-subtle);
+}
+
+.text-gradient-heading {
+  background-image: var(--gradient-heading);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  display: inline-block;
+}
+
+.text-gradient-accent {
+  background-image: var(--gradient-accent-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  display: inline-block;
+}
+
+/* Specular border sheen with non-linear multi-stop easing */
+.glass-specular-eased {
+  position: relative;
+  transform: translateZ(0);
+  contain: paint;
+}
+
+.glass-specular-eased.fixed,
+.fixed.glass-specular-eased {
+  position: fixed !important;
+}
+
+.glass-specular-eased.absolute,
+.absolute.glass-specular-eased {
+  position: absolute !important;
+}
+
+.glass-specular-eased::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--gradient-specular);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+  transform: translateZ(0);
+  transition: opacity 300ms cubic-bezier(0.4, 0, 0.2, 1), background 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Interactive Hover Perimeter Illumination */
+.glass-card.glass-specular-eased:hover::before,
+.group:hover .glass-card.glass-specular-eased::before {
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.6) 0%, rgba(13, 148, 136, 0.35) 45%, rgba(226, 232, 240, 0.3) 100%);
+}
+
+.dark .glass-card.glass-specular-eased:hover::before,
+.dark .group:hover .glass-card.glass-specular-eased::before {
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.85) 0%, rgba(20, 184, 166, 0.45) 45%, rgba(255, 255, 255, 0.08) 100%);
+}
+
+/* Form controls smooth gradient focus border */
+.input-gradient-focus {
+  transition: border-color 300ms cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1),
+              outline 300ms cubic-bezier(0.4, 0, 0.2, 1),
+              background 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+  transform: translateZ(0);
+}
+
+.input-gradient-focus:focus,
+.input-gradient-focus:focus-visible {
+  border-color: transparent !important;
+  background-image: linear-gradient(var(--card), var(--card)), var(--gradient-accent-eased) !important;
+  background-origin: padding-box, border-box !important;
+  background-clip: padding-box, border-box !important;
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--accent) 35%, transparent),
+              0 0 16px -2px color-mix(in oklab, var(--accent) 25%, transparent) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-gradient-accent-eased,
+  .hover\:bg-gradient-accent-hover,
+  .glass-specular-eased,
+  .glass-specular-eased::before,
+  .input-gradient-focus {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .input-gradient-focus:focus,
+  .input-gradient-focus:focus-visible {
+    background-image: none !important;
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 2px var(--accent) !important;
+  }
+}
+
 
 
 
