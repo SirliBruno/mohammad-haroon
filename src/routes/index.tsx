@@ -15,7 +15,17 @@ import { ProjectRequestForm } from "@/components/sections/project-request-form";
 import { FaqSection } from "@/components/sections/faq-section";
 import { FinalCTA } from "@/components/sections/final-cta";
 
+import { listHeroProjectsPublic } from "@/lib/cms/hero.functions";
+
 export const Route = createFileRoute("/")({
+  loader: async () => {
+    try {
+      const heroProjects = await listHeroProjectsPublic();
+      return { heroProjects: heroProjects ?? [] };
+    } catch {
+      return { heroProjects: [] };
+    }
+  },
   errorComponent: ({ reset }) => <RouteErrorBoundary reset={reset} />,
   notFoundComponent: () => <RouteNotFoundBoundary />,
   head: () => ({

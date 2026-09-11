@@ -14,7 +14,7 @@
  * Motion is intentionally quiet: soft mouse parallax + gentle float only.
  */
 import { useEffect, useMemo, useRef, useState, type ReactElement } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link, useMatch } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import {
@@ -60,113 +60,129 @@ type FeaturedProject = {
 
 const FEATURED: FeaturedProject[] = [
   {
-    slug: "northwind-analytics",
-    name: "Northwind",
-    host: "northwind.app",
-    category: "تصميم واجهات",
-    year: 2025,
-    tech: "Next.js",
+    slug: "rent-right",
+    name: "Rent Right",
+    host: "rent-right-xz.lovable.app",
+    category: "مشروع تجاري",
+    year: 2026,
+    tech: "React & TypeScript",
     status: "مباشر",
     accent: "emerald",
-    Website: DashboardUI,
-    Mobile: MobileAppUI,
+    Website: (props: { className?: string }) => (
+      <img
+        src="https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/hero/b99b5b71-7064-47ad-bd83-eb20285fb4ac.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9oZXJvL2I5OWI1YjcxLTcwNjQtNDdhZC1iZDgzLWViMjAyODVmYjRhYy5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg0NjA3Njc0LCJleHAiOjIwOTk5Njc2NzR9.awCY8t8yumwATa8XnCiu5MTM3eYdsSApl1fM0dBClRk"
+        alt="Rent Right"
+        className={cn("size-full object-cover", props.className)}
+        loading="eager"
+      />
+    ),
+    Mobile: (props: { className?: string }) => (
+      <img
+        src="https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/hero/ed60788c-fb0b-4850-a78d-cd1a67e7565a.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9oZXJvL2VkNjA3ODhjLWZiMGItNDg1MC1hNzhkLWNkMWE2N2U3NTY1YS5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg0NjA3Njc1LCJleHAiOjIwOTk5Njc2NzV9.GytyytGSUjOW_eZUOi76X8Qg9qF6yxS8INEAmmGDu0Y"
+        alt="Rent Right Mobile"
+        className={cn("size-full object-cover", props.className)}
+        loading="eager"
+      />
+    ),
     code: [
-      "export function Overview({ range }: Props) {",
-      "  const { data } = useMetrics(range);",
+      "export function RentItem({ item }: Props) {",
+      "  const { book, isAvailable } = useRental(item.id);",
       "",
       "  return (",
-      "    <Card className=\"p-6\">",
-      "      <Header title=\"MRR\" delta={data.delta} />",
-      "      <TrendChart series={data.mrr} />",
-      "    </Card>",
+      "    <RentalCard item={item} status={isAvailable}>",
+      "      <PriceTag daily={item.dailyRate} />",
+      "      <BookingAction onBook={book} />",
+      "    </RentalCard>",
       "  );",
       "}",
     ],
     figma: {
-      title: "Northwind · Reports v3",
-      frames: ["Overview", "Cohorts", "Empty", "Mobile"],
+      title: "Rent Right · Platform v1",
+      frames: ["Explore", "Item Detail", "Checkout", "Mobile"],
     },
   },
   {
-    slug: "haven-storefront",
-    name: "Haven",
-    host: "haven.co",
-    category: "تجارة إلكترونية",
-    year: 2025,
-    tech: "Shopify",
+    slug: "speakup",
+    name: "SpeakUp",
+    host: "speak-up-en.lovable.app",
+    category: "مشروع SaaS",
+    year: 2026,
+    tech: "React & AI Voice",
+    status: "مباشر",
+    accent: "emerald",
+    Website: (props: { className?: string }) => (
+      <img
+        src="https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/hero/eb057ed3-7277-4b37-97b6-82c1bf86c867.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9oZXJvL2ViMDU3ZWQzLTcyNzctNGIzNy05N2I2LTgyYzFiZjg2Yzg2Ny5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg0NjA2NDE0LCJleHAiOjIwOTk5NjY0MTR9.HHmIGX24p8WeaR2CIDqtfDdES3QUw8AqfTVDghQvX_c"
+        alt="SpeakUp"
+        className={cn("size-full object-cover", props.className)}
+        loading="eager"
+      />
+    ),
+    Mobile: (props: { className?: string }) => (
+      <img
+        src="https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/hero/26dbb069-482f-4247-8dea-2a610a214707.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9oZXJvLzI2ZGJiMDY5LTQ4MmYtNDI0Ny04ZGVhLTJhNjEwYTIxNDcwNy5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg0NjA2NDE3LCJleHAiOjIwOTk5NjY0MTd9.uXUGwt2NepzPr_KkYHWl5LE9_97mN1007Z6ebqRqj3I"
+        alt="SpeakUp Mobile"
+        className={cn("size-full object-cover", props.className)}
+        loading="eager"
+      />
+    ),
+    code: [
+      "export function DailyTopic({ prompt }: Props) {",
+      "  const { record, duration, isSpeaking } = useVoiceAI();",
+      "",
+      "  return (",
+      "    <SpeakingRoulette challenge={prompt.topic}>",
+      "      <VoiceRecorder onRecord={record} active={isSpeaking} />",
+      "      <FeedbackScore metrics={duration} />",
+      "    </SpeakingRoulette>",
+      "  );",
+      "}",
+    ],
+    figma: {
+      title: "SpeakUp · SaaS Platform",
+      frames: ["Roulette", "Practice", "Analytics", "Habits"],
+    },
+  },
+  {
+    slug: "fitness-camp-management",
+    name: "معسكر اللياقة",
+    host: "fitness-camp.app",
+    category: "أنظمة",
+    year: 2026,
+    tech: "Next.js & Supabase",
     status: "مباشر",
     accent: "amber",
-    Website: StoreUI,
-    Mobile: MobileAppUI,
+    Website: (props: { className?: string }) => (
+      <img
+        src="https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/hero/c0852fc3-e570-48c9-80b4-d71b95ba89fd.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9oZXJvL2MwODUyZmMzLWU1NzAtNDhjOS04MGI0LWQ3MWI5NWJhODlmZC5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg0NTIwMjAxLCJleHAiOjIwOTk4ODAyMDF9.943-AUrSxB5PbWWQXJ7y5FPz261Q125Ce0OwKDST29U"
+        alt="معسكر اللياقة"
+        className={cn("size-full object-cover", props.className)}
+        loading="eager"
+      />
+    ),
+    Mobile: (props: { className?: string }) => (
+      <img
+        src="https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/hero/4f64609a-3f79-4494-a022-c9ea2e799c95.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9oZXJvLzRmNjQ2MDlhLTNmNzktNDQ5NC1hMDIyLWM5ZWEyZTc5OWM5NS5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg0NTIxMzI4LCJleHAiOjIwOTk4ODEzMjh9.f__ihWtFO6f-B1PIYEwYaUI-yEnNzBY1fwQ8TzjyyD8"
+        alt="معسكر اللياقة Mobile"
+        className={cn("size-full object-cover", props.className)}
+        loading="eager"
+      />
+    ),
     code: [
-      "export function ProductCard({ product }: Props) {",
-      "  return (",
-      "    <article className=\"group\">",
-      "      <Image src={product.cover} alt={product.name} />",
-      "      <h3 className=\"mt-3 text-sm\">{product.name}</h3>",
-      "      <p className=\"text-xs text-muted\">${product.price}</p>",
-      "    </article>",
-      "  );",
-      "}",
-    ],
-    figma: {
-      title: "Haven · Storefront v2",
-      frames: ["Home", "PDP", "Cart", "Checkout"],
-    },
-  },
-  {
-    slug: "atelier-cms",
-    name: "Atelier",
-    host: "atelier.studio",
-    category: "مواقع إلكترونية",
-    year: 2024,
-    tech: "React",
-    status: "مباشر",
-    accent: "sky",
-    Website: EditorUI,
-    Mobile: MobileAppUI,
-    code: [
-      "export function Editor({ doc }: Props) {",
-      "  const [blocks, setBlocks] = useBlocks(doc);",
+      "export function CampRoster({ campId }: Props) {",
+      "  const { trainees, checkIn } = useCampManagement(campId);",
       "",
       "  return (",
-      "    <main className=\"mx-auto max-w-2xl\">",
-      "      <Toolbar onInsert={setBlocks} />",
-      "      <BlockList value={blocks} />",
-      "    </main>",
+      "    <RosterTable trainees={trainees}>",
+      "      <AttendanceTracker onCheckIn={checkIn} />",
+      "      <PerformanceMetrics summary={trainees.stats} />",
+      "    </RosterTable>",
       "  );",
       "}",
     ],
     figma: {
-      title: "Atelier · Editor v1.4",
-      frames: ["Canvas", "Blocks", "Preview", "Publish"],
-    },
-  },
-  {
-    slug: "lumen-payments",
-    name: "Lumen",
-    host: "lumen.finance",
-    category: "مواقع إلكترونية",
-    year: 2024,
-    tech: "TypeScript",
-    status: "قيد التطوير",
-    accent: "violet",
-    Website: DashboardUI,
-    Mobile: MobileAppUI,
-    code: [
-      "export async function createCharge(input: ChargeInput) {",
-      "  const session = await auth();",
-      "  return db.charge.create({",
-      "    data: {",
-      "      amount: input.amount,",
-      "      merchantId: session.merchantId,",
-      "    },",
-      "  });",
-      "}",
-    ],
-    figma: {
-      title: "Lumen · Console v0.9",
-      frames: ["Ledger", "Payouts", "API keys", "Logs"],
+      title: "Fitness Camp · Dashboard",
+      frames: ["Trainees", "Attendance", "Billing", "Reports"],
     },
   },
 ];
@@ -430,16 +446,21 @@ export function HeroWorkspace() {
   const canvasRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
 
+  const match = useMatch({ from: "/", shouldThrow: false });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const initialHero = (match as any)?.loaderData?.heroProjects;
+
   const fetchHero = useServerFn(listHeroProjectsPublic);
   const { data: dbHero } = useQuery({
     queryKey: ["hero-projects-public"],
     queryFn: () => fetchHero(),
+    initialData: initialHero && initialHero.length > 0 ? initialHero : undefined,
     staleTime: 60_000,
   });
 
   const projects: FeaturedProject[] = useMemo(() => {
     if (!dbHero || dbHero.length === 0) return FEATURED;
-    return dbHero.map((r, i): FeaturedProject => {
+    return (dbHero as Array<any>).map((r: any, i: number): FeaturedProject => {
       const fallback = FEATURED[i % FEATURED.length];
       const Cover = (props: { className?: string }) =>
         r.cover_url ? (
