@@ -469,9 +469,9 @@ export function WhatIBuild() {
         </div>
 
         {/* 3a. Mobile-First Glanceable Swipe-Snap Cards (Mobile Only) */}
-        <div className="mt-8 sm:hidden">
+        <div className="mt-9 mb-14 sm:hidden">
           {/* Scroll Hint & Services Count */}
-          <div className="flex items-center justify-between px-1 mb-3 text-xs text-muted-foreground">
+          <div className="flex items-center justify-between px-1 pt-3 mb-6 text-xs text-muted-foreground">
             <span className="inline-flex items-center gap-1.5 font-medium">
               <span className="size-1.5 rounded-full bg-accent animate-pulse" />
               <span>{filteredServices.length} خدمات متوفرة</span>
@@ -484,7 +484,7 @@ export function WhatIBuild() {
 
           {/* Swipe-Snap Track */}
           <div
-            className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-4 px-4 no-scrollbar touch-pan-x"
+            className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-8 -mx-4 px-4 no-scrollbar touch-pan-x"
             style={{ scrollSnapType: "x mandatory" }}
           >
             {filteredServices.map((svc) => {
