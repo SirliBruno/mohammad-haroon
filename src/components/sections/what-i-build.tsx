@@ -465,8 +465,8 @@ export function WhatIBuild() {
           })}
         </div>
 
-        {/* 3. Services 12-Grid */}
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+        {/* 3. Services Adaptive Grid (1 col mobile, 2 cols tablet, 3-4 cols desktop) */}
+        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6">
           <AnimatePresence mode="popLayout">
             {filteredServices.map((svc, idx) => {
               const isFeatured = svc.featured;
@@ -479,21 +479,26 @@ export function WhatIBuild() {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.98 }}
                   transition={{ duration: 0.25, delay: idx * 0.03 }}
-                  className={`group relative flex flex-col justify-between rounded-2xl p-6 sm:p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${
+                  className={cn(
+                    "group relative flex flex-col justify-between rounded-2xl p-5 sm:p-6",
+                    "glass-card glass-specular",
+                    "transition-all duration-300 ease-out",
+                    "hover:-translate-y-1.5 hover:border-accent/60 hover:shadow-[0_12px_36px_rgba(6,182,212,0.18)]",
+                    "active:scale-[0.99]",
                     isFeatured
-                      ? "border-2 border-accent/60 bg-gradient-to-br from-accent/[0.07] via-card to-card shadow-lg shadow-accent/5 hover:border-accent"
-                      : "border border-border/70 bg-card/90 hover:border-accent/50 dark:bg-card/70"
-                  }`}
+                      ? "border-2 border-accent/70 shadow-lg shadow-accent/10"
+                      : "border border-border/70",
+                  )}
                 >
                   <div>
                     {/* Top Row: Number, Icon, and Optional Badge */}
                     <div className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-3">
                         <div
-                          className={`flex size-10 items-center justify-center rounded-xl transition-colors duration-300 ${
+                          className={`flex size-11 items-center justify-center rounded-xl transition-all duration-300 ${
                             isFeatured
-                              ? "bg-accent text-accent-foreground shadow-sm"
-                              : "bg-accent/10 text-accent group-hover:bg-accent group-hover:text-accent-foreground"
+                              ? "bg-accent text-accent-foreground shadow-md shadow-accent/20"
+                              : "bg-accent/10 text-accent group-hover:bg-accent group-hover:text-accent-foreground group-hover:shadow-sm"
                           }`}
                         >
                           <Icons8Icon id={svc.iconId} className="size-5" alt={svc.title} />
@@ -503,52 +508,70 @@ export function WhatIBuild() {
                         </span>
                       </div>
 
-                      {svc.badge && (
+                      {svc.badge ? (
                         <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-accent/15 px-2.5 py-0.5 text-[11px] font-bold text-accent">
                           <span className="size-1.5 rounded-full bg-accent animate-pulse" />
                           {svc.badge}
+                        </span>
+                      ) : (
+                        <span className="text-[11px] font-medium text-muted-foreground/80 rounded-md border border-border/60 bg-muted/40 px-2 py-0.5">
+                          {svc.categoryLabel}
                         </span>
                       )}
                     </div>
 
                     {/* Title */}
-                    <h3 className="mt-5 text-lg sm:text-xl font-bold text-foreground leading-snug font-sans group-hover:text-accent transition-colors">
+                    <h3 className="mt-4 text-base sm:text-lg font-bold text-foreground leading-snug font-sans group-hover:text-accent transition-colors">
                       {svc.title}
                     </h3>
 
                     {/* Short Description */}
-                    <p className="mt-2.5 text-xs sm:text-sm text-foreground/80 leading-relaxed">
+                    <p className="mt-2 text-xs sm:text-sm text-foreground/80 leading-relaxed">
                       {svc.description}
                     </p>
 
+                    {/* Key Benefits Checklist */}
+                    {svc.deliverables && svc.deliverables.length > 0 && (
+                      <ul className="mt-3.5 space-y-1.5 border-t border-border/40 pt-3 text-xs text-foreground/85">
+                        {svc.deliverables.slice(0, 2).map((item) => (
+                          <li key={item} className="flex items-start gap-1.5">
+                            <CheckCircle2 className="size-3.5 text-accent shrink-0 mt-0.5" />
+                            <span className="line-clamp-1 leading-snug">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+
                     {/* Example Box */}
-                    <div className="mt-4 rounded-xl border border-border/50 bg-muted/50 p-3 text-xs leading-relaxed text-muted-foreground">
+                    <div className="mt-3 rounded-xl border border-border/50 bg-muted/40 p-2.5 text-[11.5px] leading-relaxed text-muted-foreground">
                       <span className="font-bold text-foreground inline-block ml-1">مثال:</span>
-                      <span>{svc.example}</span>
+                      <span className="line-clamp-2">{svc.example}</span>
                     </div>
                   </div>
 
                   {/* Card Bottom CTA */}
-                  <div className="mt-6 pt-4 border-t border-border/40 flex items-center justify-between gap-3">
+                  <div className="mt-5 pt-3.5 border-t border-border/40 flex items-center justify-between gap-2">
                     <button
                       type="button"
                       onClick={() => setSelectedService(svc)}
-                      className="inline-flex items-center gap-1.5 text-xs font-bold text-accent transition-colors hover:underline cursor-pointer"
+                      className="inline-flex items-center gap-1 text-xs font-bold text-accent transition-colors hover:underline cursor-pointer"
                     >
-                      <span>تفاصيل الخدمة</span>
+                      <span>التفاصيل</span>
                       <ArrowLeft className="size-3.5 transition-transform duration-300 group-hover:-translate-x-1" />
                     </button>
 
                     <button
                       type="button"
                       onClick={() => triggerOrderService(svc)}
-                      className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer ${
+                      className={cn(
+                        "inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer",
+                        "active:scale-95",
                         isFeatured
-                          ? "bg-accent text-accent-foreground hover:opacity-90 shadow-sm"
-                          : "border border-border/80 bg-background text-foreground hover:bg-accent hover:text-accent-foreground hover:border-accent"
-                      }`}
+                          ? "bg-accent text-accent-foreground hover:opacity-95 shadow-sm shadow-accent/20"
+                          : "border border-accent/40 bg-accent/10 text-accent hover:bg-accent hover:text-accent-foreground hover:shadow-xs",
+                      )}
                     >
-                      <span>{isFeatured ? "احكِ لي عن فكرتك →" : "أريد هذا النوع"}</span>
+                      <span>{isFeatured ? "احكِ لي عن فكرتك →" : "طلب الخدمة"}</span>
                     </button>
                   </div>
                 </motion.article>

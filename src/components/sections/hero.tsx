@@ -41,7 +41,7 @@ export function Hero() {
             className="lg:col-span-6 text-center lg:text-right"
           >
             {/* Top Badge: 300 SAR Starter & Availability */}
-            <div className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-3.5 py-1 text-xs font-semibold text-accent shadow-2xs">
+            <div className="inline-flex items-center gap-2 rounded-full glass-pill border border-accent/40 px-3.5 py-1 text-xs font-semibold text-accent shadow-xs">
               <span className="size-2 rounded-full bg-accent animate-pulse" />
               <span>{t("home.hero.badge", `مشاريع تبدأ من ${site.startingPrice} · ${site.availabilityLabel}`)}</span>
             </div>
@@ -69,7 +69,7 @@ export function Hero() {
               <button
                 type="button"
                 onClick={() => scrollToSection("contact-form")}
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground shadow-md transition-all hover:opacity-95 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.99] cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-accent px-6 py-3 text-sm font-bold text-accent-foreground shadow-md shadow-accent/20 transition-all hover:opacity-95 hover:shadow-[0_0_24px_rgba(6,182,212,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent active:scale-[0.99] cursor-pointer"
               >
                 {t("home.hero.cta_primary", "ابدأ مشروعك الآن")}
                 <ArrowLeft className="size-4" />
@@ -78,7 +78,7 @@ export function Hero() {
               <button
                 type="button"
                 onClick={() => scrollToSection("work")}
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-background px-5 py-3 text-sm font-medium text-foreground transition-all hover:bg-muted hover:border-foreground/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 rounded-xl glass-pill px-5 py-3 text-sm font-medium text-foreground transition-all hover:border-accent/50 hover:shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent cursor-pointer"
               >
                 {t("home.hero.cta_secondary", "شاهد أعمالي")}
                 <ArrowUpRight className="size-4 text-muted-foreground" />

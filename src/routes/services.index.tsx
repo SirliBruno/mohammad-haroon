@@ -83,10 +83,10 @@ function ServicesIndex() {
         <div className="mt-10">
           <Grid cols={{ base: 1, md: 2, lg: 4 }} gap="md">
             {serviceProcess.map((p) => (
-              <div key={p.step} className="rounded-2xl border border-border/60 bg-card p-6">
-                <p className="text-xs font-medium tracking-widest text-muted-foreground" dir="ltr">{p.step}</p>
+              <div key={p.step} className="rounded-2xl glass-card glass-specular p-6">
+                <p className="text-xs font-mono font-bold tracking-widest text-accent" dir="ltr">{p.step}</p>
                 <h3 className="mt-3 text-base font-semibold tracking-tight">{p.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{p.description}</p>
+                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{p.description}</p>
               </div>
             ))}
           </Grid>

@@ -191,7 +191,14 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="system">
-        <div className="flex min-h-dvh flex-col">
+        <div className="relative flex min-h-dvh flex-col">
+          {/* Ambient Base Canvas & Layered Glow Orbs */}
+          <div aria-hidden="true" className="ambient-canvas">
+            <div className="ambient-orb-1" />
+            <div className="ambient-orb-2" />
+            <div className="ambient-orb-3" />
+          </div>
+
           <SmoothScroll />
           <AnalyticsTracker />
           <ScrollProgress />

@@ -180,7 +180,7 @@ ${budget}
           </Reveal>
 
           <Reveal delay={0.06}>
-            <div className="mt-8 rounded-2xl border border-border/80 bg-card p-6 sm:p-8 shadow-lg">
+            <div className="mt-8 rounded-3xl glass-card glass-specular p-6 sm:p-8 shadow-xl">
               {submitted ? (
                 <div className="py-6 text-center space-y-4">
                   <div className="mx-auto flex size-14 items-center justify-center rounded-full bg-accent/15 text-accent">
@@ -412,7 +412,7 @@ ${budget}
                     <button
                       type="submit"
                       disabled={saving}
-                      className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary py-3.5 text-sm font-bold text-primary-foreground shadow-md transition-all hover:opacity-90 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+                      className="w-full flex items-center justify-center gap-2 rounded-xl bg-accent py-3.5 text-sm font-bold text-accent-foreground shadow-md shadow-accent/20 transition-all hover:opacity-95 hover:shadow-[0_0_24px_rgba(6,182,212,0.4)] active:scale-[0.99] cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                     >
                       {saving ? (
                         <>
