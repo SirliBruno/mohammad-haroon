@@ -22,6 +22,7 @@ import { ScrollToTop } from "@/components/layout/scroll-to-top";
 import { SmoothScroll } from "@/components/layout/smooth-scroll";
 import { AnalyticsTracker } from "@/components/analytics-tracker";
 import { Toaster } from "sonner";
+import { AmbientGradientMesh } from "@/components/layout/ambient-gradient-mesh";
 
 const organizationJsonLd = {
   "@context": "https://schema.org",
@@ -192,12 +193,8 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="system">
         <div className="relative flex min-h-dvh flex-col">
-          {/* Ambient Base Canvas & Layered Glow Orbs */}
-          <div aria-hidden="true" className="ambient-canvas">
-            <div className="ambient-orb-1" />
-            <div className="ambient-orb-2" />
-            <div className="ambient-orb-3" />
-          </div>
+          {/* Interactive Scroll-Driven Dark Canvas with Organic Gradient Mesh */}
+          <AmbientGradientMesh />
 
           <SmoothScroll />
           <AnalyticsTracker />

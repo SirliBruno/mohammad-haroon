@@ -285,15 +285,15 @@
 }
 
 .dark {
-  /* Deep Obsidian / Slate Canvas */
-  --background: #0b1120;
-  --bg-gradient: linear-gradient(180deg, #0f172a 0%, #020617 100%);
+  /* Deep True-Black / Obsidian Canvas (#000000 to #050811) */
+  --background: #000000;
+  --bg-gradient: linear-gradient(180deg, #02040a 0%, #000000 60%, #050811 100%);
   --foreground: #f8fafc;
 
-  --card: #0f172a;
+  --card: #080c16;
   --card-foreground: #f8fafc;
 
-  --popover: #0f172a;
+  --popover: #080c16;
   --popover-foreground: #f8fafc;
 
   /* Crisp light primary in dark mode */
@@ -707,6 +707,166 @@ body,
   outline: 2px solid var(--turquoise-glow);
   outline-offset: 2px;
 }
+
+/* ==========================================================================
+   Interactive Organic Gradient Mesh & Dynamic Transform Physics
+   ========================================================================== */
+
+.ambient-mesh-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  contain: paint;
+  transform: translate3d(0, 0, 0);
+  will-change: transform, opacity;
+}
+
+/* Orb 1: Primary Vibrant Turquoise */
+.orb-turquoise-primary {
+  top: -8%;
+  left: 10%;
+  width: 650px;
+  height: 650px;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.42) 0%, rgba(20, 184, 166, 0.20) 40%, transparent 72%);
+  filter: blur(95px);
+  opacity: 0.88;
+}
+
+/* Orb 2: Luminous Soft White / Specular Ambient Glow */
+.orb-luminous-white {
+  top: 14%;
+  right: 18%;
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.20) 0%, rgba(224, 242, 254, 0.06) 42%, transparent 74%);
+  filter: blur(85px);
+  opacity: 0.65;
+}
+
+html:not(.dark) .orb-luminous-white {
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.85) 0%, rgba(224, 242, 254, 0.35) 45%, transparent 74%);
+  opacity: 0.9;
+}
+
+/* Orb 3: High-Energy Cyan / Electric Highlight */
+.orb-cyan-glow {
+  top: 42%;
+  right: -6%;
+  width: 580px;
+  height: 580px;
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.36) 0%, rgba(6, 182, 212, 0.16) 45%, transparent 70%);
+  filter: blur(100px);
+  opacity: 0.78;
+}
+
+/* Orb 4: Deep Turquoise / Emerald Lower Counterpart */
+.orb-teal-deep {
+  bottom: -4%;
+  left: 6%;
+  width: 620px;
+  height: 620px;
+  background: radial-gradient(circle, rgba(13, 148, 136, 0.34) 0%, rgba(6, 182, 212, 0.14) 50%, transparent 72%);
+  filter: blur(95px);
+  opacity: 0.72;
+}
+
+/* Center Contrast Vignette */
+.ambient-mesh-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 50%, transparent 40%, var(--background) 100%);
+  opacity: 0.55;
+}
+
+/* Sinusoidal Idle Breathing Animations */
+@keyframes mesh-breathe-1 {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translate3d(45px, -35px, 0) scale(1.08);
+    opacity: 0.95;
+  }
+  100% {
+    transform: translate3d(-35px, 45px, 0) scale(0.95);
+    opacity: 0.80;
+  }
+}
+
+@keyframes mesh-breathe-white {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translate3d(-40px, 30px, 0) scale(1.14);
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate3d(35px, -25px, 0) scale(0.92);
+    opacity: 0.50;
+  }
+}
+
+@keyframes mesh-breathe-2 {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.75;
+  }
+  50% {
+    transform: translate3d(-55px, 40px, 0) scale(1.10);
+    opacity: 0.90;
+  }
+  100% {
+    transform: translate3d(45px, -50px, 0) scale(0.94);
+    opacity: 0.70;
+  }
+}
+
+@keyframes mesh-breathe-3 {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.70;
+  }
+  50% {
+    transform: translate3d(35px, 45px, 0) scale(1.06);
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate3d(-45px, -30px, 0) scale(0.95);
+    opacity: 0.65;
+  }
+}
+
+.animate-mesh-breathe-1 {
+  animation: mesh-breathe-1 20s ease-in-out infinite alternate;
+}
+
+.animate-mesh-breathe-white {
+  animation: mesh-breathe-white 24s ease-in-out infinite alternate;
+}
+
+.animate-mesh-breathe-2 {
+  animation: mesh-breathe-2 22s ease-in-out infinite alternate;
+}
+
+.animate-mesh-breathe-3 {
+  animation: mesh-breathe-3 26s ease-in-out infinite alternate;
+}
+
+/* Reduced Motion Override */
+@media (prefers-reduced-motion: reduce) {
+  .animate-mesh-breathe-1,
+  .animate-mesh-breathe-white,
+  .animate-mesh-breathe-2,
+  .animate-mesh-breathe-3 {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
 
 
 
