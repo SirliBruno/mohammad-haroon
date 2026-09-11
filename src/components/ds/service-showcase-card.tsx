@@ -197,7 +197,7 @@ export function ServiceShowcaseCard({
       {featured.length > 0 && (
         <div
           className={cn(
-            "relative z-30 mx-3 -mt-[13%] rounded-3xl border border-border/60 bg-card/95 p-7 backdrop-blur-xl md:p-8",
+            "relative z-30 mx-3 -mt-[13%] rounded-3xl glass-card glass-specular p-7 md:p-8",
             "shadow-[0_1px_2px_hsl(0_0%_0%/0.05),0_30px_60px_-24px_hsl(0_0%_0%/0.22)]",
             "transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
             "group-hover:-translate-y-1.5",

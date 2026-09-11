@@ -13,7 +13,7 @@ export function ProjectCard({
   className?: string;
 }) {
   return (
-    <DSCard variant="surface" interactive padding="none" className={cn("overflow-hidden", className)}>
+    <DSCard variant="glass" interactive padding="none" className={cn("overflow-hidden", className)}>
       <Link
         to="/work/$slug"
         params={{ slug: project.slug }}

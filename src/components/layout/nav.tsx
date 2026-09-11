@@ -38,10 +38,10 @@ export function Nav() {
     <header className="sticky top-3 z-40 px-3 sm:top-4 sm:px-4">
       <div
         className={cn(
-          "mx-auto max-w-7xl rounded-2xl border transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300",
+          "mx-auto max-w-7xl rounded-2xl transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300",
           scrolled
-            ? "border-border/80 bg-background/85 shadow-lg shadow-black/5 backdrop-blur-xl supports-[backdrop-filter]:bg-background/70"
-            : "border-border/50 bg-background/60 backdrop-blur-md supports-[backdrop-filter]:bg-background/40",
+            ? "glass-nav glass-specular shadow-lg shadow-black/5"
+            : "border border-border/40 bg-background/50 backdrop-blur-md supports-[backdrop-filter]:bg-background/35",
         )}
       >
         <div className="flex h-16 items-center justify-between gap-6 px-4 sm:px-6">

@@ -8,6 +8,7 @@ export const dsCardVariants = cva("rounded-xl transition-colors", {
       surface: "bg-card border border-border/60",
       outline: "bg-background border border-border/60",
       elevated: "bg-card border border-border/60 shadow-sm",
+      glass: "glass-card border border-border/60",
       ghost: "bg-transparent",
     },
     interactive: {

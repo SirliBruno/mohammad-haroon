@@ -23,7 +23,7 @@ export function ServiceCard({
 }) {
   const Icon = service.icon ? serviceIconMap[service.icon] ?? Sparkles : Sparkles;
   return (
-    <DSCard variant="surface" padding="lg" className={cn("group flex h-full flex-col", className)}>
+    <DSCard variant="glass" padding="lg" className={cn("group flex h-full flex-col", className)}>
       <div className="flex items-center justify-between">
         <span className="grid size-10 place-items-center rounded-lg border border-border/60 bg-muted/50 text-primary">
           <Icon className="size-5" aria-hidden />

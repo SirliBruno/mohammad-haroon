@@ -86,14 +86,14 @@ export function MobileNav() {
                 transition={{ duration: 0.2 }}
               >
                 <motion.div
-                  className="absolute inset-0 bg-background/70 backdrop-blur-md"
+                  className="absolute inset-0 bg-black/40 backdrop-blur-md"
                   onClick={() => setOpen(false)}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                 />
                 <motion.aside
-                  className="absolute inset-y-0 right-0 flex w-[85%] max-w-sm flex-col border-l border-border/80 bg-background shadow-2xl"
+                  className="absolute inset-y-0 right-0 flex w-[85%] max-w-sm flex-col border-l border-border/80 glass-modal shadow-2xl"
                   initial={{ x: "100%" }}
                   animate={{ x: 0 }}
                   exit={{ x: "100%" }}

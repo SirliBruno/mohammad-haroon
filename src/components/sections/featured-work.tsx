@@ -109,7 +109,7 @@ export function FeaturedWork() {
         {/* 1. Flagship Featured Project (CampFlow) */}
         {campflow && (
           <Reveal delay={0.08}>
-            <div className="mt-12 overflow-hidden rounded-3xl border border-accent/30 bg-card p-6 sm:p-10 shadow-lg shadow-accent/5">
+            <div className="mt-12 overflow-hidden rounded-3xl border border-accent/30 glass-card glass-specular p-6 sm:p-10 shadow-lg shadow-accent/5">
               <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
                 {/* Visual Preview */}
                 <div className="lg:col-span-7">
@@ -203,7 +203,7 @@ export function FeaturedWork() {
             const isStore = project.category === "متاجر";
             return (
               <Reveal key={project.slug} delay={0.12 + idx * 0.06}>
-                <article className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-border/70 bg-card p-6 sm:p-7 transition-all duration-300 hover:-translate-y-1 hover:border-foreground/20 hover:shadow-xl h-full">
+                <article className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-border/70 glass-card p-6 sm:p-7 transition-all duration-300 hover:-translate-y-1 hover:border-foreground/20 hover:shadow-xl h-full">
                   <div>
                     {/* Thumbnail / Mockup Frame */}
                     <Link
@@ -284,7 +284,7 @@ export function FeaturedWork() {
 
         {/* Action Callout after Projects */}
         <Reveal delay={0.2}>
-          <div className="mt-12 rounded-3xl border border-border/80 bg-gradient-to-br from-card via-muted/30 to-card p-8 sm:p-10 text-center space-y-4">
+          <div className="mt-12 rounded-3xl border border-border/80 glass-card glass-specular p-8 sm:p-10 text-center space-y-4">
             <h3 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
               {t("home.featured.callout_title", "شفت شغلي؟ عندك فكرة مشابهة؟")}
             </h3>
