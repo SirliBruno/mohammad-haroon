@@ -18,7 +18,7 @@ export function CTA({
   return (
     <section className={cn("py-20 md:py-28", className)}>
       <Container>
-        <div className="relative overflow-hidden rounded-2xl border border-border/60 bg-card px-8 py-16 text-center md:px-16 md:py-24">
+        <div className="relative overflow-hidden rounded-3xl glass-card glass-specular shadow-xl px-8 py-16 text-center md:px-16 md:py-24">
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0 -z-10 opacity-60 [mask-image:radial-gradient(60%_60%_at_50%_0%,black,transparent)] bg-linear-to-b from-primary/8 to-transparent"

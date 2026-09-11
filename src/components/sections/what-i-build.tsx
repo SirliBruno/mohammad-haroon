@@ -623,25 +623,32 @@ export function WhatIBuild() {
       {/* 5. Service Detail Modal */}
       {selectedService && (
         <Dialog open={Boolean(selectedService)} onOpenChange={(open) => !open && setSelectedService(null)}>
-          <DialogContent className="max-w-2xl sm:rounded-2xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
+          <DialogContent className="w-[calc(100%-2rem)] sm:w-full max-w-[800px] mx-auto rounded-3xl p-6 sm:p-8 lg:p-10 max-h-[85vh] overflow-y-auto glass-modal glass-specular shadow-2xl">
             <DialogHeader className="text-right">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="rounded-full bg-accent/10 px-2.5 py-0.5 text-xs font-bold text-accent">
-                  {selectedService.categoryLabel}
-                </span>
-                <span className="font-mono text-xs text-muted-foreground" dir="ltr">
-                  #{selectedService.number}
-                </span>
-                {selectedService.badge && (
-                  <span className="rounded-full border border-accent/30 bg-accent/15 px-2.5 py-0.5 text-[11px] font-bold text-accent">
-                    {selectedService.badge}
-                  </span>
-                )}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-3">
+                <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl border border-accent/30 bg-accent/10 text-accent shadow-xs backdrop-blur-md">
+                  <Icons8Icon id={selectedService.iconId} className="size-8" alt={selectedService.title} />
+                </div>
+                <div className="space-y-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="rounded-full bg-accent/10 px-2.5 py-0.5 text-xs font-bold text-accent">
+                      {selectedService.categoryLabel}
+                    </span>
+                    <span className="font-mono text-xs text-muted-foreground" dir="ltr">
+                      #{selectedService.number}
+                    </span>
+                    {selectedService.badge && (
+                      <span className="rounded-full border border-accent/30 bg-accent/15 px-2.5 py-0.5 text-[11px] font-bold text-accent">
+                        {selectedService.badge}
+                      </span>
+                    )}
+                  </div>
+                  <DialogTitle className="text-xl sm:text-2xl lg:text-3xl font-bold font-display text-foreground leading-tight">
+                    {selectedService.title}
+                  </DialogTitle>
+                </div>
               </div>
-              <DialogTitle className="text-xl sm:text-2xl font-bold font-display text-foreground">
-                {selectedService.title}
-              </DialogTitle>
-              <DialogDescription className="text-sm text-foreground/80 mt-1 leading-relaxed">
+              <DialogDescription className="text-sm sm:text-base text-foreground/80 mt-1 leading-relaxed">
                 {selectedService.detailedBenefit}
               </DialogDescription>
             </DialogHeader>
@@ -649,14 +656,20 @@ export function WhatIBuild() {
             <div className="mt-6 space-y-6">
               {/* Deliverables Checklist */}
               <div>
-                <h4 className="text-xs font-bold tracking-wider text-muted-foreground uppercase mb-3">
-                  ماذا تستلم في هذا المشروع؟
-                </h4>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="size-1.5 rounded-full bg-accent animate-pulse" />
+                  <h4 className="text-xs font-bold tracking-wider text-muted-foreground uppercase">
+                    ماذا تستلم في هذا المشروع؟
+                  </h4>
+                </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   {selectedService.deliverables.map((item) => (
-                    <div key={item} className="flex items-start gap-2.5 rounded-xl border border-border/50 bg-muted/40 p-3 text-xs leading-relaxed text-foreground/90">
+                    <div
+                      key={item}
+                      className="flex items-start gap-2.5 rounded-2xl border border-border/50 bg-card/60 p-3.5 text-xs leading-relaxed text-foreground/90 backdrop-blur-xs transition-colors hover:border-accent/30"
+                    >
                       <CheckCircle2 className="size-4 text-accent shrink-0 mt-0.5" />
-                      <span>{item}</span>
+                      <span className="font-medium">{item}</span>
                     </div>
                   ))}
                 </div>
@@ -664,9 +677,9 @@ export function WhatIBuild() {
 
               {/* Example & Target */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div className="rounded-xl border border-border/60 bg-background p-4">
-                  <div className="flex items-center gap-2 text-xs font-bold text-foreground mb-1">
-                    <Target className="size-3.5 text-accent" />
+                <div className="rounded-2xl border border-border/60 bg-card/60 p-4 backdrop-blur-xs">
+                  <div className="flex items-center gap-2 text-xs font-bold text-foreground mb-1.5">
+                    <Target className="size-4 text-accent" />
                     <span>الأنسب لمين؟</span>
                   </div>
                   <p className="text-xs text-muted-foreground leading-relaxed">
@@ -674,9 +687,9 @@ export function WhatIBuild() {
                   </p>
                 </div>
 
-                <div className="rounded-xl border border-border/60 bg-background p-4">
-                  <div className="flex items-center gap-2 text-xs font-bold text-foreground mb-1">
-                    <Clock className="size-3.5 text-accent" />
+                <div className="rounded-2xl border border-border/60 bg-card/60 p-4 backdrop-blur-xs">
+                  <div className="flex items-center gap-2 text-xs font-bold text-foreground mb-1.5">
+                    <Clock className="size-4 text-accent" />
                     <span>المدة المتوقعة:</span>
                   </div>
                   <p className="text-xs text-muted-foreground leading-relaxed">
@@ -686,9 +699,9 @@ export function WhatIBuild() {
               </div>
 
               {/* Real World Example Box */}
-              <div className="rounded-xl border border-accent/30 bg-accent/5 p-4 text-xs leading-relaxed">
-                <span className="font-bold text-accent block mb-1">💡 مثال واقعي:</span>
-                <span className="text-foreground/85">{selectedService.example}</span>
+              <div className="rounded-2xl border border-accent/30 bg-accent/5 p-4 sm:p-5 text-xs leading-relaxed backdrop-blur-xs">
+                <span className="font-bold text-accent block mb-1">💡 مثال واقعي من التطبيق العملي:</span>
+                <span className="text-foreground/90">{selectedService.example}</span>
               </div>
 
               {/* Action Buttons */}
@@ -697,19 +710,20 @@ export function WhatIBuild() {
                   href={`https://wa.me/${site.whatsapp.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`السلام عليكم محمد، أود الاستفسار عن خدمة: ${selectedService.title}`)}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border border-border/80 px-4 py-2.5 text-xs font-bold text-foreground hover:bg-muted transition-colors"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border border-border/80 bg-background/60 px-5 py-3 text-xs font-bold text-foreground hover:bg-muted/80 hover:border-accent/40 transition-all shadow-xs"
                 >
-                  <MessageCircle className="size-3.5 text-accent" />
-                  <span>محادثة واتساب</span>
+                  <MessageCircle className="size-4 text-accent" />
+                  <span>محادثة واتساب مباشرة</span>
+                  <ExternalLink className="size-3 text-muted-foreground" />
                 </a>
 
                 <button
                   type="button"
                   onClick={() => triggerOrderService(selectedService)}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-2.5 text-xs font-bold text-primary-foreground shadow-sm hover:opacity-90 transition-opacity cursor-pointer"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 text-xs font-bold text-primary-foreground shadow-md hover:opacity-95 hover:shadow-lg transition-all cursor-pointer"
                 >
                   <span>طلب هذه الخدمة الآن</span>
-                  <ArrowLeft className="size-3.5" />
+                  <ArrowLeft className="size-4" />
                 </button>
               </div>
             </div>
