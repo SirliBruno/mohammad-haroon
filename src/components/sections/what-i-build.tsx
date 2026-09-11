@@ -426,10 +426,8 @@ export function WhatIBuild() {
             <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-accent/10 px-3 py-1 text-xs font-semibold text-accent">
               <Sparkles className="size-3.5" /> {t("home.services.eyebrow", "خدماتي")}
             </span>
-            <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight font-display">
-              <span className="text-gradient-heading">
-                {t("home.services.title", "أحوّل أفكارك إلى منتجات رقمية حقيقية")}
-              </span>
+            <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground font-display">
+              {t("home.services.title", "أحوّل أفكارك إلى منتجات رقمية حقيقية")}
             </h2>
             <p className="mt-4 text-base sm:text-lg leading-relaxed text-muted-foreground font-sans">
               {t(
@@ -706,10 +704,8 @@ export function WhatIBuild() {
               <span className="inline-flex size-12 items-center justify-center rounded-2xl bg-accent/15 text-accent mb-4">
                 <HelpCircle className="size-6 stroke-[1.8]" />
               </span>
-              <h3 className="text-2xl sm:text-3xl font-bold tracking-tight font-display">
-                <span className="text-gradient-heading">
-                  ما لقيت الخدمة اللي تبحث عنها؟
-                </span>
+              <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground font-display">
+                ما لقيت الخدمة اللي تبحث عنها؟
               </h3>
               <p className="mt-3 text-sm sm:text-base leading-relaxed text-muted-foreground font-sans">
                 إذا كانت فكرتك مختلفة أو لم تجدها ضمن القائمة، اشرحها لي وسأساعدك في تحليلها وتحويلها إلى حل رقمي مناسب لطريقة عملك.

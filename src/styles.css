@@ -931,12 +931,7 @@ html:not(.dark) .orb-luminous-white {
 
 /* 2. Text Gradient Utilities */
 @utility text-gradient-heading {
-  background-image: var(--gradient-heading);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-  display: inline-block;
+  color: var(--color-foreground);
 }
 
 @utility text-gradient-accent {
@@ -982,12 +977,7 @@ html:not(.dark) .orb-luminous-white {
 }
 
 .text-gradient-heading {
-  background-image: var(--gradient-heading);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-  display: inline-block;
+  color: var(--color-foreground);
 }
 
 .text-gradient-accent {

@@ -49,11 +49,11 @@ export function Hero() {
             {/* Main Headline */}
             <h1
               id="hero-heading"
-              className="mt-5 text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-balance leading-[1.25]"
+              className="mt-5 text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground text-balance leading-[1.25]"
             >
-              <span className="text-gradient-heading">{t("home.hero.headline_start", "من فكرة في بالك")}</span>
+              {t("home.hero.headline_start", "من فكرة في بالك")}
               <br />
-              <span className="text-gradient-heading">{t("home.hero.headline_end", "إلى مشروع تقدر تستخدمه.")}</span>
+              {t("home.hero.headline_end", "إلى مشروع تقدر تستخدمه.")}
             </h1>
 
             {/* Subtitle */}

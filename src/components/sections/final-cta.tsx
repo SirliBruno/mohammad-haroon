@@ -27,10 +27,8 @@ export function FinalCTA() {
               <Sparkles className="size-3.5" /> الخطوة القادمة
             </span>
 
-            <h2 className="mt-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl font-display">
-              <span className="text-gradient-heading">
-                {t("home.cta.title", "جاهز تحوّل فكرتك إلى مشروع فعلي؟")}
-              </span>
+            <h2 className="mt-6 text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl font-display">
+              {t("home.cta.title", "جاهز تحوّل فكرتك إلى مشروع فعلي؟")}
             </h2>
 
             <p className="mt-6 text-base sm:text-lg leading-relaxed text-muted-foreground max-w-xl mx-auto">

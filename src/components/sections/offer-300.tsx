@@ -40,10 +40,8 @@ export function Offer300() {
 
             <div className="mt-6 grid gap-8 lg:grid-cols-12 lg:items-center">
               <div className="lg:col-span-6">
-                <h2 className="text-2xl sm:text-3xl font-bold tracking-tight font-display">
-                  <span className="text-gradient-heading">
-                    {t("home.offer.title", "ابدأ من 300 ريال")}
-                  </span>
+                <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground font-display">
+                  {t("home.offer.title", "ابدأ من 300 ريال")}
                 </h2>
                 <p className="mt-3 text-xs sm:text-sm leading-relaxed text-foreground/80">
                   {t(

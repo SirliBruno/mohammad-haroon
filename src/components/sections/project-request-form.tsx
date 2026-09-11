@@ -170,8 +170,8 @@ ${budget}
               <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-gradient-accent-subtle px-3 py-0.5 text-xs font-semibold text-accent">
                 <Sparkles className="size-3.5" /> نبدأ مباشرة
               </span>
-              <h2 className="mt-3 text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight font-display">
-                <span className="text-gradient-heading">خلنا نبدأ بفكرتك</span>
+              <h2 className="mt-3 text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-foreground font-display">
+                خلنا نبدأ بفكرتك
               </h2>
               <p className="mt-2 text-xs sm:text-sm text-muted-foreground">
                 املأ التفاصيل وسنتواصل معك فورًا عبر WhatsApp لمناقشة الفكرة والبدء بالتنفيذ.
