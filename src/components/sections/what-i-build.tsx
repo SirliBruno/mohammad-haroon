@@ -495,11 +495,10 @@ export function WhatIBuild() {
                   onClick={() => setSelectedService(svc)}
                   className={cn(
                     "snap-center w-[85vw] max-w-[320px] shrink-0 p-5 rounded-2xl flex flex-col justify-between select-none cursor-pointer",
-                    "glass-card glass-specular-eased",
-                    "border transition-all duration-300 active:scale-[0.98]",
+                    "glass-card glass-specular-eased service-card-interactive",
                     isFeatured
                       ? "border-2 border-accent/70 shadow-lg shadow-accent/10"
-                      : "border-border/80 shadow-md shadow-black/5",
+                      : "border border-border/80 shadow-md shadow-black/5",
                   )}
                   style={{ minHeight: "260px" }}
                 >
@@ -509,9 +508,9 @@ export function WhatIBuild() {
                       <div className="flex items-center gap-2.5">
                         <div
                           className={cn(
-                            "flex size-11 items-center justify-center rounded-xl transition-colors",
+                            "flex size-11 items-center justify-center rounded-xl service-icon-box",
                             isFeatured
-                              ? "bg-gradient-accent-eased text-accent-foreground shadow-md shadow-accent/20"
+                              ? "bg-accent text-accent-foreground shadow-md shadow-accent/20"
                               : "bg-accent/10 text-accent",
                           )}
                         >
@@ -598,10 +597,8 @@ export function WhatIBuild() {
                   transition={{ duration: 0.25, delay: idx * 0.03 }}
                   className={cn(
                     "group relative flex flex-col justify-between rounded-2xl p-5 sm:p-6",
-                    "glass-card glass-specular-eased",
-                    "transition-all duration-300 ease-out",
-                    "hover:-translate-y-1.5 hover:border-accent/60 hover:shadow-[0_12px_36px_rgba(6,182,212,0.18)]",
-                    "active:scale-[0.99]",
+                    "glass-card glass-specular-eased service-card-interactive",
+                    "cursor-pointer",
                     isFeatured
                       ? "border-2 border-accent/70 shadow-lg shadow-accent/10"
                       : "border border-border/70",
@@ -612,11 +609,12 @@ export function WhatIBuild() {
                     <div className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-3">
                         <div
-                          className={`flex size-11 items-center justify-center rounded-xl transition-all duration-300 ${
+                          className={cn(
+                            "flex size-11 items-center justify-center rounded-xl service-icon-box",
                             isFeatured
-                              ? "bg-gradient-accent-eased text-accent-foreground shadow-md shadow-accent/20"
-                              : "bg-accent/10 text-accent group-hover:bg-gradient-accent-eased group-hover:text-accent-foreground group-hover:shadow-sm"
-                          }`}
+                              ? "bg-accent text-accent-foreground shadow-md shadow-accent/20"
+                              : "bg-accent/10 text-accent",
+                          )}
                         >
                           <Icons8Icon id={svc.iconId} className="size-5" alt={svc.title} />
                         </div>
@@ -674,7 +672,7 @@ export function WhatIBuild() {
                       className="inline-flex items-center gap-1 text-xs font-bold text-accent transition-colors hover:underline cursor-pointer"
                     >
                       <span>التفاصيل</span>
-                      <ArrowLeft className="size-3.5 transition-transform duration-300 group-hover:-translate-x-1" />
+                      <ArrowLeft className="size-3.5 service-detail-arrow" />
                     </button>
 
                     <button
