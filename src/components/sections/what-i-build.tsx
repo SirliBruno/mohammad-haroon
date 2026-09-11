@@ -23,6 +23,8 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { ServiceBottomSheet } from "./service-bottom-sheet";
 
 /**
  * Icons8 icon renderer using CSS mask.
@@ -380,6 +382,7 @@ type FilterId = (typeof FILTER_CATEGORIES)[number]["id"];
 export function WhatIBuild() {
   const [activeFilter, setActiveFilter] = useState<FilterId>("all");
   const [selectedService, setSelectedService] = useState<ServiceItem | null>(null);
+  const isMobile = useIsMobile();
   const shouldReduceMotion = useReducedMotion();
   const { data: homeContent } = useHomeContent();
   const t = (key: string, fallback: string) => getHomeText(homeContent, key, fallback);
@@ -389,7 +392,7 @@ export function WhatIBuild() {
     return SERVICES.filter((s) => s.category === activeFilter);
   }, [activeFilter]);
 
-  const triggerOrderService = (service: ServiceItem) => {
+  const triggerOrderService = (service: ServiceItem | { projectType?: string; problemScenario?: string }) => {
     setSelectedService(null);
     window.dispatchEvent(
       new CustomEvent("select-problem", {
@@ -465,8 +468,122 @@ export function WhatIBuild() {
           })}
         </div>
 
-        {/* 3. Services Adaptive Grid (1 col mobile, 2 cols tablet, 3-4 cols desktop) */}
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6">
+        {/* 3a. Mobile-First Glanceable Swipe-Snap Cards (Mobile Only) */}
+        <div className="mt-8 sm:hidden">
+          {/* Scroll Hint & Services Count */}
+          <div className="flex items-center justify-between px-1 mb-3 text-xs text-muted-foreground">
+            <span className="inline-flex items-center gap-1.5 font-medium">
+              <span className="size-1.5 rounded-full bg-accent animate-pulse" />
+              <span>{filteredServices.length} خدمات متوفرة</span>
+            </span>
+            <span className="text-[11px] text-accent/90 font-semibold inline-flex items-center gap-1">
+              <span>اسحب للتصفح</span>
+              <span dir="ltr">⟵</span>
+            </span>
+          </div>
+
+          {/* Swipe-Snap Track */}
+          <div
+            className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-4 px-4 no-scrollbar touch-pan-x"
+            style={{ scrollSnapType: "x mandatory" }}
+          >
+            {filteredServices.map((svc) => {
+              const isFeatured = svc.featured;
+              return (
+                <article
+                  key={svc.id}
+                  onClick={() => setSelectedService(svc)}
+                  className={cn(
+                    "snap-center w-[85vw] max-w-[320px] shrink-0 p-5 rounded-2xl flex flex-col justify-between select-none cursor-pointer",
+                    "glass-card glass-specular",
+                    "border transition-all duration-300 active:scale-[0.98]",
+                    isFeatured
+                      ? "border-2 border-accent/70 shadow-lg shadow-accent/10"
+                      : "border-border/80 shadow-md shadow-black/5",
+                  )}
+                  style={{ minHeight: "260px" }}
+                >
+                  <div>
+                    {/* Top Row: Icon, Number, and Category/Badge */}
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2.5">
+                        <div
+                          className={cn(
+                            "flex size-11 items-center justify-center rounded-xl transition-colors",
+                            isFeatured
+                              ? "bg-accent text-accent-foreground shadow-md shadow-accent/20"
+                              : "bg-accent/10 text-accent",
+                          )}
+                        >
+                          <Icons8Icon id={svc.iconId} className="size-5" alt={svc.title} />
+                        </div>
+                        <span className="font-mono text-xs font-bold text-accent tracking-wider" dir="ltr">
+                          {svc.number}
+                        </span>
+                      </div>
+
+                      {svc.badge ? (
+                        <span className="inline-flex items-center gap-1 rounded-full border border-accent/40 bg-accent/15 px-2.5 py-0.5 text-[11px] font-bold text-accent">
+                          <span className="size-1.5 rounded-full bg-accent animate-pulse" />
+                          {svc.badge}
+                        </span>
+                      ) : (
+                        <span className="text-[11px] font-medium text-muted-foreground/80 rounded-md border border-border/60 bg-muted/40 px-2 py-0.5">
+                          {svc.categoryLabel}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Title */}
+                    <h3 className="mt-4 text-base font-bold text-foreground leading-snug font-sans">
+                      {svc.title}
+                    </h3>
+
+                    {/* 1-Sentence Value Hook */}
+                    <p className="mt-2 text-xs text-foreground/80 leading-relaxed line-clamp-2">
+                      {svc.description}
+                    </p>
+                  </div>
+
+                  {/* Glanceable Bottom Actions (Min 48px touch targets) */}
+                  <div className="mt-5 pt-3.5 border-t border-border/40 flex items-center justify-between gap-2">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedService(svc);
+                      }}
+                      className="inline-flex min-h-[48px] items-center gap-1.5 rounded-xl bg-accent/10 hover:bg-accent/20 px-3.5 py-2 text-xs font-bold text-accent transition-colors cursor-pointer"
+                    >
+                      <span>استكشف التفاصيل</span>
+                      <ArrowLeft className="size-3.5" />
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        triggerOrderService(svc);
+                      }}
+                      className={cn(
+                        "inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-2 text-xs font-bold transition-all cursor-pointer",
+                        "active:scale-95",
+                        isFeatured
+                          ? "bg-accent text-accent-foreground shadow-sm shadow-accent/20"
+                          : "border border-accent/40 bg-accent/15 text-accent hover:bg-accent hover:text-accent-foreground",
+                      )}
+                    >
+                      <span>{isFeatured ? "احكِ فكرتك" : "طلب الخدمة"}</span>
+                    </button>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* 3b. Services Grid (Tablet & Desktop: 2 cols tablet, 3-4 cols desktop) */}
+        <div className="mt-8 hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6">
           <AnimatePresence mode="popLayout">
             {filteredServices.map((svc, idx) => {
               const isFeatured = svc.featured;
@@ -620,8 +737,18 @@ export function WhatIBuild() {
         </Reveal>
       </Container>
 
-      {/* 5. Service Detail Modal */}
-      {selectedService && (
+      {/* 5a. Mobile Bottom Sheet (Progressive Disclosure Drawer) */}
+      {isMobile && (
+        <ServiceBottomSheet
+          service={selectedService}
+          open={Boolean(selectedService)}
+          onClose={() => setSelectedService(null)}
+          onOrder={triggerOrderService}
+        />
+      )}
+
+      {/* 5b. Desktop Service Detail Modal (Tablet & Desktop Viewports) */}
+      {!isMobile && selectedService && (
         <Dialog open={Boolean(selectedService)} onOpenChange={(open) => !open && setSelectedService(null)}>
           <DialogContent className="w-[calc(100%-2rem)] sm:w-full max-w-[780px] rounded-3xl p-5 sm:p-7 max-h-[88vh] overflow-y-auto glass-modal glass-specular shadow-2xl">
             <DialogHeader className="text-right">
