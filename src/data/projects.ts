@@ -39,41 +39,49 @@ export const projects: Project[] = [
       "Figma"
     ],
     "cover": {
-      "src": "/images/organized/laviola-sweets/item-e7cls/img-1.webp",
+      "src": "/images/organized/laviola-sweets/folder-1/img-1.webp",
       "alt": "متجر لافيولا سويتز"
     },
     "gallery": [
       {
-        "src": "/images/organized/laviola-sweets/item-e7cls/img-1.webp",
+        "src": "/images/organized/laviola-sweets/folder-1/img-1.webp",
         "alt": "متجر لافيولا سويتز - تصاميم السوشيال ميديا (2711)"
       },
       {
-        "src": "/images/organized/laviola-sweets/item-e7cls/img-2.webp",
+        "src": "/images/organized/laviola-sweets/folder-1/img-2.webp",
         "alt": "متجر لافيولا سويتز - تصاميم السوشيال ميديا (تيك توك)"
       },
       {
-        "src": "/images/organized/laviola-sweets/item-e7cls/img-3.webp",
+        "src": "/images/organized/laviola-sweets/folder-1/img-3.webp",
         "alt": "متجر لافيولا سويتز - تصاميم السوشيال ميديا (سنابشات)"
       },
       {
-        "src": "/images/organized/laviola-sweets/item-e7cls/img-4.webp",
+        "src": "/images/organized/laviola-sweets/folder-1/img-4.webp",
         "alt": "متجر لافيولا سويتز - تصاميم السوشيال ميديا (شوكولاتة الاعراس)"
       },
       {
-        "src": "/images/organized/laviola-sweets/item-e7cls/img-5.webp",
+        "src": "/images/organized/laviola-sweets/folder-1/img-5.webp",
         "alt": "متجر لافيولا سويتز - تصاميم السوشيال ميديا (شوكولاتة المناسبات)"
       },
       {
-        "src": "/images/organized/laviola-sweets/item-e7cls/img-6.webp",
+        "src": "/images/organized/laviola-sweets/folder-1/img-6.webp",
         "alt": "متجر لافيولا سويتز - تصاميم السوشيال ميديا (للمناســــــــــــــــــــــــبات)"
       },
       {
-        "src": "/images/organized/laviola-sweets/item-qyysp/img-1.webp",
+        "src": "/images/organized/laviola-sweets/folder-2/img-1.webp",
         "alt": "متجر لافيولا سويتز - تصميم بطاقة شكر (1)"
       },
       {
-        "src": "/images/organized/laviola-sweets/item-qyysp/img-2.webp",
+        "src": "/images/organized/laviola-sweets/folder-2/img-2.webp",
         "alt": "متجر لافيولا سويتز - تصميم بطاقة شكر (2)"
+      },
+      {
+        "src": "/images/organized/laviola-sweets/folder-3/img-1.webp",
+        "alt": "متجر لافيولا سويتز - صور الشعار (لافيولا الجديد  عربي - انجليزيشس)"
+      },
+      {
+        "src": "/images/organized/laviola-sweets/folder-3/img-2.webp",
+        "alt": "متجر لافيولا سويتز - صور الشعار (لافيولا الجديد)"
       }
     ],
     "problem": "الحاجة إلى بناء وتطوير مواد بصرية متكاملة واحترافية لـ متجر لافيولا سويتز.",
@@ -125,41 +133,49 @@ export const projects: Project[] = [
       "Figma"
     ],
     "cover": {
-      "src": "/images/organized/ion-advertising/branding/img-1.webp",
+      "src": "/images/organized/ion-advertising/folder-1/img-1.webp",
       "alt": "أيون للدعاية والاعلان"
     },
     "gallery": [
       {
-        "src": "/images/organized/ion-advertising/branding/img-1.webp",
+        "src": "/images/organized/ion-advertising/folder-1/img-1.webp",
         "alt": "أيون للدعاية والاعلان - صور الهوية (1)"
       },
       {
-        "src": "/images/organized/ion-advertising/branding/img-2.webp",
+        "src": "/images/organized/ion-advertising/folder-1/img-2.webp",
         "alt": "أيون للدعاية والاعلان - صور الهوية (3)"
       },
       {
-        "src": "/images/organized/ion-advertising/branding/img-3.webp",
+        "src": "/images/organized/ion-advertising/folder-1/img-3.webp",
         "alt": "أيون للدعاية والاعلان - صور الهوية (الشعار باللون البرتقالي)"
       },
       {
-        "src": "/images/organized/ion-advertising/branding/img-4.webp",
+        "src": "/images/organized/ion-advertising/folder-1/img-4.webp",
         "alt": "أيون للدعاية والاعلان - صور الهوية (الشعار باللون الروزي)"
       },
       {
-        "src": "/images/organized/ion-advertising/branding/img-5.webp",
+        "src": "/images/organized/ion-advertising/folder-1/img-5.webp",
         "alt": "أيون للدعاية والاعلان - صور الهوية (توافق الالوان)"
       },
       {
-        "src": "/images/organized/ion-advertising/branding/img-1.webp",
+        "src": "/images/organized/ion-advertising/folder-3/img-1.webp",
         "alt": "أيون للدعاية والاعلان - موك اب للهوية (108)"
       },
       {
-        "src": "/images/organized/ion-advertising/branding/img-2.webp",
+        "src": "/images/organized/ion-advertising/folder-3/img-2.webp",
         "alt": "أيون للدعاية والاعلان - موك اب للهوية (228)"
       },
       {
-        "src": "/images/organized/ion-advertising/branding/img-3.webp",
+        "src": "/images/organized/ion-advertising/folder-3/img-3.webp",
         "alt": "أيون للدعاية والاعلان - موك اب للهوية (Aug_25_-_White_And_Green_Envelope_01)"
+      },
+      {
+        "src": "/images/organized/ion-advertising/folder-3/img-4.webp",
+        "alt": "أيون للدعاية والاعلان - موك اب للهوية (ui-mobile-screen-mockupsforfree)"
+      },
+      {
+        "src": "/images/organized/ion-advertising/folder-4/img-1.webp",
+        "alt": "أيون للدعاية والاعلان - نموذج 2 للهوية (2)"
       }
     ],
     "problem": "الحاجة إلى بناء وتطوير مواد بصرية متكاملة واحترافية لـ أيون للدعاية والاعلان.",
@@ -174,8 +190,8 @@ export const projects: Project[] = [
     "status": "live"
   },
   {
-    "id": "branding",
-    "slug": "branding",
+    "id": "sports-creativity",
+    "slug": "sports-creativity",
     "title": "هوية مجمع الابداع الرياضي",
     "summary": "تنفيذ بروفايل مجمع الابداع الرياضي، صور الهوية، مطبوعات لـ هوية مجمع الابداع الرياضي",
     "shortDescription": "تنفيذ بروفايل مجمع الابداع الرياضي، صور الهوية، مطبوعات لـ هوية مجمع الابداع الرياضي",
@@ -211,41 +227,49 @@ export const projects: Project[] = [
       "Figma"
     ],
     "cover": {
-      "src": "/images/organized/branding/sports-creativity/img-1.webp",
+      "src": "/images/organized/sports-creativity/folder-1/img-1.webp",
       "alt": "هوية مجمع الابداع الرياضي"
     },
     "gallery": [
       {
-        "src": "/images/organized/branding/sports-creativity/img-1.webp",
+        "src": "/images/organized/sports-creativity/folder-1/img-1.webp",
         "alt": "هوية مجمع الابداع الرياضي - بروفايل مجمع الابداع الرياضي (موك اب 2)"
       },
       {
-        "src": "/images/organized/branding/sports-creativity/img-2.webp",
+        "src": "/images/organized/sports-creativity/folder-1/img-2.webp",
         "alt": "هوية مجمع الابداع الرياضي - بروفايل مجمع الابداع الرياضي (موك اب 3)"
       },
       {
-        "src": "/images/organized/branding/sports-creativity/img-3.webp",
+        "src": "/images/organized/sports-creativity/folder-1/img-3.webp",
         "alt": "هوية مجمع الابداع الرياضي - بروفايل مجمع الابداع الرياضي (موك اب)"
       },
       {
-        "src": "/images/organized/branding/branding/img-1.webp",
+        "src": "/images/organized/sports-creativity/folder-2/img-1.webp",
         "alt": "هوية مجمع الابداع الرياضي - صور الهوية (بخلفية الملعب بالعرض)"
       },
       {
-        "src": "/images/organized/branding/branding/img-2.webp",
+        "src": "/images/organized/sports-creativity/folder-2/img-2.webp",
         "alt": "هوية مجمع الابداع الرياضي - صور الهوية (بخلفية الملعب)"
       },
       {
-        "src": "/images/organized/branding/branding/img-3.webp",
+        "src": "/images/organized/sports-creativity/folder-2/img-3.webp",
         "alt": "هوية مجمع الابداع الرياضي - صور الهوية (موك اب الاكليشة)"
       },
       {
-        "src": "/images/organized/branding/branding/img-4.webp",
+        "src": "/images/organized/sports-creativity/folder-2/img-4.webp",
         "alt": "هوية مجمع الابداع الرياضي - صور الهوية (موك اب صورتين)"
       },
       {
-        "src": "/images/organized/branding/branding/img-5.webp",
+        "src": "/images/organized/sports-creativity/folder-2/img-5.webp",
         "alt": "هوية مجمع الابداع الرياضي - صور الهوية (موك اب)"
+      },
+      {
+        "src": "/images/organized/sports-creativity/folder-3/img-1.webp",
+        "alt": "هوية مجمع الابداع الرياضي - مطبوعات (الخلفية)"
+      },
+      {
+        "src": "/images/organized/sports-creativity/folder-3/img-2.webp",
+        "alt": "هوية مجمع الابداع الرياضي - مطبوعات (المقدمة)"
       }
     ],
     "problem": "الحاجة إلى بناء وتطوير مواد بصرية متكاملة واحترافية لـ هوية مجمع الابداع الرياضي.",
@@ -295,41 +319,49 @@ export const projects: Project[] = [
       "Figma"
     ],
     "cover": {
-      "src": "/images/organized/asean-union/item-ao2p0/img-1.webp",
+      "src": "/images/organized/asean-union/folder-1/img-1.webp",
       "alt": "شركة اتحاد آسيان للتجارة"
     },
     "gallery": [
       {
-        "src": "/images/organized/asean-union/item-ao2p0/img-1.webp",
+        "src": "/images/organized/asean-union/folder-1/img-1.webp",
         "alt": "شركة اتحاد آسيان للتجارة - بروفايل الشركة (#بدايـــــــــــــــــــتنا)"
       },
       {
-        "src": "/images/organized/asean-union/item-ao2p0/img-2.webp",
+        "src": "/images/organized/asean-union/folder-1/img-2.webp",
         "alt": "شركة اتحاد آسيان للتجارة - بروفايل الشركة (الاهداف والرؤية)"
       },
       {
-        "src": "/images/organized/asean-union/item-ao2p0/img-3.webp",
+        "src": "/images/organized/asean-union/folder-1/img-3.webp",
         "alt": "شركة اتحاد آسيان للتجارة - بروفايل الشركة (الخدمات)"
       },
       {
-        "src": "/images/organized/asean-union/item-ao2p0/img-4.webp",
+        "src": "/images/organized/asean-union/folder-1/img-4.webp",
         "alt": "شركة اتحاد آسيان للتجارة - بروفايل الشركة (المنتجات)"
       },
       {
-        "src": "/images/organized/asean-union/item-722gz/img-1.webp",
+        "src": "/images/organized/asean-union/folder-2/img-1.webp",
         "alt": "شركة اتحاد آسيان للتجارة - بنرات الموقع (298100472_1203334670446335_3638739370456709390_n)"
       },
       {
-        "src": "/images/organized/asean-union/item-722gz/img-2.webp",
+        "src": "/images/organized/asean-union/folder-2/img-2.webp",
         "alt": "شركة اتحاد آسيان للتجارة - بنرات الموقع (cf6ea8d4-175d-4a57-8f10-bf00a97f75c9)"
       },
       {
-        "src": "/images/organized/asean-union/item-722gz/img-3.webp",
+        "src": "/images/organized/asean-union/folder-2/img-3.webp",
         "alt": "شركة اتحاد آسيان للتجارة - بنرات الموقع (hgkihzd)"
       },
       {
-        "src": "/images/organized/asean-union/item-722gz/img-4.webp",
+        "src": "/images/organized/asean-union/folder-2/img-4.webp",
         "alt": "شركة اتحاد آسيان للتجارة - بنرات الموقع (إتحاد آسيــان للتجـارة)"
+      },
+      {
+        "src": "/images/organized/asean-union/folder-2/img-5.webp",
+        "alt": "شركة اتحاد آسيان للتجارة - بنرات الموقع (قهوة دوبي)"
+      },
+      {
+        "src": "/images/organized/asean-union/folder-2/img-6.webp",
+        "alt": "شركة اتحاد آسيان للتجارة - بنرات الموقع (مرقة الدجاج دوبي)"
       }
     ],
     "problem": "الحاجة إلى بناء وتطوير مواد بصرية متكاملة واحترافية لـ شركة اتحاد آسيان للتجارة.",
@@ -346,16 +378,16 @@ export const projects: Project[] = [
     "id": "business-creator",
     "slug": "business-creator",
     "title": "مسرعة الاعمال - Bussiness Creator",
-    "summary": "تنفيذ تصاميم الهوية والمواد البصرية، بروفايل  Bussiness Creator، بزنز كارد، بنرات الموقع، تصاميم السوشيال ميديا، شعار Business Creaator لـ مسرعة الاعمال - Bussiness Creator",
-    "shortDescription": "تنفيذ تصاميم الهوية والمواد البصرية، بروفايل  Bussiness Creator، بزنز كارد، بنرات الموقع، تصاميم السوشيال ميديا، شعار Business Creaator لـ مسرعة الاعمال - Bussiness Creator",
-    "description": "مجموعة مشاريع وتصاميم متميزة تم تنفيذها لـ مسرعة الاعمال - Bussiness Creator، تشمل مجلدات العمل المنظمة (تصاميم الهوية والمواد البصرية • بروفايل  Bussiness Creator • بزنز كارد • بنرات الموقع • تصاميم السوشيال ميديا • شعار Business Creaator).",
-    "role": "تصميم وتنفيذ تصاميم الهوية والمواد البصرية، بروفايل  Bussiness Creator، بزنز كارد، بنرات الموقع، تصاميم السوشيال ميديا، شعار Business Creaator",
+    "summary": "تنفيذ الهوية والتصاميم المعتمدة، بروفايل  Bussiness Creator، بزنز كارد، بنرات الموقع، تصاميم السوشيال ميديا، شعار Business Creaator لـ مسرعة الاعمال - Bussiness Creator",
+    "shortDescription": "تنفيذ الهوية والتصاميم المعتمدة، بروفايل  Bussiness Creator، بزنز كارد، بنرات الموقع، تصاميم السوشيال ميديا، شعار Business Creaator لـ مسرعة الاعمال - Bussiness Creator",
+    "description": "مجموعة مشاريع وتصاميم متميزة تم تنفيذها لـ مسرعة الاعمال - Bussiness Creator، تشمل مجلدات العمل المنظمة (الهوية والتصاميم المعتمدة • بروفايل  Bussiness Creator • بزنز كارد • بنرات الموقع • تصاميم السوشيال ميديا • شعار Business Creaator).",
+    "role": "تصميم وتنفيذ الهوية والتصاميم المعتمدة، بروفايل  Bussiness Creator، بزنز كارد، بنرات الموقع، تصاميم السوشيال ميديا، شعار Business Creaator",
     "client": "مسرعة الاعمال - Bussiness Creator",
     "year": 2024,
     "timeline": "2023 - 2024",
     "category": "مواقع",
     "tags": [
-      "تصاميم الهوية والمواد البصرية",
+      "الهوية والتصاميم المعتمدة",
       "بروفايل  Bussiness Creator",
       "بزنز كارد",
       "بنرات الموقع",
@@ -363,7 +395,7 @@ export const projects: Project[] = [
       "شعار Business Creaator"
     ],
     "services": [
-      "تصاميم الهوية والمواد البصرية",
+      "الهوية والتصاميم المعتمدة",
       "بروفايل  Bussiness Creator",
       "بزنز كارد",
       "بنرات الموقع",
@@ -386,48 +418,56 @@ export const projects: Project[] = [
       "Figma"
     ],
     "cover": {
-      "src": "/images/organized/business-creator/general-assets/img-1.webp",
+      "src": "/images/organized/business-creator/assets/img-1.webp",
       "alt": "مسرعة الاعمال - Bussiness Creator"
     },
     "gallery": [
       {
-        "src": "/images/organized/business-creator/general-assets/img-1.webp",
+        "src": "/images/organized/business-creator/assets/img-1.webp",
         "alt": "مسرعة الاعمال - Bussiness Creator - انفوجرافبك  برنامج المطاعم والكوفيهات تعديل"
       },
       {
-        "src": "/images/organized/business-creator/bussiness-creator/img-1.webp",
+        "src": "/images/organized/business-creator/folder-1/img-1.webp",
         "alt": "مسرعة الاعمال - Bussiness Creator - بروفايل  Bussiness Creator (1)"
       },
       {
-        "src": "/images/organized/business-creator/bussiness-creator/img-2.webp",
+        "src": "/images/organized/business-creator/folder-1/img-2.webp",
         "alt": "مسرعة الاعمال - Bussiness Creator - بروفايل  Bussiness Creator (2)"
       },
       {
-        "src": "/images/organized/business-creator/bussiness-creator/img-3.webp",
+        "src": "/images/organized/business-creator/folder-1/img-3.webp",
         "alt": "مسرعة الاعمال - Bussiness Creator - بروفايل  Bussiness Creator (333)"
       },
       {
-        "src": "/images/organized/business-creator/bussiness-creator/img-4.webp",
+        "src": "/images/organized/business-creator/folder-1/img-4.webp",
         "alt": "مسرعة الاعمال - Bussiness Creator - بروفايل  Bussiness Creator (4)"
       },
       {
-        "src": "/images/organized/business-creator/bussiness-creator/img-5.webp",
+        "src": "/images/organized/business-creator/folder-1/img-5.webp",
         "alt": "مسرعة الاعمال - Bussiness Creator - بروفايل  Bussiness Creator (5)"
       },
       {
-        "src": "/images/organized/business-creator/bussiness-creator/img-6.webp",
+        "src": "/images/organized/business-creator/folder-1/img-6.webp",
         "alt": "مسرعة الاعمال - Bussiness Creator - بروفايل  Bussiness Creator (8)"
       },
       {
-        "src": "/images/organized/business-creator/bussiness-creator/img-7.webp",
+        "src": "/images/organized/business-creator/folder-1/img-7.webp",
         "alt": "مسرعة الاعمال - Bussiness Creator - بروفايل  Bussiness Creator (888)"
+      },
+      {
+        "src": "/images/organized/business-creator/folder-2/img-1.webp",
+        "alt": "مسرعة الاعمال - Bussiness Creator - بزنز كارد (سشسش)"
+      },
+      {
+        "src": "/images/organized/business-creator/folder-3/img-1.webp",
+        "alt": "مسرعة الاعمال - Bussiness Creator - بنرات الموقع (release your dream)"
       }
     ],
     "problem": "الحاجة إلى بناء وتطوير مواد بصرية متكاملة واحترافية لـ مسرعة الاعمال - Bussiness Creator.",
-    "solution": "تصميم وتنسيق مجلدات العمل المختلفة (تصاميم الهوية والمواد البصرية، بروفايل  Bussiness Creator، بزنز كارد، بنرات الموقع، تصاميم السوشيال ميديا، شعار Business Creaator) بدقة عالية وهوية موحدة.",
+    "solution": "تصميم وتنسيق مجلدات العمل المختلفة (الهوية والتصاميم المعتمدة، بروفايل  Bussiness Creator، بزنز كارد، بنرات الموقع، تصاميم السوشيال ميديا، شعار Business Creaator) بدقة عالية وهوية موحدة.",
     "result": "مخرجات بصرية متناسقة وجاهزة للاستخدام الرقمي والطباعة بجودة فائقة.",
     "highlights": [
-      "إنجاز تصاميم الهوية والمواد البصرية بأعلى المعايير البصرية",
+      "إنجاز الهوية والتصاميم المعتمدة بأعلى المعايير البصرية",
       "إنجاز بروفايل  Bussiness Creator بأعلى المعايير البصرية",
       "إنجاز بزنز كارد بأعلى المعايير البصرية",
       "إنجاز بنرات الموقع بأعلى المعايير البصرية",
@@ -438,8 +478,8 @@ export const projects: Project[] = [
     "status": "live"
   },
   {
-    "id": "dropshipsa",
-    "slug": "dropshipsa",
+    "id": "dropship-sa",
+    "slug": "dropship-sa",
     "title": "موقع DropShip.sa",
     "summary": "تنفيذ بروفايل موقع دروب شيب، بزنز كارد، بنرات الموقع، تصاميم سوشيال ميديا لـ موقع DropShip.sa",
     "shortDescription": "تنفيذ بروفايل موقع دروب شيب، بزنز كارد، بنرات الموقع، تصاميم سوشيال ميديا لـ موقع DropShip.sa",
@@ -477,41 +517,49 @@ export const projects: Project[] = [
       "Figma"
     ],
     "cover": {
-      "src": "/images/organized/dropshipsa/dropship-sa/img-1.webp",
+      "src": "/images/organized/dropship-sa/folder-1/img-1.webp",
       "alt": "موقع DropShip.sa"
     },
     "gallery": [
       {
-        "src": "/images/organized/dropshipsa/dropship-sa/img-1.webp",
+        "src": "/images/organized/dropship-sa/folder-1/img-1.webp",
         "alt": "موقع DropShip.sa - بروفايل موقع دروب شيب (Artboard 1)"
       },
       {
-        "src": "/images/organized/dropshipsa/dropship-sa/img-2.webp",
+        "src": "/images/organized/dropship-sa/folder-1/img-2.webp",
         "alt": "موقع DropShip.sa - بروفايل موقع دروب شيب (Artboard 2)"
       },
       {
-        "src": "/images/organized/dropshipsa/dropship-sa/img-3.webp",
+        "src": "/images/organized/dropship-sa/folder-1/img-3.webp",
         "alt": "موقع DropShip.sa - بروفايل موقع دروب شيب (Artboard 3)"
       },
       {
-        "src": "/images/organized/dropshipsa/dropship-sa/img-4.webp",
+        "src": "/images/organized/dropship-sa/folder-1/img-4.webp",
         "alt": "موقع DropShip.sa - بروفايل موقع دروب شيب (Artboard 4)"
       },
       {
-        "src": "/images/organized/dropshipsa/dropship-sa/img-5.webp",
+        "src": "/images/organized/dropship-sa/folder-1/img-5.webp",
         "alt": "موقع DropShip.sa - بروفايل موقع دروب شيب (Artboard 5)"
       },
       {
-        "src": "/images/organized/dropshipsa/dropship-sa/img-6.webp",
+        "src": "/images/organized/dropship-sa/folder-1/img-6.webp",
         "alt": "موقع DropShip.sa - بروفايل موقع دروب شيب (Artboard 7)"
       },
       {
-        "src": "/images/organized/dropshipsa/dropship-sa/img-7.webp",
+        "src": "/images/organized/dropship-sa/folder-1/img-7.webp",
         "alt": "موقع DropShip.sa - بروفايل موقع دروب شيب (Artboard 8)"
       },
       {
-        "src": "/images/organized/dropshipsa/dropship-sa/img-8.webp",
+        "src": "/images/organized/dropship-sa/folder-1/img-8.webp",
         "alt": "موقع DropShip.sa - بروفايل موقع دروب شيب (Artboard 9)"
+      },
+      {
+        "src": "/images/organized/dropship-sa/folder-2/img-1.webp",
+        "alt": "موقع DropShip.sa - بزنز كارد (كرت دروب شيب انجليزي عربي)"
+      },
+      {
+        "src": "/images/organized/dropship-sa/folder-3/img-1.webp",
+        "alt": "موقع DropShip.sa - بنرات الموقع (1)"
       }
     ],
     "problem": "الحاجة إلى بناء وتطوير مواد بصرية متكاملة واحترافية لـ موقع DropShip.sa.",
@@ -527,108 +575,25 @@ export const projects: Project[] = [
     "status": "live"
   },
   {
-    "id": "hora-cafe",
-    "slug": "hora-cafe",
-    "title": "Hora Cafe",
-    "summary": "تنفيذ تصميم كوب شتوي، تصميم منيو لـ Hora Cafe",
-    "shortDescription": "تنفيذ تصميم كوب شتوي، تصميم منيو لـ Hora Cafe",
-    "description": "مجموعة مشاريع وتصاميم متميزة تم تنفيذها لـ Hora Cafe، تشمل مجلدات العمل المنظمة (تصميم كوب شتوي • تصميم منيو).",
-    "role": "تصميم وتنفيذ تصميم كوب شتوي، تصميم منيو",
-    "client": "Hora Cafe",
-    "year": 2024,
-    "timeline": "2023 - 2024",
-    "category": "مطبوعات",
-    "tags": [
-      "تصميم كوب شتوي",
-      "تصميم منيو"
-    ],
-    "services": [
-      "تصميم كوب شتوي",
-      "تصميم منيو"
-    ],
-    "stack": [
-      "Photoshop",
-      "Illustrator",
-      "Figma"
-    ],
-    "technologies": [
-      "Graphic Design",
-      "UI/UX",
-      "Branding"
-    ],
-    "tools": [
-      "Photoshop",
-      "Illustrator",
-      "Figma"
-    ],
-    "cover": {
-      "src": "/images/organized/hora-cafe/item-kg7dy/img-1.webp",
-      "alt": "Hora Cafe"
-    },
-    "gallery": [
-      {
-        "src": "/images/organized/hora-cafe/item-kg7dy/img-1.webp",
-        "alt": "Hora Cafe - تصميم كوب شتوي (موك اب 2)"
-      },
-      {
-        "src": "/images/organized/hora-cafe/item-kg7dy/img-2.webp",
-        "alt": "Hora Cafe - تصميم كوب شتوي (موك اب هورا جديد)"
-      },
-      {
-        "src": "/images/organized/hora-cafe/item-kg7dy/img-3.webp",
-        "alt": "Hora Cafe - تصميم كوب شتوي (موك اب)"
-      },
-      {
-        "src": "/images/organized/hora-cafe/item-kg7dy/img-4.webp",
-        "alt": "Hora Cafe - تصميم كوب شتوي (موك تب هورا جديد 2)"
-      },
-      {
-        "src": "/images/organized/hora-cafe/item-dldpn/img-1.webp",
-        "alt": "Hora Cafe - تصميم منيو (1)"
-      },
-      {
-        "src": "/images/organized/hora-cafe/item-dldpn/img-2.webp",
-        "alt": "Hora Cafe - تصميم منيو (الافطار)"
-      },
-      {
-        "src": "/images/organized/hora-cafe/item-dldpn/img-3.webp",
-        "alt": "Hora Cafe - تصميم منيو (القهوة المقطرة والموهيتو باللون الابيض)"
-      },
-      {
-        "src": "/images/organized/hora-cafe/item-dldpn/img-4.webp",
-        "alt": "Hora Cafe - تصميم منيو (المشروبات الباردة باللون الرمادي)"
-      }
-    ],
-    "problem": "الحاجة إلى بناء وتطوير مواد بصرية متكاملة واحترافية لـ Hora Cafe.",
-    "solution": "تصميم وتنسيق مجلدات العمل المختلفة (تصميم كوب شتوي، تصميم منيو) بدقة عالية وهوية موحدة.",
-    "result": "مخرجات بصرية متناسقة وجاهزة للاستخدام الرقمي والطباعة بجودة فائقة.",
-    "highlights": [
-      "إنجاز تصميم كوب شتوي بأعلى المعايير البصرية",
-      "إنجاز تصميم منيو بأعلى المعايير البصرية"
-    ],
-    "featured": true,
-    "status": "live"
-  },
-  {
     "id": "cent-hotel",
     "slug": "cent-hotel",
     "title": "فندق سنت العزيزية",
-    "summary": "تنفيذ تصاميم الهوية والمواد البصرية، بزنز كارد، بنرات، تصميم بروفايل سلسلة فنادق سنت العزيزية لـ فندق سنت العزيزية",
-    "shortDescription": "تنفيذ تصاميم الهوية والمواد البصرية، بزنز كارد، بنرات، تصميم بروفايل سلسلة فنادق سنت العزيزية لـ فندق سنت العزيزية",
-    "description": "مجموعة مشاريع وتصاميم متميزة تم تنفيذها لـ فندق سنت العزيزية، تشمل مجلدات العمل المنظمة (تصاميم الهوية والمواد البصرية • بزنز كارد • بنرات • تصميم بروفايل سلسلة فنادق سنت العزيزية).",
-    "role": "تصميم وتنفيذ تصاميم الهوية والمواد البصرية، بزنز كارد، بنرات، تصميم بروفايل سلسلة فنادق سنت العزيزية",
+    "summary": "تنفيذ الهوية والتصاميم المعتمدة، بزنز كارد، بنرات، تصميم بروفايل سلسلة فنادق سنت العزيزية لـ فندق سنت العزيزية",
+    "shortDescription": "تنفيذ الهوية والتصاميم المعتمدة، بزنز كارد، بنرات، تصميم بروفايل سلسلة فنادق سنت العزيزية لـ فندق سنت العزيزية",
+    "description": "مجموعة مشاريع وتصاميم متميزة تم تنفيذها لـ فندق سنت العزيزية، تشمل مجلدات العمل المنظمة (الهوية والتصاميم المعتمدة • بزنز كارد • بنرات • تصميم بروفايل سلسلة فنادق سنت العزيزية).",
+    "role": "تصميم وتنفيذ الهوية والتصاميم المعتمدة، بزنز كارد، بنرات، تصميم بروفايل سلسلة فنادق سنت العزيزية",
     "client": "فندق سنت العزيزية",
     "year": 2024,
     "timeline": "2023 - 2024",
     "category": "مطبوعات",
     "tags": [
-      "تصاميم الهوية والمواد البصرية",
+      "الهوية والتصاميم المعتمدة",
       "بزنز كارد",
       "بنرات",
       "تصميم بروفايل سلسلة فنادق سنت العزيزية"
     ],
     "services": [
-      "تصاميم الهوية والمواد البصرية",
+      "الهوية والتصاميم المعتمدة",
       "بزنز كارد",
       "بنرات",
       "تصميم بروفايل سلسلة فنادق سنت العزيزية"
@@ -649,134 +614,59 @@ export const projects: Project[] = [
       "Figma"
     ],
     "cover": {
-      "src": "/images/organized/cent-hotel/general-assets/img-1.webp",
+      "src": "/images/organized/cent-hotel/assets/img-1.webp",
       "alt": "فندق سنت العزيزية"
     },
     "gallery": [
       {
-        "src": "/images/organized/cent-hotel/general-assets/img-1.webp",
+        "src": "/images/organized/cent-hotel/assets/img-1.webp",
         "alt": "فندق سنت العزيزية - فندق سنــت العزيزية الوجه الاول"
       },
       {
-        "src": "/images/organized/cent-hotel/item-riuk2/img-1.webp",
+        "src": "/images/organized/cent-hotel/folder-1/img-1.webp",
         "alt": "فندق سنت العزيزية - بزنز كارد (الوجة الثاني)"
       },
       {
-        "src": "/images/organized/cent-hotel/item-iq7pr/img-1.webp",
+        "src": "/images/organized/cent-hotel/folder-2/img-1.webp",
         "alt": "فندق سنت العزيزية - بنرات (نموذج 1)"
       },
       {
-        "src": "/images/organized/cent-hotel/item-iq7pr/img-2.webp",
+        "src": "/images/organized/cent-hotel/folder-2/img-2.webp",
         "alt": "فندق سنت العزيزية - بنرات (نموذج)"
       },
       {
-        "src": "/images/organized/cent-hotel/item-iq7pr/img-3.webp",
+        "src": "/images/organized/cent-hotel/folder-2/img-3.webp",
         "alt": "فندق سنت العزيزية - بنرات (يءسشسش)"
       },
       {
-        "src": "/images/organized/cent-hotel/item-iq7pr/img-4.webp",
+        "src": "/images/organized/cent-hotel/folder-2/img-4.webp",
         "alt": "فندق سنت العزيزية - بنرات (يضصيضي)"
       },
       {
-        "src": "/images/organized/cent-hotel/cent-hotel/img-1.webp",
+        "src": "/images/organized/cent-hotel/folder-3/img-1.webp",
         "alt": "فندق سنت العزيزية - تصميم بروفايل سلسلة فنادق سنت العزيزية (12.13)"
       },
       {
-        "src": "/images/organized/cent-hotel/cent-hotel/img-2.webp",
+        "src": "/images/organized/cent-hotel/folder-3/img-2.webp",
         "alt": "فندق سنت العزيزية - تصميم بروفايل سلسلة فنادق سنت العزيزية (19 & 20)"
+      },
+      {
+        "src": "/images/organized/cent-hotel/folder-3/img-3.webp",
+        "alt": "فندق سنت العزيزية - تصميم بروفايل سلسلة فنادق سنت العزيزية (6.7)"
+      },
+      {
+        "src": "/images/organized/cent-hotel/folder-3/img-4.webp",
+        "alt": "فندق سنت العزيزية - تصميم بروفايل سلسلة فنادق سنت العزيزية (موك اب 1)"
       }
     ],
     "problem": "الحاجة إلى بناء وتطوير مواد بصرية متكاملة واحترافية لـ فندق سنت العزيزية.",
-    "solution": "تصميم وتنسيق مجلدات العمل المختلفة (تصاميم الهوية والمواد البصرية، بزنز كارد، بنرات، تصميم بروفايل سلسلة فنادق سنت العزيزية) بدقة عالية وهوية موحدة.",
+    "solution": "تصميم وتنسيق مجلدات العمل المختلفة (الهوية والتصاميم المعتمدة، بزنز كارد، بنرات، تصميم بروفايل سلسلة فنادق سنت العزيزية) بدقة عالية وهوية موحدة.",
     "result": "مخرجات بصرية متناسقة وجاهزة للاستخدام الرقمي والطباعة بجودة فائقة.",
     "highlights": [
-      "إنجاز تصاميم الهوية والمواد البصرية بأعلى المعايير البصرية",
+      "إنجاز الهوية والتصاميم المعتمدة بأعلى المعايير البصرية",
       "إنجاز بزنز كارد بأعلى المعايير البصرية",
       "إنجاز بنرات بأعلى المعايير البصرية",
       "إنجاز تصميم بروفايل سلسلة فنادق سنت العزيزية بأعلى المعايير البصرية"
-    ],
-    "featured": true,
-    "status": "live"
-  },
-  {
-    "id": "tamatta-agency",
-    "slug": "tamatta-agency",
-    "title": "وكالة تمتع للدعاية والإعلان",
-    "summary": "تنفيذ بروفايل، بزنز كارد لـ وكالة تمتع للدعاية والإعلان",
-    "shortDescription": "تنفيذ بروفايل، بزنز كارد لـ وكالة تمتع للدعاية والإعلان",
-    "description": "مجموعة مشاريع وتصاميم متميزة تم تنفيذها لـ وكالة تمتع للدعاية والإعلان، تشمل مجلدات العمل المنظمة (بروفايل • بزنز كارد).",
-    "role": "تصميم وتنفيذ بروفايل، بزنز كارد",
-    "client": "وكالة تمتع للدعاية والإعلان",
-    "year": 2024,
-    "timeline": "2023 - 2024",
-    "category": "مطبوعات",
-    "tags": [
-      "بروفايل",
-      "بزنز كارد"
-    ],
-    "services": [
-      "بروفايل",
-      "بزنز كارد"
-    ],
-    "stack": [
-      "Photoshop",
-      "Illustrator",
-      "Figma"
-    ],
-    "technologies": [
-      "Graphic Design",
-      "UI/UX",
-      "Branding"
-    ],
-    "tools": [
-      "Photoshop",
-      "Illustrator",
-      "Figma"
-    ],
-    "cover": {
-      "src": "/images/organized/tamatta-agency/item-oqrg1/img-1.webp",
-      "alt": "وكالة تمتع للدعاية والإعلان"
-    },
-    "gallery": [
-      {
-        "src": "/images/organized/tamatta-agency/item-oqrg1/img-1.webp",
-        "alt": "وكالة تمتع للدعاية والإعلان - بروفايل (1)"
-      },
-      {
-        "src": "/images/organized/tamatta-agency/item-oqrg1/img-2.webp",
-        "alt": "وكالة تمتع للدعاية والإعلان - بروفايل (2)"
-      },
-      {
-        "src": "/images/organized/tamatta-agency/item-oqrg1/img-3.webp",
-        "alt": "وكالة تمتع للدعاية والإعلان - بروفايل (3)"
-      },
-      {
-        "src": "/images/organized/tamatta-agency/item-oqrg1/img-4.webp",
-        "alt": "وكالة تمتع للدعاية والإعلان - بروفايل (5)"
-      },
-      {
-        "src": "/images/organized/tamatta-agency/item-oqrg1/img-5.webp",
-        "alt": "وكالة تمتع للدعاية والإعلان - بروفايل (6)"
-      },
-      {
-        "src": "/images/organized/tamatta-agency/item-n91u1/img-1.webp",
-        "alt": "وكالة تمتع للدعاية والإعلان - بزنز كارد (1)"
-      },
-      {
-        "src": "/images/organized/tamatta-agency/item-n91u1/img-2.webp",
-        "alt": "وكالة تمتع للدعاية والإعلان - بزنز كارد (بزنز كارد نموذج 2)"
-      },
-      {
-        "src": "/images/organized/tamatta-agency/item-n91u1/img-3.webp",
-        "alt": "وكالة تمتع للدعاية والإعلان - بزنز كارد (رائد عبد العزيز 2)"
-      }
-    ],
-    "problem": "الحاجة إلى بناء وتطوير مواد بصرية متكاملة واحترافية لـ وكالة تمتع للدعاية والإعلان.",
-    "solution": "تصميم وتنسيق مجلدات العمل المختلفة (بروفايل، بزنز كارد) بدقة عالية وهوية موحدة.",
-    "result": "مخرجات بصرية متناسقة وجاهزة للاستخدام الرقمي والطباعة بجودة فائقة.",
-    "highlights": [
-      "إنجاز بروفايل بأعلى المعايير البصرية",
-      "إنجاز بزنز كارد بأعلى المعايير البصرية"
     ],
     "featured": true,
     "status": "live"
@@ -817,41 +707,49 @@ export const projects: Project[] = [
       "Figma"
     ],
     "cover": {
-      "src": "/images/organized/dr-tomador-dental/item-oly3j/img-1.webp",
+      "src": "/images/organized/dr-tomador-dental/folder-1/img-1.webp",
       "alt": "إدارة حساب دكتورة الاسنان تماضر"
     },
     "gallery": [
       {
-        "src": "/images/organized/dr-tomador-dental/item-oly3j/img-1.webp",
+        "src": "/images/organized/dr-tomador-dental/folder-1/img-1.webp",
         "alt": "إدارة حساب دكتورة الاسنان تماضر - تصميم سوشيال ميديا (1)"
       },
       {
-        "src": "/images/organized/dr-tomador-dental/item-oly3j/img-2.webp",
+        "src": "/images/organized/dr-tomador-dental/folder-1/img-2.webp",
         "alt": "إدارة حساب دكتورة الاسنان تماضر - تصميم سوشيال ميديا (1)"
       },
       {
-        "src": "/images/organized/dr-tomador-dental/item-oly3j/img-3.webp",
+        "src": "/images/organized/dr-tomador-dental/folder-1/img-3.webp",
         "alt": "إدارة حساب دكتورة الاسنان تماضر - تصميم سوشيال ميديا (2 (1))"
       },
       {
-        "src": "/images/organized/dr-tomador-dental/item-oly3j/img-4.webp",
+        "src": "/images/organized/dr-tomador-dental/folder-1/img-4.webp",
         "alt": "إدارة حساب دكتورة الاسنان تماضر - تصميم سوشيال ميديا (2)"
       },
       {
-        "src": "/images/organized/dr-tomador-dental/item-oly3j/img-5.webp",
+        "src": "/images/organized/dr-tomador-dental/folder-1/img-5.webp",
         "alt": "إدارة حساب دكتورة الاسنان تماضر - تصميم سوشيال ميديا (الفرشاة المناسبة 2)"
       },
       {
-        "src": "/images/organized/dr-tomador-dental/item-oly3j/img-6.webp",
+        "src": "/images/organized/dr-tomador-dental/folder-1/img-6.webp",
         "alt": "إدارة حساب دكتورة الاسنان تماضر - تصميم سوشيال ميديا (الفرشاة المناسبة)"
       },
       {
-        "src": "/images/organized/dr-tomador-dental/item-oly3j/img-7.webp",
+        "src": "/images/organized/dr-tomador-dental/folder-1/img-7.webp",
         "alt": "إدارة حساب دكتورة الاسنان تماضر - تصميم سوشيال ميديا (كيفية استخراج الناب المضمور شرح 2)"
       },
       {
-        "src": "/images/organized/dr-tomador-dental/item-oly3j/img-8.webp",
+        "src": "/images/organized/dr-tomador-dental/folder-1/img-8.webp",
         "alt": "إدارة حساب دكتورة الاسنان تماضر - تصميم سوشيال ميديا (مرتين يوميا)"
+      },
+      {
+        "src": "/images/organized/dr-tomador-dental/folder-2/img-1.webp",
+        "alt": "إدارة حساب دكتورة الاسنان تماضر - تصميم شعار (1)"
+      },
+      {
+        "src": "/images/organized/dr-tomador-dental/folder-2/img-2.webp",
+        "alt": "إدارة حساب دكتورة الاسنان تماضر - تصميم شعار (sadfasdf)"
       }
     ],
     "problem": "الحاجة إلى بناء وتطوير مواد بصرية متكاملة واحترافية لـ إدارة حساب دكتورة الاسنان تماضر.",
@@ -860,6 +758,176 @@ export const projects: Project[] = [
     "highlights": [
       "إنجاز تصميم سوشيال ميديا بأعلى المعايير البصرية",
       "إنجاز تصميم شعار بأعلى المعايير البصرية"
+    ],
+    "featured": true,
+    "status": "live"
+  },
+  {
+    "id": "hora-cafe",
+    "slug": "hora-cafe",
+    "title": "Hora Cafe",
+    "summary": "تنفيذ تصميم كوب شتوي، تصميم منيو لـ Hora Cafe",
+    "shortDescription": "تنفيذ تصميم كوب شتوي، تصميم منيو لـ Hora Cafe",
+    "description": "مجموعة مشاريع وتصاميم متميزة تم تنفيذها لـ Hora Cafe، تشمل مجلدات العمل المنظمة (تصميم كوب شتوي • تصميم منيو).",
+    "role": "تصميم وتنفيذ تصميم كوب شتوي، تصميم منيو",
+    "client": "Hora Cafe",
+    "year": 2024,
+    "timeline": "2023 - 2024",
+    "category": "مطبوعات",
+    "tags": [
+      "تصميم كوب شتوي",
+      "تصميم منيو"
+    ],
+    "services": [
+      "تصميم كوب شتوي",
+      "تصميم منيو"
+    ],
+    "stack": [
+      "Photoshop",
+      "Illustrator",
+      "Figma"
+    ],
+    "technologies": [
+      "Graphic Design",
+      "UI/UX",
+      "Branding"
+    ],
+    "tools": [
+      "Photoshop",
+      "Illustrator",
+      "Figma"
+    ],
+    "cover": {
+      "src": "/images/organized/hora-cafe/folder-1/img-1.webp",
+      "alt": "Hora Cafe"
+    },
+    "gallery": [
+      {
+        "src": "/images/organized/hora-cafe/folder-1/img-1.webp",
+        "alt": "Hora Cafe - تصميم كوب شتوي (موك اب 2)"
+      },
+      {
+        "src": "/images/organized/hora-cafe/folder-1/img-2.webp",
+        "alt": "Hora Cafe - تصميم كوب شتوي (موك اب هورا جديد)"
+      },
+      {
+        "src": "/images/organized/hora-cafe/folder-1/img-3.webp",
+        "alt": "Hora Cafe - تصميم كوب شتوي (موك اب)"
+      },
+      {
+        "src": "/images/organized/hora-cafe/folder-1/img-4.webp",
+        "alt": "Hora Cafe - تصميم كوب شتوي (موك تب هورا جديد 2)"
+      },
+      {
+        "src": "/images/organized/hora-cafe/folder-2/img-1.webp",
+        "alt": "Hora Cafe - تصميم منيو (1)"
+      },
+      {
+        "src": "/images/organized/hora-cafe/folder-2/img-2.webp",
+        "alt": "Hora Cafe - تصميم منيو (الافطار)"
+      },
+      {
+        "src": "/images/organized/hora-cafe/folder-2/img-3.webp",
+        "alt": "Hora Cafe - تصميم منيو (القهوة المقطرة والموهيتو باللون الابيض)"
+      },
+      {
+        "src": "/images/organized/hora-cafe/folder-2/img-4.webp",
+        "alt": "Hora Cafe - تصميم منيو (المشروبات الباردة باللون الرمادي)"
+      },
+      {
+        "src": "/images/organized/hora-cafe/folder-2/img-5.webp",
+        "alt": "Hora Cafe - تصميم منيو (لوب شورو رمادي)"
+      }
+    ],
+    "problem": "الحاجة إلى بناء وتطوير مواد بصرية متكاملة واحترافية لـ Hora Cafe.",
+    "solution": "تصميم وتنسيق مجلدات العمل المختلفة (تصميم كوب شتوي، تصميم منيو) بدقة عالية وهوية موحدة.",
+    "result": "مخرجات بصرية متناسقة وجاهزة للاستخدام الرقمي والطباعة بجودة فائقة.",
+    "highlights": [
+      "إنجاز تصميم كوب شتوي بأعلى المعايير البصرية",
+      "إنجاز تصميم منيو بأعلى المعايير البصرية"
+    ],
+    "featured": true,
+    "status": "live"
+  },
+  {
+    "id": "tamatta-agency",
+    "slug": "tamatta-agency",
+    "title": "وكالة تمتع للدعاية والإعلان",
+    "summary": "تنفيذ بروفايل، بزنز كارد لـ وكالة تمتع للدعاية والإعلان",
+    "shortDescription": "تنفيذ بروفايل، بزنز كارد لـ وكالة تمتع للدعاية والإعلان",
+    "description": "مجموعة مشاريع وتصاميم متميزة تم تنفيذها لـ وكالة تمتع للدعاية والإعلان، تشمل مجلدات العمل المنظمة (بروفايل • بزنز كارد).",
+    "role": "تصميم وتنفيذ بروفايل، بزنز كارد",
+    "client": "وكالة تمتع للدعاية والإعلان",
+    "year": 2024,
+    "timeline": "2023 - 2024",
+    "category": "مطبوعات",
+    "tags": [
+      "بروفايل",
+      "بزنز كارد"
+    ],
+    "services": [
+      "بروفايل",
+      "بزنز كارد"
+    ],
+    "stack": [
+      "Photoshop",
+      "Illustrator",
+      "Figma"
+    ],
+    "technologies": [
+      "Graphic Design",
+      "UI/UX",
+      "Branding"
+    ],
+    "tools": [
+      "Photoshop",
+      "Illustrator",
+      "Figma"
+    ],
+    "cover": {
+      "src": "/images/organized/tamatta-agency/folder-1/img-1.webp",
+      "alt": "وكالة تمتع للدعاية والإعلان"
+    },
+    "gallery": [
+      {
+        "src": "/images/organized/tamatta-agency/folder-1/img-1.webp",
+        "alt": "وكالة تمتع للدعاية والإعلان - بروفايل (1)"
+      },
+      {
+        "src": "/images/organized/tamatta-agency/folder-1/img-2.webp",
+        "alt": "وكالة تمتع للدعاية والإعلان - بروفايل (2)"
+      },
+      {
+        "src": "/images/organized/tamatta-agency/folder-1/img-3.webp",
+        "alt": "وكالة تمتع للدعاية والإعلان - بروفايل (3)"
+      },
+      {
+        "src": "/images/organized/tamatta-agency/folder-1/img-4.webp",
+        "alt": "وكالة تمتع للدعاية والإعلان - بروفايل (5)"
+      },
+      {
+        "src": "/images/organized/tamatta-agency/folder-1/img-5.webp",
+        "alt": "وكالة تمتع للدعاية والإعلان - بروفايل (6)"
+      },
+      {
+        "src": "/images/organized/tamatta-agency/folder-2/img-1.webp",
+        "alt": "وكالة تمتع للدعاية والإعلان - بزنز كارد (1)"
+      },
+      {
+        "src": "/images/organized/tamatta-agency/folder-2/img-2.webp",
+        "alt": "وكالة تمتع للدعاية والإعلان - بزنز كارد (بزنز كارد نموذج 2)"
+      },
+      {
+        "src": "/images/organized/tamatta-agency/folder-2/img-3.webp",
+        "alt": "وكالة تمتع للدعاية والإعلان - بزنز كارد (رائد عبد العزيز 2)"
+      }
+    ],
+    "problem": "الحاجة إلى بناء وتطوير مواد بصرية متكاملة واحترافية لـ وكالة تمتع للدعاية والإعلان.",
+    "solution": "تصميم وتنسيق مجلدات العمل المختلفة (بروفايل، بزنز كارد) بدقة عالية وهوية موحدة.",
+    "result": "مخرجات بصرية متناسقة وجاهزة للاستخدام الرقمي والطباعة بجودة فائقة.",
+    "highlights": [
+      "إنجاز بروفايل بأعلى المعايير البصرية",
+      "إنجاز بزنز كارد بأعلى المعايير البصرية"
     ],
     "featured": true,
     "status": "live"
@@ -898,36 +966,36 @@ export const projects: Project[] = [
       "Figma"
     ],
     "cover": {
-      "src": "/images/organized/rayouf-perfumes/item-zxk11/img-1.webp",
+      "src": "/images/organized/rayouf-perfumes/folder-1/img-1.webp",
       "alt": "عطور ريوف"
     },
     "gallery": [
       {
-        "src": "/images/organized/rayouf-perfumes/item-zxk11/img-1.webp",
+        "src": "/images/organized/rayouf-perfumes/folder-1/img-1.webp",
         "alt": "عطور ريوف - تصميم بنرات المنتجات (بنر يوم التأسيس)"
       },
       {
-        "src": "/images/organized/rayouf-perfumes/item-zxk11/img-2.webp",
+        "src": "/images/organized/rayouf-perfumes/folder-1/img-2.webp",
         "alt": "عطور ريوف - تصميم بنرات المنتجات (عطور m1 m2)"
       },
       {
-        "src": "/images/organized/rayouf-perfumes/item-zxk11/img-3.webp",
+        "src": "/images/organized/rayouf-perfumes/folder-1/img-3.webp",
         "alt": "عطور ريوف - تصميم بنرات المنتجات (فخــامــة)"
       },
       {
-        "src": "/images/organized/rayouf-perfumes/item-zxk11/img-4.webp",
+        "src": "/images/organized/rayouf-perfumes/folder-1/img-4.webp",
         "alt": "عطور ريوف - تصميم بنرات المنتجات (موك اب عطور ريوف)"
       },
       {
-        "src": "/images/organized/rayouf-perfumes/item-zxk11/img-5.webp",
+        "src": "/images/organized/rayouf-perfumes/folder-1/img-5.webp",
         "alt": "عطور ريوف - تصميم بنرات المنتجات (‏‏عطر اورماندا - نسخة)"
       },
       {
-        "src": "/images/organized/rayouf-perfumes/item-zxk11/img-6.webp",
+        "src": "/images/organized/rayouf-perfumes/folder-1/img-6.webp",
         "alt": "عطور ريوف - تصميم بنرات المنتجات (‏‏عطر رماح - نسخة)"
       },
       {
-        "src": "/images/organized/rayouf-perfumes/item-zxk11/img-7.webp",
+        "src": "/images/organized/rayouf-perfumes/folder-1/img-7.webp",
         "alt": "عطور ريوف - تصميم بنرات المنتجات (‏‏عطر لكجري - نسخة)"
       }
     ],
@@ -976,36 +1044,36 @@ export const projects: Project[] = [
       "Figma"
     ],
     "cover": {
-      "src": "/images/organized/nbox-store/item-3itjw/img-1.webp",
+      "src": "/images/organized/nbox-store/folder-1/img-1.webp",
       "alt": "متجر NBOX"
     },
     "gallery": [
       {
-        "src": "/images/organized/nbox-store/item-3itjw/img-1.webp",
+        "src": "/images/organized/nbox-store/folder-1/img-1.webp",
         "alt": "متجر NBOX - البنرات (Artboard 1)"
       },
       {
-        "src": "/images/organized/nbox-store/item-3itjw/img-2.webp",
+        "src": "/images/organized/nbox-store/folder-1/img-2.webp",
         "alt": "متجر NBOX - البنرات (Artboard 2)"
       },
       {
-        "src": "/images/organized/nbox-store/item-3itjw/img-3.webp",
+        "src": "/images/organized/nbox-store/folder-1/img-3.webp",
         "alt": "متجر NBOX - البنرات (Artboard 3)"
       },
       {
-        "src": "/images/organized/nbox-store/item-3itjw/img-4.webp",
+        "src": "/images/organized/nbox-store/folder-1/img-4.webp",
         "alt": "متجر NBOX - البنرات (Artboard 4)"
       },
       {
-        "src": "/images/organized/nbox-store/item-t93es/img-1.webp",
+        "src": "/images/organized/nbox-store/folder-2/img-1.webp",
         "alt": "متجر NBOX - تصاميم سوشيال ميديا (2)"
       },
       {
-        "src": "/images/organized/nbox-store/item-t93es/img-2.webp",
+        "src": "/images/organized/nbox-store/folder-2/img-2.webp",
         "alt": "متجر NBOX - تصاميم سوشيال ميديا (Artboard 1)"
       },
       {
-        "src": "/images/organized/nbox-store/item-t93es/img-3.webp",
+        "src": "/images/organized/nbox-store/folder-2/img-3.webp",
         "alt": "متجر NBOX - تصاميم سوشيال ميديا (Artboard 5)"
       }
     ],
@@ -1055,32 +1123,32 @@ export const projects: Project[] = [
       "Figma"
     ],
     "cover": {
-      "src": "/images/organized/xo-hash/branding/img-1.webp",
+      "src": "/images/organized/xo-hash/folder-1/img-1.webp",
       "alt": "XO Hash"
     },
     "gallery": [
       {
-        "src": "/images/organized/xo-hash/branding/img-1.webp",
+        "src": "/images/organized/xo-hash/folder-1/img-1.webp",
         "alt": "XO Hash - صور الهوية (مع كتابة شعار XO Hashtag)"
       },
       {
-        "src": "/images/organized/xo-hash/branding/img-2.webp",
+        "src": "/images/organized/xo-hash/folder-1/img-2.webp",
         "alt": "XO Hash - صور الهوية (مع كتابة شعار افقي XO Hashtag)"
       },
       {
-        "src": "/images/organized/xo-hash/branding/img-1.webp",
+        "src": "/images/organized/xo-hash/folder-2/img-1.webp",
         "alt": "XO Hash - موك اب للهوية (2)"
       },
       {
-        "src": "/images/organized/xo-hash/branding/img-2.webp",
+        "src": "/images/organized/xo-hash/folder-2/img-2.webp",
         "alt": "XO Hash - موك اب للهوية (3)"
       },
       {
-        "src": "/images/organized/xo-hash/branding/img-3.webp",
+        "src": "/images/organized/xo-hash/folder-2/img-3.webp",
         "alt": "XO Hash - موك اب للهوية (4)"
       },
       {
-        "src": "/images/organized/xo-hash/branding/img-4.webp",
+        "src": "/images/organized/xo-hash/folder-2/img-4.webp",
         "alt": "XO Hash - موك اب للهوية (5)"
       }
     ],
@@ -1095,22 +1163,22 @@ export const projects: Project[] = [
     "status": "live"
   },
   {
-    "id": "shardon",
-    "slug": "shardon",
+    "id": "shardon-brand",
+    "slug": "shardon-brand",
     "title": "براند شاردون - SHARDON",
-    "summary": "تنفيذ تصاميم الهوية والمواد البصرية لـ براند شاردون - SHARDON",
-    "shortDescription": "تنفيذ تصاميم الهوية والمواد البصرية لـ براند شاردون - SHARDON",
-    "description": "مجموعة مشاريع وتصاميم متميزة تم تنفيذها لـ براند شاردون - SHARDON، تشمل مجلدات العمل المنظمة (تصاميم الهوية والمواد البصرية).",
-    "role": "تصميم وتنفيذ تصاميم الهوية والمواد البصرية",
+    "summary": "تنفيذ الهوية والتصاميم المعتمدة لـ براند شاردون - SHARDON",
+    "shortDescription": "تنفيذ الهوية والتصاميم المعتمدة لـ براند شاردون - SHARDON",
+    "description": "مجموعة مشاريع وتصاميم متميزة تم تنفيذها لـ براند شاردون - SHARDON، تشمل مجلدات العمل المنظمة (الهوية والتصاميم المعتمدة).",
+    "role": "تصميم وتنفيذ الهوية والتصاميم المعتمدة",
     "client": "براند شاردون - SHARDON",
     "year": 2024,
     "timeline": "2023 - 2024",
     "category": "هوية",
     "tags": [
-      "تصاميم الهوية والمواد البصرية"
+      "الهوية والتصاميم المعتمدة"
     ],
     "services": [
-      "تصاميم الهوية والمواد البصرية"
+      "الهوية والتصاميم المعتمدة"
     ],
     "stack": [
       "Photoshop",
@@ -1128,36 +1196,36 @@ export const projects: Project[] = [
       "Figma"
     ],
     "cover": {
-      "src": "/images/organized/shardon/general-assets/img-1.webp",
+      "src": "/images/organized/shardon-brand/assets/img-1.webp",
       "alt": "براند شاردون - SHARDON"
     },
     "gallery": [
       {
-        "src": "/images/organized/shardon/general-assets/img-1.webp",
+        "src": "/images/organized/shardon-brand/assets/img-1.webp",
         "alt": "براند شاردون - SHARDON - 5555"
       },
       {
-        "src": "/images/organized/shardon/general-assets/img-2.webp",
+        "src": "/images/organized/shardon-brand/assets/img-2.webp",
         "alt": "براند شاردون - SHARDON - الشعار مع الكتابة 2"
       },
       {
-        "src": "/images/organized/shardon/general-assets/img-3.webp",
+        "src": "/images/organized/shardon-brand/assets/img-3.webp",
         "alt": "براند شاردون - SHARDON - شرح الشعار"
       },
       {
-        "src": "/images/organized/shardon/general-assets/img-4.webp",
+        "src": "/images/organized/shardon-brand/assets/img-4.webp",
         "alt": "براند شاردون - SHARDON - شسيبشسيب"
       },
       {
-        "src": "/images/organized/shardon/general-assets/img-5.webp",
+        "src": "/images/organized/shardon-brand/assets/img-5.webp",
         "alt": "براند شاردون - SHARDON - موك اب"
       }
     ],
     "problem": "الحاجة إلى بناء وتطوير مواد بصرية متكاملة واحترافية لـ براند شاردون - SHARDON.",
-    "solution": "تصميم وتنسيق مجلدات العمل المختلفة (تصاميم الهوية والمواد البصرية) بدقة عالية وهوية موحدة.",
+    "solution": "تصميم وتنسيق مجلدات العمل المختلفة (الهوية والتصاميم المعتمدة) بدقة عالية وهوية موحدة.",
     "result": "مخرجات بصرية متناسقة وجاهزة للاستخدام الرقمي والطباعة بجودة فائقة.",
     "highlights": [
-      "إنجاز تصاميم الهوية والمواد البصرية بأعلى المعايير البصرية"
+      "إنجاز الهوية والتصاميم المعتمدة بأعلى المعايير البصرية"
     ],
     "featured": true,
     "status": "live"
@@ -1198,28 +1266,28 @@ export const projects: Project[] = [
       "Figma"
     ],
     "cover": {
-      "src": "/images/organized/luster-rawnaq/item-s8t8b/img-1.webp",
+      "src": "/images/organized/luster-rawnaq/folder-1/img-1.webp",
       "alt": "رونق Luster"
     },
     "gallery": [
       {
-        "src": "/images/organized/luster-rawnaq/item-s8t8b/img-1.webp",
+        "src": "/images/organized/luster-rawnaq/folder-1/img-1.webp",
         "alt": "رونق Luster - تصميم سوشيال ميديا (بوستر لوستر)"
       },
       {
-        "src": "/images/organized/luster-rawnaq/item-s8t8b/img-2.webp",
+        "src": "/images/organized/luster-rawnaq/folder-1/img-2.webp",
         "alt": "رونق Luster - تصميم سوشيال ميديا (عرض)"
       },
       {
-        "src": "/images/organized/luster-rawnaq/item-hoefo/img-1.webp",
+        "src": "/images/organized/luster-rawnaq/folder-2/img-1.webp",
         "alt": "رونق Luster - صور الشعار (2)"
       },
       {
-        "src": "/images/organized/luster-rawnaq/item-hoefo/img-2.webp",
+        "src": "/images/organized/luster-rawnaq/folder-2/img-2.webp",
         "alt": "رونق Luster - صور الشعار (zzzz)"
       },
       {
-        "src": "/images/organized/luster-rawnaq/item-hoefo/img-3.webp",
+        "src": "/images/organized/luster-rawnaq/folder-2/img-3.webp",
         "alt": "رونق Luster - صور الشعار (خلفية بيضا)"
       }
     ],
@@ -1269,28 +1337,28 @@ export const projects: Project[] = [
       "Figma"
     ],
     "cover": {
-      "src": "/images/organized/laza-restaurant/item-mahmn/img-1.webp",
+      "src": "/images/organized/laza-restaurant/folder-1/img-1.webp",
       "alt": "مطعم لازا البخاري"
     },
     "gallery": [
       {
-        "src": "/images/organized/laza-restaurant/item-mahmn/img-1.webp",
+        "src": "/images/organized/laza-restaurant/folder-1/img-1.webp",
         "alt": "مطعم لازا البخاري - تصميم  سوشيال ميديا (النموذج الثاني)"
       },
       {
-        "src": "/images/organized/laza-restaurant/item-mahmn/img-2.webp",
+        "src": "/images/organized/laza-restaurant/folder-1/img-2.webp",
         "alt": "مطعم لازا البخاري - تصميم  سوشيال ميديا (رز بيلاف بالدجاج)"
       },
       {
-        "src": "/images/organized/laza-restaurant/item-mahmn/img-3.webp",
+        "src": "/images/organized/laza-restaurant/folder-1/img-3.webp",
         "alt": "مطعم لازا البخاري - تصميم  سوشيال ميديا (عرض الشخصين (1))"
       },
       {
-        "src": "/images/organized/laza-restaurant/item-n1ul9/img-1.webp",
+        "src": "/images/organized/laza-restaurant/folder-2/img-1.webp",
         "alt": "مطعم لازا البخاري - منيو المطعم (الاطباق الرئيسية بإبراز بعض الأطباق تكبير الخط )"
       },
       {
-        "src": "/images/organized/laza-restaurant/item-n1ul9/img-2.webp",
+        "src": "/images/organized/laza-restaurant/folder-2/img-2.webp",
         "alt": "مطعم لازا البخاري - منيو المطعم (النمموذج الاول)"
       }
     ],
@@ -1305,22 +1373,22 @@ export const projects: Project[] = [
     "status": "live"
   },
   {
-    "id": "branding",
-    "slug": "branding",
+    "id": "sindyan-agri",
+    "slug": "sindyan-agri",
     "title": "هوية شركة سنديان الزراعية",
-    "summary": "تنفيذ تصاميم الهوية والمواد البصرية لـ هوية شركة سنديان الزراعية",
-    "shortDescription": "تنفيذ تصاميم الهوية والمواد البصرية لـ هوية شركة سنديان الزراعية",
-    "description": "مجموعة مشاريع وتصاميم متميزة تم تنفيذها لـ هوية شركة سنديان الزراعية، تشمل مجلدات العمل المنظمة (تصاميم الهوية والمواد البصرية).",
-    "role": "تصميم وتنفيذ تصاميم الهوية والمواد البصرية",
+    "summary": "تنفيذ الهوية والتصاميم المعتمدة لـ هوية شركة سنديان الزراعية",
+    "shortDescription": "تنفيذ الهوية والتصاميم المعتمدة لـ هوية شركة سنديان الزراعية",
+    "description": "مجموعة مشاريع وتصاميم متميزة تم تنفيذها لـ هوية شركة سنديان الزراعية، تشمل مجلدات العمل المنظمة (الهوية والتصاميم المعتمدة).",
+    "role": "تصميم وتنفيذ الهوية والتصاميم المعتمدة",
     "client": "هوية شركة سنديان الزراعية",
     "year": 2024,
     "timeline": "2023 - 2024",
     "category": "هوية",
     "tags": [
-      "تصاميم الهوية والمواد البصرية"
+      "الهوية والتصاميم المعتمدة"
     ],
     "services": [
-      "تصاميم الهوية والمواد البصرية"
+      "الهوية والتصاميم المعتمدة"
     ],
     "stack": [
       "Photoshop",
@@ -1338,53 +1406,53 @@ export const projects: Project[] = [
       "Figma"
     ],
     "cover": {
-      "src": "/images/organized/branding/general-assets/img-1.webp",
+      "src": "/images/organized/sindyan-agri/assets/img-1.webp",
       "alt": "هوية شركة سنديان الزراعية"
     },
     "gallery": [
       {
-        "src": "/images/organized/branding/general-assets/img-1.webp",
+        "src": "/images/organized/sindyan-agri/assets/img-1.webp",
         "alt": "هوية شركة سنديان الزراعية - الخطوط المستخدمة"
       },
       {
-        "src": "/images/organized/branding/general-assets/img-2.webp",
+        "src": "/images/organized/sindyan-agri/assets/img-2.webp",
         "alt": "هوية شركة سنديان الزراعية - بالأبيض"
       },
       {
-        "src": "/images/organized/branding/general-assets/img-3.webp",
+        "src": "/images/organized/sindyan-agri/assets/img-3.webp",
         "alt": "هوية شركة سنديان الزراعية - مربع شعار سنديان الخليج"
       },
       {
-        "src": "/images/organized/branding/general-assets/img-4.webp",
+        "src": "/images/organized/sindyan-agri/assets/img-4.webp",
         "alt": "هوية شركة سنديان الزراعية - موك اب شعار شركة السنديان"
       }
     ],
     "problem": "الحاجة إلى بناء وتطوير مواد بصرية متكاملة واحترافية لـ هوية شركة سنديان الزراعية.",
-    "solution": "تصميم وتنسيق مجلدات العمل المختلفة (تصاميم الهوية والمواد البصرية) بدقة عالية وهوية موحدة.",
+    "solution": "تصميم وتنسيق مجلدات العمل المختلفة (الهوية والتصاميم المعتمدة) بدقة عالية وهوية موحدة.",
     "result": "مخرجات بصرية متناسقة وجاهزة للاستخدام الرقمي والطباعة بجودة فائقة.",
     "highlights": [
-      "إنجاز تصاميم الهوية والمواد البصرية بأعلى المعايير البصرية"
+      "إنجاز الهوية والتصاميم المعتمدة بأعلى المعايير البصرية"
     ],
     "featured": true,
     "status": "live"
   },
   {
-    "id": "branding",
-    "slug": "branding",
+    "id": "lawn-agency",
+    "slug": "lawn-agency",
     "title": "هوية وكالة لون للدعاية والإعلان",
-    "summary": "تنفيذ تصاميم الهوية والمواد البصرية لـ هوية وكالة لون للدعاية والإعلان",
-    "shortDescription": "تنفيذ تصاميم الهوية والمواد البصرية لـ هوية وكالة لون للدعاية والإعلان",
-    "description": "مجموعة مشاريع وتصاميم متميزة تم تنفيذها لـ هوية وكالة لون للدعاية والإعلان، تشمل مجلدات العمل المنظمة (تصاميم الهوية والمواد البصرية).",
-    "role": "تصميم وتنفيذ تصاميم الهوية والمواد البصرية",
+    "summary": "تنفيذ الهوية والتصاميم المعتمدة لـ هوية وكالة لون للدعاية والإعلان",
+    "shortDescription": "تنفيذ الهوية والتصاميم المعتمدة لـ هوية وكالة لون للدعاية والإعلان",
+    "description": "مجموعة مشاريع وتصاميم متميزة تم تنفيذها لـ هوية وكالة لون للدعاية والإعلان، تشمل مجلدات العمل المنظمة (الهوية والتصاميم المعتمدة).",
+    "role": "تصميم وتنفيذ الهوية والتصاميم المعتمدة",
     "client": "هوية وكالة لون للدعاية والإعلان",
     "year": 2024,
     "timeline": "2023 - 2024",
     "category": "هوية",
     "tags": [
-      "تصاميم الهوية والمواد البصرية"
+      "الهوية والتصاميم المعتمدة"
     ],
     "services": [
-      "تصاميم الهوية والمواد البصرية"
+      "الهوية والتصاميم المعتمدة"
     ],
     "stack": [
       "Photoshop",
@@ -1402,32 +1470,32 @@ export const projects: Project[] = [
       "Figma"
     ],
     "cover": {
-      "src": "/images/organized/branding/general-assets/img-1.webp",
+      "src": "/images/organized/lawn-agency/assets/img-1.webp",
       "alt": "هوية وكالة لون للدعاية والإعلان"
     },
     "gallery": [
       {
-        "src": "/images/organized/branding/general-assets/img-1.webp",
+        "src": "/images/organized/lawn-agency/assets/img-1.webp",
         "alt": "هوية وكالة لون للدعاية والإعلان - الشعار الثابت"
       },
       {
-        "src": "/images/organized/branding/general-assets/img-2.webp",
+        "src": "/images/organized/lawn-agency/assets/img-2.webp",
         "alt": "هوية وكالة لون للدعاية والإعلان - الفكرة الثانية تعديل جداوي2"
       },
       {
-        "src": "/images/organized/branding/general-assets/img-3.webp",
+        "src": "/images/organized/lawn-agency/assets/img-3.webp",
         "alt": "هوية وكالة لون للدعاية والإعلان - رمز الوكالة"
       },
       {
-        "src": "/images/organized/branding/general-assets/img-4.webp",
+        "src": "/images/organized/lawn-agency/assets/img-4.webp",
         "alt": "هوية وكالة لون للدعاية والإعلان - موك اب"
       }
     ],
     "problem": "الحاجة إلى بناء وتطوير مواد بصرية متكاملة واحترافية لـ هوية وكالة لون للدعاية والإعلان.",
-    "solution": "تصميم وتنسيق مجلدات العمل المختلفة (تصاميم الهوية والمواد البصرية) بدقة عالية وهوية موحدة.",
+    "solution": "تصميم وتنسيق مجلدات العمل المختلفة (الهوية والتصاميم المعتمدة) بدقة عالية وهوية موحدة.",
     "result": "مخرجات بصرية متناسقة وجاهزة للاستخدام الرقمي والطباعة بجودة فائقة.",
     "highlights": [
-      "إنجاز تصاميم الهوية والمواد البصرية بأعلى المعايير البصرية"
+      "إنجاز الهوية والتصاميم المعتمدة بأعلى المعايير البصرية"
     ],
     "featured": true,
     "status": "live"
@@ -1466,24 +1534,24 @@ export const projects: Project[] = [
       "Figma"
     ],
     "cover": {
-      "src": "/images/organized/rayhanah-mawadda/item-0koe0/img-1.webp",
+      "src": "/images/organized/rayhanah-mawadda/folder-1/img-1.webp",
       "alt": "شركة ريحانة مودة  للسفر"
     },
     "gallery": [
       {
-        "src": "/images/organized/rayhanah-mawadda/item-0koe0/img-1.webp",
+        "src": "/images/organized/rayhanah-mawadda/folder-1/img-1.webp",
         "alt": "شركة ريحانة مودة  للسفر - تصميم بروشورات اعلانية (Umrah Bullet Train)"
       },
       {
-        "src": "/images/organized/rayhanah-mawadda/item-0koe0/img-2.webp",
+        "src": "/images/organized/rayhanah-mawadda/folder-1/img-2.webp",
         "alt": "شركة ريحانة مودة  للسفر - تصميم بروشورات اعلانية (برشور رحلة الطائف)"
       },
       {
-        "src": "/images/organized/rayhanah-mawadda/item-0koe0/img-3.webp",
+        "src": "/images/organized/rayhanah-mawadda/folder-1/img-3.webp",
         "alt": "شركة ريحانة مودة  للسفر - تصميم بروشورات اعلانية (بروشور برنامح رحلات المدينة المنورة1)"
       },
       {
-        "src": "/images/organized/rayhanah-mawadda/item-0koe0/img-4.webp",
+        "src": "/images/organized/rayhanah-mawadda/folder-1/img-4.webp",
         "alt": "شركة ريحانة مودة  للسفر - تصميم بروشورات اعلانية (بكج العمره)"
       }
     ],
@@ -1497,22 +1565,22 @@ export const projects: Project[] = [
     "status": "live"
   },
   {
-    "id": "naktle",
-    "slug": "naktle",
+    "id": "naktl-rice",
+    "slug": "naktl-rice",
     "title": "عبوة Naktle",
-    "summary": "تنفيذ تصاميم الهوية والمواد البصرية لـ عبوة Naktle",
-    "shortDescription": "تنفيذ تصاميم الهوية والمواد البصرية لـ عبوة Naktle",
-    "description": "مجموعة مشاريع وتصاميم متميزة تم تنفيذها لـ عبوة Naktle، تشمل مجلدات العمل المنظمة (تصاميم الهوية والمواد البصرية).",
-    "role": "تصميم وتنفيذ تصاميم الهوية والمواد البصرية",
+    "summary": "تنفيذ الهوية والتصاميم المعتمدة لـ عبوة Naktle",
+    "shortDescription": "تنفيذ الهوية والتصاميم المعتمدة لـ عبوة Naktle",
+    "description": "مجموعة مشاريع وتصاميم متميزة تم تنفيذها لـ عبوة Naktle، تشمل مجلدات العمل المنظمة (الهوية والتصاميم المعتمدة).",
+    "role": "تصميم وتنفيذ الهوية والتصاميم المعتمدة",
     "client": "عبوة Naktle",
     "year": 2024,
     "timeline": "2023 - 2024",
     "category": "مطبوعات",
     "tags": [
-      "تصاميم الهوية والمواد البصرية"
+      "الهوية والتصاميم المعتمدة"
     ],
     "services": [
-      "تصاميم الهوية والمواد البصرية"
+      "الهوية والتصاميم المعتمدة"
     ],
     "stack": [
       "Photoshop",
@@ -1530,28 +1598,28 @@ export const projects: Project[] = [
       "Figma"
     ],
     "cover": {
-      "src": "/images/organized/naktle/general-assets/img-1.webp",
+      "src": "/images/organized/naktl-rice/assets/img-1.webp",
       "alt": "عبوة Naktle"
     },
     "gallery": [
       {
-        "src": "/images/organized/naktle/general-assets/img-1.webp",
+        "src": "/images/organized/naktl-rice/assets/img-1.webp",
         "alt": "عبوة Naktle - 1موك اب لتصميم رز نكتل الجديد"
       },
       {
-        "src": "/images/organized/naktle/general-assets/img-2.webp",
+        "src": "/images/organized/naktl-rice/assets/img-2.webp",
         "alt": "عبوة Naktle - التصميم الاخير لكيس الرز"
       },
       {
-        "src": "/images/organized/naktle/general-assets/img-3.webp",
+        "src": "/images/organized/naktl-rice/assets/img-3.webp",
         "alt": "عبوة Naktle - نكتل هي اختيار كل عائلة مربع"
       }
     ],
     "problem": "الحاجة إلى بناء وتطوير مواد بصرية متكاملة واحترافية لـ عبوة Naktle.",
-    "solution": "تصميم وتنسيق مجلدات العمل المختلفة (تصاميم الهوية والمواد البصرية) بدقة عالية وهوية موحدة.",
+    "solution": "تصميم وتنسيق مجلدات العمل المختلفة (الهوية والتصاميم المعتمدة) بدقة عالية وهوية موحدة.",
     "result": "مخرجات بصرية متناسقة وجاهزة للاستخدام الرقمي والطباعة بجودة فائقة.",
     "highlights": [
-      "إنجاز تصاميم الهوية والمواد البصرية بأعلى المعايير البصرية"
+      "إنجاز الهوية والتصاميم المعتمدة بأعلى المعايير البصرية"
     ],
     "featured": true,
     "status": "live"
@@ -1560,19 +1628,19 @@ export const projects: Project[] = [
     "id": "beauty-and-more",
     "slug": "beauty-and-more",
     "title": "بيوتي اند مور",
-    "summary": "تنفيذ تصاميم الهوية والمواد البصرية لـ بيوتي اند مور",
-    "shortDescription": "تنفيذ تصاميم الهوية والمواد البصرية لـ بيوتي اند مور",
-    "description": "مجموعة مشاريع وتصاميم متميزة تم تنفيذها لـ بيوتي اند مور، تشمل مجلدات العمل المنظمة (تصاميم الهوية والمواد البصرية).",
-    "role": "تصميم وتنفيذ تصاميم الهوية والمواد البصرية",
+    "summary": "تنفيذ الهوية والتصاميم المعتمدة لـ بيوتي اند مور",
+    "shortDescription": "تنفيذ الهوية والتصاميم المعتمدة لـ بيوتي اند مور",
+    "description": "مجموعة مشاريع وتصاميم متميزة تم تنفيذها لـ بيوتي اند مور، تشمل مجلدات العمل المنظمة (الهوية والتصاميم المعتمدة).",
+    "role": "تصميم وتنفيذ الهوية والتصاميم المعتمدة",
     "client": "بيوتي اند مور",
     "year": 2024,
     "timeline": "2023 - 2024",
     "category": "تسويق",
     "tags": [
-      "تصاميم الهوية والمواد البصرية"
+      "الهوية والتصاميم المعتمدة"
     ],
     "services": [
-      "تصاميم الهوية والمواد البصرية"
+      "الهوية والتصاميم المعتمدة"
     ],
     "stack": [
       "Photoshop",
@@ -1590,28 +1658,28 @@ export const projects: Project[] = [
       "Figma"
     ],
     "cover": {
-      "src": "/images/organized/beauty-and-more/general-assets/img-1.webp",
+      "src": "/images/organized/beauty-and-more/assets/img-1.webp",
       "alt": "بيوتي اند مور"
     },
     "gallery": [
       {
-        "src": "/images/organized/beauty-and-more/general-assets/img-1.webp",
+        "src": "/images/organized/beauty-and-more/assets/img-1.webp",
         "alt": "بيوتي اند مور - بيوتي اند 11مور"
       },
       {
-        "src": "/images/organized/beauty-and-more/general-assets/img-2.webp",
+        "src": "/images/organized/beauty-and-more/assets/img-2.webp",
         "alt": "بيوتي اند مور - بيوتي اند مور ابو كلب"
       },
       {
-        "src": "/images/organized/beauty-and-more/general-assets/img-3.webp",
+        "src": "/images/organized/beauty-and-more/assets/img-3.webp",
         "alt": "بيوتي اند مور - بيوتي اند مور مع بنت"
       }
     ],
     "problem": "الحاجة إلى بناء وتطوير مواد بصرية متكاملة واحترافية لـ بيوتي اند مور.",
-    "solution": "تصميم وتنسيق مجلدات العمل المختلفة (تصاميم الهوية والمواد البصرية) بدقة عالية وهوية موحدة.",
+    "solution": "تصميم وتنسيق مجلدات العمل المختلفة (الهوية والتصاميم المعتمدة) بدقة عالية وهوية موحدة.",
     "result": "مخرجات بصرية متناسقة وجاهزة للاستخدام الرقمي والطباعة بجودة فائقة.",
     "highlights": [
-      "إنجاز تصاميم الهوية والمواد البصرية بأعلى المعايير البصرية"
+      "إنجاز الهوية والتصاميم المعتمدة بأعلى المعايير البصرية"
     ],
     "featured": true,
     "status": "live"
@@ -1620,19 +1688,19 @@ export const projects: Project[] = [
     "id": "environment-day",
     "slug": "environment-day",
     "title": "تصميم يوم البيئة للمدارس",
-    "summary": "تنفيذ تصاميم الهوية والمواد البصرية لـ تصميم يوم البيئة للمدارس",
-    "shortDescription": "تنفيذ تصاميم الهوية والمواد البصرية لـ تصميم يوم البيئة للمدارس",
-    "description": "مجموعة مشاريع وتصاميم متميزة تم تنفيذها لـ تصميم يوم البيئة للمدارس، تشمل مجلدات العمل المنظمة (تصاميم الهوية والمواد البصرية).",
-    "role": "تصميم وتنفيذ تصاميم الهوية والمواد البصرية",
+    "summary": "تنفيذ الهوية والتصاميم المعتمدة لـ تصميم يوم البيئة للمدارس",
+    "shortDescription": "تنفيذ الهوية والتصاميم المعتمدة لـ تصميم يوم البيئة للمدارس",
+    "description": "مجموعة مشاريع وتصاميم متميزة تم تنفيذها لـ تصميم يوم البيئة للمدارس، تشمل مجلدات العمل المنظمة (الهوية والتصاميم المعتمدة).",
+    "role": "تصميم وتنفيذ الهوية والتصاميم المعتمدة",
     "client": "تصميم يوم البيئة للمدارس",
     "year": 2024,
     "timeline": "2023 - 2024",
     "category": "مطبوعات",
     "tags": [
-      "تصاميم الهوية والمواد البصرية"
+      "الهوية والتصاميم المعتمدة"
     ],
     "services": [
-      "تصاميم الهوية والمواد البصرية"
+      "الهوية والتصاميم المعتمدة"
     ],
     "stack": [
       "Photoshop",
@@ -1650,24 +1718,24 @@ export const projects: Project[] = [
       "Figma"
     ],
     "cover": {
-      "src": "/images/organized/environment-day/general-assets/img-1.webp",
+      "src": "/images/organized/environment-day/assets/img-1.webp",
       "alt": "تصميم يوم البيئة للمدارس"
     },
     "gallery": [
       {
-        "src": "/images/organized/environment-day/general-assets/img-1.webp",
+        "src": "/images/organized/environment-day/assets/img-1.webp",
         "alt": "تصميم يوم البيئة للمدارس - التصصميم"
       },
       {
-        "src": "/images/organized/environment-day/general-assets/img-2.webp",
+        "src": "/images/organized/environment-day/assets/img-2.webp",
         "alt": "تصميم يوم البيئة للمدارس - موك اب 2"
       }
     ],
     "problem": "الحاجة إلى بناء وتطوير مواد بصرية متكاملة واحترافية لـ تصميم يوم البيئة للمدارس.",
-    "solution": "تصميم وتنسيق مجلدات العمل المختلفة (تصاميم الهوية والمواد البصرية) بدقة عالية وهوية موحدة.",
+    "solution": "تصميم وتنسيق مجلدات العمل المختلفة (الهوية والتصاميم المعتمدة) بدقة عالية وهوية موحدة.",
     "result": "مخرجات بصرية متناسقة وجاهزة للاستخدام الرقمي والطباعة بجودة فائقة.",
     "highlights": [
-      "إنجاز تصاميم الهوية والمواد البصرية بأعلى المعايير البصرية"
+      "إنجاز الهوية والتصاميم المعتمدة بأعلى المعايير البصرية"
     ],
     "featured": true,
     "status": "live"
@@ -1676,19 +1744,19 @@ export const projects: Project[] = [
     "id": "skeleton-cafe",
     "slug": "skeleton-cafe",
     "title": "كافي سكيليتون",
-    "summary": "تنفيذ تصاميم الهوية والمواد البصرية لـ كافي سكيليتون",
-    "shortDescription": "تنفيذ تصاميم الهوية والمواد البصرية لـ كافي سكيليتون",
-    "description": "مجموعة مشاريع وتصاميم متميزة تم تنفيذها لـ كافي سكيليتون، تشمل مجلدات العمل المنظمة (تصاميم الهوية والمواد البصرية).",
-    "role": "تصميم وتنفيذ تصاميم الهوية والمواد البصرية",
+    "summary": "تنفيذ الهوية والتصاميم المعتمدة لـ كافي سكيليتون",
+    "shortDescription": "تنفيذ الهوية والتصاميم المعتمدة لـ كافي سكيليتون",
+    "description": "مجموعة مشاريع وتصاميم متميزة تم تنفيذها لـ كافي سكيليتون، تشمل مجلدات العمل المنظمة (الهوية والتصاميم المعتمدة).",
+    "role": "تصميم وتنفيذ الهوية والتصاميم المعتمدة",
     "client": "كافي سكيليتون",
     "year": 2024,
     "timeline": "2023 - 2024",
     "category": "تسويق",
     "tags": [
-      "تصاميم الهوية والمواد البصرية"
+      "الهوية والتصاميم المعتمدة"
     ],
     "services": [
-      "تصاميم الهوية والمواد البصرية"
+      "الهوية والتصاميم المعتمدة"
     ],
     "stack": [
       "Photoshop",
@@ -1706,24 +1774,24 @@ export const projects: Project[] = [
       "Figma"
     ],
     "cover": {
-      "src": "/images/organized/skeleton-cafe/general-assets/img-1.webp",
+      "src": "/images/organized/skeleton-cafe/assets/img-1.webp",
       "alt": "كافي سكيليتون"
     },
     "gallery": [
       {
-        "src": "/images/organized/skeleton-cafe/general-assets/img-1.webp",
+        "src": "/images/organized/skeleton-cafe/assets/img-1.webp",
         "alt": "كافي سكيليتون - موك اب 3"
       },
       {
-        "src": "/images/organized/skeleton-cafe/general-assets/img-2.webp",
+        "src": "/images/organized/skeleton-cafe/assets/img-2.webp",
         "alt": "كافي سكيليتون - موك اب"
       }
     ],
     "problem": "الحاجة إلى بناء وتطوير مواد بصرية متكاملة واحترافية لـ كافي سكيليتون.",
-    "solution": "تصميم وتنسيق مجلدات العمل المختلفة (تصاميم الهوية والمواد البصرية) بدقة عالية وهوية موحدة.",
+    "solution": "تصميم وتنسيق مجلدات العمل المختلفة (الهوية والتصاميم المعتمدة) بدقة عالية وهوية موحدة.",
     "result": "مخرجات بصرية متناسقة وجاهزة للاستخدام الرقمي والطباعة بجودة فائقة.",
     "highlights": [
-      "إنجاز تصاميم الهوية والمواد البصرية بأعلى المعايير البصرية"
+      "إنجاز الهوية والتصاميم المعتمدة بأعلى المعايير البصرية"
     ],
     "featured": true,
     "status": "live"
