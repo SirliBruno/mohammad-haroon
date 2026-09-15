@@ -64,23 +64,25 @@ function WorkIndex() {
     const dbSlugs = new Set(fromDb.map((p) => p.slug));
     const merged = [...fromDb, ...staticProjects.filter((p) => !dbSlugs.has(p.slug))];
 
-    return merged.filter((p) => {
-      const matchCat =
-        category === "الكل" ||
-        p.category === category ||
-        (category === "مواقع" && p.category === "مواقع إلكترونية") ||
-        (category === "متاجر" && p.category === "تجارة إلكترونية") ||
-        (category === "UI/UX" && p.category === "تصميم واجهات") ||
-        (category === "هوية" && (p.category === "تصميم جرافيكي" || p.category === "هوية"));
+    return merged
+      .filter((p) => {
+        const matchCat =
+          category === "الكل" ||
+          p.category === category ||
+          (category === "مواقع" && p.category === "مواقع إلكترونية") ||
+          (category === "متاجر" && p.category === "تجارة إلكترونية") ||
+          (category === "UI/UX" && p.category === "تصميم واجهات") ||
+          (category === "هوية" && (p.category === "تصميم جرافيكي" || p.category === "هوية"));
 
-      const matchQuery =
-        !query.trim() ||
-        p.title.toLowerCase().includes(query.toLowerCase()) ||
-        p.summary.toLowerCase().includes(query.toLowerCase()) ||
-        p.tags.some((t) => t.toLowerCase().includes(query.toLowerCase()));
+        const matchQuery =
+          !query.trim() ||
+          p.title.toLowerCase().includes(query.toLowerCase()) ||
+          p.summary.toLowerCase().includes(query.toLowerCase()) ||
+          p.tags.some((t) => t.toLowerCase().includes(query.toLowerCase()));
 
-      return matchCat && matchQuery;
-    });
+        return matchCat && matchQuery;
+      })
+      .sort((a, b) => (b.year ?? 0) - (a.year ?? 0));
   }, [fromDb, category, query]);
 
   const total = allFiltered.length;
