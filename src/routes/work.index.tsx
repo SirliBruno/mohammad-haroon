@@ -66,27 +66,33 @@ function WorkIndex() {
   const [lightboxImage, setLightboxImage] = useState<{ src: string; alt: string; title: string } | null>(null);
 
   const filteredEntities = useMemo(() => {
-    return clientEntities.filter((entity) => {
-      const matchCat =
-        category === "الكل" ||
-        entity.category === category ||
-        entity.folders.some((f) => f.category === category);
+    return clientEntities
+      .filter((entity) => {
+        const matchCat =
+          category === "الكل" ||
+          entity.category === category ||
+          entity.folders.some((f) => f.category === category);
 
-      const q = query.trim().toLowerCase();
-      const matchQuery =
-        !q ||
-        entity.name.toLowerCase().includes(q) ||
-        entity.tagline.toLowerCase().includes(q) ||
-        entity.description.toLowerCase().includes(q) ||
-        entity.services.some((s) => s.toLowerCase().includes(q)) ||
-        entity.folders.some(
-          (f) =>
-            f.title.toLowerCase().includes(q) ||
-            f.summary.toLowerCase().includes(q),
-        );
+        const q = query.trim().toLowerCase();
+        const matchQuery =
+          !q ||
+          entity.name.toLowerCase().includes(q) ||
+          entity.tagline.toLowerCase().includes(q) ||
+          entity.description.toLowerCase().includes(q) ||
+          entity.services.some((s) => s.toLowerCase().includes(q)) ||
+          entity.folders.some(
+            (f) =>
+              f.title.toLowerCase().includes(q) ||
+              f.summary.toLowerCase().includes(q),
+          );
 
-      return matchCat && matchQuery;
-    });
+        return matchCat && matchQuery;
+      })
+      .sort((a, b) => {
+        const aCount = a.totalFiles ?? a.folders.reduce((acc, f) => acc + f.images.length, 0);
+        const bCount = b.totalFiles ?? b.folders.reduce((acc, f) => acc + f.images.length, 0);
+        return bCount - aCount;
+      });
   }, [category, query]);
 
   const totalFolders = useMemo(() => {
@@ -281,6 +287,9 @@ function ClientEntityCard({
                 </span>
                 <span className="text-xs font-medium text-muted-foreground">
                   {entity.year}
+                </span>
+                <span className="rounded-md bg-muted px-2 py-0.5 text-[11px] font-semibold text-foreground">
+                  {entity.totalFiles ?? entity.folders.reduce((acc, f) => acc + f.images.length, 0)} ملف وتصميم
                 </span>
               </div>
               <p className="mt-1.5 text-xs sm:text-sm text-muted-foreground leading-relaxed">
