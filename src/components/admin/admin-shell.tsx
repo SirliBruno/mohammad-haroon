@@ -37,6 +37,7 @@ import {
   Search,
   LogOut,
   ArrowRight,
+  Upload,
   type LucideIcon,
 } from "lucide-react";
 
@@ -49,6 +50,7 @@ const NAV: NavItem[] = [
   { to: "/admin/home", label: "الصفحة الرئيسية", group: "الصفحة الرئيسية", icon: LayoutDashboard },
   { to: "/admin/hero", label: "قسم الهيرو", group: "الصفحة الرئيسية", icon: Sparkles },
   { to: "/admin/projects", label: "المشاريع", group: "الأعمال", icon: FolderKanban },
+  { to: "/admin/my-projects", label: "استيراد أعمالي", group: "الأعمال", icon: Upload },
   { to: "/admin/services", label: "الخدمات", group: "الأعمال", icon: Wrench },
   { to: "/admin/testimonials", label: "التوصيات", group: "الأعمال", icon: MessagesSquare },
   { to: "/admin/blog", label: "المدونة", group: "الكتابة", icon: BookOpen },
