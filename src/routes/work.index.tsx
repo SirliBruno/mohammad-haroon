@@ -2,18 +2,26 @@ import { useState, useMemo } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { ArrowUpRight, Search, X, ArrowLeft } from "lucide-react";
+import { ArrowUpRight, Search, X, Sparkles, ChevronRight, ChevronLeft, ArrowLeft } from "lucide-react";
 import { buildMeta } from "@/features/seo/build-meta";
 import { PageHeader } from "@/components/layout/page-header";
 import { Section } from "@/components/layout/section";
-import { EmptyState, DSButton } from "@/components/ds";
+import { Grid, EmptyState, DSButton, DSCard } from "@/components/ds";
 import { type Project } from "@/features/projects/schema";
 import { projects as staticProjects } from "@/data/projects";
 import { cn } from "@/lib/utils";
+import { statusMeta } from "@/lib/project-status";
 import { toProject } from "@/lib/project-adapter";
-import { listPublicProjects } from "@/lib/cms/projects-public.functions";
+import {
+  listPublicProjects,
+  getProjectFacets,
+} from "@/lib/cms/projects-public.functions";
 import { usePageContent, getPageText } from "@/lib/cms/home-content";
 import { RouteErrorBoundary, RouteNotFoundBoundary } from "@/components/layout/route-boundaries";
+
+const PAGE_SIZE = 6;
+const CATEGORY_FILTERS = ["الكل", "أنظمة", "مواقع", "متاجر", "UI/UX", "هوية"] as const;
+type CategoryFilter = (typeof CATEGORY_FILTERS)[number];
 
 export const Route = createFileRoute("/work/")({
   errorComponent: ({ reset }) => <RouteErrorBoundary reset={reset} eyebrow="المشاريع" />,
@@ -30,73 +38,58 @@ export const Route = createFileRoute("/work/")({
   component: WorkIndex,
 });
 
-const CATEGORY_ORDER = ["متاجر", "هوية", "مواقع", "أنظمة"];
-
 function WorkIndex() {
   const listFn = useServerFn(listPublicProjects);
-  const [query, setQuery] = useState("");
+  const facetsFn = useServerFn(getProjectFacets);
 
-  const listQ = useQuery({
-    queryKey: ["work", "list", { query }],
-    queryFn: () =>
-      listFn({
-        data: {
-          limit: 100, // Fetch all available public DB projects
-          search: query.trim() || undefined,
-        },
-      }),
-    placeholderData: keepPreviousData,
+  const [query, setQuery] = useState("");
+  const [category, setCategory] = useState<CategoryFilter>("الكل");
+  const [page, setPage] = useState(1);
+
+  const facetsQ = useQuery({
+    queryKey: ["work", "facets"],
+    queryFn: () => facetsFn(),
+    staleTime: 60_000,
   });
 
-  const allCombined = useMemo(() => {
-    const dbProjects = (listQ.data?.rows ?? []).map(toProject);
-    const dbSlugs = new Set(dbProjects.map((p) => p.slug));
-    const merged = [...dbProjects];
+  const listQ = useQuery({
+    queryKey: ["work", "list-all"],
+    queryFn: () => listFn({ data: { limit: 100 } }),
+    staleTime: 60_000,
+  });
 
-    staticProjects.forEach((sp) => {
-      if (!dbSlugs.has(sp.slug)) {
-        merged.push(sp);
-      }
-    });
+  const fromDb = (listQ.data?.rows ?? []).map(toProject);
+
+  const allFiltered = useMemo(() => {
+    const dbSlugs = new Set(fromDb.map((p) => p.slug));
+    const merged = [...fromDb, ...staticProjects.filter((p) => !dbSlugs.has(p.slug))];
 
     return merged.filter((p) => {
-      if (!query.trim()) return true;
-      const q = query.toLowerCase();
-      return (
-        p.title.toLowerCase().includes(q) ||
-        p.summary.toLowerCase().includes(q) ||
-        (p.tags || []).some((t) => t.toLowerCase().includes(q))
-      );
-    });
-  }, [listQ.data, query]);
+      const matchCat =
+        category === "الكل" ||
+        p.category === category ||
+        (category === "مواقع" && p.category === "مواقع إلكترونية") ||
+        (category === "متاجر" && p.category === "تجارة إلكترونية") ||
+        (category === "UI/UX" && p.category === "تصميم واجهات") ||
+        (category === "هوية" && (p.category === "تصميم جرافيكي" || p.category === "هوية"));
 
-  const groupedProjects = useMemo(() => {
-    const groups: Record<string, Project[]> = {};
-    allCombined.forEach((p) => {
-      const cat = p.category || "أخرى";
-      // Normalize similar categories
-      const normalizedCat = 
-        cat === "تجارة إلكترونية" ? "متاجر" :
-        cat === "مواقع إلكترونية" ? "مواقع" :
-        cat === "تصميم جرافيكي" ? "هوية" : cat;
+      const matchQuery =
+        !query.trim() ||
+        p.title.toLowerCase().includes(query.toLowerCase()) ||
+        p.summary.toLowerCase().includes(query.toLowerCase()) ||
+        p.tags.some((t) => t.toLowerCase().includes(query.toLowerCase()));
 
-      if (!groups[normalizedCat]) groups[normalizedCat] = [];
-      groups[normalizedCat].push(p);
+      return matchCat && matchQuery;
     });
-    return groups;
-  }, [allCombined]);
+  }, [fromDb, category, query]);
+
+  const total = allFiltered.length;
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const safePage = Math.min(page, totalPages);
+  const projectsToDisplay = allFiltered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
 
   const { data: workRows } = usePageContent("work");
   const tt = (k: string, fb: string) => getPageText(workRows, k, fb);
-
-  const sortedCategories = Object.keys(groupedProjects).sort((a, b) => {
-    const idxA = CATEGORY_ORDER.indexOf(a);
-    const idxB = CATEGORY_ORDER.indexOf(b);
-    if (idxA !== -1 && idxB !== -1) return idxA - idxB;
-    if (idxA !== -1) return -1;
-    if (idxB !== -1) return 1;
-    return a.localeCompare(b);
-  });
 
   return (
     <>
@@ -106,79 +99,156 @@ function WorkIndex() {
         description="مجموعة مختارة من المواقع والأنظمة والمتاجر الإلكترونية التي صممتها وطورتها — من الفكرة إلى الإطلاق."
       />
 
-      <Section className="border-t border-border/60 pb-24">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-12">
-          <div>
+      <Section className="border-t border-border/60">
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <h2 className="text-2xl font-bold tracking-tight text-foreground md:text-3xl">
               جميع المشاريع
             </h2>
-            <p className="mt-2 text-sm text-muted-foreground">
-              استكشف أعمالي السابقة وتصفح المشاريع في كل تصنيف.
-            </p>
+            <div className="relative w-full md:max-w-sm">
+              <Search
+                aria-hidden
+                className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+              />
+              <input
+                type="search"
+                value={query}
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  setPage(1);
+                }}
+                placeholder="ابحث بالعنوان أو الوسم أو التقنية…"
+                aria-label="ابحث في المشاريع"
+                className="h-11 w-full rounded-2xl border border-border/80 bg-card pr-9 pl-9 text-sm text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30"
+              />
+              {query && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setQuery("");
+                    setPage(1);
+                  }}
+                  aria-label="مسح البحث"
+                  className="absolute left-2 top-1/2 grid size-6 -translate-y-1/2 place-items-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
+                >
+                  <X className="size-3.5" />
+                </button>
+              )}
+            </div>
           </div>
-          <div className="relative w-full md:max-w-sm">
-            <Search
-              aria-hidden
-              className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
-            />
-            <input
-              type="search"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="ابحث بالعنوان أو الوسم..."
-              aria-label="ابحث في المشاريع"
-              className="h-11 w-full rounded-2xl border border-border/80 bg-card pr-9 pl-9 text-sm text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30 transition-all"
-            />
-            {query && (
-              <button
-                type="button"
-                onClick={() => setQuery("")}
-                aria-label="مسح البحث"
-                className="absolute left-2 top-1/2 grid size-6 -translate-y-1/2 place-items-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
-              >
-                <X className="size-3.5" />
-              </button>
-            )}
+
+          {/* Filter Pills */}
+          <div
+            role="radiogroup"
+            aria-label="تصفية حسب الفئة"
+            className="flex flex-wrap items-center gap-2"
+          >
+            {CATEGORY_FILTERS.map((c) => {
+              const active = category === c;
+              return (
+                <button
+                  key={c}
+                  type="button"
+                  role="radio"
+                  aria-checked={active}
+                  onClick={() => {
+                    setCategory(c);
+                    setPage(1);
+                  }}
+                  className={cn(
+                    "inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs sm:text-sm font-semibold transition-all",
+                    active
+                      ? "bg-foreground text-background shadow-xs"
+                      : "border border-border/70 bg-card text-muted-foreground hover:border-foreground/40 hover:text-foreground",
+                  )}
+                >
+                  {c}
+                </button>
+              );
+            })}
           </div>
+
+          <p className="text-xs text-muted-foreground" aria-live="polite">
+            {total === 0
+              ? "لا توجد مشاريع مطابقة للبحث."
+              : `يظهر ${(safePage - 1) * PAGE_SIZE + 1}–${Math.min(
+                  safePage * PAGE_SIZE,
+                  total,
+                )} من أصل ${total} مشروع`}
+          </p>
         </div>
 
-        {allCombined.length === 0 ? (
-          <EmptyState
-            title="لا توجد نتائج مطابقة"
-            description="جرب البحث بكلمة أخرى، أو أعد ضبط الفلترة."
-            action={
-              <DSButton variant="outline" size="sm" onClick={() => setQuery("")}>
-                إعادة الضبط
-              </DSButton>
-            }
-          />
-        ) : (
-          <div className="flex flex-col gap-16 md:gap-20">
-            {sortedCategories.map((cat) => (
-              <div key={cat} className="group/section">
-                <div className="mb-6 flex items-center justify-between">
-                  <h3 className="text-xl font-bold text-foreground sm:text-2xl">
-                    مشاريع {cat}
-                  </h3>
-                  <span className="rounded-full bg-muted px-3 py-1 text-xs font-semibold text-muted-foreground">
-                    {groupedProjects[cat].length} مشروع
-                  </span>
-                </div>
-                
-                {/* Horizontal Carousel */}
-                <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8 pt-2 hide-scrollbar">
-                  {groupedProjects[cat].map((p) => (
-                    <div 
-                      key={p.slug} 
-                      className="min-w-[85vw] sm:min-w-[340px] md:min-w-[380px] lg:min-w-[420px] snap-start shrink-0"
-                    >
-                      <WorkProjectCard project={p} />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
+        <div className="mt-10">
+          {total === 0 ? (
+            <EmptyState
+              title="لا توجد نتائج مطابقة"
+              description="جرب البحث بكلمة أخرى، أو أعد ضبط الفلترة."
+              action={
+                <DSButton
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setQuery("");
+                    setCategory("الكل");
+                    setPage(1);
+                  }}
+                >
+                  إعادة الضبط
+                </DSButton>
+              }
+            />
+          ) : (
+            <Grid cols={{ base: 1, md: 2, lg: 3 }} gap="lg">
+              {projectsToDisplay.map((p) => (
+                <WorkProjectCard key={p.slug} project={p} />
+              ))}
+            </Grid>
+          )}
+        </div>
+
+        {totalPages > 1 && (
+          <nav
+            aria-label="التنقل بين الصفحات"
+            className="mt-12 flex items-center justify-center gap-2"
+          >
+            <button
+              type="button"
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={safePage === 1}
+              aria-label="الصفحة السابقة"
+              className="grid size-9 place-items-center rounded-xl border border-border bg-card text-muted-foreground transition-colors hover:text-foreground disabled:opacity-40"
+            >
+              <ChevronRight className="size-4" />
+            </button>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => {
+              const active = n === safePage;
+              return (
+                <button
+                  key={n}
+                  type="button"
+                  onClick={() => setPage(n)}
+                  aria-current={active ? "page" : undefined}
+                  className={cn(
+                    "min-w-9 rounded-xl px-3 py-1.5 text-xs font-semibold tabular-nums transition-colors",
+                    active
+                      ? "bg-foreground text-background"
+                      : "border border-border bg-card text-muted-foreground hover:text-foreground",
+                  )}
+                >
+                  {n}
+                </button>
+              );
+            })}
+            <button
+              type="button"
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              disabled={safePage === totalPages}
+              aria-label="الصفحة التالية"
+              className="grid size-9 place-items-center rounded-xl border border-border bg-card text-muted-foreground transition-colors hover:text-foreground disabled:opacity-40"
+            >
+              <ChevronLeft className="size-4" />
+            </button>
+          </nav>
         )}
       </Section>
     </>

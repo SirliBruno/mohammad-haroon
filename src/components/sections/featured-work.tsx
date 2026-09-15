@@ -39,10 +39,9 @@ export function FeaturedWork() {
   });
 
   const allProjects: Project[] = useMemo(() => {
-    if (projectsData?.rows && projectsData.rows.length > 0) {
-      return projectsData.rows.map(toProject);
-    }
-    return staticProjects;
+    const dbProjects = (projectsData?.rows ?? []).map(toProject);
+    const dbSlugs = new Set(dbProjects.map((p) => p.slug));
+    return [...dbProjects, ...staticProjects.filter((p) => !dbSlugs.has(p.slug))];
   }, [projectsData]);
 
   // Read custom overrides from CMS if configured in /admin/home
