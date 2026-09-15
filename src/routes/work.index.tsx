@@ -8,12 +8,10 @@ import {
   ArrowLeft,
   ArrowUpRight,
   Eye,
-  ChevronRight,
-  ChevronLeft,
-  Sparkles,
   Maximize2,
   Layers,
   CheckCircle2,
+  Images,
 } from "lucide-react";
 import { buildMeta } from "@/features/seo/build-meta";
 import { PageHeader } from "@/components/layout/page-header";
@@ -63,6 +61,7 @@ export const Route = createFileRoute("/work/")({
 function WorkIndex() {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<CategoryFilter>("الكل");
+  const [activeGalleryEntity, setActiveGalleryEntity] = useState<ClientEntity | null>(null);
   const [lightboxImage, setLightboxImage] = useState<{ src: string; alt: string; title: string } | null>(null);
 
   const filteredEntities = useMemo(() => {
@@ -177,7 +176,7 @@ function WorkIndex() {
           <p className="text-xs text-muted-foreground" aria-live="polite">
             {filteredEntities.length === 0
               ? "لا توجد نتائج مطابقة لبحثك."
-              : `يتم عرض ${filteredEntities.length} جهة عمل تحتوي على ${totalFolders} مجلد تصميم.`}
+              : `يتم عرض ${filteredEntities.length} جهة عمل مصنفة من الأكثر ملفات إلى الأقل.`}
           </p>
         </div>
 
@@ -205,6 +204,7 @@ function WorkIndex() {
               <ClientEntityCard
                 key={entity.id}
                 entity={entity}
+                onOpenFullGallery={(ent) => setActiveGalleryEntity(ent)}
                 onOpenLightbox={(img, title) =>
                   setLightboxImage({ src: img.src, alt: img.alt, title })
                 }
@@ -214,12 +214,23 @@ function WorkIndex() {
         </div>
       </Section>
 
+      {/* Full Client Gallery Modal */}
+      {activeGalleryEntity && (
+        <FullGalleryModal
+          entity={activeGalleryEntity}
+          onClose={() => setActiveGalleryEntity(null)}
+          onOpenLightbox={(img, title) =>
+            setLightboxImage({ src: img.src, alt: img.alt, title })
+          }
+        />
+      )}
+
       {/* Lightbox Modal */}
       {lightboxImage && (
         <div
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-200"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-in fade-in duration-200"
           onClick={() => setLightboxImage(null)}
         >
           <div
@@ -253,9 +264,11 @@ function WorkIndex() {
 
 function ClientEntityCard({
   entity,
+  onOpenFullGallery,
   onOpenLightbox,
 }: {
   entity: ClientEntity;
+  onOpenFullGallery: (entity: ClientEntity) => void;
   onOpenLightbox: (img: { src: string; alt: string }, title: string) => void;
 }) {
   const [activeFolderId, setActiveFolderId] = useState<string>(entity.folders[0]?.id || "");
@@ -267,6 +280,7 @@ function ClientEntityCard({
 
   const images = activeFolder?.images || [];
   const currentImage = images[activeImageIndex] || images[0] || { src: activeFolder?.cover, alt: activeFolder?.title };
+  const totalFiles = entity.totalFiles ?? entity.folders.reduce((acc, f) => acc + f.images.length, 0);
 
   return (
     <article className="overflow-hidden rounded-3xl border border-border/70 bg-card/80 backdrop-blur-sm transition-all duration-300 hover:border-foreground/30 shadow-xs">
@@ -289,7 +303,7 @@ function ClientEntityCard({
                   {entity.year}
                 </span>
                 <span className="rounded-md bg-muted px-2 py-0.5 text-[11px] font-semibold text-foreground">
-                  {entity.totalFiles ?? entity.folders.reduce((acc, f) => acc + f.images.length, 0)} ملف وتصميم
+                  {totalFiles} ملف وتصميم
                 </span>
               </div>
               <p className="mt-1.5 text-xs sm:text-sm text-muted-foreground leading-relaxed">
@@ -298,15 +312,27 @@ function ClientEntityCard({
             </div>
           </div>
 
-          {/* Quick Details link */}
-          <Link
-            to="/work/$slug"
-            params={{ slug: entity.mainSlug }}
-            className="inline-flex items-center gap-2 self-start md:self-center text-xs font-bold text-foreground hover:text-accent transition-colors bg-card border border-border px-3.5 py-2 rounded-xl"
-          >
-            <span>عرض دراسة الحالة</span>
-            <ArrowLeft className="size-3.5" />
-          </Link>
+          {/* Quick Actions */}
+          <div className="flex flex-wrap items-center gap-2.5 self-start md:self-center">
+            <button
+              type="button"
+              onClick={() => onOpenFullGallery(entity)}
+              className="inline-flex items-center gap-2 text-xs font-bold text-background bg-foreground hover:bg-foreground/90 transition-all px-4 py-2.5 rounded-xl shadow-xs hover:scale-102 active:scale-98"
+            >
+              <Images className="size-4 text-accent" />
+              <span>معرض التصاميم بالكامل ({totalFiles})</span>
+            </button>
+
+            <Link
+              to="/work/$slug"
+              params={{ slug: entity.mainSlug }}
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors bg-card border border-border px-3 py-2.5 rounded-xl hover:border-foreground/30"
+              title="عرض دراسة الحالة"
+            >
+              <span>دراسة الحالة</span>
+              <ArrowLeft className="size-3" />
+            </Link>
+          </div>
         </div>
 
         {/* Deliverable Folders Navigation (Tabs) */}
@@ -367,9 +393,10 @@ function ClientEntityCard({
                 alt={currentImage.alt || activeFolder.title}
                 className="size-full object-cover transition-transform duration-500 group-hover:scale-103"
                 loading="lazy"
+                decoding="async"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-between p-4">
-                <span className="text-xs text-white/90 font-medium">
+                <span className="text-xs text-white/90 font-medium truncate max-w-[70%]">
                   {currentImage.alt || activeFolder.title}
                 </span>
                 <span className="inline-flex items-center gap-1 text-xs text-white bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-lg">
@@ -401,6 +428,7 @@ function ClientEntityCard({
                         alt={img.alt}
                         className="size-full object-cover"
                         loading="lazy"
+                        decoding="async"
                       />
                     </button>
                   );
@@ -444,14 +472,14 @@ function ClientEntityCard({
             </div>
 
             <div className="pt-4 border-t border-border/50 flex items-center justify-between">
-              <Link
-                to="/work/$slug"
-                params={{ slug: entity.mainSlug }}
-                className="inline-flex items-center gap-2 text-xs font-bold text-foreground hover:text-accent transition-colors"
+              <button
+                type="button"
+                onClick={() => onOpenFullGallery(entity)}
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-foreground hover:text-accent transition-colors"
               >
-                <span>دراسة الحالة كاملة</span>
-                <ArrowUpRight className="size-3.5" />
-              </Link>
+                <Images className="size-3.5" />
+                <span>فتح كامل المعرض</span>
+              </button>
 
               <button
                 type="button"
@@ -466,5 +494,191 @@ function ClientEntityCard({
         </div>
       )}
     </article>
+  );
+}
+
+function FullGalleryModal({
+  entity,
+  onClose,
+  onOpenLightbox,
+}: {
+  entity: ClientEntity;
+  onClose: () => void;
+  onOpenLightbox: (img: { src: string; alt: string }, title: string) => void;
+}) {
+  const [selectedFolderFilter, setSelectedFolderFilter] = useState<string>("all");
+
+  const totalImages = useMemo(() => {
+    return entity.folders.reduce((acc, f) => acc + f.images.length, 0);
+  }, [entity.folders]);
+
+  const displayedFolders = useMemo(() => {
+    if (selectedFolderFilter === "all") return entity.folders;
+    return entity.folders.filter((f) => f.id === selectedFolderFilter);
+  }, [entity.folders, selectedFolderFilter]);
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-3 sm:p-6 animate-in fade-in duration-200"
+      onClick={onClose}
+    >
+      <div
+        className="relative max-w-6xl max-h-[92vh] w-full bg-card border border-border/80 rounded-3xl flex flex-col overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Modal Header */}
+        <div className="p-5 sm:p-6 border-b border-border/60 bg-muted/20 flex flex-col gap-4 shrink-0">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-foreground text-background font-bold text-base shadow-sm">
+                {entity.name.charAt(0)}
+              </div>
+              <div>
+                <div className="flex items-center gap-2.5 flex-wrap">
+                  <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
+                    معرض أعمال: {entity.name}
+                  </h3>
+                  <span className="rounded-full bg-accent/10 px-2.5 py-0.5 text-xs font-semibold text-accent">
+                    {entity.categoryLabel}
+                  </span>
+                  <span className="rounded-md bg-muted px-2 py-0.5 text-[11px] font-semibold text-foreground">
+                    {totalImages} ملف وتصميم
+                  </span>
+                </div>
+                <p className="mt-1 text-xs text-muted-foreground line-clamp-1">
+                  {entity.tagline}
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={onClose}
+              className="grid size-9 place-items-center rounded-full bg-muted hover:bg-foreground hover:text-background text-muted-foreground transition-colors shrink-0"
+              aria-label="إغلاق المعرض"
+            >
+              <X className="size-4" />
+            </button>
+          </div>
+
+          {/* Sub-Folders Quick Filter Pills */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none snap-x">
+            <button
+              type="button"
+              onClick={() => setSelectedFolderFilter("all")}
+              className={cn(
+                "flex shrink-0 items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold transition-all",
+                selectedFolderFilter === "all"
+                  ? "bg-foreground text-background shadow-xs"
+                  : "border border-border bg-card text-muted-foreground hover:text-foreground",
+              )}
+            >
+              <Layers className="size-3.5" />
+              <span>جميع المجلدات ({entity.folders.length})</span>
+            </button>
+
+            {entity.folders.map((folder) => {
+              const active = selectedFolderFilter === folder.id;
+              return (
+                <button
+                  key={folder.id}
+                  type="button"
+                  onClick={() => setSelectedFolderFilter(folder.id)}
+                  className={cn(
+                    "flex shrink-0 items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold transition-all snap-start",
+                    active
+                      ? "bg-foreground text-background shadow-xs"
+                      : "border border-border bg-card text-muted-foreground hover:text-foreground",
+                  )}
+                >
+                  {active ? (
+                    <FolderOpen className="size-3.5 text-accent" />
+                  ) : (
+                    <Folder className="size-3.5" />
+                  )}
+                  <span>{folder.title}</span>
+                  <span className="rounded-full bg-background/20 px-1.5 text-[10px]">
+                    {folder.images.length}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Modal Scrollable Body */}
+        <div className="flex-1 overflow-y-auto p-5 sm:p-8 space-y-10 scrollbar-thin">
+          {displayedFolders.map((folder) => (
+            <section key={folder.id} className="space-y-4">
+              <div className="flex items-center justify-between border-b border-border/50 pb-2.5">
+                <div className="flex items-center gap-2">
+                  <FolderOpen className="size-4 text-accent" />
+                  <h4 className="text-base sm:text-lg font-bold text-foreground">
+                    {folder.title}
+                  </h4>
+                  <span className="rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                    {folder.images.length} صور
+                  </span>
+                </div>
+                <p className="text-xs text-muted-foreground hidden sm:block">
+                  {folder.summary}
+                </p>
+              </div>
+
+              {/* Images Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {folder.images.map((img, idx) => (
+                  <div
+                    key={img.src + idx}
+                    className="group relative aspect-[16/10] overflow-hidden rounded-2xl border border-border/80 bg-neutral-900 cursor-pointer transition-all hover:border-accent hover:shadow-md"
+                    onClick={() =>
+                      onOpenLightbox(img, `${entity.name} — ${folder.title} (${idx + 1}/${folder.images.length})`)
+                    }
+                  >
+                    <img
+                      src={img.src}
+                      alt={img.alt || folder.title}
+                      className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-between p-3.5">
+                      <span className="text-xs text-white/90 font-medium truncate max-w-[80%]">
+                        {img.alt || folder.title}
+                      </span>
+                      <span className="grid size-7 place-items-center rounded-lg bg-black/60 text-white backdrop-blur-xs">
+                        <Maximize2 className="size-3.5" />
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+
+        {/* Modal Footer */}
+        <div className="p-4 sm:p-5 border-t border-border/60 bg-muted/20 flex items-center justify-between shrink-0">
+          <Link
+            to="/work/$slug"
+            params={{ slug: entity.mainSlug }}
+            className="inline-flex items-center gap-2 text-xs font-bold text-foreground hover:text-accent transition-colors"
+          >
+            <span>الانتقال لصفحة تفاصيل المشروع الكاملة</span>
+            <ArrowLeft className="size-3.5" />
+          </Link>
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-xs font-semibold text-muted-foreground hover:text-foreground px-3 py-1.5 rounded-lg hover:bg-muted transition-colors"
+          >
+            إغلاق المعرض
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
