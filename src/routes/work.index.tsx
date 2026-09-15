@@ -262,18 +262,37 @@ function WorkIndex() {
 
 function WorkProjectCard({ project }: { project: Project }) {
   return (
-    <article className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-border/70 bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-foreground/30 hover:shadow-xl">
-      <div>
+    <article className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-border/70 bg-card transition-all duration-300 hover:-translate-y-1 hover:border-foreground/30 hover:shadow-xl h-full">
+      <Link
+        to="/work/$slug"
+        params={{ slug: project.slug }}
+        className="block aspect-[16/10] overflow-hidden bg-muted/40 relative"
+      >
+        {project.cover?.src ? (
+          <img
+            src={project.cover.src}
+            alt={project.cover.alt || project.title}
+            className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+            loading="lazy"
+          />
+        ) : (
+          <div className="flex size-full items-center justify-center text-muted-foreground/50">
+            لا توجد صورة
+          </div>
+        )}
+      </Link>
+      
+      <div className="flex flex-col flex-1 p-5 sm:p-6">
         <div className="flex items-center justify-between text-xs text-muted-foreground mb-3">
           <span className="font-semibold text-accent">{project.category}</span>
           <span>{project.year}</span>
         </div>
 
-        <h3 className="text-xl font-bold tracking-tight text-foreground">
+        <h3 className="text-xl font-bold tracking-tight text-foreground line-clamp-1">
           {project.title}
         </h3>
 
-        <p className="mt-2 text-xs sm:text-sm text-muted-foreground line-clamp-3 leading-relaxed">
+        <p className="mt-2 text-xs sm:text-sm text-muted-foreground line-clamp-2 leading-relaxed flex-1">
           {project.summary}
         </p>
 
@@ -289,24 +308,24 @@ function WorkProjectCard({ project }: { project: Project }) {
             ))}
           </div>
         )}
-      </div>
 
-      <div className="mt-6 pt-4 border-t border-border/50 flex items-center justify-between">
-        <Link
-          to="/work/$slug"
-          params={{ slug: project.slug }}
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-foreground transition-colors hover:text-accent"
-        >
-          عرض المشروع
-          <ArrowLeft className="size-3.5" />
-        </Link>
-        <Link
-          to="/work/$slug"
-          params={{ slug: project.slug }}
-          className="flex size-7 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors group-hover:text-foreground"
-        >
-          <ArrowUpRight className="size-3.5" />
-        </Link>
+        <div className="mt-6 pt-4 border-t border-border/50 flex items-center justify-between">
+          <Link
+            to="/work/$slug"
+            params={{ slug: project.slug }}
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-foreground transition-colors hover:text-accent"
+          >
+            عرض المشروع
+            <ArrowLeft className="size-3.5" />
+          </Link>
+          <Link
+            to="/work/$slug"
+            params={{ slug: project.slug }}
+            className="flex size-7 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors group-hover:text-foreground"
+          >
+            <ArrowUpRight className="size-3.5" />
+          </Link>
+        </div>
       </div>
     </article>
   );
