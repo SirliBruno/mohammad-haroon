@@ -334,9 +334,15 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
     window.addEventListener("keydown", onKey);
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    if (typeof window !== "undefined" && window.__lenis) {
+      window.__lenis.stop();
+    }
     return () => {
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = prev;
+      if (typeof window !== "undefined" && window.__lenis) {
+        window.__lenis.start();
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showForm, busy, form]);
@@ -627,13 +633,18 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
           role="dialog"
           aria-modal="true"
           aria-labelledby="admin-crud-title"
-          className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 backdrop-blur-sm p-4 overflow-y-auto"
+          data-lenis-prevent="true"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-3 sm:p-6"
           onMouseDown={(e) => {
             if (e.target === e.currentTarget) closeForm();
           }}
         >
-          <div className="w-full max-w-3xl my-8 rounded-2xl border border-border bg-white shadow-xl dark:border-border dark:bg-neutral-900">
-            <div className="flex items-center justify-between border-b border-border px-6 py-4 dark:border-border">
+          <div
+            data-lenis-prevent="true"
+            className="w-full max-w-4xl max-h-[90vh] flex flex-col rounded-2xl border border-border bg-white shadow-2xl dark:border-border dark:bg-neutral-900 overflow-hidden"
+          >
+            {/* Header - Fixed at top */}
+            <div className="flex items-center justify-between border-b border-border px-6 py-4 shrink-0 dark:border-border bg-neutral-50/50 dark:bg-neutral-900/50">
               <h2 id="admin-crud-title" className="text-lg font-semibold">
                 {editingId ? `تعديل ${entityName}` : `إضافة ${entityName}`}
               </h2>
@@ -641,13 +652,19 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
                 type="button"
                 onClick={closeForm}
                 aria-label="إغلاق"
-                className="text-muted-foreground hover:text-foreground dark:hover:text-neutral-100"
+                className="rounded-lg p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground dark:hover:text-neutral-100 transition-colors"
               >
                 ✕
               </button>
-
             </div>
-            <form onSubmit={handleSubmit} className="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            {/* Scrollable Form Body */}
+            <form
+              id="admin-crud-form"
+              onSubmit={handleSubmit}
+              data-lenis-prevent="true"
+              className="flex-1 overflow-y-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-4 overscroll-contain"
+            >
               {fields.map((field) => (
                 <FieldRenderer
                   key={field.name}
@@ -656,11 +673,19 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
                   onChange={(v) => setForm((f) => ({ ...f, [field.name]: v }))}
                 />
               ))}
-              <div className="md:col-span-2 flex flex-wrap items-center justify-end gap-2 pt-4 border-t border-border dark:border-border">
+            </form>
+
+            {/* Footer - Fixed at bottom */}
+            <div className="flex flex-wrap items-center justify-between gap-3 px-6 py-4 border-t border-border shrink-0 dark:border-border bg-neutral-50/80 dark:bg-neutral-900/80 backdrop-blur-xs">
+              <span className="text-xs text-muted-foreground hidden sm:inline">
+                يمكنك الضغط على Esc للإغلاق أو Ctrl+S للحفظ
+              </span>
+              <div className="flex items-center gap-2 ms-auto">
                 <button
                   type="button"
                   onClick={closeForm}
-                  className="rounded-md border border-input bg-white px-4 py-2 text-sm dark:border-border dark:bg-neutral-800"
+                  disabled={busy}
+                  className="rounded-md border border-input bg-white px-4 py-2 text-sm hover:bg-muted dark:border-border dark:bg-neutral-800 dark:hover:bg-neutral-700"
                 >
                   إلغاء
                 </button>
@@ -678,15 +703,15 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
 
                 <button
                   type="submit"
+                  form="admin-crud-form"
                   disabled={busy}
-                  className="inline-flex items-center gap-2 rounded-md bg-neutral-900 px-5 py-2 text-sm font-semibold text-white disabled:opacity-50 dark:bg-white dark:text-neutral-950 dark:hover:bg-neutral-200 shadow-xs"
+                  className="inline-flex items-center gap-2 rounded-md bg-neutral-900 px-5 py-2 text-sm font-semibold text-white hover:bg-neutral-800 disabled:opacity-50 dark:bg-white dark:text-neutral-950 dark:hover:bg-neutral-200 shadow-sm"
                 >
                   {busy ? "جارِ الحفظ…" : editingId ? "حفظ التعديلات" : "إضافة"}
                   <kbd className="hidden sm:inline-flex rounded border border-white/30 px-1.5 py-0.5 text-[10px] font-mono text-white/70 dark:border-neutral-900/30 dark:text-neutral-950/70">⌘S</kbd>
                 </button>
-
               </div>
-            </form>
+            </div>
           </div>
         </div>
       )}
@@ -695,6 +720,7 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
         <div
           role="dialog"
           aria-modal="true"
+          data-lenis-prevent="true"
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
           onMouseDown={(e) => {
             if (e.target === e.currentTarget && !busy) setConfirmDelete(null);
@@ -731,6 +757,7 @@ export function AdminCrud<Row extends { id: string }>(props: AdminCrudProps<Row>
         <div
           role="dialog"
           aria-modal="true"
+          data-lenis-prevent="true"
           className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
           onMouseDown={(e) => {
             if (e.target === e.currentTarget) setConfirmDiscard(false);
