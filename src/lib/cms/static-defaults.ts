@@ -594,7 +594,7 @@ export const staticProjectsAsRows: ProjectRow[] = [
       "React Router",
       "Framer Motion"
     ],
-    "cover_url": "https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/projects/241f11bb-6090-4d21-9d7f-7ff4c9a67357.svg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9wcm9qZWN0cy8yNDFmMTFiYi02MDkwLTRkMjEtOWQ3Zi03ZmY0YzlhNjczNTcuc3ZnIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4NDY3Nzc3NywiZXhwIjoyMTAwMDM3Nzc3fQ.faoSWdUyf20OyLU-SeC2BPyBMwKefu94q9-o-XlYii0",
+    "cover_url": "/images/projects/speakup-cover.webp",
     "gallery": [
       {
         "alt": "",

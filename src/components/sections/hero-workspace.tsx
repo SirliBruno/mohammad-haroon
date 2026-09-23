@@ -70,7 +70,7 @@ const FEATURED: FeaturedProject[] = [
     accent: "emerald",
     Website: (props: { className?: string }) => (
       <img
-        src="https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/hero/b99b5b71-7064-47ad-bd83-eb20285fb4ac.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9oZXJvL2I5OWI1YjcxLTcwNjQtNDdhZC1iZDgzLWViMjAyODVmYjRhYy5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg0NjA3Njc0LCJleHAiOjIwOTk5Njc2NzR9.awCY8t8yumwATa8XnCiu5MTM3eYdsSApl1fM0dBClRk"
+        src="/images/hero/rent-right-desktop.webp"
         alt="Rent Right"
         className={cn("size-full object-cover", props.className)}
         loading="eager"
@@ -78,7 +78,7 @@ const FEATURED: FeaturedProject[] = [
     ),
     Mobile: (props: { className?: string }) => (
       <img
-        src="https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/hero/ed60788c-fb0b-4850-a78d-cd1a67e7565a.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9oZXJvL2VkNjA3ODhjLWZiMGItNDg1MC1hNzhkLWNkMWE2N2U3NTY1YS5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg0NjA3Njc1LCJleHAiOjIwOTk5Njc2NzV9.GytyytGSUjOW_eZUOi76X8Qg9qF6yxS8INEAmmGDu0Y"
+        src="/images/hero/rent-right-mobile.webp"
         alt="Rent Right Mobile"
         className={cn("size-full object-cover", props.className)}
         loading="eager"
@@ -112,7 +112,7 @@ const FEATURED: FeaturedProject[] = [
     accent: "emerald",
     Website: (props: { className?: string }) => (
       <img
-        src="https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/hero/eb057ed3-7277-4b37-97b6-82c1bf86c867.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9oZXJvL2ViMDU3ZWQzLTcyNzctNGIzNy05N2I2LTgyYzFiZjg2Yzg2Ny5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg0NjA2NDE0LCJleHAiOjIwOTk5NjY0MTR9.HHmIGX24p8WeaR2CIDqtfDdES3QUw8AqfTVDghQvX_c"
+        src="/images/hero/speakup-desktop.webp"
         alt="SpeakUp"
         className={cn("size-full object-cover", props.className)}
         loading="eager"
@@ -120,7 +120,7 @@ const FEATURED: FeaturedProject[] = [
     ),
     Mobile: (props: { className?: string }) => (
       <img
-        src="https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/hero/26dbb069-482f-4247-8dea-2a610a214707.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9oZXJvLzI2ZGJiMDY5LTQ4MmYtNDI0Ny04ZGVhLTJhNjEwYTIxNDcwNy5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg0NjA2NDE3LCJleHAiOjIwOTk5NjY0MTd9.uXUGwt2NepzPr_KkYHWl5LE9_97mN1007Z6ebqRqj3I"
+        src="/images/hero/speakup-mobile.webp"
         alt="SpeakUp Mobile"
         className={cn("size-full object-cover", props.className)}
         loading="eager"
@@ -154,7 +154,7 @@ const FEATURED: FeaturedProject[] = [
     accent: "amber",
     Website: (props: { className?: string }) => (
       <img
-        src="https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/hero/c0852fc3-e570-48c9-80b4-d71b95ba89fd.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9oZXJvL2MwODUyZmMzLWU1NzAtNDhjOS04MGI0LWQ3MWI5NWJhODlmZC5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg0NTIwMjAxLCJleHAiOjIwOTk4ODAyMDF9.943-AUrSxB5PbWWQXJ7y5FPz261Q125Ce0OwKDST29U"
+        src="/images/hero/fitness-camp-desktop.webp"
         alt="معسكر اللياقة"
         className={cn("size-full object-cover", props.className)}
         loading="eager"
@@ -162,7 +162,7 @@ const FEATURED: FeaturedProject[] = [
     ),
     Mobile: (props: { className?: string }) => (
       <img
-        src="https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/hero/4f64609a-3f79-4494-a022-c9ea2e799c95.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9oZXJvLzRmNjQ2MDlhLTNmNzktNDQ5NC1hMDIyLWM5ZWEyZTc5OWM5NS5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg0NTIxMzI4LCJleHAiOjIwOTk4ODEzMjh9.f__ihWtFO6f-B1PIYEwYaUI-yEnNzBY1fwQ8TzjyyD8"
+        src="/images/hero/fitness-camp-mobile.webp"
         alt="معسكر اللياقة Mobile"
         className={cn("size-full object-cover", props.className)}
         loading="eager"

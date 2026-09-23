@@ -1,4 +1,4 @@
-﻿import { memo } from "react";
+import { memo, useState, useEffect } from "react";
 import { motion, useScroll, useSpring, useTransform, useReducedMotion } from "motion/react";
 import { cn } from "@/lib/utils";
 
@@ -24,6 +24,18 @@ export const AmbientGradientMesh = memo(function AmbientGradientMesh({
   className?: string;
 }) {
   const reduce = useReducedMotion();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(max-width: 768px)");
+    setIsMobile(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
+  const shouldDisableMotion = reduce || isMobile;
 
   // Passive GPU-bound scroll tracking
   const { scrollY, scrollYProgress } = useScroll();
@@ -52,7 +64,7 @@ export const AmbientGradientMesh = memo(function AmbientGradientMesh({
       <motion.div
         className="relative size-full origin-center"
         style={
-          reduce
+          shouldDisableMotion
             ? undefined
             : {
                 y: meshY,

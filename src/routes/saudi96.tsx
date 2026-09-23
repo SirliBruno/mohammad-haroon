@@ -34,6 +34,14 @@ export const Route = createFileRoute("/saudi96")({
         "احتفالاً باليوم الوطني 96: موقع تعريفي احترافي متكامل خلال 48 ساعة بـ 296 ريال بدلاً من 650 ريال. تصميم عصري يعكس الهوية الوطنية مع ربط الواتساب ودومين واستضافة.",
       path: "/saudi96",
     }),
+    links: [
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Readex+Pro:wght@400;600;700;800&display=swap",
+      },
+    ],
   }),
   component: Saudi96LandingPage,
 });

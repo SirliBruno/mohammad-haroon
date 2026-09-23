@@ -1,16 +1,31 @@
+import { useState, useEffect, lazy, Suspense } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { ArrowLeft, ArrowUpRight, ShieldCheck, Zap, Sparkles } from "lucide-react";
 import { Container } from "@/components/layout/container";
 import { smoothScrollTo } from "@/components/layout/smooth-scroll";
-import { HeroWorkspace } from "./hero-workspace";
 import { HeroMobile } from "./hero-mobile";
 import { site } from "@/config/site";
 import { useHomeContent, getHomeText } from "@/lib/cms/home-content";
+
+const HeroWorkspace = lazy(() =>
+  import("./hero-workspace").then((m) => ({ default: m.HeroWorkspace }))
+);
 
 export function Hero() {
   const reduce = useReducedMotion();
   const { data: homeContent } = useHomeContent();
   const t = (key: string, fallback: string) => getHomeText(homeContent, key, fallback);
+
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(min-width: 1024px)");
+    setIsDesktop(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
 
   const scrollToSection = (id: string) => {
     smoothScrollTo(`#${id}`);
@@ -117,12 +132,13 @@ export function Hero() {
             transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
             className="lg:col-span-6 min-w-0"
           >
-            <div className="lg:hidden">
+            {isDesktop ? (
+              <Suspense fallback={<HeroMobile />}>
+                <HeroWorkspace />
+              </Suspense>
+            ) : (
               <HeroMobile />
-            </div>
-            <div className="hidden lg:block">
-              <HeroWorkspace />
-            </div>
+            )}
           </motion.div>
         </div>
       </Container>

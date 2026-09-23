@@ -830,6 +830,16 @@ html:not(.dark) .orb-luminous-white {
   opacity: 0.55;
 }
 
+/* Mobile GPU Optimization: Replace heavy blur(95px) orbs with static background gradient */
+@media (max-width: 768px) {
+  .ambient-mesh-orb {
+    display: none !important;
+  }
+  .ambient-canvas {
+    background: var(--gradient-ambient-mesh);
+  }
+}
+
 /* Sinusoidal Idle Breathing Animations */
 @keyframes mesh-breathe-1 {
   0% {
