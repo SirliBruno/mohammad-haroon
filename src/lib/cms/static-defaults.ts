@@ -710,7 +710,7 @@ export const staticProjectsAsRows: ProjectRow[] = [
       "Location Services",
       "Database Management"
     ],
-    "cover_url": "/images/hero/rent-right-desktop.webp",
+    "cover_url": "/images/projects/rent-right-cover.webp",
     "gallery": [
       {
         "alt": "",
@@ -830,7 +830,7 @@ export const staticProjectsAsRows: ProjectRow[] = [
       "TanStack Query",
       "Framer Motion"
     ],
-    "cover_url": "/images/hero/fitness-camp-desktop.webp",
+    "cover_url": "/images/projects/fitness-camp-cover.webp",
     "gallery": [
       {
         "alt": "",
