@@ -34,6 +34,7 @@ import {
   StoreUI,
 } from "@/components/mockups/ui-samples";
 import { listHeroProjectsPublic } from "@/lib/cms/hero.functions";
+import { getOptimizedImageUrl } from "@/lib/optimized-images";
 import { cn } from "@/lib/utils";
 
 /* -------------------------------------------------------------------------- */
@@ -462,10 +463,12 @@ export function HeroWorkspace() {
     if (!dbHero || dbHero.length === 0) return FEATURED;
     return (dbHero as Array<any>).map((r: any, i: number): FeaturedProject => {
       const fallback = FEATURED[i % FEATURED.length];
+      const coverUrl = getOptimizedImageUrl(r.cover_url);
+      const mobileUrl = getOptimizedImageUrl(r.mobile_url);
       const Cover = (props: { className?: string }) =>
-        r.cover_url ? (
+        coverUrl ? (
           <img
-            src={r.cover_url}
+            src={coverUrl}
             alt={r.title}
             className={cn("size-full object-cover", props.className)}
           />
@@ -473,9 +476,9 @@ export function HeroWorkspace() {
           <fallback.Website {...props} />
         );
       const Phone = (props: { className?: string }) =>
-        r.mobile_url ? (
+        mobileUrl ? (
           <img
-            src={r.mobile_url}
+            src={mobileUrl}
             alt={r.title}
             className={cn("size-full object-cover", props.className)}
           />

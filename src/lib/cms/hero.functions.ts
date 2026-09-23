@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { getOptimizedImageUrl } from "@/lib/optimized-images";
 
 const heroInputSchema = z.object({
   title: z.string().trim().min(1).max(200),
@@ -38,7 +39,11 @@ export const listHeroProjectsPublic = createServerFn({ method: "GET" }).handler(
       .order("sort_order", { ascending: true })
       .order("created_at", { ascending: true });
     if (error) throwSafe("listPublic", "hero_projects", error);
-    return data ?? [];
+    return (data ?? []).map((item) => ({
+      ...item,
+      cover_url: getOptimizedImageUrl(item.cover_url),
+      mobile_url: getOptimizedImageUrl(item.mobile_url),
+    }));
   },
 );
 
