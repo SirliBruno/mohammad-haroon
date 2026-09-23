@@ -27,7 +27,17 @@ export const employmentType = z.enum([
 export const messageStatus = z.enum(["new", "read", "replied", "archived", "spam"]);
 export const mediaKind = z.enum(["image", "video", "document", "audio", "other"]);
 
-const optionalUrl = z.string().url().max(2048).optional().nullable();
+const optionalUrl = z
+  .string()
+  .trim()
+  .max(2048)
+  .optional()
+  .nullable()
+  .refine(
+    (v) => !v || v.startsWith("/") || /^https?:\/\//i.test(v) || /^data:image\//i.test(v),
+    { message: "Must be a valid URL or path" },
+  )
+  .transform((v) => (v && v.length > 0 ? v : null));
 const optionalText = (max = 4000) => z.string().trim().max(max).optional().nullable();
 const stringArray = (max = 40, itemMax = 500) =>
   z.array(z.string().trim().min(1).max(itemMax)).max(max).default([]);

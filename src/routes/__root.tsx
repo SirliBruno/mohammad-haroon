@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -131,6 +132,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     }),
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700;800&family=Readex+Pro:wght@400;600;700;800&display=swap",
+      },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
       {
         rel: "preload",
@@ -188,23 +195,25 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isCampaign = pathname.startsWith("/saudi96") || pathname.startsWith("/nd96");
 
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="system">
         <div className="relative flex min-h-dvh flex-col">
           {/* Interactive Scroll-Driven Dark Canvas with Organic Gradient Mesh */}
-          <AmbientGradientMesh />
+          {!isCampaign && <AmbientGradientMesh />}
 
           <SmoothScroll />
           <AnalyticsTracker />
-          <ScrollProgress />
-          <Nav />
+          {!isCampaign && <ScrollProgress />}
+          {!isCampaign && <Nav />}
           <main id="main" className="flex-1">
             <Outlet />
           </main>
-          <Footer />
-          <ScrollToTop />
+          {!isCampaign && <Footer />}
+          {!isCampaign && <ScrollToTop />}
           <Toaster
             position="top-center"
             dir={site.direction}

@@ -26,9 +26,9 @@ function buildPayload(p: Project) {
     client: p.client ?? p.title,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     timeline: (p as any).timeline ?? null,
-    cover_url: p.cover?.src ?? null,
-    live_url: p.liveDemo ?? p.liveUrl ?? null,
-    github_url: p.github ?? null,
+    cover_url: p.cover?.src?.trim() || null,
+    live_url: p.liveDemo?.trim() || p.liveUrl?.trim() || null,
+    github_url: p.github?.trim() || null,
     status: "live" as const,
     content_status: "published" as const,
     featured: p.featured ?? false,

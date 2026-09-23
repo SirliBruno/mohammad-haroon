@@ -17,8 +17,10 @@ import { Route as BlogRouteImport } from './routes/blog'
 import { Route as CareerRouteImport } from './routes/career'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as IdeasRouteImport } from './routes/ideas'
+import { Route as Nd96RouteImport } from './routes/nd96'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as Saudi96RouteImport } from './routes/saudi96'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as UsesRouteImport } from './routes/uses'
@@ -90,6 +92,11 @@ const IdeasRoute = IdeasRouteImport.update({
   path: '/ideas',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Nd96Route = Nd96RouteImport.update({
+  id: '/nd96',
+  path: '/nd96',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProductsRoute = ProductsRouteImport.update({
   id: '/products',
   path: '/products',
@@ -98,6 +105,11 @@ const ProductsRoute = ProductsRouteImport.update({
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Saudi96Route = Saudi96RouteImport.update({
+  id: '/saudi96',
+  path: '/saudi96',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ServicesRoute = ServicesRouteImport.update({
@@ -275,8 +287,10 @@ export interface FileRoutesByFullPath {
   '/career': typeof CareerRoute
   '/contact': typeof ContactRoute
   '/ideas': typeof IdeasRoute
+  '/nd96': typeof Nd96Route
   '/products': typeof ProductsRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/saudi96': typeof Saudi96Route
   '/services': typeof ServicesRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/uses': typeof UsesRoute
@@ -316,8 +330,10 @@ export interface FileRoutesByTo {
   '/career': typeof CareerRoute
   '/contact': typeof ContactRoute
   '/ideas': typeof IdeasRoute
+  '/nd96': typeof Nd96Route
   '/products': typeof ProductsRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/saudi96': typeof Saudi96Route
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/uses': typeof UsesRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -358,8 +374,10 @@ export interface FileRoutesById {
   '/career': typeof CareerRoute
   '/contact': typeof ContactRoute
   '/ideas': typeof IdeasRoute
+  '/nd96': typeof Nd96Route
   '/products': typeof ProductsRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/saudi96': typeof Saudi96Route
   '/services': typeof ServicesRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/uses': typeof UsesRoute
@@ -402,8 +420,10 @@ export interface FileRouteTypes {
     | '/career'
     | '/contact'
     | '/ideas'
+    | '/nd96'
     | '/products'
     | '/reset-password'
+    | '/saudi96'
     | '/services'
     | '/sitemap.xml'
     | '/uses'
@@ -443,8 +463,10 @@ export interface FileRouteTypes {
     | '/career'
     | '/contact'
     | '/ideas'
+    | '/nd96'
     | '/products'
     | '/reset-password'
+    | '/saudi96'
     | '/sitemap.xml'
     | '/uses'
     | '/blog/$slug'
@@ -484,8 +506,10 @@ export interface FileRouteTypes {
     | '/career'
     | '/contact'
     | '/ideas'
+    | '/nd96'
     | '/products'
     | '/reset-password'
+    | '/saudi96'
     | '/services'
     | '/sitemap.xml'
     | '/uses'
@@ -528,8 +552,10 @@ export interface RootRouteChildren {
   CareerRoute: typeof CareerRoute
   ContactRoute: typeof ContactRoute
   IdeasRoute: typeof IdeasRoute
+  Nd96Route: typeof Nd96Route
   ProductsRoute: typeof ProductsRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  Saudi96Route: typeof Saudi96Route
   ServicesRoute: typeof ServicesRouteWithChildren
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   UsesRoute: typeof UsesRoute
@@ -596,6 +622,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IdeasRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/nd96': {
+      id: '/nd96'
+      path: '/nd96'
+      fullPath: '/nd96'
+      preLoaderRoute: typeof Nd96RouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/products': {
       id: '/products'
       path: '/products'
@@ -608,6 +641,13 @@ declare module '@tanstack/react-router' {
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/saudi96': {
+      id: '/saudi96'
+      path: '/saudi96'
+      fullPath: '/saudi96'
+      preLoaderRoute: typeof Saudi96RouteImport
       parentRoute: typeof rootRouteImport
     }
     '/services': {
@@ -924,8 +964,10 @@ const rootRouteChildren: RootRouteChildren = {
   CareerRoute: CareerRoute,
   ContactRoute: ContactRoute,
   IdeasRoute: IdeasRoute,
+  Nd96Route: Nd96Route,
   ProductsRoute: ProductsRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  Saudi96Route: Saudi96Route,
   ServicesRoute: ServicesRouteWithChildren,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   UsesRoute: UsesRoute,
