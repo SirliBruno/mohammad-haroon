@@ -710,7 +710,7 @@ export const staticProjectsAsRows: ProjectRow[] = [
       "Location Services",
       "Database Management"
     ],
-    "cover_url": "https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/projects/7d26df9d-a18f-4c68-9ccd-ea13421ba811.svg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9wcm9qZWN0cy83ZDI2ZGY5ZC1hMThmLTRjNjgtOWNjZC1lYTEzNDIxYmE4MTEuc3ZnIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4NDY4NjAxMSwiZXhwIjoyMTAwMDQ2MDExfQ.drQw1b78nbPLD8fiRTDM_m7k-JVBf8upWKb5-SHEBY8",
+    "cover_url": "/images/hero/rent-right-desktop.webp",
     "gallery": [
       {
         "alt": "",
@@ -830,7 +830,7 @@ export const staticProjectsAsRows: ProjectRow[] = [
       "TanStack Query",
       "Framer Motion"
     ],
-    "cover_url": "https://dzubuginlleixqwgnvqj.supabase.co/storage/v1/object/sign/media/projects/47536a47-f2f6-4950-b9c7-fed45d94c322.svg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzYyNmNiYi0xZDM0LTQ0NjYtOTcyNS0zY2Q2NmMxNDdiZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYS9wcm9qZWN0cy80NzUzNmE0Ny1mMmY2LTQ5NTAtYjljNy1mZWQ0NWQ5NGMzMjIuc3ZnIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4NDYyNTQxMSwiZXhwIjoyMDk5OTg1NDExfQ.zec4IRE-DqkzpQajKwjfc2P9hHihSoSRSh2d2YsPs28",
+    "cover_url": "/images/hero/fitness-camp-desktop.webp",
     "gallery": [
       {
         "alt": "",

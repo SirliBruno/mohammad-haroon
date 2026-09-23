@@ -7,6 +7,7 @@
  */
 import type { Tables } from "@/integrations/supabase/types";
 import { projectCategories, type Project, type ProjectCategory } from "@/features/projects/schema";
+import { getOptimizedImageUrl } from "./optimized-images";
 
 type Row = Tables<"projects">;
 
@@ -45,7 +46,7 @@ function mapGallery(v: unknown): Project["gallery"] {
       const src = str(r.src) ?? str(r.url);
       if (!src) return null;
       return {
-        src,
+        src: getOptimizedImageUrl(src),
         alt: str(r.alt) ?? "",
         width: typeof r.width === "number" ? r.width : undefined,
         height: typeof r.height === "number" ? r.height : undefined,
@@ -126,7 +127,7 @@ export function toProject(row: Row): Project {
     stack: row.technologies ?? [],
     tools: row.tools && row.tools.length ? row.tools : undefined,
     timeline: row.timeline ?? undefined,
-    cover: { src: row.cover_url ?? "", alt: row.title },
+    cover: { src: getOptimizedImageUrl(row.cover_url ?? ""), alt: row.title },
     gallery: mapGallery(row.gallery),
     metrics,
     github: row.github_url ?? undefined,

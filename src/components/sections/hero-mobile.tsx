@@ -9,6 +9,7 @@ import { DashboardUI, StoreUI, EditorUI } from "@/components/mockups/ui-samples"
 import { listHeroProjectsPublic } from "@/lib/cms/hero.functions";
 import { listPublicProjects } from "@/lib/cms/projects-public.functions";
 import { projects as staticProjects } from "@/data/projects";
+import { getOptimizedImageUrl } from "@/lib/optimized-images";
 import { cn } from "@/lib/utils";
 
 type MobileHeroItem = {
@@ -188,7 +189,7 @@ export function HeroMobile() {
   if (!current) return null;
 
   const isLive = current.status === "مباشر";
-  const displayImage = current.coverUrl || current.mobileUrl;
+  const displayImage = getOptimizedImageUrl(current.coverUrl || current.mobileUrl, current.slug);
   const hostName = current.host || (current.slug ? `${current.slug}.app` : "project.preview");
 
   return (
