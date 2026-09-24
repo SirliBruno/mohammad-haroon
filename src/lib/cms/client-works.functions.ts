@@ -3,18 +3,29 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { clientEntities as staticClientEntities, type ClientEntity, type DeliverableFolder } from "@/data/client-works";
 
+const imageItemSchema = z.union([
+  z.string().transform((src) => ({ src: src.trim(), alt: "" })),
+  z.object({
+    src: z.string().trim().optional().nullable(),
+    url: z.string().trim().optional().nullable(),
+    href: z.string().trim().optional().nullable(),
+    alt: z.string().trim().optional().nullable().default("").transform((v) => v ?? ""),
+  }).transform((item) => ({
+    src: (item.src || item.url || item.href || "").trim(),
+    alt: item.alt || "",
+  })),
+]);
+
 const deliverableFolderSchema = z.object({
   id: z.string().trim().min(1),
   title: z.string().trim().min(1),
   category: z.string().trim().default("هوية"),
   summary: z.string().trim().default(""),
   cover: z.string().trim().optional().nullable().default("").transform((v) => v ?? ""),
-  images: z.array(
-    z.object({
-      src: z.string().trim().min(1),
-      alt: z.string().trim().optional().nullable().default("").transform((v) => v ?? ""),
-    }),
-  ).default([]),
+  images: z
+    .array(imageItemSchema)
+    .default([])
+    .transform((imgs) => imgs.filter((img): img is { src: string; alt: string } => Boolean(img && img.src))),
   projectSlug: z.string().trim().optional(),
 });
 

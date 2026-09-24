@@ -181,11 +181,18 @@ export const signHeroMediaPath = createServerFn({ method: "POST" })
       const { data: signed, error } = await db.storage
         .from("media")
         .createSignedUrl(data.path, 60 * 60 * 24 * 365 * 10);
-      if (error) {
-        console.error("[signHeroMediaPath] storage signing failed:", error);
-        throw new Error(`تعذر توقيع رابط الصورة من وحدة التخزين: ${error.message || "الملف غير موجود"}`);
+      if (!error && signed?.signedUrl) {
+        signedUrl = signed.signedUrl;
+      } else {
+        // Fallback to public URL if media bucket has public read policy
+        const { data: pub } = db.storage.from("media").getPublicUrl(data.path);
+        if (pub?.publicUrl) {
+          signedUrl = pub.publicUrl;
+        } else if (error) {
+          console.error("[signHeroMediaPath] storage signing failed:", error);
+          throw new Error(`تعذر توقيع رابط الصورة من وحدة التخزين: ${error.message || "الملف غير موجود"}`);
+        }
       }
-      signedUrl = signed?.signedUrl;
     }
 
     if (!signedUrl) {

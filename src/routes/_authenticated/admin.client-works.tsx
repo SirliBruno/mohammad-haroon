@@ -29,6 +29,7 @@ import {
   Link as LinkIcon,
 } from "lucide-react";
 import { AdminShell } from "@/components/admin/admin-shell";
+import { ImageInput } from "@/components/admin/image-input";
 import {
   adminListClientWorks,
   adminSaveClientWork,
@@ -39,6 +40,24 @@ import { supabase } from "@/integrations/supabase/client";
 import { getOptimizedImageUrl } from "@/lib/optimized-images";
 import type { ClientEntity, DeliverableFolder } from "@/data/client-works";
 import { cn } from "@/lib/utils";
+
+function getMimeType(ext: string): string {
+  const map: Record<string, string> = {
+    png: "image/png",
+    jpg: "image/jpeg",
+    jpeg: "image/jpeg",
+    webp: "image/webp",
+    svg: "image/svg+xml",
+    gif: "image/gif",
+    avif: "image/avif",
+  };
+  return map[ext.toLowerCase()] || "image/png";
+}
+
+function isImageFile(file: File): boolean {
+  if (file.type && file.type.startsWith("image/")) return true;
+  return /\.(png|jpe?g|webp|svg|gif|avif|bmp|ico)$/i.test(file.name);
+}
 
 export const Route = createFileRoute("/_authenticated/admin/client-works")({
   component: AdminClientWorksPage,
@@ -125,6 +144,19 @@ export function AdminClientWorksPage() {
     currentFolder?.cover ||
     currentFolder?.images[0]?.src ||
     "";
+
+  const allEntityImages = useMemo(() => {
+    if (!currentEntity) return [];
+    const list: Array<{ src: string; alt: string; folderTitle: string }> = [];
+    for (const f of currentEntity.folders) {
+      for (const img of f.images) {
+        if (img?.src) {
+          list.push({ src: img.src, alt: img.alt || f.title, folderTitle: f.title });
+        }
+      }
+    }
+    return list;
+  }, [currentEntity]);
 
   const selectEntity = (entity: ClientEntity) => {
     setSelectedId(entity.id);
@@ -223,14 +255,15 @@ export function AdminClientWorksPage() {
 
   // Helper to upload files directly into current folder
   const uploadFiles = async (files: FileList | File[], setAsCover = false) => {
-    if (!currentEntity || !currentFolder) {
+    const base = draft || activeEntity;
+    if (!base || !currentFolder) {
       toast.error("يرجى اختيار جهة عمل ومجلد أولاً.");
       return;
     }
 
-    const fileList = Array.from(files).filter((f) => f.type.startsWith("image/"));
+    const fileList = Array.from(files).filter(isImageFile);
     if (fileList.length === 0) {
-      toast.error("يرجى اختيار ملفات صور صالحة (PNG, JPG, WEBP, SVG, GIF).");
+      toast.error("يرجى اختيار ملفات صور صالحة (PNG, JPG, WEBP, SVG, GIF, AVIF).");
       return;
     }
 
@@ -243,66 +276,87 @@ export function AdminClientWorksPage() {
         setUploadStatus(`جارٍ رفع (${i + 1} من ${fileList.length}): ${file.name}`);
 
         const ext = (file.name.split(".").pop() ?? "png").toLowerCase();
-        const safeEntityId = currentEntity.id.replace(/[^a-zA-Z0-9_\-\.]/g, "-");
-        const safeFolderId = currentFolder.id.replace(/[^a-zA-Z0-9_\-\.]/g, "-");
+        const safeEntityId =
+          base.id.replace(/[^a-zA-Z0-9_\-\.]/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "") || "entity";
+        const safeFolderId =
+          currentFolder.id.replace(/[^a-zA-Z0-9_\-\.]/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "") || "folder";
         const path = `projects/client-works/${safeEntityId}/${safeFolderId}/${crypto.randomUUID()}.${ext}`;
 
+        const contentType = file.type || getMimeType(ext);
         const { error: upErr } = await supabase.storage
           .from("media")
-          .upload(path, file, { contentType: file.type, upsert: false });
+          .upload(path, file, { contentType, upsert: false });
 
         if (upErr) throw upErr;
 
         const { url } = (await signMedia({ data: { path } })) as { url: string };
         if (!url) throw new Error("تعذر إنشاء رابط الصورة الموقّع من السيرفر.");
 
-        const cleanAlt = file.name
-          .replace(/\.[^/.]+$/, "")
-          .replace(/[-_]/g, " ")
-          .trim() || currentFolder.title;
+        const cleanAlt =
+          file.name
+            .replace(/\.[^/.]+$/, "")
+            .replace(/[-_]/g, " ")
+            .trim() || currentFolder.title;
 
         uploadedImages.push({ src: url, alt: cleanAlt });
       }
 
       // Add uploaded images directly to folder
-      setDraft((prevDraft) => {
-        if (!prevDraft) return prevDraft;
-        const nextFolders = [...prevDraft.folders];
-        const targetFolder = nextFolders[activeFolderIndex];
-        if (!targetFolder) return prevDraft;
+      const nextFolders = [...base.folders];
+      const targetFolder = nextFolders[activeFolderIndex] || nextFolders[0];
+      if (!targetFolder) throw new Error("المجلد المحدد غير متاح");
 
-        const shouldCover = setAsCover || autoSetAsCover || !targetFolder.cover;
-        const firstSrc = uploadedImages[0]?.src;
-        const nextCover = shouldCover && firstSrc ? firstSrc : targetFolder.cover;
+      const shouldCover = setAsCover || autoSetAsCover || !targetFolder.cover;
+      const firstSrc = uploadedImages[0]?.src;
+      const nextCover = shouldCover && firstSrc ? firstSrc : (targetFolder.cover || firstSrc || "");
 
-        let combined = [...targetFolder.images, ...uploadedImages];
-        if (shouldCover && firstSrc) {
-          const coverImg = combined.find((img) => img.src === nextCover);
-          const others = combined.filter((img) => img.src !== nextCover);
-          combined = coverImg ? [coverImg, ...others] : combined;
+      let combined = [...targetFolder.images, ...uploadedImages];
+      if (shouldCover && firstSrc) {
+        const coverIdx = combined.findIndex((img) => img.src === nextCover);
+        if (coverIdx > -1) {
+          const [cItem] = combined.splice(coverIdx, 1);
+          combined.unshift(cItem);
         }
+      }
 
-        nextFolders[activeFolderIndex] = {
-          ...targetFolder,
-          cover: nextCover,
-          images: combined,
-        };
+      nextFolders[activeFolderIndex] = {
+        ...targetFolder,
+        cover: nextCover,
+        images: combined,
+      };
 
-        const nextWorkCover =
-          shouldCover && firstSrc && (!prevDraft.cover || setAsCover)
-            ? firstSrc
-            : prevDraft.cover;
+      const nextWorkCover =
+        shouldCover && firstSrc && (!base.cover || setAsCover)
+          ? firstSrc
+          : base.cover;
 
-        return {
-          ...prevDraft,
-          cover: nextWorkCover,
-          folders: nextFolders,
-        };
-      });
+      const updatedEntity: ClientEntity = {
+        ...base,
+        cover: nextWorkCover,
+        folders: nextFolders,
+      };
 
-      toast.success(
-        `تم بنجاح رفع وإضافة ${uploadedImages.length} صورة إلى مجلد "${currentFolder.title}". اضغط "حفظ التغييرات" لتثبيتها.`,
-      );
+      setDraft(updatedEntity);
+
+      // Auto-save to database immediately so uploaded images and cover are permanently persisted
+      try {
+        const res = await saveFn({ data: { entity: updatedEntity } });
+        if (res?.entity) {
+          setDraft(JSON.parse(JSON.stringify(res.entity)));
+          setSelectedId(res.entity.id);
+        }
+        queryClient.invalidateQueries({ queryKey: ["admin-client-works"] });
+        queryClient.invalidateQueries({ queryKey: ["client-works-public"] });
+        router.invalidate();
+        toast.success(
+          `تم بنجاح رفع وإضافة ${uploadedImages.length} صورة إلى مجلد "${targetFolder.title}" وحفظ التغييرات مباشرة!`,
+        );
+      } catch (saveErr: any) {
+        console.warn("Auto-save after upload warning:", saveErr);
+        toast.success(
+          `تم رفع ${uploadedImages.length} صورة وإضافتها للمجلد محلياً. اضغط "حفظ التغييرات" لتثبيتها.`,
+        );
+      }
     } catch (err: any) {
       console.error("Upload error:", err);
       toast.error(`فشل رفع الصور: ${err.message || "خطأ غير متوقع"}`);
@@ -315,46 +369,70 @@ export function AdminClientWorksPage() {
 
   // Helper to upload a main work cover directly
   const uploadWorkCoverDirect = async (file: File) => {
-    if (!currentEntity) return;
+    const base = draft || activeEntity;
+    if (!base) return;
+
+    if (!isImageFile(file)) {
+      toast.error("يرجى اختيار ملف صورة صالح (PNG, JPG, WEBP, SVG, GIF, AVIF).");
+      return;
+    }
+
     try {
       setIsUploading(true);
       setUploadStatus(`جارٍ رفع غلاف العمل: ${file.name}...`);
       const ext = (file.name.split(".").pop() ?? "png").toLowerCase();
-      const safeEntityId = currentEntity.id.replace(/[^a-zA-Z0-9_\-\.]/g, "-");
+      const safeEntityId =
+        base.id.replace(/[^a-zA-Z0-9_\-\.]/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "") || "entity";
       const path = `projects/client-works/${safeEntityId}/cover/${crypto.randomUUID()}.${ext}`;
 
+      const contentType = file.type || getMimeType(ext);
       const { error: upErr } = await supabase.storage
         .from("media")
-        .upload(path, file, { contentType: file.type, upsert: false });
+        .upload(path, file, { contentType, upsert: false });
 
       if (upErr) throw upErr;
 
       const { url } = (await signMedia({ data: { path } })) as { url: string };
       if (!url) throw new Error("تعذر إنشاء رابط الصورة الموقّع");
 
-      const cleanAlt = file.name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ") || currentEntity.name;
+      const cleanAlt = file.name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ") || base.name;
       const newImg = { src: url, alt: cleanAlt };
 
-      // Also append to the primary folder so it's part of the files list
-      setDraft((prevDraft) => {
-        if (!prevDraft) return prevDraft;
-        const nextFolders = [...prevDraft.folders];
-        if (nextFolders.length > 0) {
-          const f0 = nextFolders[0];
-          nextFolders[0] = {
-            ...f0,
-            cover: url,
-            images: [newImg, ...f0.images.filter((img) => img.src !== url)],
-          };
-        }
-        return {
-          ...prevDraft,
+      // Also append to active folder (or first folder) so it's visible in existing images
+      const nextFolders = [...base.folders];
+      const folderIdx = activeFolderIndex >= 0 && activeFolderIndex < nextFolders.length ? activeFolderIndex : 0;
+      if (nextFolders.length > 0) {
+        const targetF = nextFolders[folderIdx];
+        const nextImgs = [newImg, ...targetF.images.filter((img) => img.src !== url)];
+        nextFolders[folderIdx] = {
+          ...targetF,
           cover: url,
-          folders: nextFolders,
+          images: nextImgs,
         };
-      });
+      }
 
-      toast.success(`تم تعيين "${file.name}" كغلاف رئيسي للعمل وإضافتها للمجلد الرئيسي!`);
+      const updatedEntity: ClientEntity = {
+        ...base,
+        cover: url,
+        folders: nextFolders,
+      };
+
+      setDraft(updatedEntity);
+
+      try {
+        const res = await saveFn({ data: { entity: updatedEntity } });
+        if (res?.entity) {
+          setDraft(JSON.parse(JSON.stringify(res.entity)));
+          setSelectedId(res.entity.id);
+        }
+        queryClient.invalidateQueries({ queryKey: ["admin-client-works"] });
+        queryClient.invalidateQueries({ queryKey: ["client-works-public"] });
+        router.invalidate();
+        toast.success(`تم تعيين "${file.name}" كغلاف رئيسي للعمل وإضافتها للمجلد وحفظ التغييرات بنجاح!`);
+      } catch (saveErr: any) {
+        console.warn("Auto-save of work cover warning:", saveErr);
+        toast.success(`تم تعيين "${file.name}" كغلاف رئيسي للعمل محلياً. اضغط "حفظ التغييرات" لتثبيته.`);
+      }
     } catch (err: any) {
       console.error("Cover upload error:", err);
       toast.error(`فشل رفع الغلاف: ${err.message || "خطأ غير متوقع"}`);
@@ -365,9 +443,65 @@ export function AdminClientWorksPage() {
     }
   };
 
+  // Helper when image is uploaded via ImageInput
+  const handleImageInputAdd = async (url: string | null) => {
+    if (!url) return;
+    const base = draft || activeEntity;
+    if (!base || !currentFolder) {
+      toast.error("يرجى اختيار جهة عمل ومجلد أولاً.");
+      return;
+    }
+
+    const cleanAlt = newImageAlt.trim() || currentFolder.title;
+    const newImg = { src: url, alt: cleanAlt };
+
+    const nextFolders = [...base.folders];
+    const targetFolder = nextFolders[activeFolderIndex];
+    if (!targetFolder) return;
+
+    const shouldCover = autoSetAsCover || !targetFolder.cover;
+    const nextCover = shouldCover ? url : targetFolder.cover;
+    const combined = shouldCover
+      ? [newImg, ...targetFolder.images.filter((img) => img.src !== url)]
+      : [...targetFolder.images, newImg];
+
+    nextFolders[activeFolderIndex] = {
+      ...targetFolder,
+      cover: nextCover,
+      images: combined,
+    };
+
+    const nextWorkCover = shouldCover && !base.cover ? url : base.cover;
+
+    const updatedEntity: ClientEntity = {
+      ...base,
+      cover: nextWorkCover,
+      folders: nextFolders,
+    };
+
+    setDraft(updatedEntity);
+    setNewImageSrc("");
+    setNewImageAlt("");
+
+    try {
+      const res = await saveFn({ data: { entity: updatedEntity } });
+      if (res?.entity) {
+        setDraft(JSON.parse(JSON.stringify(res.entity)));
+        setSelectedId(res.entity.id);
+      }
+      queryClient.invalidateQueries({ queryKey: ["admin-client-works"] });
+      queryClient.invalidateQueries({ queryKey: ["client-works-public"] });
+      router.invalidate();
+      toast.success(`تمت إضافة الصورة بنجاح إلى مجلد "${targetFolder.title}" وحفظ التغييرات مباشرة!`);
+    } catch {
+      toast.success(`تمت إضافة الصورة إلى المجلد محلياً. اضغط "حفظ التغييرات" لتثبيتها.`);
+    }
+  };
+
   // Helper actions on images inside active folder
   const addImageToFolderByUrl = () => {
-    if (!currentEntity || !currentFolder) return;
+    const base = draft || activeEntity;
+    if (!base || !currentFolder) return;
     if (!newImageSrc.trim()) {
       toast.error("يرجى إدخال رابط الصورة أولاً.");
       return;
@@ -382,7 +516,7 @@ export function AdminClientWorksPage() {
       : [...currentFolder.images, newImg];
     const nextCover = shouldSetCover ? cleanSrc : currentFolder.cover;
 
-    const nextFolders = [...currentEntity.folders];
+    const nextFolders = [...base.folders];
     nextFolders[activeFolderIndex] = {
       ...currentFolder,
       cover: nextCover,
@@ -390,8 +524,8 @@ export function AdminClientWorksPage() {
     };
 
     setDraft({
-      ...currentEntity,
-      cover: currentEntity.cover || (shouldSetCover ? cleanSrc : undefined),
+      ...base,
+      cover: base.cover || (shouldSetCover ? cleanSrc : undefined),
       folders: nextFolders,
     });
 
@@ -401,7 +535,8 @@ export function AdminClientWorksPage() {
   };
 
   const removeImageFromFolder = (imgIndex: number) => {
-    if (!currentEntity || !currentFolder) return;
+    const base = draft || activeEntity;
+    if (!base || !currentFolder) return;
     const targetImg = currentFolder.images[imgIndex];
     if (!targetImg) return;
 
@@ -412,20 +547,20 @@ export function AdminClientWorksPage() {
         ? nextImages[0]?.src || ""
         : currentFolder.cover;
 
-    const nextFolders = [...currentEntity.folders];
+    const nextFolders = [...base.folders];
     nextFolders[activeFolderIndex] = {
       ...currentFolder,
       cover: nextCover,
       images: nextImages,
     };
 
-    let nextEntityCover = currentEntity.cover;
+    let nextEntityCover = base.cover;
     if (nextEntityCover === deletedSrc) {
       nextEntityCover = nextCover || undefined;
     }
 
     setDraft({
-      ...currentEntity,
+      ...base,
       cover: nextEntityCover,
       folders: nextFolders,
     });
@@ -433,51 +568,64 @@ export function AdminClientWorksPage() {
   };
 
   const setAsFolderCover = (src: string) => {
-    if (!currentEntity || !currentFolder) return;
-    const coverImg = currentFolder.images.find((img) => img.src === src);
-    const others = currentFolder.images.filter((img) => img.src !== src);
-    const reordered = coverImg ? [coverImg, ...others] : currentFolder.images;
+    const base = draft || activeEntity;
+    if (!base || !currentFolder) return;
 
-    const nextFolders = [...currentEntity.folders];
+    const nextFolders = [...base.folders];
+    const targetFolder = nextFolders[activeFolderIndex];
+    if (!targetFolder) return;
+
+    // Move to front without deleting any other instances
+    const idx = targetFolder.images.findIndex((img) => img.src === src);
+    let reordered = [...targetFolder.images];
+    if (idx > -1) {
+      const [item] = reordered.splice(idx, 1);
+      reordered.unshift(item);
+    }
+
     nextFolders[activeFolderIndex] = {
-      ...currentFolder,
+      ...targetFolder,
       cover: src,
       images: reordered,
     };
 
-    setDraft({
-      ...currentEntity,
+    const updatedEntity: ClientEntity = {
+      ...base,
       folders: nextFolders,
-    });
+    };
+
+    setDraft(updatedEntity);
     toast.success("تم تعيين الصورة كغلاف لهذا المجلد ونقلها لمقدمة التصاميم.");
   };
 
   const setAsWorkCover = (src: string) => {
-    if (!currentEntity || !currentFolder) return;
-    const coverImg = currentFolder.images.find((img) => img.src === src);
-    const others = currentFolder.images.filter((img) => img.src !== src);
-    const reordered = coverImg ? [coverImg, ...others] : currentFolder.images;
+    const base = draft || activeEntity;
+    if (!base || !currentFolder) return;
 
-    const nextFolders = [...currentEntity.folders];
-    nextFolders[activeFolderIndex] = {
-      ...currentFolder,
-      cover: src,
-      images: reordered,
-    };
-
-    // If current folder is not the first folder, bring it to the top so it's showcased first everywhere
-    if (activeFolderIndex !== 0) {
-      const activeF = nextFolders.splice(activeFolderIndex, 1)[0];
-      nextFolders.unshift(activeF);
-      setActiveFolderIndex(0);
+    const nextFolders = [...base.folders];
+    const targetFolder = nextFolders[activeFolderIndex];
+    if (targetFolder) {
+      const idx = targetFolder.images.findIndex((img) => img.src === src);
+      let reordered = [...targetFolder.images];
+      if (idx > -1) {
+        const [item] = reordered.splice(idx, 1);
+        reordered.unshift(item);
+      }
+      nextFolders[activeFolderIndex] = {
+        ...targetFolder,
+        cover: src,
+        images: reordered,
+      };
     }
 
-    setDraft({
-      ...currentEntity,
+    const updatedEntity: ClientEntity = {
+      ...base,
       cover: src,
       folders: nextFolders,
-    });
-    toast.success("تم تعيين الصورة كغلاف رئيسي للعمل وجعل هذا المجلد في صدارة العرض!");
+    };
+
+    setDraft(updatedEntity);
+    toast.success("تم تعيين الصورة كغلاف رئيسي للعمل بنجاح! اضغط 'حفظ التغييرات' لتثبيتها.");
   };
 
   const addNewClient = () => {
@@ -775,8 +923,45 @@ export function AdminClientWorksPage() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <label className="inline-flex cursor-pointer items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-muted transition-colors shadow-xs">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                  {/* Selector from existing images across all folders */}
+                  {allEntityImages.length > 0 && (
+                    <div className="flex items-center gap-1.5 bg-card border border-border/80 rounded-xl px-2.5 py-1.5 text-xs shadow-xs">
+                      <span className="text-[11px] text-muted-foreground whitespace-nowrap">اختر من الصور:</span>
+                      <select
+                        value={currentEntity.cover || ""}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setDraft((prev) => {
+                            const base = prev || currentEntity;
+                            if (!base) return prev;
+                            return { ...base, cover: val || undefined };
+                          });
+                          toast.info(
+                            val
+                              ? "تم تحديد غلاف العمل. اضغط 'حفظ التغييرات' لتثبيته."
+                              : "تمت إعادة تعيين غلاف العمل إلى غلاف المجلد الأول.",
+                          );
+                        }}
+                        className="rounded-lg border border-border/70 bg-muted/40 px-2 py-1 text-xs max-w-[190px] truncate focus:border-foreground/40 focus:outline-none"
+                      >
+                        <option value="">تلقائي (غلاف أول مجلد)</option>
+                        {currentEntity.folders.map((folder, fIdx) =>
+                          folder.images.length > 0 ? (
+                            <optgroup key={folder.id || fIdx} label={folder.title}>
+                              {folder.images.map((img, i) => (
+                                <option key={img.src + i} value={img.src}>
+                                  {folder.title} — {img.alt || `صورة ${i + 1}`}
+                                </option>
+                              ))}
+                            </optgroup>
+                          ) : null,
+                        )}
+                      </select>
+                    </div>
+                  )}
+
+                  <label className="inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-xl border border-border bg-card px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-muted transition-colors shadow-xs">
                     <Upload className="size-3 text-accent" />
                     <span>رفع غلاف رئيسي</span>
                     <input
@@ -785,6 +970,7 @@ export function AdminClientWorksPage() {
                       accept="image/*"
                       className="hidden"
                       disabled={isUploading}
+                      onClick={(e) => e.stopPropagation()}
                       onChange={(e) => {
                         const file = e.target.files?.[0];
                         if (file) uploadWorkCoverDirect(file);
@@ -992,6 +1178,7 @@ export function AdminClientWorksPage() {
                       accept="image/*"
                       className="hidden"
                       disabled={isUploading}
+                      onClick={(e) => e.stopPropagation()}
                       onChange={(e) => {
                         if (e.target.files && e.target.files.length > 0) {
                           uploadFiles(e.target.files);
@@ -1014,7 +1201,7 @@ export function AdminClientWorksPage() {
                     </span>
 
                     <span className="text-xs text-muted-foreground mt-1">
-                      يدعم رفع عدة صور معاً دفعة واحدة (PNG, JPG, WEBP, SVG) وإدراجها فوراً في هذا المجلد.
+                      يدعم رفع عدة صور معاً دفعة واحدة (PNG, JPG, WEBP, SVG) وإدراجها فوراً في هذا المجلد وحفظها مباشرة.
                     </span>
 
                     <button
@@ -1049,49 +1236,66 @@ export function AdminClientWorksPage() {
                       className="inline-flex items-center gap-1 text-[11px] font-semibold text-accent hover:underline self-start sm:self-auto"
                     >
                       <LinkIcon className="size-3" />
-                      <span>{showUrlInput ? "إخفاء إضافة الرابط المباشر" : "أو إضافة صورة عبر رابط مباشر (URL)"}</span>
+                      <span>{showUrlInput ? "إخفاء الخيارات الإضافية للرفع" : "خيارات إضافية (أداة ImageInput أو رابط URL)"}</span>
                     </button>
                   </div>
 
-                  {/* Direct URL Input Row (Collapsible) */}
+                  {/* Extra Upload Options (ImageInput + Direct URL) */}
                   {showUrlInput && (
-                    <div className="mt-2 rounded-xl border border-border/80 bg-card p-3.5 grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
-                      <div className="sm:col-span-6">
-                        <label className="text-[11px] font-medium text-muted-foreground">
-                          رابط الصورة المباشر (URL أو مسار محلي)
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="https://... أو /images/..."
-                          dir="ltr"
+                    <div className="mt-2 rounded-xl border border-border/80 bg-card p-4 flex flex-col gap-4">
+                      {/* ImageInput Single Uploader */}
+                      <div className="pb-3 border-b border-border/60">
+                        <span className="text-[11px] font-bold text-foreground block mb-2">
+                          الرفع عبر أداة الصور الفردية (ImageInput) — تُضاف للمجلد فور اكتمال الرفع تلقائياً:
+                        </span>
+                        <ImageInput
                           value={newImageSrc}
-                          onChange={(e) => setNewImageSrc(e.target.value)}
-                          className="mt-1 w-full rounded-xl border border-border/80 bg-muted/20 p-2 text-xs focus:border-foreground/40 focus:outline-none"
+                          onChange={(url) => {
+                            if (url) handleImageInputAdd(url);
+                          }}
+                          folder={`projects/client-works/${currentEntity.id}/${currentFolder.id}`}
                         />
                       </div>
 
-                      <div className="sm:col-span-4">
-                        <label className="text-[11px] font-medium text-muted-foreground">
-                          وصف التصميم (Alt Text)
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="مثال: الشعار الرئيسي، بطاقة عمل..."
-                          value={newImageAlt}
-                          onChange={(e) => setNewImageAlt(e.target.value)}
-                          className="mt-1 w-full rounded-xl border border-border/80 bg-muted/20 p-2 text-xs focus:border-foreground/40 focus:outline-none"
-                        />
-                      </div>
+                      {/* Direct URL Input Row */}
+                      <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
+                        <div className="sm:col-span-6">
+                          <label className="text-[11px] font-medium text-muted-foreground">
+                            رابط الصورة المباشر (URL أو مسار محلي)
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="https://... أو /images/..."
+                            dir="ltr"
+                            value={newImageSrc}
+                            onChange={(e) => setNewImageSrc(e.target.value)}
+                            className="mt-1 w-full rounded-xl border border-border/80 bg-muted/20 p-2 text-xs focus:border-foreground/40 focus:outline-none"
+                          />
+                        </div>
 
-                      <div className="sm:col-span-2">
-                        <button
-                          type="button"
-                          onClick={addImageToFolderByUrl}
-                          className="w-full rounded-xl bg-foreground p-2 text-xs font-bold text-background transition-opacity hover:opacity-90 shadow-xs flex items-center justify-center gap-1"
-                        >
-                          <Plus className="size-3.5" />
-                          <span>إضافة الرابط</span>
-                        </button>
+                        <div className="sm:col-span-4">
+                          <label className="text-[11px] font-medium text-muted-foreground">
+                            وصف التصميم (Alt Text)
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="مثال: الشعار الرئيسي، بطاقة عمل..."
+                            value={newImageAlt}
+                            onChange={(e) => setNewImageAlt(e.target.value)}
+                            className="mt-1 w-full rounded-xl border border-border/80 bg-muted/20 p-2 text-xs focus:border-foreground/40 focus:outline-none"
+                          />
+                        </div>
+
+                        <div className="sm:col-span-2">
+                          <button
+                            type="button"
+                            onClick={addImageToFolderByUrl}
+                            className="w-full rounded-xl bg-foreground p-2 text-xs font-bold text-background transition-opacity hover:opacity-90 shadow-xs flex items-center justify-center gap-1"
+                          >
+                            <Plus className="size-3.5" />
+                            <span>إضافة الرابط</span>
+                          </button>
+                        </div>
                       </div>
                     </div>
                   )}
@@ -1107,7 +1311,8 @@ export function AdminClientWorksPage() {
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {currentFolder.images.map((img, imgIdx) => {
-                      const isFolderCover = currentFolder.cover === img.src;
+                      const isFolderCover =
+                        currentFolder.cover === img.src || (!currentFolder.cover && imgIdx === 0);
                       const isWorkCover =
                         currentWorkCover === img.src ||
                         (!currentEntity.cover && currentEntity.folders[0]?.id === currentFolder.id && isFolderCover);
@@ -1212,7 +1417,7 @@ export function AdminClientWorksPage() {
                                   nextImages[imgIdx] = { ...img, alt: e.target.value };
                                   const nextFolders = [...currentEntity.folders];
                                   nextFolders[activeFolderIndex] = { ...currentFolder, images: nextImages };
-                                  setDraft({ ...currentEntity, folders: nextFolders });
+                                  setDraft((prev) => (prev ? { ...prev, folders: nextFolders } : { ...currentEntity, folders: nextFolders }));
                                 }}
                                 className="flex-1 rounded-lg border border-border/70 bg-muted/30 px-2 py-1 text-[11px] text-foreground focus:border-foreground/40 focus:outline-none"
                               />
