@@ -91,20 +91,14 @@ export const listClientWorksPublic = createServerFn({ method: "GET" }).handler(
 export const adminListClientWorks = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    const { requireAdmin, getRequestContextClient, getPublicServerClient } = await import(
+    const { requireAdmin, getRequestContextClient } = await import(
       "@/features/cms/repository.server"
     );
 
-    let client;
-    try {
-      const { db, userId } = await getRequestContextClient(context);
-      await requireAdmin(db, userId);
-      client = db;
-    } catch {
-      client = getPublicServerClient();
-    }
+    const { db, userId } = await getRequestContextClient(context);
+    await requireAdmin(db, userId);
 
-    const { data } = await client
+    const { data } = await db
       .from("site_content")
       .select("key, metadata, updated_at")
       .eq("group_name", "client_works");
@@ -155,18 +149,12 @@ export const adminSaveClientWork = createServerFn({ method: "POST" })
     entity: clientEntitySchema.parse(d.entity),
   }))
   .handler(async ({ data: { entity }, context }) => {
-    const { requireAdmin, getRequestContextClient, getPublicServerClient } = await import(
+    const { requireAdmin, getRequestContextClient } = await import(
       "@/features/cms/repository.server"
     );
 
-    let client;
-    try {
-      const { db, userId } = await getRequestContextClient(context);
-      await requireAdmin(db, userId);
-      client = db;
-    } catch {
-      client = getPublicServerClient();
-    }
+    const { db, userId } = await getRequestContextClient(context);
+    await requireAdmin(db, userId);
 
     // Auto-calculate total files across all folders
     const totalFiles = entity.folders.reduce((acc, f) => acc + (f.images?.length || 0), 0);
@@ -187,7 +175,7 @@ export const adminSaveClientWork = createServerFn({ method: "POST" })
       updated_at: new Date().toISOString(),
     };
 
-    const { data: saved, error } = await client
+    const { data: saved, error } = await db
       .from("site_content")
       .upsert(payload, { onConflict: "key" })
       .select()
@@ -208,24 +196,18 @@ export const adminDeleteClientWork = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator(z.object({ id: z.string().min(1) }))
   .handler(async ({ data: { id }, context }) => {
-    const { requireAdmin, getRequestContextClient, getPublicServerClient } = await import(
+    const { requireAdmin, getRequestContextClient } = await import(
       "@/features/cms/repository.server"
     );
 
-    let client;
-    try {
-      const { db, userId } = await getRequestContextClient(context);
-      await requireAdmin(db, userId);
-      client = db;
-    } catch {
-      client = getPublicServerClient();
-    }
+    const { db, userId } = await getRequestContextClient(context);
+    await requireAdmin(db, userId);
 
     const key = `client_work.${id}`;
-    const { error } = await client.from("site_content").delete().eq("key", key);
+    const { error } = await db.from("site_content").delete().eq("key", key);
 
     if (error) {
-      throw new Error(`فشل حذف المجلدات: ${error.message}`);
+      throw new Error(`فشل استعادة المجلدات: ${error.message}`);
     }
 
     return { success: true, id };
