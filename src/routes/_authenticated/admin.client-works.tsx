@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -40,6 +40,7 @@ export const Route = createFileRoute("/_authenticated/admin/client-works")({
 const CATEGORIES = ["هوية", "متاجر", "مواقع", "أنظمة", "مطبوعات", "تسويق"] as const;
 
 export function AdminClientWorksPage() {
+  const router = useRouter();
   const queryClient = useQueryClient();
   const listFn = useServerFn(adminListClientWorks);
   const saveFn = useServerFn(adminSaveClientWork);
@@ -100,6 +101,7 @@ export function AdminClientWorksPage() {
       toast.success(`تم حفظ مجلدات وملفات "${res.entity.name}" بنجاح`);
       queryClient.invalidateQueries({ queryKey: ["admin-client-works"] });
       queryClient.invalidateQueries({ queryKey: ["client-works-public"] });
+      router.invalidate();
       setDraft(JSON.parse(JSON.stringify(res.entity)));
     },
     onError: (err: Error) => {
@@ -116,6 +118,7 @@ export function AdminClientWorksPage() {
       toast.success("تمت استعادة الإعدادات الافتراضية");
       queryClient.invalidateQueries({ queryKey: ["admin-client-works"] });
       queryClient.invalidateQueries({ queryKey: ["client-works-public"] });
+      router.invalidate();
       setDraft(null);
     },
     onError: (err: Error) => {
@@ -211,23 +214,43 @@ export function AdminClientWorksPage() {
 
   const removeImageFromFolder = (imgIndex: number) => {
     if (!currentEntity || !currentFolder) return;
+    const deletedSrc = currentFolder.images[imgIndex]?.src;
     const nextImages = currentFolder.images.filter((_, i) => i !== imgIndex);
+    const nextCover =
+      currentFolder.cover === deletedSrc
+        ? nextImages[0]?.src || ""
+        : currentFolder.cover;
+
     const nextFolders = [...currentEntity.folders];
     nextFolders[activeFolderIndex] = {
       ...currentFolder,
-      cover: currentFolder.cover === currentFolder.images[imgIndex]?.src ? nextImages[0]?.src || "" : currentFolder.cover,
+      cover: nextCover,
       images: nextImages,
     };
     setDraft({
       ...currentEntity,
       folders: nextFolders,
     });
-    toast.info("تم حذف الملف من المجلد.");
+    toast.info("تم حذف الملف من المجلد. اضغط على 'حفظ التغييرات' لتثبيت التعديل.");
   };
 
   const setAsFolderCover = (src: string) => {
-    updateFolderField("cover", src);
-    toast.success("تم تعيين الصورة كغلاف لهذا المجلد.");
+    if (!currentEntity || !currentFolder) return;
+    const coverImg = currentFolder.images.find((img) => img.src === src);
+    const remaining = currentFolder.images.filter((img) => img.src !== src);
+    const reorderedImages = coverImg ? [coverImg, ...remaining] : currentFolder.images;
+
+    const nextFolders = [...currentEntity.folders];
+    nextFolders[activeFolderIndex] = {
+      ...currentFolder,
+      cover: src,
+      images: reorderedImages,
+    };
+    setDraft({
+      ...currentEntity,
+      folders: nextFolders,
+    });
+    toast.success("تم تعيين الصورة كغلاف لهذا المجلد ونقلها للتصميم الرئيسي.");
   };
 
   const addNewClient = () => {

@@ -66,6 +66,33 @@ export const Route = createFileRoute("/work/$slug")({
 
     if (!project) throw notFound();
 
+    // Enrich with dynamic client works data if customized via admin dashboard
+    try {
+      const { listClientWorksPublic } = await import("@/lib/cms/client-works.functions");
+      const clientWorks = await listClientWorksPublic();
+      const clientWork = clientWorks.find(
+        (cw) => cw.id === params.slug || cw.mainSlug === params.slug,
+      );
+      if (clientWork && clientWork.folders.length > 0) {
+        const primaryFolder = clientWork.folders[0];
+        const primaryCover = primaryFolder?.cover || primaryFolder?.images[0]?.src;
+        const allImages = clientWork.folders.flatMap((f) =>
+          f.images.map((img) => ({
+            src: img.src,
+            alt: img.alt || f.title,
+          })),
+        );
+        project = {
+          ...project,
+          title: clientWork.name || project.title,
+          cover: primaryCover ? { src: primaryCover, alt: project.title } : project.cover,
+          gallery: allImages.length > 0 ? allImages : project.gallery,
+        };
+      }
+    } catch {
+      // fallback to original project
+    }
+
     const related = staticProjects
       .filter((p) => p.slug !== project?.slug && (p.category === project?.category || p.featured))
       .slice(0, 3);

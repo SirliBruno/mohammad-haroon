@@ -46,6 +46,9 @@ const CATEGORY_LABELS: Record<CategoryFilter, string> = {
 };
 
 export const Route = createFileRoute("/work/")({
+  loader: async () => {
+    return await listClientWorksPublic();
+  },
   errorComponent: ({ reset }) => <RouteErrorBoundary reset={reset} eyebrow="المشاريع" />,
   notFoundComponent: () => <RouteNotFoundBoundary eyebrow="المشاريع" />,
   head: () => ({
@@ -66,12 +69,14 @@ function WorkIndex() {
   const [activeGalleryEntity, setActiveGalleryEntity] = useState<ClientEntity | null>(null);
   const [lightboxImage, setLightboxImage] = useState<{ src: string; alt: string; title: string } | null>(null);
 
+  const loaderEntities = Route.useLoaderData();
   const fetchClientWorks = useServerFn(listClientWorksPublic);
-  const { data: allEntities = clientEntities } = useQuery({
+  const { data: allEntities = loaderEntities } = useQuery({
     queryKey: ["client-works-public"],
     queryFn: () => fetchClientWorks(),
-    initialData: clientEntities,
-    staleTime: 60_000,
+    initialData: loaderEntities,
+    staleTime: 0,
+    refetchOnMount: "always",
   });
 
   const filteredEntities = useMemo(() => {
@@ -282,14 +287,33 @@ function ClientEntityCard({
   onOpenLightbox: (img: { src: string; alt: string }, title: string) => void;
 }) {
   const [activeFolderId, setActiveFolderId] = useState<string>(entity.folders[0]?.id || "");
-  const [activeImageIndex, setActiveImageIndex] = useState<number>(0);
 
   const activeFolder = useMemo(() => {
     return entity.folders.find((f) => f.id === activeFolderId) || entity.folders[0];
   }, [entity.folders, activeFolderId]);
 
-  const images = activeFolder?.images || [];
-  const currentImage = images[activeImageIndex] || images[0] || { src: activeFolder?.cover, alt: activeFolder?.title };
+  // Order images so that the folder cover (if specified) is always first
+  const images = useMemo(() => {
+    if (!activeFolder?.images) return [];
+    if (!activeFolder.cover) return activeFolder.images;
+    const coverImg = activeFolder.images.find((img) => img.src === activeFolder.cover);
+    if (!coverImg) return activeFolder.images;
+    const others = activeFolder.images.filter((img) => img.src !== activeFolder.cover);
+    return [coverImg, ...others];
+  }, [activeFolder]);
+
+  const [activeImageIndex, setActiveImageIndex] = useState<number>(0);
+
+  // Automatically reset to the cover image (index 0) whenever the active folder changes
+  useEffect(() => {
+    setActiveImageIndex(0);
+  }, [activeFolderId]);
+
+  const currentImage =
+    images[activeImageIndex] ||
+    (activeFolder?.cover ? { src: activeFolder.cover, alt: activeFolder.title } : undefined) ||
+    images[0] ||
+    { src: "", alt: activeFolder?.title || "" };
   const totalFiles = entity.totalFiles ?? entity.folders.reduce((acc, f) => acc + f.images.length, 0);
 
   return (
@@ -610,53 +634,70 @@ function FullGalleryModal({
 
         {/* Modal Scrollable Body */}
         <div className="flex-1 overflow-y-auto p-5 sm:p-8 space-y-10 scrollbar-thin">
-          {displayedFolders.map((folder) => (
-            <section key={folder.id} className="space-y-4">
-              <div className="flex items-center justify-between border-b border-border/50 pb-2.5">
-                <div className="flex items-center gap-2">
-                  <FolderOpen className="size-4 text-accent" />
-                  <h4 className="text-base sm:text-lg font-bold text-foreground">
-                    {folder.title}
-                  </h4>
-                  <span className="rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
-                    {folder.images.length} صور
-                  </span>
-                </div>
-                <p className="text-xs text-muted-foreground hidden sm:block">
-                  {folder.summary}
-                </p>
-              </div>
+          {displayedFolders.map((folder) => {
+            const sortedImages = folder.cover
+              ? [
+                  ...folder.images.filter((img) => img.src === folder.cover),
+                  ...folder.images.filter((img) => img.src !== folder.cover),
+                ]
+              : folder.images;
 
-              {/* Images Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {folder.images.map((img, idx) => (
-                  <div
-                    key={img.src + idx}
-                    className="group relative aspect-[16/10] overflow-hidden rounded-2xl border border-border/80 bg-neutral-900 cursor-pointer transition-all hover:border-accent hover:shadow-md"
-                    onClick={() =>
-                      onOpenLightbox(img, `${entity.name} — ${folder.title} (${idx + 1}/${folder.images.length})`)
-                    }
-                  >
-                    <img
-                      src={img.src}
-                      alt={img.alt || folder.title}
-                      className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-between p-3.5">
-                      <span className="text-xs text-white/90 font-medium truncate max-w-[80%]">
-                        {img.alt || folder.title}
-                      </span>
-                      <span className="grid size-7 place-items-center rounded-lg bg-black/60 text-white backdrop-blur-xs">
-                        <Maximize2 className="size-3.5" />
-                      </span>
-                    </div>
+            return (
+              <section key={folder.id} className="space-y-4">
+                <div className="flex items-center justify-between border-b border-border/50 pb-2.5">
+                  <div className="flex items-center gap-2">
+                    <FolderOpen className="size-4 text-accent" />
+                    <h4 className="text-base sm:text-lg font-bold text-foreground">
+                      {folder.title}
+                    </h4>
+                    <span className="rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                      {folder.images.length} صور
+                    </span>
                   </div>
-                ))}
-              </div>
-            </section>
-          ))}
+                  <p className="text-xs text-muted-foreground hidden sm:block">
+                    {folder.summary}
+                  </p>
+                </div>
+
+                {/* Images Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {sortedImages.map((img, idx) => {
+                    const isCover = folder.cover === img.src;
+                    return (
+                      <div
+                        key={img.src + idx}
+                        className="group relative aspect-[16/10] overflow-hidden rounded-2xl border border-border/80 bg-neutral-900 cursor-pointer transition-all hover:border-accent hover:shadow-md"
+                        onClick={() =>
+                          onOpenLightbox(img, `${entity.name} — ${folder.title} (${idx + 1}/${sortedImages.length})`)
+                        }
+                      >
+                        <img
+                          src={img.src}
+                          alt={img.alt || folder.title}
+                          className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                        {isCover && (
+                          <span className="absolute top-2 right-2 rounded-md bg-accent px-2 py-0.5 text-[10px] font-bold text-accent-foreground shadow-sm z-10">
+                            غلاف المجلد
+                          </span>
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-between p-3.5">
+                          <span className="text-xs text-white/90 font-medium truncate max-w-[80%]">
+                            {img.alt || folder.title}
+                          </span>
+                          <span className="grid size-7 place-items-center rounded-lg bg-black/60 text-white backdrop-blur-xs">
+                            <Maximize2 className="size-3.5" />
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </section>
+            );
+          })}
         </div>
 
         {/* Modal Footer */}
