@@ -16,8 +16,10 @@ import {
 import { buildMeta } from "@/features/seo/build-meta";
 import { PageHeader } from "@/components/layout/page-header";
 import { Section } from "@/components/layout/section";
-import { EmptyState, DSButton } from "@/components/ds";
+import { useServerFn } from "@tanstack/react-start";
+import { useQuery } from "@tanstack/react-query";
 import { clientEntities, type ClientEntity, type DeliverableFolder } from "@/data/client-works";
+import { listClientWorksPublic } from "@/lib/cms/client-works.functions";
 import { cn } from "@/lib/utils";
 import { RouteErrorBoundary, RouteNotFoundBoundary } from "@/components/layout/route-boundaries";
 
@@ -64,8 +66,16 @@ function WorkIndex() {
   const [activeGalleryEntity, setActiveGalleryEntity] = useState<ClientEntity | null>(null);
   const [lightboxImage, setLightboxImage] = useState<{ src: string; alt: string; title: string } | null>(null);
 
+  const fetchClientWorks = useServerFn(listClientWorksPublic);
+  const { data: allEntities = clientEntities } = useQuery({
+    queryKey: ["client-works-public"],
+    queryFn: () => fetchClientWorks(),
+    initialData: clientEntities,
+    staleTime: 60_000,
+  });
+
   const filteredEntities = useMemo(() => {
-    return clientEntities
+    return allEntities
       .filter((entity) => {
         const matchCat =
           category === "الكل" ||
@@ -287,29 +297,24 @@ function ClientEntityCard({
       {/* Brand Header */}
       <div className="p-5 sm:p-7 border-b border-border/50 bg-muted/20">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div className="flex items-start gap-4">
-            <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-foreground text-background font-bold text-lg shadow-sm">
-              {entity.name.charAt(0)}
+          <div>
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
+                {entity.name}
+              </h3>
+              <span className="rounded-full bg-accent/10 px-2.5 py-0.5 text-xs font-semibold text-accent">
+                {entity.categoryLabel}
+              </span>
+              <span className="text-xs font-medium text-muted-foreground">
+                {entity.year}
+              </span>
+              <span className="rounded-md bg-muted px-2 py-0.5 text-[11px] font-semibold text-foreground">
+                {totalFiles} ملف وتصميم
+              </span>
             </div>
-            <div>
-              <div className="flex items-center gap-2.5 flex-wrap">
-                <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
-                  {entity.name}
-                </h3>
-                <span className="rounded-full bg-accent/10 px-2.5 py-0.5 text-xs font-semibold text-accent">
-                  {entity.categoryLabel}
-                </span>
-                <span className="text-xs font-medium text-muted-foreground">
-                  {entity.year}
-                </span>
-                <span className="rounded-md bg-muted px-2 py-0.5 text-[11px] font-semibold text-foreground">
-                  {totalFiles} ملف وتصميم
-                </span>
-              </div>
-              <p className="mt-1.5 text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                {entity.tagline}
-              </p>
-            </div>
+            <p className="mt-1.5 text-xs sm:text-sm text-muted-foreground leading-relaxed">
+              {entity.tagline}
+            </p>
           </div>
 
           {/* Quick Actions */}
@@ -531,26 +536,21 @@ function FullGalleryModal({
         {/* Modal Header */}
         <div className="p-5 sm:p-6 border-b border-border/60 bg-muted/20 flex flex-col gap-4 shrink-0">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-foreground text-background font-bold text-base shadow-sm">
-                {entity.name.charAt(0)}
+            <div>
+              <div className="flex items-center gap-2.5 flex-wrap">
+                <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
+                  معرض أعمال: {entity.name}
+                </h3>
+                <span className="rounded-full bg-accent/10 px-2.5 py-0.5 text-xs font-semibold text-accent">
+                  {entity.categoryLabel}
+                </span>
+                <span className="rounded-md bg-muted px-2 py-0.5 text-[11px] font-semibold text-foreground">
+                  {totalImages} ملف وتصميم
+                </span>
               </div>
-              <div>
-                <div className="flex items-center gap-2.5 flex-wrap">
-                  <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
-                    معرض أعمال: {entity.name}
-                  </h3>
-                  <span className="rounded-full bg-accent/10 px-2.5 py-0.5 text-xs font-semibold text-accent">
-                    {entity.categoryLabel}
-                  </span>
-                  <span className="rounded-md bg-muted px-2 py-0.5 text-[11px] font-semibold text-foreground">
-                    {totalImages} ملف وتصميم
-                  </span>
-                </div>
-                <p className="mt-1 text-xs text-muted-foreground line-clamp-1">
-                  {entity.tagline}
-                </p>
-              </div>
+              <p className="mt-1 text-xs text-muted-foreground line-clamp-1">
+                {entity.tagline}
+              </p>
             </div>
 
             <button
