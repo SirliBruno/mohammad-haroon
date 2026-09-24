@@ -676,7 +676,7 @@ export function AdminClientWorksPage() {
                           toast.success("تم رفع الملف بنجاح، اضغط 'إضافة' لإلحاقه بالمجلد.");
                         }
                       }}
-                      folder={`client-works/${currentEntity.id}/${currentFolder.id}`}
+                      folder={`projects/client-works/${currentEntity.id}/${currentFolder.id}`}
                     />
                   </div>
                 </div>

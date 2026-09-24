@@ -160,9 +160,37 @@ export const signHeroMediaPath = createServerFn({ method: "POST" })
     const { requireAdmin, getRequestContextClient } = await import("@/features/cms/repository.server");
     const { db, userId } = await getRequestContextClient(context);
     await requireAdmin(db, userId);
-    const { data: signed, error } = await db.storage
-      .from("media")
-      .createSignedUrl(data.path, 60 * 60 * 24 * 365 * 10);
-    if (error) throwSafe("sign", "storage.media", error);
-    return { url: signed.signedUrl };
+
+    let signedUrl: string | undefined;
+
+    // 1. Attempt signing with supabaseAdmin (service role bypasses RLS)
+    try {
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { data: adminSigned, error: adminErr } = await supabaseAdmin.storage
+        .from("media")
+        .createSignedUrl(data.path, 60 * 60 * 24 * 365 * 10);
+      if (!adminErr && adminSigned?.signedUrl) {
+        signedUrl = adminSigned.signedUrl;
+      }
+    } catch {
+      // ignore admin client load error and fallback to db client
+    }
+
+    // 2. Fallback to request db client
+    if (!signedUrl) {
+      const { data: signed, error } = await db.storage
+        .from("media")
+        .createSignedUrl(data.path, 60 * 60 * 24 * 365 * 10);
+      if (error) {
+        console.error("[signHeroMediaPath] storage signing failed:", error);
+        throw new Error(`تعذر توقيع رابط الصورة من وحدة التخزين: ${error.message || "الملف غير موجود"}`);
+      }
+      signedUrl = signed?.signedUrl;
+    }
+
+    if (!signedUrl) {
+      throw new Error("تعذّر إنشاء رابط الصورة. يرجى المحاولة مرة أخرى.");
+    }
+
+    return { url: signedUrl };
   });
