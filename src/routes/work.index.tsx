@@ -12,14 +12,15 @@ import {
   Layers,
   CheckCircle2,
   Images,
+  Instagram,
 } from "lucide-react";
 import { buildMeta } from "@/features/seo/build-meta";
 import { PageHeader } from "@/components/layout/page-header";
 import { Section } from "@/components/layout/section";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
-import { clientEntities, type ClientEntity, type DeliverableFolder } from "@/data/client-works";
-import { listClientWorksPublic } from "@/lib/cms/client-works.functions";
+import { clientEntities, type ClientEntity, type DeliverableFolder, type DeliverableImage } from "@/data/client-works";
+import { listClientWorksPublic, extractInstagramShortcode } from "@/lib/cms/client-works.functions";
 import { cn } from "@/lib/utils";
 import { getOptimizedImageUrl } from "@/lib/optimized-images";
 import { RouteErrorBoundary, RouteNotFoundBoundary } from "@/components/layout/route-boundaries";
@@ -68,7 +69,14 @@ function WorkIndex() {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<CategoryFilter>("الكل");
   const [activeGalleryEntity, setActiveGalleryEntity] = useState<ClientEntity | null>(null);
-  const [lightboxImage, setLightboxImage] = useState<{ src: string; alt: string; title: string } | null>(null);
+  const [lightboxImage, setLightboxImage] = useState<{
+    src: string;
+    alt: string;
+    title: string;
+    type?: "image" | "instagram";
+    shortcode?: string;
+    instagramUrl?: string;
+  } | null>(null);
 
   const loaderEntities = Route.useLoaderData();
   const fetchClientWorks = useServerFn(listClientWorksPublic);
@@ -222,7 +230,14 @@ function WorkIndex() {
                 entity={entity}
                 onOpenFullGallery={(ent) => setActiveGalleryEntity(ent)}
                 onOpenLightbox={(img, title) =>
-                  setLightboxImage({ src: img.src, alt: img.alt, title })
+                  setLightboxImage({
+                    src: img.src,
+                    alt: img.alt,
+                    title,
+                    type: img.type,
+                    shortcode: img.shortcode || extractInstagramShortcode(img.src) || undefined,
+                    instagramUrl: img.instagramUrl || img.src,
+                  })
                 }
               />
             ))
@@ -236,44 +251,95 @@ function WorkIndex() {
           entity={activeGalleryEntity}
           onClose={() => setActiveGalleryEntity(null)}
           onOpenLightbox={(img, title) =>
-            setLightboxImage({ src: img.src, alt: img.alt, title })
+            setLightboxImage({
+              src: img.src,
+              alt: img.alt,
+              title,
+              type: img.type,
+              shortcode: img.shortcode || extractInstagramShortcode(img.src) || undefined,
+              instagramUrl: img.instagramUrl || img.src,
+            })
           }
         />
       )}
 
       {/* Lightbox Modal */}
-      {lightboxImage && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-in fade-in duration-200"
-          onClick={() => setLightboxImage(null)}
-        >
+      {lightboxImage && (() => {
+        const isInstagram =
+          lightboxImage.type === "instagram" ||
+          Boolean(lightboxImage.shortcode) ||
+          Boolean(extractInstagramShortcode(lightboxImage.src));
+        const shortcode =
+          lightboxImage.shortcode || extractInstagramShortcode(lightboxImage.src);
+
+        return (
           <div
-            className="relative max-w-5xl max-h-[90vh] w-full flex flex-col items-center"
-            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-in fade-in duration-200"
+            onClick={() => setLightboxImage(null)}
           >
-            <div className="w-full flex items-center justify-between text-white mb-3 px-2">
-              <span className="text-sm font-medium">{lightboxImage.title}</span>
-              <button
-                type="button"
-                onClick={() => setLightboxImage(null)}
-                className="grid size-8 place-items-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
-                aria-label="إغلاق المعاينة"
-              >
-                <X className="size-4" />
-              </button>
-            </div>
-            <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-neutral-900">
-              <img
-                src={lightboxImage.src}
-                alt={lightboxImage.alt}
-                className="max-h-[80vh] w-auto object-contain rounded-2xl"
-              />
+            <div
+              className={cn(
+                "relative max-h-[90vh] w-full flex flex-col items-center",
+                isInstagram ? "max-w-xl" : "max-w-5xl",
+              )}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="w-full flex items-center justify-between text-white mb-3 px-2">
+                <div className="flex items-center gap-2 truncate max-w-[75%]">
+                  {isInstagram && (
+                    <span className="rounded-md bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm flex items-center gap-1 shrink-0">
+                      <Instagram className="size-3" />
+                      <span>إنستغرام</span>
+                    </span>
+                  )}
+                  <span className="text-sm font-medium truncate">{lightboxImage.title}</span>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  {isInstagram && (
+                    <a
+                      href={lightboxImage.instagramUrl || lightboxImage.src}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1 rounded-full bg-white/10 hover:bg-white/20 text-white px-3 py-1 text-xs font-semibold transition-colors"
+                    >
+                      <Instagram className="size-3.5 text-pink-400" />
+                      <span>فتح في التطبيق</span>
+                    </a>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => setLightboxImage(null)}
+                    className="grid size-8 place-items-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+                    aria-label="إغلاق المعاينة"
+                  >
+                    <X className="size-4" />
+                  </button>
+                </div>
+              </div>
+              <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 w-full flex items-center justify-center">
+                {isInstagram && shortcode ? (
+                  <iframe
+                    src={`https://www.instagram.com/p/${shortcode}/embed/`}
+                    className="w-full h-[620px] max-h-[75vh] border-0 rounded-2xl bg-neutral-950"
+                    title={lightboxImage.title}
+                    loading="lazy"
+                    allowFullScreen
+                    scrolling="no"
+                  />
+                ) : (
+                  <img
+                    src={getOptimizedImageUrl(lightboxImage.src)}
+                    alt={lightboxImage.alt}
+                    className="max-h-[80vh] w-auto object-contain rounded-2xl"
+                  />
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
     </>
   );
 }
@@ -285,7 +351,7 @@ function ClientEntityCard({
 }: {
   entity: ClientEntity;
   onOpenFullGallery: (entity: ClientEntity) => void;
-  onOpenLightbox: (img: { src: string; alt: string }, title: string) => void;
+  onOpenLightbox: (img: DeliverableImage, title: string) => void;
 }) {
   const [activeFolderId, setActiveFolderId] = useState<string>(() => {
     if (entity.cover) {
@@ -319,11 +385,19 @@ function ClientEntityCard({
     setActiveImageIndex(0);
   }, [activeFolderId]);
 
-  const currentImage =
+  const currentImage: DeliverableImage =
     images[activeImageIndex] ||
     (activeFolder?.cover ? { src: activeFolder.cover, alt: activeFolder.title } : undefined) ||
     images[0] ||
     { src: "", alt: activeFolder?.title || "" };
+  const isInstagramCurrent =
+    currentImage.type === "instagram" ||
+    Boolean(currentImage.shortcode) ||
+    Boolean(extractInstagramShortcode(currentImage.src));
+  const currentShortcode =
+    currentImage.shortcode || extractInstagramShortcode(currentImage.src);
+  const currentInstagramUrl = currentImage.instagramUrl || currentImage.src;
+
   const totalFiles = entity.totalFiles ?? entity.folders.reduce((acc, f) => acc + f.images.length, 0);
 
   return (
@@ -423,33 +497,78 @@ function ClientEntityCard({
         <div className="p-5 sm:p-7 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           {/* Main Visual Display */}
           <div className="lg:col-span-8 flex flex-col gap-4">
-            <div
-              className="group relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-border/80 bg-neutral-900 cursor-pointer"
-              onClick={() => onOpenLightbox(currentImage, `${entity.name} — ${activeFolder.title}`)}
-            >
-              <img
-                src={getOptimizedImageUrl(currentImage.src)}
-                alt={currentImage.alt || activeFolder.title}
-                className="size-full object-cover transition-transform duration-500 group-hover:scale-103"
-                loading="lazy"
-                decoding="async"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-between p-4">
-                <span className="text-xs text-white/90 font-medium truncate max-w-[70%]">
-                  {currentImage.alt || activeFolder.title}
-                </span>
-                <span className="inline-flex items-center gap-1 text-xs text-white bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-lg">
-                  <Maximize2 className="size-3" />
-                  تكبير الصورة
-                </span>
+            {isInstagramCurrent && currentShortcode ? (
+              <div className="relative w-full rounded-2xl border border-pink-500/30 bg-neutral-950 overflow-hidden shadow-lg flex flex-col">
+                {/* Instagram Header Banner */}
+                <div className="px-4 py-2.5 bg-gradient-to-r from-purple-950/60 via-pink-950/40 to-neutral-900 border-b border-pink-500/20 flex items-center justify-between text-xs">
+                  <div className="flex items-center gap-2">
+                    <span className="rounded-md bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] p-1 text-white shadow-xs">
+                      <Instagram className="size-3.5" />
+                    </span>
+                    <span className="font-bold text-foreground">منشور إنستغرام تفاعلي</span>
+                    <span className="text-[11px] text-muted-foreground hidden sm:inline">
+                      ({currentImage.alt || activeFolder.title})
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <a
+                      href={currentInstagramUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1 rounded-lg bg-pink-500/10 hover:bg-pink-500/20 text-pink-600 dark:text-pink-400 border border-pink-500/30 px-2.5 py-1 text-[11px] font-semibold transition-colors"
+                    >
+                      <span>فتح في التطبيق</span>
+                      <ArrowUpRight className="size-3" />
+                    </a>
+                  </div>
+                </div>
+
+                {/* Embedded Iframe */}
+                <div className="w-full flex justify-center bg-black/95 p-1 sm:p-2">
+                  <iframe
+                    src={`https://www.instagram.com/p/${currentShortcode}/embed/`}
+                    className="w-full max-w-[540px] h-[520px] sm:h-[580px] border-0 rounded-xl bg-neutral-950"
+                    title={currentImage.alt || activeFolder.title}
+                    loading="lazy"
+                    allowFullScreen
+                    scrolling="no"
+                  />
+                </div>
               </div>
-            </div>
+            ) : (
+              <div
+                className="group relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-border/80 bg-neutral-900 cursor-pointer"
+                onClick={() => onOpenLightbox(currentImage, `${entity.name} — ${activeFolder.title}`)}
+              >
+                <img
+                  src={getOptimizedImageUrl(currentImage.src)}
+                  alt={currentImage.alt || activeFolder.title}
+                  className="size-full object-cover transition-transform duration-500 group-hover:scale-103"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-between p-4">
+                  <span className="text-xs text-white/90 font-medium truncate max-w-[70%]">
+                    {currentImage.alt || activeFolder.title}
+                  </span>
+                  <span className="inline-flex items-center gap-1 text-xs text-white bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-lg">
+                    <Maximize2 className="size-3" />
+                    تكبير الصورة
+                  </span>
+                </div>
+              </div>
+            )}
 
             {/* Thumbnail Gallery Strip */}
             {images.length > 1 && (
               <div className="flex items-center gap-2.5 overflow-x-auto pb-1 scrollbar-none">
                 {images.map((img, idx) => {
                   const isSelected = idx === activeImageIndex;
+                  const isInstagram =
+                    img.type === "instagram" ||
+                    Boolean(img.shortcode) ||
+                    Boolean(extractInstagramShortcode(img.src));
+
                   return (
                     <button
                       key={img.src + idx}
@@ -458,17 +577,31 @@ function ClientEntityCard({
                       className={cn(
                         "relative aspect-[16/10] w-20 sm:w-24 shrink-0 overflow-hidden rounded-xl border transition-all",
                         isSelected
-                          ? "border-accent ring-2 ring-accent/40 scale-102"
+                          ? isInstagram
+                            ? "border-pink-500 ring-2 ring-pink-500/40 scale-102"
+                            : "border-accent ring-2 ring-accent/40 scale-102"
                           : "border-border/60 opacity-60 hover:opacity-100 hover:border-foreground/30",
                       )}
                     >
-                      <img
-                        src={getOptimizedImageUrl(img.src)}
-                        alt={img.alt}
-                        className="size-full object-cover"
-                        loading="lazy"
-                        decoding="async"
-                      />
+                      {isInstagram ? (
+                        <div className="size-full flex flex-col items-center justify-center bg-gradient-to-br from-[#833ab4]/20 via-[#fd1d1d]/15 to-[#fcb045]/15 p-1 text-center">
+                          <Instagram className="size-4 text-pink-500" />
+                          <span className="text-[9px] font-bold text-foreground mt-0.5">إنستغرام</span>
+                        </div>
+                      ) : (
+                        <img
+                          src={getOptimizedImageUrl(img.src)}
+                          alt={img.alt}
+                          className="size-full object-cover"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      )}
+                      {isInstagram && (
+                        <span className="absolute top-1 right-1 rounded-sm bg-gradient-to-tr from-[#f09433] to-[#bc1888] p-0.5 text-white shadow-xs">
+                          <Instagram className="size-2.5" />
+                        </span>
+                      )}
                     </button>
                   );
                 })}
@@ -543,7 +676,7 @@ function FullGalleryModal({
 }: {
   entity: ClientEntity;
   onClose: () => void;
-  onOpenLightbox: (img: { src: string; alt: string }, title: string) => void;
+  onOpenLightbox: (img: DeliverableImage, title: string) => void;
 }) {
   const [selectedFolderFilter, setSelectedFolderFilter] = useState<string>("all");
 
@@ -645,7 +778,7 @@ function FullGalleryModal({
         {/* Modal Scrollable Body */}
         <div className="flex-1 overflow-y-auto p-5 sm:p-8 space-y-10 scrollbar-thin">
           {displayedFolders.map((folder) => {
-            const sortedImages = folder.cover
+            const sortedImages: DeliverableImage[] = folder.cover
               ? [
                   ...folder.images.filter((img) => img.src === folder.cover),
                   ...folder.images.filter((img) => img.src !== folder.cover),
@@ -673,26 +806,68 @@ function FullGalleryModal({
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {sortedImages.map((img, idx) => {
                     const isCover = folder.cover === img.src;
+                    const isInstagram =
+                      img.type === "instagram" ||
+                      Boolean(img.shortcode) ||
+                      Boolean(extractInstagramShortcode(img.src));
+                    const shortcode =
+                      img.shortcode || extractInstagramShortcode(img.src);
+
                     return (
                       <div
                         key={img.src + idx}
-                        className="group relative aspect-[16/10] overflow-hidden rounded-2xl border border-border/80 bg-neutral-900 cursor-pointer transition-all hover:border-accent hover:shadow-md"
+                        className={cn(
+                          "group relative aspect-[16/10] overflow-hidden rounded-2xl border transition-all cursor-pointer hover:shadow-md",
+                          isInstagram
+                            ? "border-pink-500/40 bg-pink-500/5 hover:border-pink-500"
+                            : "border-border/80 bg-neutral-900 hover:border-accent",
+                        )}
                         onClick={() =>
-                          onOpenLightbox(img, `${entity.name} — ${folder.title} (${idx + 1}/${sortedImages.length})`)
+                          onOpenLightbox(
+                            img,
+                            `${entity.name} — ${folder.title} (${idx + 1}/${sortedImages.length})`,
+                          )
                         }
                       >
-                        <img
-                          src={getOptimizedImageUrl(img.src)}
-                          alt={img.alt || folder.title}
-                          className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
-                          loading="lazy"
-                          decoding="async"
-                        />
-                        {isCover && (
-                          <span className="absolute top-2 right-2 rounded-md bg-accent px-2 py-0.5 text-[10px] font-bold text-accent-foreground shadow-sm z-10">
-                            غلاف المجلد
-                          </span>
+                        {isInstagram ? (
+                          <div className="size-full flex flex-col items-center justify-center bg-gradient-to-br from-[#833ab4]/15 via-[#fd1d1d]/10 to-[#fcb045]/15 p-4 text-center">
+                            <div className="size-11 rounded-2xl bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center text-white shadow-md mb-2 transition-transform duration-300 group-hover:scale-110">
+                              <Instagram className="size-5" />
+                            </div>
+                            <span className="text-xs font-bold text-foreground">
+                              منشور إنستغرام تفاعلي
+                            </span>
+                            <span className="text-[10px] text-muted-foreground mt-0.5 dir-ltr truncate max-w-[85%] font-mono">
+                              {shortcode ? `/p/${shortcode}` : "منشور إنستغرام"}
+                            </span>
+                          </div>
+                        ) : (
+                          <img
+                            src={getOptimizedImageUrl(img.src)}
+                            alt={img.alt || folder.title}
+                            className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            loading="lazy"
+                            decoding="async"
+                          />
                         )}
+
+                        {/* Badges */}
+                        <div className="absolute top-2 inset-x-2 flex items-center justify-between gap-1 pointer-events-none z-10">
+                          <div className="flex items-center gap-1">
+                            {isInstagram && (
+                              <span className="rounded-md bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm flex items-center gap-1">
+                                <Instagram className="size-3" />
+                                <span>إنستغرام</span>
+                              </span>
+                            )}
+                          </div>
+                          {isCover && (
+                            <span className="rounded-md bg-accent px-2 py-0.5 text-[10px] font-bold text-accent-foreground shadow-sm">
+                              غلاف المجلد
+                            </span>
+                          )}
+                        </div>
+
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-between p-3.5">
                           <span className="text-xs text-white/90 font-medium truncate max-w-[80%]">
                             {img.alt || folder.title}

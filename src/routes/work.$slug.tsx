@@ -75,17 +75,24 @@ export const Route = createFileRoute("/work/$slug")({
       );
       if (clientWork && clientWork.folders.length > 0) {
         const primaryFolder = clientWork.folders[0];
-        const primaryCover = clientWork.cover || primaryFolder?.cover || primaryFolder?.images[0]?.src;
+        const validCover = [
+          clientWork.cover,
+          primaryFolder?.cover,
+          ...clientWork.folders.flatMap((f) => f.images.map((img) => img.src)),
+        ].find((src) => src && !src.includes("instagram.com"));
+
         const allImages = clientWork.folders.flatMap((f) =>
-          f.images.map((img) => ({
-            src: getOptimizedImageUrl(img.src),
-            alt: img.alt || f.title,
-          })),
+          f.images
+            .filter((img) => img.type !== "instagram" && !img.src.includes("instagram.com"))
+            .map((img) => ({
+              src: getOptimizedImageUrl(img.src),
+              alt: img.alt || f.title,
+            })),
         );
         project = {
           ...project,
           title: clientWork.name || project.title,
-          cover: primaryCover ? { src: getOptimizedImageUrl(primaryCover), alt: project.title } : project.cover,
+          cover: validCover ? { src: getOptimizedImageUrl(validCover), alt: project.title } : project.cover,
           gallery: allImages.length > 0 ? allImages : project.gallery,
         };
       }

@@ -27,6 +27,7 @@ import {
   CheckCircle2,
   Copy,
   Link as LinkIcon,
+  Instagram,
 } from "lucide-react";
 import { AdminShell } from "@/components/admin/admin-shell";
 import { ImageInput } from "@/components/admin/image-input";
@@ -34,11 +35,12 @@ import {
   adminListClientWorks,
   adminSaveClientWork,
   adminDeleteClientWork,
+  extractInstagramShortcode,
 } from "@/lib/cms/client-works.functions";
 import { signHeroMediaPath } from "@/lib/cms/hero.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { getOptimizedImageUrl } from "@/lib/optimized-images";
-import type { ClientEntity, DeliverableFolder } from "@/data/client-works";
+import type { ClientEntity, DeliverableFolder, DeliverableImage } from "@/data/client-works";
 import { cn } from "@/lib/utils";
 
 function getMimeType(ext: string): string {
@@ -99,6 +101,11 @@ export function AdminClientWorksPage() {
   const [showUrlInput, setShowUrlInput] = useState(false);
   const [newImageSrc, setNewImageSrc] = useState("");
   const [newImageAlt, setNewImageAlt] = useState("");
+
+  // Instagram Post input state
+  const [instagramPostUrl, setInstagramPostUrl] = useState("");
+  const [instagramPostAlt, setInstagramPostAlt] = useState("");
+  const [isAddingInstagram, setIsAddingInstagram] = useState(false);
 
   // Sync initial selection
   useEffect(() => {
@@ -532,6 +539,53 @@ export function AdminClientWorksPage() {
     setNewImageSrc("");
     setNewImageAlt("");
     toast.success("تمت إضافة رابط الصورة إلى المجلد بنجاح. اضغط حفظ التغييرات.");
+  };
+
+  const addInstagramPostToFolder = () => {
+    const base = draft || activeEntity;
+    if (!base || !currentFolder) return;
+    if (!instagramPostUrl.trim()) {
+      toast.error("يرجى إدخال رابط منشور أو ريلز إنستغرام أولاً.");
+      return;
+    }
+    const cleanUrl = instagramPostUrl.trim();
+    const shortcode = extractInstagramShortcode(cleanUrl);
+    if (!shortcode) {
+      toast.error("رابط إنستغرام غير صالح. يرجى إدخال رابط منشور أو ريلز صحيح (مثال: https://www.instagram.com/p/... أو /reel/...)");
+      return;
+    }
+
+    const cleanAlt = instagramPostAlt.trim() || `منشور إنستغرام (${shortcode})`;
+    const newInstagramImg: DeliverableImage = {
+      src: cleanUrl,
+      alt: cleanAlt,
+      type: "instagram",
+      instagramUrl: cleanUrl,
+      shortcode: shortcode,
+    };
+
+    const shouldSetCover = !currentFolder.cover;
+    const nextImages = shouldSetCover
+      ? [newInstagramImg, ...currentFolder.images]
+      : [...currentFolder.images, newInstagramImg];
+    const nextCover = shouldSetCover ? cleanUrl : currentFolder.cover;
+
+    const nextFolders = [...base.folders];
+    nextFolders[activeFolderIndex] = {
+      ...currentFolder,
+      cover: nextCover,
+      images: nextImages,
+    };
+
+    setDraft({
+      ...base,
+      cover: base.cover || (shouldSetCover ? cleanUrl : undefined),
+      folders: nextFolders,
+    });
+
+    setInstagramPostUrl("");
+    setInstagramPostAlt("");
+    toast.success("تمت إضافة منشور إنستغرام بنجاح! اضغط 'حفظ التغييرات' لتثبيته في المعرض.");
   };
 
   const removeImageFromFolder = (imgIndex: number) => {
@@ -1299,6 +1353,80 @@ export function AdminClientWorksPage() {
                       </div>
                     </div>
                   )}
+
+                  {/* Instagram Post Integration Card */}
+                  <div className="rounded-xl border border-pink-500/30 bg-gradient-to-br from-purple-500/[0.05] via-pink-500/[0.05] to-orange-500/[0.05] p-4 flex flex-col gap-3">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <div className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white shadow-xs">
+                          <Instagram className="size-4" />
+                        </div>
+                        <div>
+                          <span className="text-xs font-bold text-foreground">
+                            إضافة منشور أو ريلز من إنستغرام (Instagram Embed)
+                          </span>
+                          <p className="text-[10px] text-muted-foreground">
+                            يُعرض بتصميم تفاعلي متجاوب داخل المعرض بدون أي استهلاك لمساحة التخزين
+                          </p>
+                        </div>
+                      </div>
+                      <span className="hidden sm:inline-flex rounded-md border border-pink-500/30 bg-pink-500/10 px-2 py-0.5 text-[10px] font-bold text-pink-600 dark:text-pink-400">
+                        سريع وتفاعلي
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
+                      <div className="sm:col-span-6">
+                        <label className="text-[11px] font-medium text-foreground/80 block">
+                          رابط المنشور أو الريلز (Instagram URL)
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="https://www.instagram.com/p/... أو /reel/..."
+                          dir="ltr"
+                          value={instagramPostUrl}
+                          onChange={(e) => setInstagramPostUrl(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              e.preventDefault();
+                              addInstagramPostToFolder();
+                            }
+                          }}
+                          className="mt-1 w-full rounded-xl border border-pink-500/30 bg-card p-2 text-xs focus:border-pink-500 focus:outline-none focus:ring-1 focus:ring-pink-500/30 font-mono"
+                        />
+                      </div>
+
+                      <div className="sm:col-span-4">
+                        <label className="text-[11px] font-medium text-foreground/80 block">
+                          عنوان أو وصف المنشور (اختياري)
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="مثال: ريلز الكواليس، تصميم الهوية..."
+                          value={instagramPostAlt}
+                          onChange={(e) => setInstagramPostAlt(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              e.preventDefault();
+                              addInstagramPostToFolder();
+                            }
+                          }}
+                          className="mt-1 w-full rounded-xl border border-border/80 bg-card p-2 text-xs focus:border-pink-500 focus:outline-none"
+                        />
+                      </div>
+
+                      <div className="sm:col-span-2">
+                        <button
+                          type="button"
+                          onClick={addInstagramPostToFolder}
+                          className="w-full rounded-xl bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 p-2 text-xs font-bold text-white transition-opacity hover:opacity-90 shadow-xs flex items-center justify-center gap-1.5"
+                        >
+                          <Plus className="size-3.5" />
+                          <span>إضافة المنشور</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Existing Images Grid in Active Folder */}
@@ -1306,7 +1434,7 @@ export function AdminClientWorksPage() {
                   <div className="rounded-2xl border border-dashed border-border p-12 text-center flex flex-col items-center justify-center gap-2 text-muted-foreground">
                     <ImageIcon className="size-8 stroke-[1.5] text-muted-foreground/60" />
                     <span className="text-xs font-semibold">هذا المجلد لا يحتوي على أي ملفات حتى الآن.</span>
-                    <span className="text-[11px]">ارفع صوراً أو تصاميم من الصندوق أعلاه لتظهر هنا فوراً.</span>
+                    <span className="text-[11px]">ارفع صوراً أو أضف منشورات إنستغرام من الصندوق أعلاه لتظهر هنا فوراً.</span>
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -1316,6 +1444,13 @@ export function AdminClientWorksPage() {
                       const isWorkCover =
                         currentWorkCover === img.src ||
                         (!currentEntity.cover && currentEntity.folders[0]?.id === currentFolder.id && isFolderCover);
+                      const isInstagram =
+                        img.type === "instagram" ||
+                        Boolean(img.shortcode) ||
+                        Boolean(extractInstagramShortcode(img.src));
+                      const instagramShortcode =
+                        img.shortcode || extractInstagramShortcode(img.src) || "";
+                      const instagramUrl = img.instagramUrl || img.src;
 
                       return (
                         <div
@@ -1326,26 +1461,48 @@ export function AdminClientWorksPage() {
                               ? "border-amber-500/80 bg-amber-500/5 ring-1 ring-amber-500/20"
                               : isFolderCover
                               ? "border-accent bg-accent/5 ring-1 ring-accent/20"
+                              : isInstagram
+                              ? "border-pink-500/40 bg-pink-500/5 hover:border-pink-500/60"
                               : "border-border/80 bg-muted/20 hover:border-foreground/30",
                           )}
                         >
-                          {/* Image preview frame */}
+                          {/* Image / Instagram preview frame */}
                           <div className="relative aspect-[16/10] w-full overflow-hidden bg-neutral-900">
-                            <img
-                              src={getOptimizedImageUrl(img.src)}
-                              alt={img.alt}
-                              className="size-full object-cover transition-transform duration-300 group-hover:scale-102"
-                              loading="lazy"
-                            />
+                            {isInstagram ? (
+                              <div className="size-full flex flex-col items-center justify-center bg-gradient-to-br from-[#833ab4]/15 via-[#fd1d1d]/10 to-[#fcb045]/15 p-4 text-center">
+                                <div className="size-11 rounded-2xl bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center text-white shadow-md mb-2 transition-transform duration-300 group-hover:scale-110">
+                                  <Instagram className="size-5" />
+                                </div>
+                                <span className="text-xs font-bold text-foreground">منشور إنستغرام تفاعلي</span>
+                                <span className="text-[10px] text-muted-foreground mt-0.5 dir-ltr truncate max-w-[85%] font-mono">
+                                  {instagramShortcode ? `/p/${instagramShortcode}` : "منشور إنستغرام"}
+                                </span>
+                              </div>
+                            ) : (
+                              <img
+                                src={getOptimizedImageUrl(img.src)}
+                                alt={img.alt}
+                                className="size-full object-cover transition-transform duration-300 group-hover:scale-102"
+                                loading="lazy"
+                              />
+                            )}
 
                             {/* Prominent Badges */}
                             <div className="absolute top-2 inset-x-2 flex items-center justify-between gap-1 pointer-events-none">
-                              {isWorkCover ? (
-                                <span className="rounded-md bg-amber-500 px-2 py-0.5 text-[10px] font-bold text-black shadow-sm flex items-center gap-1">
-                                  <Star className="size-3 fill-black" />
-                                  <span>غلاف العمل الرئيسي</span>
-                                </span>
-                              ) : <span />}
+                              <div className="flex items-center gap-1">
+                                {isWorkCover && (
+                                  <span className="rounded-md bg-amber-500 px-2 py-0.5 text-[10px] font-bold text-black shadow-sm flex items-center gap-1">
+                                    <Star className="size-3 fill-black" />
+                                    <span>غلاف العمل الرئيسي</span>
+                                  </span>
+                                )}
+                                {isInstagram && (
+                                  <span className="rounded-md bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm flex items-center gap-1">
+                                    <Instagram className="size-3" />
+                                    <span>إنستغرام</span>
+                                  </span>
+                                )}
+                              </div>
 
                               {isFolderCover && (
                                 <span className="rounded-md bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm flex items-center gap-1">
@@ -1358,13 +1515,14 @@ export function AdminClientWorksPage() {
                             {/* Quick Overlay Preview on Hover */}
                             <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 p-2">
                               <a
-                                href={img.src}
+                                href={isInstagram ? instagramUrl : img.src}
                                 target="_blank"
                                 rel="noreferrer"
-                                className="rounded-xl bg-card/90 p-2 text-foreground hover:bg-card shadow-xs transition-transform hover:scale-105"
-                                title="معاينة الصورة الأصلية بالحجم الكامل"
+                                className="rounded-xl bg-card/90 px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-card shadow-xs transition-transform hover:scale-105 flex items-center gap-1.5"
+                                title={isInstagram ? "فتح المنشور على إنستغرام" : "معاينة الصورة الأصلية بالحجم الكامل"}
                               >
-                                <ExternalLink className="size-3.5" />
+                                {isInstagram ? <Instagram className="size-3.5 text-pink-500" /> : <ExternalLink className="size-3.5" />}
+                                <span>{isInstagram ? "فتح في إنستغرام" : "معاينة"}</span>
                               </a>
                             </div>
                           </div>

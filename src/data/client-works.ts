@@ -1,10 +1,18 @@
+export type DeliverableImage = {
+  src: string;
+  alt: string;
+  type?: "image" | "instagram";
+  instagramUrl?: string;
+  shortcode?: string;
+};
+
 export interface DeliverableFolder {
   id: string;
   title: string;
   category: string;
   summary: string;
   cover: string;
-  images: Array<{ src: string; alt: string }>;
+  images: DeliverableImage[];
   projectSlug?: string;
 }
 

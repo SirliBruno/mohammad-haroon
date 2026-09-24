@@ -3,17 +3,47 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { clientEntities as staticClientEntities, type ClientEntity, type DeliverableFolder } from "@/data/client-works";
 
+export function extractInstagramShortcode(url: string): string | null {
+  if (!url) return null;
+  const m = url.match(/instagram\.com\/(?:p|reel|tv)\/([A-Za-z0-9_-]+)/i);
+  return m ? m[1] : null;
+}
+
 const imageItemSchema = z.union([
-  z.string().transform((src) => ({ src: src.trim(), alt: "" })),
+  z.string().transform((src) => {
+    const trimmed = src.trim();
+    const shortcode = extractInstagramShortcode(trimmed);
+    return {
+      src: trimmed,
+      alt: "",
+      type: shortcode ? ("instagram" as const) : ("image" as const),
+      instagramUrl: shortcode ? trimmed : undefined,
+      shortcode: shortcode || undefined,
+    };
+  }),
   z.object({
     src: z.string().trim().optional().nullable(),
     url: z.string().trim().optional().nullable(),
     href: z.string().trim().optional().nullable(),
     alt: z.string().trim().optional().nullable().default("").transform((v) => v ?? ""),
-  }).transform((item) => ({
-    src: (item.src || item.url || item.href || "").trim(),
-    alt: item.alt || "",
-  })),
+    type: z.enum(["image", "instagram"]).optional().nullable(),
+    instagramUrl: z.string().trim().optional().nullable(),
+    shortcode: z.string().trim().optional().nullable(),
+  }).transform((item) => {
+    const rawSrc = (item.src || item.url || item.href || item.instagramUrl || "").trim();
+    const foundShortcode =
+      item.shortcode ||
+      extractInstagramShortcode(rawSrc) ||
+      (item.instagramUrl ? extractInstagramShortcode(item.instagramUrl) : null);
+    const isInsta = item.type === "instagram" || Boolean(foundShortcode);
+    return {
+      src: rawSrc,
+      alt: item.alt || "",
+      type: isInsta ? ("instagram" as const) : ("image" as const),
+      instagramUrl: isInsta ? (item.instagramUrl || rawSrc) : undefined,
+      shortcode: foundShortcode || undefined,
+    };
+  }),
 ]);
 
 const deliverableFolderSchema = z.object({
@@ -25,7 +55,7 @@ const deliverableFolderSchema = z.object({
   images: z
     .array(imageItemSchema)
     .default([])
-    .transform((imgs) => imgs.filter((img): img is { src: string; alt: string } => Boolean(img && img.src))),
+    .transform((imgs) => imgs.filter((img) => Boolean(img && img.src))),
   projectSlug: z.string().trim().optional(),
 });
 
