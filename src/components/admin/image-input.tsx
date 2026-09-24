@@ -40,7 +40,19 @@ export function ImageInput({
       const { url } = (await sign({ data: { path } })) as { url: string };
       onChange(url);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "فشل الرفع");
+      let msg = "فشل الرفع";
+      if (e instanceof Error) {
+        msg = e.message;
+        try {
+          const parsed = JSON.parse(e.message);
+          if (Array.isArray(parsed) && parsed[0]?.message) {
+            msg = parsed[0].message;
+          }
+        } catch {
+          // keep original message
+        }
+      }
+      setError(msg);
     } finally {
       setBusy(false);
     }

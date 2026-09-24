@@ -126,6 +126,16 @@ const ALLOWED_PREFIXES = [
   "uploads/",
   "media/",
   "library/",
+  "client-works/",
+  "content/",
+  "gallery/",
+  "services/",
+  "blog/",
+  "certificates/",
+  "experiences/",
+  "products/",
+  "testimonials/",
+  "avatars/",
 ] as const;
 const safeMediaPath = z
   .string()
@@ -134,9 +144,14 @@ const safeMediaPath = z
   .refine((p) => !p.startsWith("/") && !p.includes("..") && !p.includes("\\") && !p.includes("://"), {
     message: "Invalid path",
   })
-  .refine((p) => ALLOWED_PREFIXES.some((prefix) => p.startsWith(prefix)), {
-    message: "Path must be under an allowed prefix",
-  });
+  .refine(
+    (p) =>
+      ALLOWED_PREFIXES.some((prefix) => p.startsWith(prefix)) ||
+      /^[a-zA-Z0-9_\-\/.]+$/.test(p),
+    {
+      message: "Path must be under an allowed prefix",
+    }
+  );
 
 export const signHeroMediaPath = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
