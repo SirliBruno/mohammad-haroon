@@ -21,6 +21,7 @@ import { useQuery } from "@tanstack/react-query";
 import { clientEntities, type ClientEntity, type DeliverableFolder } from "@/data/client-works";
 import { listClientWorksPublic } from "@/lib/cms/client-works.functions";
 import { cn } from "@/lib/utils";
+import { getOptimizedImageUrl } from "@/lib/optimized-images";
 import { RouteErrorBoundary, RouteNotFoundBoundary } from "@/components/layout/route-boundaries";
 
 const CATEGORY_FILTERS = [
@@ -286,21 +287,30 @@ function ClientEntityCard({
   onOpenFullGallery: (entity: ClientEntity) => void;
   onOpenLightbox: (img: { src: string; alt: string }, title: string) => void;
 }) {
-  const [activeFolderId, setActiveFolderId] = useState<string>(entity.folders[0]?.id || "");
+  const [activeFolderId, setActiveFolderId] = useState<string>(() => {
+    if (entity.cover) {
+      const folderWithCover = entity.folders.find(
+        (f) => f.cover === entity.cover || f.images.some((img) => img.src === entity.cover),
+      );
+      if (folderWithCover) return folderWithCover.id;
+    }
+    return entity.folders[0]?.id || "";
+  });
 
   const activeFolder = useMemo(() => {
     return entity.folders.find((f) => f.id === activeFolderId) || entity.folders[0];
   }, [entity.folders, activeFolderId]);
 
-  // Order images so that the folder cover (if specified) is always first
+  // Order images so that the folder cover (or entity cover if in this folder) is always first
   const images = useMemo(() => {
     if (!activeFolder?.images) return [];
-    if (!activeFolder.cover) return activeFolder.images;
-    const coverImg = activeFolder.images.find((img) => img.src === activeFolder.cover);
+    const targetCover = activeFolder.cover || (entity.folders[0]?.id === activeFolder.id ? entity.cover : undefined);
+    if (!targetCover) return activeFolder.images;
+    const coverImg = activeFolder.images.find((img) => img.src === targetCover);
     if (!coverImg) return activeFolder.images;
-    const others = activeFolder.images.filter((img) => img.src !== activeFolder.cover);
+    const others = activeFolder.images.filter((img) => img.src !== targetCover);
     return [coverImg, ...others];
-  }, [activeFolder]);
+  }, [activeFolder, entity.cover]);
 
   const [activeImageIndex, setActiveImageIndex] = useState<number>(0);
 
@@ -418,7 +428,7 @@ function ClientEntityCard({
               onClick={() => onOpenLightbox(currentImage, `${entity.name} — ${activeFolder.title}`)}
             >
               <img
-                src={currentImage.src}
+                src={getOptimizedImageUrl(currentImage.src)}
                 alt={currentImage.alt || activeFolder.title}
                 className="size-full object-cover transition-transform duration-500 group-hover:scale-103"
                 loading="lazy"
@@ -453,7 +463,7 @@ function ClientEntityCard({
                       )}
                     >
                       <img
-                        src={img.src}
+                        src={getOptimizedImageUrl(img.src)}
                         alt={img.alt}
                         className="size-full object-cover"
                         loading="lazy"
@@ -672,7 +682,7 @@ function FullGalleryModal({
                         }
                       >
                         <img
-                          src={img.src}
+                          src={getOptimizedImageUrl(img.src)}
                           alt={img.alt || folder.title}
                           className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
                           loading="lazy"

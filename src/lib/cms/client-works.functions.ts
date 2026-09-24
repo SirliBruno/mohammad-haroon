@@ -8,11 +8,11 @@ const deliverableFolderSchema = z.object({
   title: z.string().trim().min(1),
   category: z.string().trim().default("هوية"),
   summary: z.string().trim().default(""),
-  cover: z.string().trim().default(""),
+  cover: z.string().trim().optional().nullable().default("").transform((v) => v ?? ""),
   images: z.array(
     z.object({
       src: z.string().trim().min(1),
-      alt: z.string().trim().default(""),
+      alt: z.string().trim().optional().nullable().default("").transform((v) => v ?? ""),
     }),
   ).default([]),
   projectSlug: z.string().trim().optional(),
@@ -30,6 +30,7 @@ const clientEntitySchema = z.object({
   services: z.array(z.string()).default([]),
   mainSlug: z.string().trim().default(""),
   totalFiles: z.number().int().optional(),
+  cover: z.string().trim().optional().nullable().transform((v) => v || undefined),
   folders: z.array(deliverableFolderSchema).default([]),
 });
 

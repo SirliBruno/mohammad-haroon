@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -21,14 +21,22 @@ import {
   Sparkles,
   ChevronRight,
   Eye,
+  Star,
+  UploadCloud,
+  Loader2,
+  CheckCircle2,
+  Copy,
+  Link as LinkIcon,
 } from "lucide-react";
 import { AdminShell } from "@/components/admin/admin-shell";
-import { ImageInput } from "@/components/admin/image-input";
 import {
   adminListClientWorks,
   adminSaveClientWork,
   adminDeleteClientWork,
 } from "@/lib/cms/client-works.functions";
+import { signHeroMediaPath } from "@/lib/cms/hero.functions";
+import { supabase } from "@/integrations/supabase/client";
+import { getOptimizedImageUrl } from "@/lib/optimized-images";
 import type { ClientEntity, DeliverableFolder } from "@/data/client-works";
 import { cn } from "@/lib/utils";
 
@@ -45,6 +53,7 @@ export function AdminClientWorksPage() {
   const listFn = useServerFn(adminListClientWorks);
   const saveFn = useServerFn(adminSaveClientWork);
   const deleteFn = useServerFn(adminDeleteClientWork);
+  const signMedia = useServerFn(signHeroMediaPath);
 
   const { data: rawEntities = [], isLoading } = useQuery({
     queryKey: ["admin-client-works"],
@@ -59,9 +68,27 @@ export function AdminClientWorksPage() {
   const [draft, setDraft] = useState<ClientEntity | null>(null);
   const [activeFolderIndex, setActiveFolderIndex] = useState<number>(0);
 
-  // New file input state
+  // Upload & File state
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState<string | null>(null);
+  const [isDragActive, setIsDragActive] = useState(false);
+  const [autoSetAsCover, setAutoSetAsCover] = useState(true);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const entityCoverInputRef = useRef<HTMLInputElement>(null);
+
+  // Direct URL input state
+  const [showUrlInput, setShowUrlInput] = useState(false);
   const [newImageSrc, setNewImageSrc] = useState("");
   const [newImageAlt, setNewImageAlt] = useState("");
+
+  // Sync initial selection
+  useEffect(() => {
+    if (!selectedId && rawEntities.length > 0) {
+      setSelectedId(rawEntities[0].id);
+      setDraft(JSON.parse(JSON.stringify(rawEntities[0])));
+      setActiveFolderIndex(0);
+    }
+  }, [rawEntities, selectedId]);
 
   const filteredEntities = useMemo(() => {
     return rawEntities.filter((e) => {
@@ -75,7 +102,7 @@ export function AdminClientWorksPage() {
     });
   }, [rawEntities, search]);
 
-  // Set initial selected entity
+  // Set active entity reference
   const activeEntity = useMemo(() => {
     if (draft && draft.id === selectedId) return draft;
     if (selectedId) {
@@ -85,11 +112,26 @@ export function AdminClientWorksPage() {
     return rawEntities[0] || null;
   }, [rawEntities, selectedId, draft]);
 
+  const currentEntity = draft || activeEntity;
+  const currentFolder: DeliverableFolder | undefined = currentEntity?.folders[activeFolderIndex];
+
+  const currentWorkCover =
+    currentEntity?.cover ||
+    currentEntity?.folders[0]?.cover ||
+    currentEntity?.folders[0]?.images[0]?.src ||
+    "";
+
+  const currentFolderCover =
+    currentFolder?.cover ||
+    currentFolder?.images[0]?.src ||
+    "";
+
   const selectEntity = (entity: ClientEntity) => {
     setSelectedId(entity.id);
-    // Deep clone to draft
     setDraft(JSON.parse(JSON.stringify(entity)));
     setActiveFolderIndex(0);
+    setNewImageSrc("");
+    setNewImageAlt("");
   };
 
   // Mutation to save
@@ -103,6 +145,7 @@ export function AdminClientWorksPage() {
       queryClient.invalidateQueries({ queryKey: ["client-works-public"] });
       router.invalidate();
       setDraft(JSON.parse(JSON.stringify(res.entity)));
+      setSelectedId(res.entity.id);
     },
     onError: (err: Error) => {
       toast.error(err.message || "حدث خطأ أثناء الحفظ");
@@ -115,7 +158,7 @@ export function AdminClientWorksPage() {
       return await deleteFn({ data: { id } });
     },
     onSuccess: () => {
-      toast.success("تمت استعادة الإعدادات الافتراضية");
+      toast.success("تمت استعادة الإعدادات الافتراضية للجهة");
       queryClient.invalidateQueries({ queryKey: ["admin-client-works"] });
       queryClient.invalidateQueries({ queryKey: ["client-works-public"] });
       router.invalidate();
@@ -126,10 +169,6 @@ export function AdminClientWorksPage() {
     },
   });
 
-  // Ensure draft is initialized if not yet
-  const currentEntity = draft || activeEntity;
-  const currentFolder: DeliverableFolder | undefined = currentEntity?.folders[activeFolderIndex];
-
   // Helper actions on folders
   const addFolder = () => {
     if (!currentEntity) return;
@@ -138,7 +177,7 @@ export function AdminClientWorksPage() {
       id: newFolderId,
       title: "مجلد جديد",
       category: currentEntity.category || "هوية",
-      summary: `أعمال جديدة لـ ${currentEntity.name}`,
+      summary: `أعمال وتصاميم جديدة لـ ${currentEntity.name}`,
       cover: "",
       images: [],
     };
@@ -148,7 +187,7 @@ export function AdminClientWorksPage() {
     };
     setDraft(updated);
     setActiveFolderIndex(updated.folders.length - 1);
-    toast.info("تمت إضافة مجلد جديد. لا تنس حفظ التغييرات.");
+    toast.info("تمت إضافة مجلد جديد. أضف الصور والتصاميم ثم اضغط حفظ التغييرات.");
   };
 
   const removeFolder = (index: number) => {
@@ -182,18 +221,166 @@ export function AdminClientWorksPage() {
     });
   };
 
-  // Helper actions on images/files inside active folder
-  const addImageToFolder = () => {
-    if (!currentEntity || !currentFolder) return;
-    if (!newImageSrc.trim()) {
-      toast.error("يرجى إدخال رابط أو رفع صورة أولاً.");
+  // Helper to upload files directly into current folder
+  const uploadFiles = async (files: FileList | File[], setAsCover = false) => {
+    if (!currentEntity || !currentFolder) {
+      toast.error("يرجى اختيار جهة عمل ومجلد أولاً.");
       return;
     }
-    const nextImages = [
-      ...currentFolder.images,
-      { src: newImageSrc.trim(), alt: newImageAlt.trim() || currentFolder.title },
-    ];
-    const nextCover = currentFolder.cover || newImageSrc.trim();
+
+    const fileList = Array.from(files).filter((f) => f.type.startsWith("image/"));
+    if (fileList.length === 0) {
+      toast.error("يرجى اختيار ملفات صور صالحة (PNG, JPG, WEBP, SVG, GIF).");
+      return;
+    }
+
+    setIsUploading(true);
+    const uploadedImages: Array<{ src: string; alt: string }> = [];
+
+    try {
+      for (let i = 0; i < fileList.length; i++) {
+        const file = fileList[i];
+        setUploadStatus(`جارٍ رفع (${i + 1} من ${fileList.length}): ${file.name}`);
+
+        const ext = (file.name.split(".").pop() ?? "png").toLowerCase();
+        const safeEntityId = currentEntity.id.replace(/[^a-zA-Z0-9_\-\.]/g, "-");
+        const safeFolderId = currentFolder.id.replace(/[^a-zA-Z0-9_\-\.]/g, "-");
+        const path = `projects/client-works/${safeEntityId}/${safeFolderId}/${crypto.randomUUID()}.${ext}`;
+
+        const { error: upErr } = await supabase.storage
+          .from("media")
+          .upload(path, file, { contentType: file.type, upsert: false });
+
+        if (upErr) throw upErr;
+
+        const { url } = (await signMedia({ data: { path } })) as { url: string };
+        if (!url) throw new Error("تعذر إنشاء رابط الصورة الموقّع من السيرفر.");
+
+        const cleanAlt = file.name
+          .replace(/\.[^/.]+$/, "")
+          .replace(/[-_]/g, " ")
+          .trim() || currentFolder.title;
+
+        uploadedImages.push({ src: url, alt: cleanAlt });
+      }
+
+      // Add uploaded images directly to folder
+      setDraft((prevDraft) => {
+        if (!prevDraft) return prevDraft;
+        const nextFolders = [...prevDraft.folders];
+        const targetFolder = nextFolders[activeFolderIndex];
+        if (!targetFolder) return prevDraft;
+
+        const shouldCover = setAsCover || autoSetAsCover || !targetFolder.cover;
+        const firstSrc = uploadedImages[0]?.src;
+        const nextCover = shouldCover && firstSrc ? firstSrc : targetFolder.cover;
+
+        let combined = [...targetFolder.images, ...uploadedImages];
+        if (shouldCover && firstSrc) {
+          const coverImg = combined.find((img) => img.src === nextCover);
+          const others = combined.filter((img) => img.src !== nextCover);
+          combined = coverImg ? [coverImg, ...others] : combined;
+        }
+
+        nextFolders[activeFolderIndex] = {
+          ...targetFolder,
+          cover: nextCover,
+          images: combined,
+        };
+
+        const nextWorkCover =
+          shouldCover && firstSrc && (!prevDraft.cover || setAsCover)
+            ? firstSrc
+            : prevDraft.cover;
+
+        return {
+          ...prevDraft,
+          cover: nextWorkCover,
+          folders: nextFolders,
+        };
+      });
+
+      toast.success(
+        `تم بنجاح رفع وإضافة ${uploadedImages.length} صورة إلى مجلد "${currentFolder.title}". اضغط "حفظ التغييرات" لتثبيتها.`,
+      );
+    } catch (err: any) {
+      console.error("Upload error:", err);
+      toast.error(`فشل رفع الصور: ${err.message || "خطأ غير متوقع"}`);
+    } finally {
+      setIsUploading(false);
+      setUploadStatus(null);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
+  // Helper to upload a main work cover directly
+  const uploadWorkCoverDirect = async (file: File) => {
+    if (!currentEntity) return;
+    try {
+      setIsUploading(true);
+      setUploadStatus(`جارٍ رفع غلاف العمل: ${file.name}...`);
+      const ext = (file.name.split(".").pop() ?? "png").toLowerCase();
+      const safeEntityId = currentEntity.id.replace(/[^a-zA-Z0-9_\-\.]/g, "-");
+      const path = `projects/client-works/${safeEntityId}/cover/${crypto.randomUUID()}.${ext}`;
+
+      const { error: upErr } = await supabase.storage
+        .from("media")
+        .upload(path, file, { contentType: file.type, upsert: false });
+
+      if (upErr) throw upErr;
+
+      const { url } = (await signMedia({ data: { path } })) as { url: string };
+      if (!url) throw new Error("تعذر إنشاء رابط الصورة الموقّع");
+
+      const cleanAlt = file.name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ") || currentEntity.name;
+      const newImg = { src: url, alt: cleanAlt };
+
+      // Also append to the primary folder so it's part of the files list
+      setDraft((prevDraft) => {
+        if (!prevDraft) return prevDraft;
+        const nextFolders = [...prevDraft.folders];
+        if (nextFolders.length > 0) {
+          const f0 = nextFolders[0];
+          nextFolders[0] = {
+            ...f0,
+            cover: url,
+            images: [newImg, ...f0.images.filter((img) => img.src !== url)],
+          };
+        }
+        return {
+          ...prevDraft,
+          cover: url,
+          folders: nextFolders,
+        };
+      });
+
+      toast.success(`تم تعيين "${file.name}" كغلاف رئيسي للعمل وإضافتها للمجلد الرئيسي!`);
+    } catch (err: any) {
+      console.error("Cover upload error:", err);
+      toast.error(`فشل رفع الغلاف: ${err.message || "خطأ غير متوقع"}`);
+    } finally {
+      setIsUploading(false);
+      setUploadStatus(null);
+      if (entityCoverInputRef.current) entityCoverInputRef.current.value = "";
+    }
+  };
+
+  // Helper actions on images inside active folder
+  const addImageToFolderByUrl = () => {
+    if (!currentEntity || !currentFolder) return;
+    if (!newImageSrc.trim()) {
+      toast.error("يرجى إدخال رابط الصورة أولاً.");
+      return;
+    }
+    const cleanSrc = newImageSrc.trim();
+    const cleanAlt = newImageAlt.trim() || currentFolder.title;
+    const newImg = { src: cleanSrc, alt: cleanAlt };
+
+    const shouldSetCover = !currentFolder.cover;
+    const nextImages = shouldSetCover
+      ? [newImg, ...currentFolder.images]
+      : [...currentFolder.images, newImg];
+    const nextCover = shouldSetCover ? cleanSrc : currentFolder.cover;
 
     const nextFolders = [...currentEntity.folders];
     nextFolders[activeFolderIndex] = {
@@ -204,17 +391,21 @@ export function AdminClientWorksPage() {
 
     setDraft({
       ...currentEntity,
+      cover: currentEntity.cover || (shouldSetCover ? cleanSrc : undefined),
       folders: nextFolders,
     });
 
     setNewImageSrc("");
     setNewImageAlt("");
-    toast.success("تمت إضافة الملف إلى المجلد. اضغط حفظ التغييرات.");
+    toast.success("تمت إضافة رابط الصورة إلى المجلد بنجاح. اضغط حفظ التغييرات.");
   };
 
   const removeImageFromFolder = (imgIndex: number) => {
     if (!currentEntity || !currentFolder) return;
-    const deletedSrc = currentFolder.images[imgIndex]?.src;
+    const targetImg = currentFolder.images[imgIndex];
+    if (!targetImg) return;
+
+    const deletedSrc = targetImg.src;
     const nextImages = currentFolder.images.filter((_, i) => i !== imgIndex);
     const nextCover =
       currentFolder.cover === deletedSrc
@@ -227,40 +418,77 @@ export function AdminClientWorksPage() {
       cover: nextCover,
       images: nextImages,
     };
+
+    let nextEntityCover = currentEntity.cover;
+    if (nextEntityCover === deletedSrc) {
+      nextEntityCover = nextCover || undefined;
+    }
+
     setDraft({
       ...currentEntity,
+      cover: nextEntityCover,
       folders: nextFolders,
     });
-    toast.info("تم حذف الملف من المجلد. اضغط على 'حفظ التغييرات' لتثبيت التعديل.");
+    toast.info("تم حذف الصورة من المجلد محلياً. اضغط على 'حفظ التغييرات' لتثبيت التعديل.");
   };
 
   const setAsFolderCover = (src: string) => {
     if (!currentEntity || !currentFolder) return;
     const coverImg = currentFolder.images.find((img) => img.src === src);
-    const remaining = currentFolder.images.filter((img) => img.src !== src);
-    const reorderedImages = coverImg ? [coverImg, ...remaining] : currentFolder.images;
+    const others = currentFolder.images.filter((img) => img.src !== src);
+    const reordered = coverImg ? [coverImg, ...others] : currentFolder.images;
 
     const nextFolders = [...currentEntity.folders];
     nextFolders[activeFolderIndex] = {
       ...currentFolder,
       cover: src,
-      images: reorderedImages,
+      images: reordered,
     };
+
     setDraft({
       ...currentEntity,
       folders: nextFolders,
     });
-    toast.success("تم تعيين الصورة كغلاف لهذا المجلد ونقلها للتصميم الرئيسي.");
+    toast.success("تم تعيين الصورة كغلاف لهذا المجلد ونقلها لمقدمة التصاميم.");
+  };
+
+  const setAsWorkCover = (src: string) => {
+    if (!currentEntity || !currentFolder) return;
+    const coverImg = currentFolder.images.find((img) => img.src === src);
+    const others = currentFolder.images.filter((img) => img.src !== src);
+    const reordered = coverImg ? [coverImg, ...others] : currentFolder.images;
+
+    const nextFolders = [...currentEntity.folders];
+    nextFolders[activeFolderIndex] = {
+      ...currentFolder,
+      cover: src,
+      images: reordered,
+    };
+
+    // If current folder is not the first folder, bring it to the top so it's showcased first everywhere
+    if (activeFolderIndex !== 0) {
+      const activeF = nextFolders.splice(activeFolderIndex, 1)[0];
+      nextFolders.unshift(activeF);
+      setActiveFolderIndex(0);
+    }
+
+    setDraft({
+      ...currentEntity,
+      cover: src,
+      folders: nextFolders,
+    });
+    toast.success("تم تعيين الصورة كغلاف رئيسي للعمل وجعل هذا المجلد في صدارة العرض!");
   };
 
   const addNewClient = () => {
     const name = window.prompt("أدخل اسم الجهة أو المشروع الجديد (مثال: متجر الرياض):");
     if (!name?.trim()) return;
-    const slug = name
-      .toLowerCase()
-      .trim()
-      .replace(/\s+/g, "-")
-      .replace(/[^a-z0-9\u0600-\u06FF-]/g, "") || `work-${Date.now().toString(36)}`;
+    const slug =
+      name
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, "-")
+        .replace(/[^a-z0-9\u0600-\u06FF-]/g, "") || `work-${Date.now().toString(36)}`;
     const newEntity: ClientEntity = {
       id: slug,
       name: name.trim(),
@@ -271,6 +499,7 @@ export function AdminClientWorksPage() {
       year: new Date().getFullYear(),
       services: ["هوية بصرية"],
       mainSlug: slug,
+      cover: "",
       folders: [
         {
           id: `${slug}-folder-1`,
@@ -289,7 +518,7 @@ export function AdminClientWorksPage() {
   return (
     <AdminShell
       title="مجلدات وملفات الأعمال"
-      description="تحكم كامل في مجلدات وأقسام العمل للجهات، وإضافة وحذف الصور والتصاميم بداخل كل مجلد لتظهر مباشرة في صفحة الأعمال."
+      description="تحكم كامل في مجلدات وأقسام العمل للجهات، رفع الصور مباشرة للمجلدات وتعيين أغلفة الأعمال والمجلدات لتظهر مباشرة في الموقع."
       actions={
         <div className="flex items-center gap-2">
           <button
@@ -307,7 +536,11 @@ export function AdminClientWorksPage() {
               onClick={() => currentEntity && saveMutation.mutate(currentEntity)}
               className="inline-flex items-center gap-1.5 rounded-xl bg-foreground px-4 py-2 text-xs font-bold text-background transition-all hover:bg-foreground/90 disabled:opacity-50 shadow-xs"
             >
-              <Save className="size-3.5 text-accent" />
+              {saveMutation.isPending ? (
+                <Loader2 className="size-3.5 animate-spin text-accent" />
+              ) : (
+                <Save className="size-3.5 text-accent" />
+              )}
               <span>{saveMutation.isPending ? "جارٍ الحفظ..." : "حفظ التغييرات"}</span>
             </button>
           )}
@@ -339,13 +572,17 @@ export function AdminClientWorksPage() {
           {/* List */}
           <div className="flex flex-col gap-1.5 max-h-[650px] overflow-y-auto pr-1">
             {isLoading ? (
-              <div className="p-8 text-center text-xs text-muted-foreground">جارٍ تحميل الأعمال...</div>
+              <div className="p-8 text-center text-xs text-muted-foreground flex flex-col items-center gap-2">
+                <Loader2 className="size-4 animate-spin text-accent" />
+                <span>جارٍ تحميل الأعمال...</span>
+              </div>
             ) : filteredEntities.length === 0 ? (
               <div className="p-8 text-center text-xs text-muted-foreground">لا توجد نتائج مطابقة</div>
             ) : (
               filteredEntities.map((entity) => {
                 const isSelected = (currentEntity?.id || rawEntities[0]?.id) === entity.id;
-                const totalFiles = entity.totalFiles ?? entity.folders.reduce((acc, f) => acc + f.images.length, 0);
+                const totalFiles =
+                  entity.totalFiles ?? entity.folders.reduce((acc, f) => acc + f.images.length, 0);
                 return (
                   <button
                     key={entity.id}
@@ -365,7 +602,9 @@ export function AdminClientWorksPage() {
                           <span
                             className={cn(
                               "rounded-md px-1.5 py-0.2 text-[9px] font-semibold shrink-0",
-                              isSelected ? "bg-accent text-accent-foreground" : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30",
+                              isSelected
+                                ? "bg-accent text-accent-foreground"
+                                : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30",
                             )}
                           >
                             مُعدّل
@@ -410,7 +649,7 @@ export function AdminClientWorksPage() {
         {/* Main Work Area: Deliverable Folders & Files */}
         {currentEntity ? (
           <div className="lg:col-span-8 flex flex-col gap-6">
-            {/* Entity Header Card */}
+            {/* Entity Header & Meta Card */}
             <div className="rounded-2xl border border-border/80 bg-card p-5 shadow-xs flex flex-col gap-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border/60 pb-4">
                 <div>
@@ -454,7 +693,7 @@ export function AdminClientWorksPage() {
                 </div>
               </div>
 
-              {/* Editable Entity Meta */}
+              {/* Editable Entity Meta Inputs */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
                 <div>
                   <label className="text-[11px] font-medium text-muted-foreground">اسم الجهة / المشروع</label>
@@ -504,6 +743,56 @@ export function AdminClientWorksPage() {
                   />
                 </div>
               </div>
+
+              {/* Work Main Cover Showcase & Quick Uploader */}
+              <div className="mt-1 rounded-xl border border-border/70 bg-muted/20 p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-3.5">
+                  <div className="relative size-16 shrink-0 overflow-hidden rounded-xl border border-border/80 bg-neutral-900 shadow-xs">
+                    {currentWorkCover ? (
+                      <img
+                        src={getOptimizedImageUrl(currentWorkCover)}
+                        alt="غلاف العمل الرئيسي"
+                        className="size-full object-cover"
+                      />
+                    ) : (
+                      <div className="flex size-full items-center justify-center text-muted-foreground text-[10px]">
+                        بدون غلاف
+                      </div>
+                    )}
+                    <span className="absolute bottom-0 inset-x-0 bg-amber-500/90 text-[8px] font-bold text-black text-center py-0.5">
+                      غلاف العمل
+                    </span>
+                  </div>
+
+                  <div className="flex flex-col">
+                    <span className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                      <Star className="size-3.5 text-amber-500 fill-amber-500" />
+                      <span>الغلاف الرئيسي للعمل المعروض في الموقع</span>
+                    </span>
+                    <span className="text-[11px] text-muted-foreground mt-0.5 line-clamp-1 max-w-md" dir="ltr">
+                      {currentWorkCover || "لم يتم تحديد غلاف (يُعتمد غلاف أول مجلد تلقائياً)"}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <label className="inline-flex cursor-pointer items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-muted transition-colors shadow-xs">
+                    <Upload className="size-3 text-accent" />
+                    <span>رفع غلاف رئيسي</span>
+                    <input
+                      type="file"
+                      ref={entityCoverInputRef}
+                      accept="image/*"
+                      className="hidden"
+                      disabled={isUploading}
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) uploadWorkCoverDirect(file);
+                      }}
+                    />
+                  </label>
+                </div>
+              </div>
             </div>
 
             {/* Deliverable Folders Navigation (Interactive Tabs) */}
@@ -533,7 +822,11 @@ export function AdminClientWorksPage() {
                     <button
                       key={f.id}
                       type="button"
-                      onClick={() => setActiveFolderIndex(i)}
+                      onClick={() => {
+                        setActiveFolderIndex(i);
+                        setNewImageSrc("");
+                        setNewImageAlt("");
+                      }}
                       className={cn(
                         "flex shrink-0 items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-semibold transition-all",
                         isActive
@@ -560,8 +853,10 @@ export function AdminClientWorksPage() {
               {currentFolder && (
                 <div className="mt-2 rounded-xl border border-border/70 bg-muted/20 p-4 flex flex-col gap-4">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                    <span className="text-xs font-bold text-foreground">
-                      إعدادات المجلد النشط: <span className="text-accent">{currentFolder.title}</span>
+                    <span className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                      <FolderOpen className="size-3.5 text-accent" />
+                      <span>إعدادات المجلد النشط: </span>
+                      <span className="text-accent">{currentFolder.title}</span>
                     </span>
 
                     <button
@@ -606,13 +901,58 @@ export function AdminClientWorksPage() {
                       />
                     </div>
                   </div>
+
+                  {/* Folder Cover Quick View & Selector */}
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-border/50 text-xs">
+                    <div className="flex items-center gap-2.5">
+                      <div className="relative size-10 shrink-0 overflow-hidden rounded-lg border border-border/80 bg-neutral-900">
+                        {currentFolderCover ? (
+                          <img
+                            src={getOptimizedImageUrl(currentFolderCover)}
+                            alt="غلاف المجلد"
+                            className="size-full object-cover"
+                          />
+                        ) : (
+                          <div className="flex size-full items-center justify-center text-[9px] text-muted-foreground">
+                            فارغ
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-[11px] font-semibold text-foreground flex items-center gap-1">
+                          <CheckCircle2 className="size-3 text-emerald-500" />
+                          <span>غلاف هذا المجلد:</span>
+                        </span>
+                        <span className="text-[10px] text-muted-foreground line-clamp-1 max-w-xs" dir="ltr">
+                          {currentFolderCover || "لم يتم تعيين غلاف (سيعتمد التصميم الأول تلقائياً)"}
+                        </span>
+                      </div>
+                    </div>
+
+                    {currentFolder.images.length > 0 && (
+                      <div className="flex items-center gap-2 self-start sm:self-center">
+                        <span className="text-[11px] text-muted-foreground">اختر الغلاف:</span>
+                        <select
+                          value={currentFolder.cover || currentFolder.images[0]?.src || ""}
+                          onChange={(e) => setAsFolderCover(e.target.value)}
+                          className="rounded-lg border border-border bg-card px-2.5 py-1 text-xs focus:border-foreground/40 focus:outline-none"
+                        >
+                          {currentFolder.images.map((img, i) => (
+                            <option key={img.src + i} value={img.src}>
+                              صورة {i + 1}: {img.alt || "بدون وصف"}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
 
-            {/* Folder Files & Designs Grid */}
+            {/* Folder Files & Upload Zone */}
             {currentFolder && (
-              <div className="rounded-2xl border border-border/80 bg-card p-5 shadow-xs flex flex-col gap-4">
+              <div className="rounded-2xl border border-border/80 bg-card p-5 shadow-xs flex flex-col gap-5">
                 <div className="flex items-center justify-between pb-3 border-b border-border/60">
                   <div className="flex items-center gap-2">
                     <ImageIcon className="size-4 text-accent" />
@@ -622,131 +962,271 @@ export function AdminClientWorksPage() {
                   </div>
                 </div>
 
-                {/* Add New File / Image Box */}
-                <div className="rounded-xl border border-dashed border-border/90 bg-muted/30 p-4 flex flex-col gap-3">
-                  <span className="text-xs font-bold text-foreground flex items-center gap-1.5">
-                    <Plus className="size-3.5 text-accent" />
-                    <span>إضافة تصميم أو ملف جديد إلى هذا المجلد:</span>
-                  </span>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
-                    <div className="sm:col-span-5">
-                      <label className="text-[11px] font-medium text-muted-foreground">رابط الصورة أو مسارها المحلي</label>
-                      <input
-                        type="text"
-                        placeholder="/images/... أو https://..."
-                        dir="ltr"
-                        value={newImageSrc}
-                        onChange={(e) => setNewImageSrc(e.target.value)}
-                        className="mt-1 w-full rounded-xl border border-border/80 bg-card p-2 text-xs focus:border-foreground/40 focus:outline-none"
-                      />
-                    </div>
-
-                    <div className="sm:col-span-5">
-                      <label className="text-[11px] font-medium text-muted-foreground">وصف التصميم (Alt Text)</label>
-                      <input
-                        type="text"
-                        placeholder="مثال: الشعار باللون الأبيض، بطاقة عمل..."
-                        value={newImageAlt}
-                        onChange={(e) => setNewImageAlt(e.target.value)}
-                        className="mt-1 w-full rounded-xl border border-border/80 bg-card p-2 text-xs focus:border-foreground/40 focus:outline-none"
-                      />
-                    </div>
-
-                    <div className="sm:col-span-2">
-                      <button
-                        type="button"
-                        onClick={addImageToFolder}
-                        className="w-full rounded-xl bg-foreground p-2 text-xs font-bold text-background transition-opacity hover:opacity-90 shadow-xs flex items-center justify-center gap-1"
-                      >
-                        <Plus className="size-3.5" />
-                        <span>إضافة</span>
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Or upload from device */}
-                  <div className="pt-2 border-t border-border/40">
-                    <ImageInput
-                      label="أو ارفع ملفًا مباشرة من جهازك إلى هذا المجلد:"
-                      value={newImageSrc}
-                      onChange={(url) => {
-                        if (url) {
-                          setNewImageSrc(url);
-                          toast.success("تم رفع الملف بنجاح، اضغط 'إضافة' لإلحاقه بالمجلد.");
+                {/* Modern Multi-File Dropzone & Upload Box */}
+                <div className="flex flex-col gap-3 rounded-2xl border border-dashed border-border/90 bg-muted/20 p-5 transition-all">
+                  <div
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      setIsDragActive(true);
+                    }}
+                    onDragLeave={() => setIsDragActive(false)}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      setIsDragActive(false);
+                      if (e.dataTransfer.files) {
+                        uploadFiles(e.dataTransfer.files);
+                      }
+                    }}
+                    className={cn(
+                      "flex flex-col items-center justify-center p-6 text-center rounded-xl border-2 border-dashed transition-all cursor-pointer bg-card/60",
+                      isDragActive
+                        ? "border-accent bg-accent/10 scale-[1.01]"
+                        : "border-border/80 hover:border-foreground/40 hover:bg-card",
+                    )}
+                    onClick={() => fileInputRef.current?.click()}
+                  >
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      multiple
+                      accept="image/*"
+                      className="hidden"
+                      disabled={isUploading}
+                      onChange={(e) => {
+                        if (e.target.files && e.target.files.length > 0) {
+                          uploadFiles(e.target.files);
                         }
                       }}
-                      folder={`projects/client-works/${currentEntity.id}/${currentFolder.id}`}
                     />
+
+                    <div className="flex size-12 items-center justify-center rounded-2xl bg-accent/10 text-accent mb-3">
+                      {isUploading ? (
+                        <Loader2 className="size-6 animate-spin text-accent" />
+                      ) : (
+                        <UploadCloud className="size-6 text-accent" />
+                      )}
+                    </div>
+
+                    <span className="text-sm font-bold text-foreground">
+                      {isUploading
+                        ? uploadStatus || "جارٍ رفع الصور..."
+                        : "اضغط لاختيار صور من جهازك أو اسحبها وأفلتها هنا"}
+                    </span>
+
+                    <span className="text-xs text-muted-foreground mt-1">
+                      يدعم رفع عدة صور معاً دفعة واحدة (PNG, JPG, WEBP, SVG) وإدراجها فوراً في هذا المجلد.
+                    </span>
+
+                    <button
+                      type="button"
+                      disabled={isUploading}
+                      className="mt-4 inline-flex items-center gap-1.5 rounded-xl bg-foreground px-4 py-2 text-xs font-bold text-background transition-opacity hover:opacity-90 shadow-xs"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        fileInputRef.current?.click();
+                      }}
+                    >
+                      <Upload className="size-3.5" />
+                      <span>{isUploading ? "جارٍ الرفع..." : "اختيار ملفات من الجهاز"}</span>
+                    </button>
                   </div>
+
+                  {/* Upload Settings / Auto Cover Option */}
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-1 pt-1 text-xs">
+                    <label className="flex items-center gap-2 cursor-pointer select-none text-muted-foreground hover:text-foreground">
+                      <input
+                        type="checkbox"
+                        checked={autoSetAsCover}
+                        onChange={(e) => setAutoSetAsCover(e.target.checked)}
+                        className="rounded border-border accent-accent size-3.5"
+                      />
+                      <span>تعيين أول صورة يتم رفعها كغلاف لهذا المجلد تلقائياً</span>
+                    </label>
+
+                    <button
+                      type="button"
+                      onClick={() => setShowUrlInput(!showUrlInput)}
+                      className="inline-flex items-center gap-1 text-[11px] font-semibold text-accent hover:underline self-start sm:self-auto"
+                    >
+                      <LinkIcon className="size-3" />
+                      <span>{showUrlInput ? "إخفاء إضافة الرابط المباشر" : "أو إضافة صورة عبر رابط مباشر (URL)"}</span>
+                    </button>
+                  </div>
+
+                  {/* Direct URL Input Row (Collapsible) */}
+                  {showUrlInput && (
+                    <div className="mt-2 rounded-xl border border-border/80 bg-card p-3.5 grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
+                      <div className="sm:col-span-6">
+                        <label className="text-[11px] font-medium text-muted-foreground">
+                          رابط الصورة المباشر (URL أو مسار محلي)
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="https://... أو /images/..."
+                          dir="ltr"
+                          value={newImageSrc}
+                          onChange={(e) => setNewImageSrc(e.target.value)}
+                          className="mt-1 w-full rounded-xl border border-border/80 bg-muted/20 p-2 text-xs focus:border-foreground/40 focus:outline-none"
+                        />
+                      </div>
+
+                      <div className="sm:col-span-4">
+                        <label className="text-[11px] font-medium text-muted-foreground">
+                          وصف التصميم (Alt Text)
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="مثال: الشعار الرئيسي، بطاقة عمل..."
+                          value={newImageAlt}
+                          onChange={(e) => setNewImageAlt(e.target.value)}
+                          className="mt-1 w-full rounded-xl border border-border/80 bg-muted/20 p-2 text-xs focus:border-foreground/40 focus:outline-none"
+                        />
+                      </div>
+
+                      <div className="sm:col-span-2">
+                        <button
+                          type="button"
+                          onClick={addImageToFolderByUrl}
+                          className="w-full rounded-xl bg-foreground p-2 text-xs font-bold text-background transition-opacity hover:opacity-90 shadow-xs flex items-center justify-center gap-1"
+                        >
+                          <Plus className="size-3.5" />
+                          <span>إضافة الرابط</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                {/* Existing Images Grid */}
+                {/* Existing Images Grid in Active Folder */}
                 {currentFolder.images.length === 0 ? (
-                  <div className="rounded-xl border border-dashed border-border p-8 text-center text-xs text-muted-foreground">
-                    هذا المجلد لا يحتوي على أي ملفات حتى الآن. أضف تصميماً جديداً من الصندوق أعلاه.
+                  <div className="rounded-2xl border border-dashed border-border p-12 text-center flex flex-col items-center justify-center gap-2 text-muted-foreground">
+                    <ImageIcon className="size-8 stroke-[1.5] text-muted-foreground/60" />
+                    <span className="text-xs font-semibold">هذا المجلد لا يحتوي على أي ملفات حتى الآن.</span>
+                    <span className="text-[11px]">ارفع صوراً أو تصاميم من الصندوق أعلاه لتظهر هنا فوراً.</span>
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {currentFolder.images.map((img, imgIdx) => {
-                      const isCover = currentFolder.cover === img.src;
+                      const isFolderCover = currentFolder.cover === img.src;
+                      const isWorkCover =
+                        currentWorkCover === img.src ||
+                        (!currentEntity.cover && currentEntity.folders[0]?.id === currentFolder.id && isFolderCover);
+
                       return (
                         <div
-                          key={imgIdx}
-                          className="group relative flex flex-col overflow-hidden rounded-xl border border-border/80 bg-muted/20 transition-all hover:border-foreground/30 hover:shadow-md"
+                          key={img.src + imgIdx}
+                          className={cn(
+                            "group relative flex flex-col overflow-hidden rounded-2xl border transition-all shadow-xs hover:shadow-md",
+                            isWorkCover
+                              ? "border-amber-500/80 bg-amber-500/5 ring-1 ring-amber-500/20"
+                              : isFolderCover
+                              ? "border-accent bg-accent/5 ring-1 ring-accent/20"
+                              : "border-border/80 bg-muted/20 hover:border-foreground/30",
+                          )}
                         >
                           {/* Image preview frame */}
                           <div className="relative aspect-[16/10] w-full overflow-hidden bg-neutral-900">
                             <img
-                              src={img.src}
+                              src={getOptimizedImageUrl(img.src)}
                               alt={img.alt}
                               className="size-full object-cover transition-transform duration-300 group-hover:scale-102"
                               loading="lazy"
                             />
 
-                            {isCover && (
-                              <span className="absolute top-2 right-2 rounded-md bg-accent px-2 py-0.5 text-[10px] font-bold text-accent-foreground shadow-sm">
-                                غلاف المجلد
-                              </span>
-                            )}
+                            {/* Prominent Badges */}
+                            <div className="absolute top-2 inset-x-2 flex items-center justify-between gap-1 pointer-events-none">
+                              {isWorkCover ? (
+                                <span className="rounded-md bg-amber-500 px-2 py-0.5 text-[10px] font-bold text-black shadow-sm flex items-center gap-1">
+                                  <Star className="size-3 fill-black" />
+                                  <span>غلاف العمل الرئيسي</span>
+                                </span>
+                              ) : <span />}
 
-                            {/* Hover overlay actions */}
-                            <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 p-2">
-                              {!isCover && (
-                                <button
-                                  type="button"
-                                  onClick={() => setAsFolderCover(img.src)}
-                                  className="rounded-lg bg-card/90 px-2.5 py-1.5 text-[11px] font-semibold text-foreground hover:bg-card shadow-xs transition-transform hover:scale-105"
-                                >
-                                  تعيين كغلاف
-                                </button>
+                              {isFolderCover && (
+                                <span className="rounded-md bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm flex items-center gap-1">
+                                  <Check className="size-3" />
+                                  <span>غلاف المجلد</span>
+                                </span>
                               )}
+                            </div>
+
+                            {/* Quick Overlay Preview on Hover */}
+                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 p-2">
+                              <a
+                                href={img.src}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="rounded-xl bg-card/90 p-2 text-foreground hover:bg-card shadow-xs transition-transform hover:scale-105"
+                                title="معاينة الصورة الأصلية بالحجم الكامل"
+                              >
+                                <ExternalLink className="size-3.5" />
+                              </a>
+                            </div>
+                          </div>
+
+                          {/* Action Toolbar on the Card (Always Accessible) */}
+                          <div className="p-3 flex flex-col gap-2.5 bg-card/60">
+                            {/* Buttons: Set as Folder Cover & Work Cover */}
+                            <div className="grid grid-cols-2 gap-1.5 text-[11px]">
+                              <button
+                                type="button"
+                                disabled={isFolderCover}
+                                onClick={() => setAsFolderCover(img.src)}
+                                className={cn(
+                                  "inline-flex items-center justify-center gap-1 rounded-lg px-2 py-1.5 font-semibold transition-all",
+                                  isFolderCover
+                                    ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 cursor-default"
+                                    : "border border-border bg-card text-foreground hover:bg-muted hover:border-foreground/30",
+                                )}
+                                title="تعيين كغلاف لهذا المجلد"
+                              >
+                                <Check className="size-3 text-emerald-500" />
+                                <span>{isFolderCover ? "غلاف المجلد ✓" : "غلاف المجلد"}</span>
+                              </button>
+
+                              <button
+                                type="button"
+                                disabled={isWorkCover}
+                                onClick={() => setAsWorkCover(img.src)}
+                                className={cn(
+                                  "inline-flex items-center justify-center gap-1 rounded-lg px-2 py-1.5 font-semibold transition-all",
+                                  isWorkCover
+                                    ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30 cursor-default"
+                                    : "border border-border bg-card text-foreground hover:bg-muted hover:border-foreground/30",
+                                )}
+                                title="تعيين كغلاف رئيسي للعمل بالكامل"
+                              >
+                                <Star className={cn("size-3", isWorkCover ? "text-amber-500 fill-amber-500" : "text-amber-500")} />
+                                <span>{isWorkCover ? "غلاف العمل ★" : "غلاف للعمل ★"}</span>
+                              </button>
+                            </div>
+
+                            {/* Caption editor & Delete */}
+                            <div className="flex items-center gap-1.5">
+                              <input
+                                type="text"
+                                value={img.alt}
+                                placeholder="وصف التصميم (Alt text)..."
+                                onChange={(e) => {
+                                  const nextImages = [...currentFolder.images];
+                                  nextImages[imgIdx] = { ...img, alt: e.target.value };
+                                  const nextFolders = [...currentEntity.folders];
+                                  nextFolders[activeFolderIndex] = { ...currentFolder, images: nextImages };
+                                  setDraft({ ...currentEntity, folders: nextFolders });
+                                }}
+                                className="flex-1 rounded-lg border border-border/70 bg-muted/30 px-2 py-1 text-[11px] text-foreground focus:border-foreground/40 focus:outline-none"
+                              />
+
                               <button
                                 type="button"
                                 onClick={() => removeImageFromFolder(imgIdx)}
-                                className="rounded-lg bg-red-600/90 p-1.5 text-white hover:bg-red-600 shadow-xs transition-transform hover:scale-105"
-                                title="حذف من المجلد"
+                                className="rounded-lg border border-red-500/20 bg-red-500/10 p-1.5 text-red-600 dark:text-red-400 hover:bg-red-500/20 transition-colors shrink-0"
+                                title="حذف الصورة من المجلد"
                               >
                                 <Trash2 className="size-3.5" />
                               </button>
                             </div>
-                          </div>
 
-                          {/* Editable caption */}
-                          <div className="p-2.5 flex flex-col gap-1">
-                            <input
-                              type="text"
-                              value={img.alt}
-                              placeholder="وصف التصميم..."
-                              onChange={(e) => {
-                                const nextImages = [...currentFolder.images];
-                                nextImages[imgIdx] = { ...img, alt: e.target.value };
-                                const nextFolders = [...currentEntity.folders];
-                                nextFolders[activeFolderIndex] = { ...currentFolder, images: nextImages };
-                                setDraft({ ...currentEntity, folders: nextFolders });
-                              }}
-                              className="w-full rounded-lg border border-border/60 bg-card px-2 py-1 text-[11px] text-foreground focus:border-foreground/40 focus:outline-none"
-                            />
                             <span dir="ltr" className="text-[9px] text-muted-foreground truncate" title={img.src}>
                               {img.src}
                             </span>

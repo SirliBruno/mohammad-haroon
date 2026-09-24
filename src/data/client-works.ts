@@ -20,6 +20,7 @@ export interface ClientEntity {
   services: string[];
   mainSlug: string;
   totalFiles?: number;
+  cover?: string;
   folders: DeliverableFolder[];
 }
 

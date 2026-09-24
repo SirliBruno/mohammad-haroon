@@ -31,7 +31,7 @@ import { projects as staticProjects } from "@/data/projects";
 import { site } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { statusMeta } from "@/lib/project-status";
-import { toProject } from "@/lib/project-adapter";
+import { getOptimizedImageUrl } from "@/lib/optimized-images";
 import { BrowserFrame } from "@/components/mockups/devices";
 import { DashboardUI, StoreUI, EditorUI } from "@/components/mockups/ui-samples";
 import {
@@ -75,17 +75,17 @@ export const Route = createFileRoute("/work/$slug")({
       );
       if (clientWork && clientWork.folders.length > 0) {
         const primaryFolder = clientWork.folders[0];
-        const primaryCover = primaryFolder?.cover || primaryFolder?.images[0]?.src;
+        const primaryCover = clientWork.cover || primaryFolder?.cover || primaryFolder?.images[0]?.src;
         const allImages = clientWork.folders.flatMap((f) =>
           f.images.map((img) => ({
-            src: img.src,
+            src: getOptimizedImageUrl(img.src),
             alt: img.alt || f.title,
           })),
         );
         project = {
           ...project,
           title: clientWork.name || project.title,
-          cover: primaryCover ? { src: primaryCover, alt: project.title } : project.cover,
+          cover: primaryCover ? { src: getOptimizedImageUrl(primaryCover), alt: project.title } : project.cover,
           gallery: allImages.length > 0 ? allImages : project.gallery,
         };
       }
