@@ -34,9 +34,9 @@ const NEED_TYPES = [
 ] as const;
 
 const BUDGET_RANGES = [
-  "300 – 500 ريال",
-  "500 – 1,000 ريال",
+  "499 – 1,000 ريال",
   "1,000 – 3,000 ريال",
+  "3,000 – 5,000 ريال",
   "أكثر",
   "غير متأكد",
 ] as const;
@@ -46,7 +46,7 @@ export function ProjectRequestForm() {
   const [currentProblem, setCurrentProblem] = useState<string>("ما عندي موقع أو صفحة واضحة");
   const [selectedNeeds, setSelectedNeeds] = useState<string[]>(["تصميم + برمجة"]);
   const [idea, setIdea] = useState("");
-  const [budget, setBudget] = useState<string>("300 – 500 ريال");
+  const [budget, setBudget] = useState<string>("499 – 1,000 ريال");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [submitted, setSubmitted] = useState(false);
