@@ -11,6 +11,6 @@ export const Route = createFileRoute("/_authenticated")({
   },
   component: () => <Outlet />,
   errorComponent: ({ error, reset }) => (
-    <AdminErrorBoundary error={error} reset={reset} />
+    <AdminErrorBoundary error={error as Error} reset={reset} />
   ),
 });

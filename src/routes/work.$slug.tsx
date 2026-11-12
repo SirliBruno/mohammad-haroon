@@ -1,4 +1,4 @@
-import { Link, createFileRoute, notFound, useRouter } from "@tanstack/react-router";
+import { Link, createFileRoute, notFound, useRouter, type ErrorComponentProps } from "@tanstack/react-router";
 import {
   ArrowLeft,
   ArrowRight,
@@ -38,6 +38,7 @@ import {
   getPublicProjectBySlug,
   listPublicProjects,
 } from "@/lib/cms/projects-public.functions";
+import { toProject } from "@/lib/project-adapter";
 
 const mockupBySlug: Record<string, React.ComponentType> = {
   campflow: DashboardUI,
@@ -513,7 +514,7 @@ function ProjectNotFound() {
   );
 }
 
-function ProjectError({ error, reset }: { error: Error; reset: () => void }) {
+function ProjectError({ reset }: ErrorComponentProps) {
   return (
     <Section>
       <div className="mx-auto max-w-md text-center py-16">

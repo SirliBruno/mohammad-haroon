@@ -1,8 +1,8 @@
 import { QueryClient } from "@tanstack/react-query";
-import { createRouter, ErrorComponent, Link } from "@tanstack/react-router";
+import { createRouter, ErrorComponent, Link, type ErrorComponentProps } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 
-function DefaultErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function DefaultErrorComponent({ error, reset }: ErrorComponentProps) {
   return (
     <div className="mx-auto my-16 max-w-lg rounded-2xl border border-border bg-background p-6 text-start">
       <p className="text-xs font-medium tracking-[0.14em] text-muted-foreground">حدث خطأ</p>
@@ -13,7 +13,7 @@ function DefaultErrorComponent({ error, reset }: { error: Error; reset: () => vo
       <details className="mt-4 rounded-md bg-muted p-3 text-xs text-muted-foreground">
         <summary className="cursor-pointer">تفاصيل تقنية</summary>
         <pre dir="ltr" className="mt-2 whitespace-pre-wrap break-words">
-          {error?.message ?? String(error)}
+          {(error as Error)?.message ?? String(error)}
         </pre>
       </details>
       <div className="mt-6 flex flex-wrap gap-2">

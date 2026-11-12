@@ -24,6 +24,8 @@ import { listClientWorksPublic, extractInstagramShortcode } from "@/lib/cms/clie
 import { cn } from "@/lib/utils";
 import { getOptimizedImageUrl } from "@/lib/optimized-images";
 import { RouteErrorBoundary, RouteNotFoundBoundary } from "@/components/layout/route-boundaries";
+import { EmptyState } from "@/components/ds/states";
+import { DSButton } from "@/components/ds/button";
 
 const CATEGORY_FILTERS = [
   "الكل",
