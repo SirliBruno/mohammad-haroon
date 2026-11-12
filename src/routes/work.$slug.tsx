@@ -514,7 +514,7 @@ function ProjectNotFound() {
   );
 }
 
-function ProjectError({ error, reset }: { error: Error; reset: () => void }) {
+function ProjectError({ reset }: ErrorComponentProps) {
   return (
     <Section>
       <div className="mx-auto max-w-md text-center py-16">

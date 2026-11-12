@@ -66,7 +66,7 @@ export const Route = createFileRoute("/services/$slug")({
     <Section>
       <div className="mx-auto max-w-md text-center">
         <h1 className="text-2xl font-semibold tracking-tight">تعذّر تحميل الخدمة</h1>
-        <p className="mt-2 text-sm text-muted-foreground">{error.message}</p>
+        <p className="mt-2 text-sm text-muted-foreground">{(error as Error).message}</p>
       </div>
     </Section>
   ),
