@@ -16,7 +16,8 @@ export type FunnelEvent =
   | "contact_view"
   | "contact_start"
   | "contact_submit"
-  | "cta_click";
+  | "cta_click"
+  | `whatsapp-click-${string}`;
 
 function getSessionId(): string {
   if (typeof window === "undefined") return "";

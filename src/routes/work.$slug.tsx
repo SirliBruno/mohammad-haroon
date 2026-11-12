@@ -38,6 +38,7 @@ import {
   getPublicProjectBySlug,
   listPublicProjects,
 } from "@/lib/cms/projects-public.functions";
+import { toProject } from "@/lib/project-adapter";
 
 const mockupBySlug: Record<string, React.ComponentType> = {
   campflow: DashboardUI,
