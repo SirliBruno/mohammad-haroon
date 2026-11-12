@@ -213,7 +213,7 @@ export const adminSaveClientWork = createServerFn({ method: "POST" })
       kind: "json",
       label: entity.name,
       value_ar: entity.name,
-      metadata: { entity: sanitizedEntity },
+      metadata: JSON.parse(JSON.stringify({ entity: sanitizedEntity })),
       updated_at: new Date().toISOString(),
     };
 
