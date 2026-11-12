@@ -4,7 +4,7 @@ export const primaryNav: NavItem[] = [
   { label: "الخدمات", to: "/#what-i-build" },
   { label: "الأعمال", to: "/#work" },
   { label: "كيف أعمل", to: "/#how-it-works" },
-  { label: "عرض 300 ريال", to: "/#offer" },
+  { label: "عرض 499 ريال", to: "/#offer" },
   { label: "عني", to: "/#about" },
   { label: "الأسئلة", to: "/#faq" },
 ];

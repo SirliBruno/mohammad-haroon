@@ -35,7 +35,7 @@ export const HOME_SECTIONS: HomeSectionDef[] = [
     label: "الهيرو (مقدمة الموقع)",
     description: "العنوان الرئيسي، الوصف، نصوص الأزرار، ونقاط الثقة.",
     fields: [
-      { key: "home.hero.badge", label: "شارة العرض والسعر", kind: "text", defaultValue: "مشاريع تبدأ من 300 ريال · متاح لمشاريع جديدة" },
+      { key: "home.hero.badge", label: "شارة العرض والسعر", kind: "text", defaultValue: "مشاريع تبدأ من 499 ريال · متاح لمشاريع جديدة" },
       { key: "home.hero.headline_start", label: "السطر الأول من العنوان", kind: "text", defaultValue: "من فكرة في بالك" },
       { key: "home.hero.headline_end", label: "السطر الثاني من العنوان", kind: "text", defaultValue: "إلى مشروع تقدر تستخدمه." },
       { key: "home.hero.description", label: "الوصف تحت العنوان", kind: "textarea", rows: 3, defaultValue: "أصمم وأطوّر مواقع، متاجر وأنظمة إلكترونية مخصصة تخدم هدفك وتزيد مبيعاتك — من الفكرة إلى الإطلاق." },
@@ -86,12 +86,12 @@ export const HOME_SECTIONS: HomeSectionDef[] = [
   },
   {
     id: "offer",
-    label: "عرض الـ 300 ريال",
+    label: "عرض الـ 499 ريال",
     description: "نصوص وسعر وزر عرض البداية السريعة.",
     fields: [
       { key: "home.offer.badge", label: "شارة العرض", kind: "text", defaultValue: "عرض البداية السريعة" },
-      { key: "home.offer.title", label: "العنوان", kind: "text", defaultValue: "ابدأ مشروعك الرقمي من 300 ريال" },
-      { key: "home.offer.price", label: "السعر الظاهر", kind: "text", defaultValue: "300 ريال" },
+      { key: "home.offer.title", label: "العنوان", kind: "text", defaultValue: "ابدأ مشروعك الرقمي من 499 ريال" },
+      { key: "home.offer.price", label: "السعر الظاهر", kind: "text", defaultValue: "499 ريال" },
       { key: "home.offer.description", label: "الوصف", kind: "textarea", rows: 3, defaultValue: "صفحة هبوط احترافية أو موقع تعريفي سريع مصمم ليعرض فكرتك ويبدأ في استقبال العملاء فورًا." },
       { key: "home.offer.cta", label: "نص الزر", kind: "text", defaultValue: "احجز مشروعك الآن" },
     ],

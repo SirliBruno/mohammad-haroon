@@ -56,7 +56,7 @@ function HomePage() {
       {/* 5. How It Works ("من الفكرة إلى الإطلاق.") */}
       <HowItWorks />
 
-      {/* 6. 300 SAR Offer ("ابدأ من 300 ريال") */}
+      {/* 6. 499 SAR Offer ("ابدأ من 499 ريال") */}
       <Offer300 />
 
       {/* 7. MVP Section ("عندك فكرة كبيرة؟") */}

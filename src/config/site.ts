@@ -6,7 +6,7 @@ export const site = {
   roleEn: "Product Designer & Fullstack Developer",
   tagline: "من فكرة في بالك إلى مشروع تقدر تستخدمه.",
   description:
-    "محمد هارون — مطور ومصمم مواقع وأنظمة ومتاجر إلكترونية. أحوّل الأفكار إلى حلول رقمية عملية تبدأ من 300 ريال.",
+    "محمد هارون — مطور ومصمم مواقع وأنظمة ومتاجر إلكترونية. أحوّل الأفكار إلى حلول رقمية عملية تبدأ من 499 ريال.",
   url: "https://mohammadharoon.com",
   locale: "ar",
   direction: "rtl" as "ltr" | "rtl",
@@ -18,7 +18,7 @@ export const site = {
   workingHours: "الأحد–الخميس · 9:00 ص – 6:00 م",
   available: true,
   availabilityLabel: "متاح لمشاريع جديدة",
-  startingPrice: "300 ريال",
+  startingPrice: "499 ريال",
   linkedin: "https://www.linkedin.com/in/mohammadharoon",
   github: "https://github.com/mohammadharoon",
   twitter: "https://x.com/mohammadharoon",

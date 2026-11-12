@@ -41,7 +41,7 @@ export function Offer300() {
             <div className="mt-6 grid gap-8 lg:grid-cols-12 lg:items-center">
               <div className="lg:col-span-6">
                 <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground font-display">
-                  {t("home.offer.title", "ابدأ من 300 ريال")}
+                  {t("home.offer.title", "ابدأ من 499 ريال")}
                 </h2>
                 <p className="mt-3 text-xs sm:text-sm leading-relaxed text-foreground/80">
                   {t(
@@ -65,7 +65,7 @@ export function Offer300() {
               {/* Examples Checklist */}
               <div className="lg:col-span-6 rounded-xl border border-border/80 bg-background/80 p-5">
                 <p className="text-xs font-semibold uppercase tracking-wider text-foreground">
-                  أمثلة على مشاريع قد تبدأ من 300 ريال:
+                  أمثلة على مشاريع قد تبدأ من 499 ريال:
                 </p>
 
                 <ul className="mt-3 space-y-2">
