@@ -1,4 +1,4 @@
-import { Link, createFileRoute, notFound, useRouter } from "@tanstack/react-router";
+import { Link, createFileRoute, notFound, useRouter, type ErrorComponentProps } from "@tanstack/react-router";
 import {
   ArrowLeft,
   ArrowRight,
